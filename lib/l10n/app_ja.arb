@@ -1,8 +1,8 @@
 {
   "@@locale": "ja",
 
-  "helloWorld": "こんにちは世界",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
+  "gameName": "想咲 - ソウサク -",
+  "@gameName": {
+    "description": "このノベルゲームアプリの正式名称"
   }
 }
