@@ -4,13 +4,5 @@
   "helloWorld": "こんにちは世界",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
-  },
-  "assaultlily" : "アサルトリリィ"
-  },
-  "raspi": "ラズパイ"
-  "gotoukeeita": "五島慶太",
-  "raspi": "ラズパイ",
-  "ichigo":"うんち",
-  "test": "----テスト---",
-  "rasberry": "テストテキスト"
+  }
 }
