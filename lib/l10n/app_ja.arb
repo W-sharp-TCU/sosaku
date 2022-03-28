@@ -4,5 +4,6 @@
   "helloWorld": "こんにちは世界",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
-  }
+  },
+  "ichigo":"うんち",
 }
