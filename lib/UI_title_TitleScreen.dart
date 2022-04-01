@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'wraper_GetScreenSize.dart';
+import 'wrapper_GetScreenSize.dart';
 
 class TitleScreen extends StatelessWidget{
   const TitleScreen({Key? key}) : super(key: key);
@@ -16,11 +16,29 @@ class TitleScreen extends StatelessWidget{
         height: double.infinity,
         color: Colors.black,
         child: Center(
-          child: Container(
-            height: GetScreenSize.screenHeight(),
-            width: GetScreenSize.screenWidth(),
-            color: Colors.green,
-            child: Text("背景画像"),
+          child: GestureDetector(
+            onTap: (){
+              //画面遷移の処理を書く
+              print("tap");//デバッグ用
+            },
+            child: Container(
+              height: GetScreenSize.screenHeight(),
+              width: GetScreenSize.screenWidth(),
+              color: Colors.green,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: const Alignment(0, 0.8),
+                    child: Container(
+                      height: GetScreenSize.screenHeight() * 0.2,
+                      width: GetScreenSize.screenWidth() * 0.8,
+                      color: Colors.red,
+                    ),
+                  ),
+
+                ],
+              )
+            ),
           ),
         )
       )
