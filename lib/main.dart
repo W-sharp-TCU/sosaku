@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sosaku/l10n/l10n.dart';
-import 'UI_title_TitleScreen.dart';
+import 'Title/UI_title_TitleScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

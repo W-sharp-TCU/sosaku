@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'wrapper_GetScreenSize.dart';
+import '../Wrapper/wrapper_GetScreenSize.dart';
 
 class TitleScreen extends StatelessWidget{
   const TitleScreen({Key? key}) : super(key: key);

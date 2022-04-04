@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_provider:
+  provider:
   flutter_localizations:  # L18n support
     sdk: flutter
   intl: ^0.17.0           # L18n support
@@ -103,5 +103,5 @@ flutter:
 # mentioned below is changed.
 flutter_native_splash:
   color: "#FFFFFF"
-  image: assets/drawable/titleMenu/splash.png
+  image: assets/drawable/Splash/splash.png
   fullscreen: true

@@ -116,13 +116,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2+1"
-  flutter_provider:
-    dependency: "direct main"
-    description:
-      name: flutter_provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -182,6 +175,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -266,6 +266,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  provider:
+    dependency: "direct main"
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.2"
   shared_preferences:
     dependency: "direct main"
     description:
