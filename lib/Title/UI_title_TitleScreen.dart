@@ -18,7 +18,12 @@ class TitleScreen extends StatelessWidget{
         child: Center(
           child: GestureDetector(
             onTap: (){
-              //画面遷移の処理を書く
+              /*
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ()),
+              );
+              */
               print("tap");//デバッグ用
             },
             child: Container(
