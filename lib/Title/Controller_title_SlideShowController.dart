@@ -1,26 +1,60 @@
 import 'package:flutter/widgets.dart';
-import 'package:sosaku/Title/Provider_title_TitleScreenProvider.dart';
+import 'package:sosaku/Title/Interface_title_SlideShowInterface.dart';
+
+
 
 class SlideShowController {
-  final int _interval = 3000; // [ms]
-  final List<String> _imagePaths = ["assets/drawable/Splash/splash.png"];
+  final int _interval = 5000; // [ms]
+  final List<String> _imagePaths = ["drawable/Title/Ocean.jpg",
+                                    "drawable/Title/Lion.jpg",
+                                    "drawable/Title/default.jpg"];
+  SlideShowInterface? _target;
+  int _i = 0;
 
-  late TitleScreenProvider _target;
 
-  /// start change image in _interval milli seconds.
-  void start(TitleScreenProvider target) {
-    _target = target;
+  /// Start changing images in [_interval] milli seconds.
+  /// This function can be called in build() of Widget class repeatedly.
+  ///
+  /// @param context : specify [BuildContext] of build().
+  /// @param target : specify the instance of [ChangeNotifier] which extends
+  /// [SlideShowInterface].
+  void start(BuildContext context, SlideShowInterface target) {
+    if (_target==null) {
+      _target = target;
+      _threadLoop(context);
+    }
   }
-
-  /// stop changing.
+  
+  /// Stop changing.
   void stop() {
-
+    _target = null;
   }
 
-  Future<void> changeImage(BuildContext context) async {
-    await precacheImage(AssetImage(_imagePaths[0]), context);
-    _target.mBGImagePath = _imagePaths[0];
-    Future.delayed(Duration(milliseconds: _interval));
+  
+  
+  Future<void> _threadLoop(BuildContext context) async {
+    _changeImage(context).then((value) {
+      Future.delayed(Duration(milliseconds: _interval), ()
+      {
+        if (_target != null) {
+          _threadLoop(context);
+        } else {
+          // do nothing.
+        }
+      });
+    });
+  }
+
+  Future<void> _changeImage(BuildContext context) async {
+    await precacheImage(AssetImage(_imagePaths[_i]), context);
+    if (_i != _imagePaths.length-1) {
+      _i++;
+    } else {
+      _i = 0;
+    }
+    if (_target!=null) {
+      _target!.setImage(_imagePaths[_i]);
+    }
   }
 
 }
