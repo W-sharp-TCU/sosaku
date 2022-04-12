@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
+import '../Home/UI_home_HomeScreen.dart';
 
 class TitleScreen extends StatelessWidget{
   const TitleScreen({Key? key}) : super(key: key);
@@ -23,12 +24,12 @@ class TitleScreen extends StatelessWidget{
               child: GestureDetector(
                 onTap: (){
                   slideshow.stop();
-                  /*
+
                   Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => ()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                   );
-                  */
+
                   print("tap");//デバッグ用
                 },
                 child: Container(
