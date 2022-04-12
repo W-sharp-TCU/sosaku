@@ -6,14 +6,10 @@ class LoadScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    GetScreenSize.setSize
-      (MediaQuery
-        .of(context)
-        .size
-        .height, MediaQuery
-        .of(context)
-        .size
-        .width);
+    GetScreenSize.setSize(
+        MediaQuery.of(context).size.height,
+        MediaQuery.of(context).size.width
+    );
 
     return Scaffold(
       body: Container(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
+import 'Provider_title_TitleScreenProvider.dart';
 
 class TitleScreen extends StatelessWidget{
   const TitleScreen({Key? key}) : super(key: key);
@@ -9,6 +11,8 @@ class TitleScreen extends StatelessWidget{
 
     GetScreenSize.setSize
       (MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+    var slideshow = context.watch<TitleScreenProvider>();
+    slideshow.start(context);
 
     return Scaffold(
         body: Container(
@@ -18,29 +22,38 @@ class TitleScreen extends StatelessWidget{
             child: Center(
               child: GestureDetector(
                 onTap: (){
+                  slideshow.stop();
                   /*
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ()),
-              );
-              */
+                  Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ()),
+                  );
+                  */
                   print("tap");//デバッグ用
                 },
                 child: Container(
                     height: GetScreenSize.screenHeight(),
                     width: GetScreenSize.screenWidth(),
-                    color: Colors.green,
+                    color: Colors.black,
                     child: Stack(
                       children: [
-                        Align(
-                          alignment: const Alignment(0, 0.8),
-                          child: Container(
-                            height: GetScreenSize.screenHeight() * 0.2,
-                            width: GetScreenSize.screenWidth() * 0.8,
-                            color: Colors.red,
-                          ),
+
+                        Image(
+                          fit: BoxFit.cover,
+                          image:AssetImage(context.watch<TitleScreenProvider>().mBGImagePath),
                         ),
 
+                        Align(
+                          alignment: const Alignment(0, 0.8),
+                            child: Text(
+                              'Tap to Start',
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.2,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ),
                       ],
                     )
                 ),
