@@ -11,42 +11,42 @@ class TitleScreen extends StatelessWidget{
       (MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.black,
-        child: Center(
-          child: GestureDetector(
-            onTap: (){
-              /*
+        body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.black,
+            child: Center(
+              child: GestureDetector(
+                onTap: (){
+                  /*
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => ()),
               );
               */
-              print("tap");//デバッグ用
-            },
-            child: Container(
-              height: GetScreenSize.screenHeight(),
-              width: GetScreenSize.screenWidth(),
-              color: Colors.green,
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: const Alignment(0, 0.8),
-                    child: Container(
-                      height: GetScreenSize.screenHeight() * 0.2,
-                      width: GetScreenSize.screenWidth() * 0.8,
-                      color: Colors.red,
-                    ),
-                  ),
+                  print("tap");//デバッグ用
+                },
+                child: Container(
+                    height: GetScreenSize.screenHeight(),
+                    width: GetScreenSize.screenWidth(),
+                    color: Colors.green,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: const Alignment(0, 0.8),
+                          child: Container(
+                            height: GetScreenSize.screenHeight() * 0.2,
+                            width: GetScreenSize.screenWidth() * 0.8,
+                            color: Colors.red,
+                          ),
+                        ),
 
-                ],
-              )
-            ),
-          ),
+                      ],
+                    )
+                ),
+              ),
+            )
         )
-      )
     );
   }
 }

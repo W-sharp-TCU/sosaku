@@ -9,3 +9,4 @@ Target : Android, iOS, Web
 
 **開発ツール**
 - シナリオエディター ([GitHub](https://github.com/W-sharp-TCU/scenario_editor))
+- Android Studio 2021.1.1
