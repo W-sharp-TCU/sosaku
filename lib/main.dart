@@ -6,7 +6,7 @@ import 'Title/UI_title_TitleScreen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //向き指定
+  // 向き指定
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight, // 横固定
   ]);
