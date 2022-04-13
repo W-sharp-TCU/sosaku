@@ -26,8 +26,8 @@ class ConversationScreen extends StatelessWidget{
                   children: [
 
                     Image(
-                    fit: BoxFit.cover,
-                    image:AssetImage(),
+                      fit: BoxFit.cover,
+                      image:AssetImage(),
                     ),
 
                     Align(
@@ -49,19 +49,36 @@ class ConversationScreen extends StatelessWidget{
                         },
                         child: Container(
                           height: GetScreenSize.screenHeight() * 0.2,
-                          child: Image(
-                            fit: BoxFit.cover,
-                            image:AssetImage(),
-                            )
-                        ),
-                      )
-                    )
-                  ],
-                )
-              ),
+                          child: Stack(
+                            children: [
+                              Image(
+                                fit: BoxFit.cover,
+                                image:AssetImage(),
+                              ),
 
-            )
-        )
+                              Align(
+                                alignment: const Alignment(0, 1),
+                                child: Text(
+                                  "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                                  maxLines: 3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+                    "あいるけけ\nかｊふぁｓｄｆ"
+
+
+
+                  ],
+                ),
+              ),
+            ),
+        ),
     );
   }
 }
