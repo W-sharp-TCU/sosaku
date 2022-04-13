@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 /// widget files import
 import 'UI_home_Button.dart';
+/// widget files import when tested.
+import '../Conversasion/UI_conversation_ConversationScreen.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -35,19 +37,38 @@ class HomeScreen extends StatelessWidget {
                 /// widget button 1
                 Align(
                   alignment: const Alignment(0.7, 0.20),
-                  child: Button(buttonName: "button_1"),
+                  child:GestureDetector(
+                    child: Button(buttonName: "button_1"),
+                    onTap: (){
+                      print("pudhed button 1");
+                    },
+                  ),
                 ),
 
                 /// widget button 2
                 Align(
                   alignment: const Alignment(0.7, 0.50),
-                  child: Button(buttonName: "button_2"),
+                  child:GestureDetector(
+                    child: Button(buttonName: "button_2"),
+                    onTap: (){
+                      print("pudhed button 2");
+                    },
+                  ),
                 ),
 
                 /// widget button 3
                 Align(
                   alignment: const Alignment(0.7, 0.80),
-                  child: Button(buttonName: "button_3"),
+                  child:GestureDetector(
+                    child: Button(buttonName: "button_3"),
+                    onTap: (){
+                      print("pudhed button 3");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ConversationScreen()),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

@@ -84,9 +84,6 @@ class ConversationScreen extends StatelessWidget{
                         ),
                       ),
                     ),
-
-
-
                   ],
                 ),
               ),
