@@ -41,7 +41,8 @@ class ConversationScreen extends StatelessWidget{
                     Align(
                       alignment: const Alignment(0, 1),
                       child: Container(
-                        height: GetScreenSize.screenHeight() * 0.5,
+                        height: GetScreenSize.screenHeight() * 0.7,
+                        width: GetScreenSize.screenWidth() * 0.5,
                         color: Colors.pink,  //画像を用意したら消す
                         /*
                         child: Image(
@@ -60,7 +61,7 @@ class ConversationScreen extends StatelessWidget{
                         },
                         child: Container(
                           height: GetScreenSize.screenHeight() * 0.2,
-                          color: Colors.white,  //画像を用意したら消す
+                          color: Colors.white.withOpacity(0.5),//画像を用意したら消す
                           child: Stack(
                             children: [
 
@@ -72,7 +73,7 @@ class ConversationScreen extends StatelessWidget{
                               */
 
                               Align(
-                                alignment: const Alignment(0, 1),
+                                alignment: const Alignment(0, 0),
                                 child: Text(
                                   "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                                   maxLines: 3,

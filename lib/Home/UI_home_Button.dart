@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// wrapper import
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
+import '../Conversasion/UI_conversation_ConversationScreen.dart';
 
 class Button extends StatelessWidget {
   Button({Key? key, required this.buttonName}) : super(key: key);
@@ -33,6 +34,10 @@ class Button extends StatelessWidget {
         ),
         onTap: (){
           /// set function when pressed.
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ConversationScreen()),
+          );
           print("pudhed");
         },
       ),
