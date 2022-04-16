@@ -26,6 +26,20 @@ class LoadScreen extends StatelessWidget{
 
                 Align(
                   alignment: const Alignment(0, 0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        for(var i = 0; i < 10; i++)
+                          Container(
+                            height: GetScreenSize.screenHeight() * 0.3,
+                            width: GetScreenSize.screenWidth() * 0.3,
+                            color: i.isEven ? Colors.blue : Colors.pink,
+                            padding: EdgeInsets.all(GetScreenSize.screenWidth() * 0.05),
+                          )
+                      ],
+                    )
+                  ),
                 ),
               ],
             ),

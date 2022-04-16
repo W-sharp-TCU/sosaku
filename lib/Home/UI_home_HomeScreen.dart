@@ -6,6 +6,7 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'UI_home_Button.dart';
 /// widget files import when tested.
 import '../Conversasion/UI_conversation_ConversationScreen.dart';
+import '../Load/UI_load_LoadScreen.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -52,6 +53,10 @@ class HomeScreen extends StatelessWidget {
                     child: Button(buttonName: "button_2"),
                     onTap: (){
                       print("pudhed button 2");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoadScreen()),
+                      );
                     },
                   ),
                 ),
