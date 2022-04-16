@@ -31,11 +31,17 @@ class LoadScreen extends StatelessWidget{
                     child: Row(
                       children: [
                         for(var i = 0; i < 10; i++)
-                          Container(
-                            height: GetScreenSize.screenHeight() * 0.3,
-                            width: GetScreenSize.screenWidth() * 0.3,
-                            color: i.isEven ? Colors.blue : Colors.pink,
-                            padding: EdgeInsets.all(GetScreenSize.screenWidth() * 0.05),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for(var j = 0; j < 2; j++)
+                                Container(
+                                  height: GetScreenSize.screenHeight() * 0.3,
+                                  width: GetScreenSize.screenWidth() * 0.3,
+                                  color: i.isEven ? Colors.blue : Colors.pink,
+                                  margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
+                                ),
+                            ],
                           )
                       ],
                     )
@@ -49,3 +55,4 @@ class LoadScreen extends StatelessWidget{
     );
   }
 }
+
