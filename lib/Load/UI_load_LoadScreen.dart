@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
+import '../Home/UI_home_HomeScreen.dart';
+import 'UI_load_SelectLoadFile.dart';
 
 class LoadScreen extends StatelessWidget{
   const LoadScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height,
         MediaQuery.of(context).size.width
@@ -24,29 +27,56 @@ class LoadScreen extends StatelessWidget{
             child: Stack(
               children: [
 
-                Align(
-                  alignment: const Alignment(0, 0),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        for(var i = 0; i < 10; i++)
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              for(var j = 0; j < 2; j++)
-                                Container(
-                                  height: GetScreenSize.screenHeight() * 0.3,
-                                  width: GetScreenSize.screenWidth() * 0.3,
-                                  color: i.isEven ? Colors.blue : Colors.pink,
-                                  margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
-                                ),
-                            ],
-                          )
-                      ],
-                    )
-                  ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for(var i = 0; i < 10; i++)
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            for(var j = 0; j < 2; j++)
+                              SelectLoadFile(i, j)
+                          ],
+                        )
+                    ],
+                  )
                 ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap:(){
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomeScreen())
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right:GetScreenSize.screenWidth() * 0.02,
+                            top:GetScreenSize.screenWidth() * 0.02),
+                        width: GetScreenSize.screenWidth() * 0.07,
+                        height: GetScreenSize.screenWidth() * 0.1,
+                        color: Colors.white,
+                        child: const Center(
+                          child: Text("back"),
+                        )
+                      ),
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(top:GetScreenSize.screenWidth() * 0.02),
+                      width: GetScreenSize.screenWidth() * 0.3,
+                      height: GetScreenSize.screenWidth() * 0.1,
+                      color: Colors.white,
+                      child: const Center(
+                        child: Text("File Select Text"),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -55,4 +85,3 @@ class LoadScreen extends StatelessWidget{
     );
   }
 }
-
