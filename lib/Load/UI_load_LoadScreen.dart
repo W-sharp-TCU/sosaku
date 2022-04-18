@@ -55,8 +55,10 @@ class LoadScreen extends StatelessWidget{
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.only(right:GetScreenSize.screenWidth() * 0.02,
-                            top:GetScreenSize.screenWidth() * 0.02),
+                        margin: EdgeInsets.only(
+                            right:GetScreenSize.screenWidth() * 0.02,
+                            top:GetScreenSize.screenWidth() * 0.02
+                        ),
                         width: GetScreenSize.screenWidth() * 0.07,
                         height: GetScreenSize.screenWidth() * 0.1,
                         color: Colors.white,

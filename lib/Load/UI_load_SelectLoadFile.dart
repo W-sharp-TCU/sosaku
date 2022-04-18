@@ -23,9 +23,14 @@ class SelectLoadFile extends StatelessWidget{
           height: GetScreenSize.screenHeight() * 0.3,
           width: GetScreenSize.screenWidth() * 0.35,
           color: Colors.white,
-          margin: EdgeInsets.only(bottom:GetScreenSize.screenWidth() * 0.03,
-              left: GetScreenSize.screenWidth() * 0.01, right: GetScreenSize.screenWidth() * 0.01),
-          padding: EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
+          margin: EdgeInsets.only(
+              bottom:GetScreenSize.screenWidth() * 0.03,
+              left: GetScreenSize.screenWidth() * 0.01,
+              right: GetScreenSize.screenWidth() * 0.01
+          ),
+          padding: EdgeInsets.all(
+              GetScreenSize.screenWidth() * 0.005
+          ),
 
           child:Column(
             mainAxisAlignment: MainAxisAlignment.start,
