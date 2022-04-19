@@ -65,10 +65,21 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+
   assets:
-    - assets/
-    - system_data/
+    - assets/drawable/ActionResult/
+    - assets/drawable/Conversasion/
+    - assets/drawable/Dialogs/
+    - assets/drawable/Home/
+    - assets/drawable/Load/
+    - assets/drawable/LoadingProgress/
+    - assets/drawable/Menu/
+    - assets/drawable/SelectAction/
+    - assets/drawable/Setting/
+    - assets/drawable/Splash/
+    - assets/drawable/Title/
+    - assets/sound/ # 何かここに入れるときはBGM, SEなど種類ごとにフォルダ分けしてください。
+    - assets/text/ # 何かここに入れるときはscenario_data, configなど種類ごとにフォルダ分けしてください。
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
