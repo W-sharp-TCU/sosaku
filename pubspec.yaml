@@ -29,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider:
+  flutter_riverpod:
   flutter_localizations:  # L18n support
     sdk: flutter
   intl: ^0.17.0           # L18n support

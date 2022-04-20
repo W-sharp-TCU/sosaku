@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
 import '../Home/UI_home_HomeScreen.dart';
+
+final titleScreenProvider = ChangeNotifierProvider((ref) => Tit)
 
 class TitleScreen extends StatelessWidget{
   const TitleScreen({Key? key}) : super(key: key);
@@ -19,9 +21,6 @@ class TitleScreen extends StatelessWidget{
         body: Container(
             width: double.infinity,
             height: double.infinity,
-            color: Colors.black,
-            child: Center(
-              child: GestureDetector(
                 onTap: (){
                   slideshow.stop();
 
