@@ -6,7 +6,7 @@ import 'UI_load_SelectLoadFile.dart';
 import 'Provider_load_LoadScreenProvider.dart';
 
 final loadScreenProvider =
-    ChangeNotifierProvider.autoDispose((ref) => LoadScreenProvider());
+    ChangeNotifierProvider.autoDispose((ref) => LoadUIProvider());
 
 class LoadScreen extends ConsumerWidget {
   const LoadScreen({Key? key}) : super(key: key);

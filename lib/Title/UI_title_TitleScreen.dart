@@ -14,8 +14,8 @@ class TitleScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    /*var slideshow = ref.watch(titleScreenProvider);
-    slideshow.start(context);*/
+    var slideshow = ref.watch(titleScreenProvider);
+    slideshow.start(context);
 
     return ProviderScope(
       child: Scaffold(
@@ -26,7 +26,7 @@ class TitleScreen extends ConsumerWidget {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    //slideshow.stop();
+                    slideshow.stop();
 
                     Navigator.pushReplacement(
                       context,
