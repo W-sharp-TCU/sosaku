@@ -76,12 +76,35 @@ class LoadScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
+
+                if(context.watch<LoadScreenProvider>().popFlag)
+                  Align(
+                    alignment: Alignment(0,0),
+                    child: const PopScreen(),
+                  ),
+
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class PopScreen extends StatelessWidget{
+  const PopScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context){
+    GetScreenSize.setSize
+      (MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+
+    return Container(
+      width: GetScreenSize.screenWidth(),
+      height: GetScreenSize.screenHeight(),
+      color: Colors.black.withOpacity(0.5),
     );
   }
 }
