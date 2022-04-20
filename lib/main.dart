@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:sosaku/Load/Provider_load_LoadScreenProvider.dart';
-import 'package:sosaku/Title/Provider_title_TitleScreenProvider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'Title/UI_title_TitleScreen.dart';
 
 void main() {
@@ -11,15 +9,7 @@ void main() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight, // 横固定
   ]);
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => TitleScreenProvider()),
-        ChangeNotifierProvider(create: (_) => LoadScreenProvider())
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
