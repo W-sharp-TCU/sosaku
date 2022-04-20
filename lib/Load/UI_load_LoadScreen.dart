@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Home/UI_home_HomeScreen.dart';
 import 'UI_load_SelectLoadFile.dart';
-import 'Provider_load_LoadScreenProvider.dart';
+import 'Provider_load_LoadUIProvider.dart';
 
 final loadScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => LoadUIProvider());
@@ -29,10 +29,6 @@ class LoadScreen extends ConsumerWidget {
               color: Colors.green,
               child: Stack(
                 children: [
-                  Image(
-                      fit: BoxFit.cover,
-                      image: AssetImage(
-                          ref.watch(loadScreenProvider).mBGImagePath)),
                   SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
