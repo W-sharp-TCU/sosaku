@@ -4,8 +4,9 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Home/UI_home_HomeScreen.dart';
 import 'UI_load_SelectLoadFile.dart';
 import 'Provider_load_LoadUIProvider.dart';
+import '../Dialogs/UI_Dialog_DialogScreen.dart';
 
-final loadScreenProvider =
+final loadUIProvider =
     ChangeNotifierProvider.autoDispose((ref) => LoadUIProvider());
 
 class LoadScreen extends ConsumerWidget {
@@ -64,22 +65,28 @@ class LoadScreen extends ConsumerWidget {
                               child: Text("back"),
                             )),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            top: GetScreenSize.screenWidth() * 0.02),
-                        width: GetScreenSize.screenWidth() * 0.3,
-                        height: GetScreenSize.screenWidth() * 0.1,
-                        color: Colors.white,
-                        child: const Center(
-                          child: Text("File Select Text"),
+
+                      GestureDetector(
+                        onTap:(){
+                          ref.read(loadUIProvider).changeFlag();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: GetScreenSize.screenWidth() * 0.02),
+                          width: GetScreenSize.screenWidth() * 0.3,
+                          height: GetScreenSize.screenWidth() * 0.1,
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text("File Select Text"),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  if (ref.watch(loadScreenProvider).popFlag)
+                  if (ref.watch(loadUIProvider).popFlag)
                     Align(
                       alignment: Alignment(0, 0),
-                      child: const PopScreen(),
+                      child: const DialogScreen(),
                     ),
                 ],
               ),
