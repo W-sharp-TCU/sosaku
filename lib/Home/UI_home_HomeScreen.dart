@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 
 /// wrapper import
 import '../Wrapper/wrapper_GetScreenSize.dart';
+
 /// widget files import
 import 'UI_home_Button.dart';
+
 /// widget files import when tested.
 import '../Conversasion/UI_conversation_ConversationScreen.dart';
 import '../Load/UI_load_LoadScreen.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    GetScreenSize.setSize(MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+    GetScreenSize.setSize(
+        MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
     return Scaffold(
       body: Container(
@@ -25,22 +29,23 @@ class HomeScreen extends StatelessWidget {
           child: Container(
             height: GetScreenSize.screenHeight(),
             width: GetScreenSize.screenWidth(),
-            color: Colors.grey, /* delete it when you set asset path */
+            color: Colors.grey,
+            /* delete it when you set asset path */
             child: Stack(
               children: <Widget>[
                 /// asset background screen without image path.
                 ///
                 /// Image(
-                  /// image: AssetImage(""),
+                /// image: AssetImage(""),
                 /// ),
                 ///
 
                 /// widget button 1
                 Align(
                   alignment: const Alignment(0.7, 0.20),
-                  child:GestureDetector(
+                  child: GestureDetector(
                     child: Button(buttonName: "button_1"),
-                    onTap: (){
+                    onTap: () {
                       print("pudhed button 1");
                     },
                   ),
@@ -49,13 +54,14 @@ class HomeScreen extends StatelessWidget {
                 /// widget button 2
                 Align(
                   alignment: const Alignment(0.7, 0.50),
-                  child:GestureDetector(
+                  child: GestureDetector(
                     child: Button(buttonName: "button_2"),
-                    onTap: (){
+                    onTap: () {
                       print("pudhed button 2");
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoadScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoadScreen()),
                       );
                     },
                   ),
@@ -64,13 +70,21 @@ class HomeScreen extends StatelessWidget {
                 /// widget button 3
                 Align(
                   alignment: const Alignment(0.7, 0.80),
-                  child:GestureDetector(
+                  child: GestureDetector(
                     child: Button(buttonName: "button_3"),
-                    onTap: (){
+                    onTap: () {
                       print("pudhed button 3");
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const ConversationScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => NowLoadingScreen(
+                                process: () async {
+                                  print("START!");
+                                  await Future.delayed(
+                                      const Duration(seconds: 5));
+                                  print("FINISH!");
+                                },
+                                goto: ConversationScreen())),
                       );
                     },
                   ),

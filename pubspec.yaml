@@ -72,7 +72,7 @@ flutter:
     - assets/drawable/Dialogs/
     - assets/drawable/Home/
     - assets/drawable/Load/
-    - assets/drawable/LoadingProgress/
+    - assets/drawable/NowLoading/
     - assets/drawable/Menu/
     - assets/drawable/SelectAction/
     - assets/drawable/Setting/
