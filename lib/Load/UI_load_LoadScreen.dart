@@ -1,13 +1,19 @@
+///package
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Home/UI_home_HomeScreen.dart';
 import 'UI_load_SelectLoadFile.dart';
 import 'Provider_load_LoadUIProvider.dart';
 import '../Dialogs/UI_Dialog_DialogScreen.dart';
+import 'Provider_load_LoadScreenProvider.dart';
 
 final loadUIProvider =
     ChangeNotifierProvider.autoDispose((ref) => LoadUIProvider());
+final loadScreenProvider =
+    ChangeNotifierProvider.autoDispose((ref) => LoadScreenProvider());
 
 class LoadScreen extends ConsumerWidget {
   const LoadScreen({Key? key}) : super(key: key);

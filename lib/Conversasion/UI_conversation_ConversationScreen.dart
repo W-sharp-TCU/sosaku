@@ -42,7 +42,7 @@ class ConversationScreen extends StatelessWidget{
                   alignment: const Alignment(0, 1),
                   child: Container(
                     height: GetScreenSize.screenHeight() * 0.7,
-                    width: GetScreenSize.screenWidth() * 0.5,
+                    width: GetScreenSize.screenWidth() * 0.3,
                     color: Colors.pink,  //画像を用意したら消す
                     /*
                     child: Image(
@@ -60,7 +60,8 @@ class ConversationScreen extends StatelessWidget{
                       print("tap");
                     },
                     child: Container(
-                      height: GetScreenSize.screenHeight() * 0.2,
+                      height: GetScreenSize.screenHeight() * 0.3,
+                      width: GetScreenSize.screenWidth() * 0.9,
                       color: Colors.white.withOpacity(0.5),//画像を用意したら消す
                       padding: EdgeInsets.all(
                         GetScreenSize.screenWidth() * 0.005,
