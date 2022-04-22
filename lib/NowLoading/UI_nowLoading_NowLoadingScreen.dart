@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 
 class NowLoadingScreen extends ConsumerWidget {
   bool _firstBuild = true;
@@ -40,8 +38,8 @@ class NowLoadingScreen extends ConsumerWidget {
   }
 
   Future<void> _loadProcess(Function process) async {
-    print("Start pressing.");
+    //print("Start pressing.");
     await process();
-    print("End processing.");
+    //print("End processing.");
   }
 }
