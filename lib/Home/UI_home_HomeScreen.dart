@@ -80,8 +80,10 @@ class HomeScreen extends StatelessWidget {
                             builder: (context) => NowLoadingScreen(
                                 process: () async {
                                   print("START!");
-                                  await Future.delayed(
-                                      const Duration(seconds: 5));
+                                  await precacheImage(
+                                      AssetImage(
+                                          "assets/drawable/Conversasion/4k.jpg"),
+                                      context);
                                   print("FINISH!");
                                 },
                                 goto: ConversationScreen())),

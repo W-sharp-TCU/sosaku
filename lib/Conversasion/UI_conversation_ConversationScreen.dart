@@ -36,8 +36,8 @@ class ConversationScreen extends ConsumerWidget {
                   /*color: Colors.green,*/
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(
-                            "assets/drawable/Conversasion/default.jpg")),
+                        image:
+                            AssetImage("assets/drawable/Conversasion/4k.jpg")),
                   ),
                 ),
                 Align(
