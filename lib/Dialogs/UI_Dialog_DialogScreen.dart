@@ -56,29 +56,23 @@ class DialogScreen extends ConsumerWidget{
 
                   ///YES
                   Align(
-                      alignment: const Alignment(-0.7, 0.7),
-                      child: Container(
-                        width: GetScreenSize.screenWidth() * 0.2,
-                        height: GetScreenSize.screenHeight() * 0.2,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        //  borderRadius: BorderRadius.circular(GetScreenSize.screenWidth() * 0.1),
-                          image: const DecorationImage(
-                            image: AssetImage('assets/drawable/Title/Lion.jpg'),
-                            fit: BoxFit.cover,
+                      alignment: const Alignment(0.7, 0.7),
+                      child:GestureDetector(
+                        onTap: (){
+                          print("pushed yes");  ///debug
+                        },
+                        child: AnimatedContainer(
+                          width: GetScreenSize.screenWidth() * 0.2,
+                          height: GetScreenSize.screenHeight() * 0.2,
+                          color: Colors.redAccent,
+                          duration: const Duration(seconds: 2),
+                          //transform: Matrix4.diagonal3(,,1),
+                          child: const Center(
+                            child: Text(
+                                "YES"
+                            ),
                           ),
-                          
                         ),
-
-                        child: Material(
-                          color:Colors.transparent,
-                          child: InkWell(
-                            onTap: (){
-                              print("yes tap");
-                            },
-                          ),
-                        )
-
                       )
                   ),
 
