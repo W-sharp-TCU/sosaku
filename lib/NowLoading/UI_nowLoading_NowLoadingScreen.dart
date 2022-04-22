@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NowLoadingScreen extends ConsumerWidget {
   /// NowLoading Screen will show in [_minDuration] milliseconds at least.
-  static const int _minDuration = 1500; // [ms]
+  static const int _minDuration = 3000; // [ms]
 
   bool _firstBuild = true;
   late final Function _process;
@@ -33,9 +33,16 @@ class NowLoadingScreen extends ConsumerWidget {
     _firstBuild = false;
     /*************************************/
     // TODO: implement build
-    return const Scaffold(
-      body: Center(
-        child: Text("Now Loading..."),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                    "assets/drawable/NowLoading/LoadingAnimation.gif"))),
+        child: Center(
+          child: Container(
+              color: Colors.white, child: const Text("Now Loading...")),
+        ),
       ),
     );
   }
