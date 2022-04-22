@@ -14,7 +14,7 @@ class NowLoadingScreen extends ConsumerWidget {
   /// @param key (optional) : Flutter key.
   /// @param process : Specify processes you want to do while Now Loading Screen is appeared.
   ///                   ex) () async { await precacheImage(AssetImage("FILENAME"), context) }
-  /// @param goto : Specify [ConsumerWidget] you want to show after load processes finish.
+  /// @param goto : Specify [Widget] you want to show after load processes finish.
   NowLoadingScreen(
       {Key? key, required Function process, required ConsumerWidget goto})
       : super(key: key) {
