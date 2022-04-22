@@ -3,7 +3,7 @@ import 'package:sosaku/Title/Interface_title_SlideShowInterface.dart';
 
 class SlideShowController {
   final int _interval = 5000; // [ms]
-  final List<String> _imagePaths = [
+  final List<String> imagePaths = [
     "assets/drawable/Title/Ocean.jpg",
     "assets/drawable/Title/Lion.jpg",
     "assets/drawable/Title/default.jpg"
@@ -42,14 +42,14 @@ class SlideShowController {
   }
 
   Future<void> _changeImage(BuildContext context) async {
-    await precacheImage(AssetImage(_imagePaths[_i]), context);
-    if (_i != _imagePaths.length - 1) {
+    await precacheImage(AssetImage(imagePaths[_i]), context);
+    if (_i != imagePaths.length - 1) {
       _i++;
     } else {
       _i = 0;
     }
     if (_target != null) {
-      _target!.setImage(_imagePaths[_i]);
+      _target!.setImage(imagePaths[_i]);
     }
   }
 }

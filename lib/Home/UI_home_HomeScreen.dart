@@ -10,7 +10,7 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'UI_home_Button.dart';
 
 /// widget files import when tested.
-import '../Conversasion/UI_conversation_ConversationScreen.dart';
+import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../Load/UI_load_LoadScreen.dart';
 
 final homeScreenProvider =
@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   child: GestureDetector(
                     child: Button(buttonName: "button_1"),
                     onTap: () {
-                      print("pudhed button 1");
+                      print("pushed button 1");
                     },
                   ),
                 ),
@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                   child: GestureDetector(
                     child: Button(buttonName: "button_2"),
                     onTap: () {
-                      print("pudhed button 2");
+                      print("pushed button 2");
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                   child: GestureDetector(
                     child: Button(buttonName: "button_3"),
                     onTap: () {
-                      print("pudhed button 3");
+                      print("pushed button 3");
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -85,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                                 process: () async {
                                   await precacheImage(
                                       const AssetImage(
-                                          "assets/drawable/Conversasion/4k.jpg"),
+                                          "assets/drawable/Conversation/4k.jpg"),
                                       context);
                                 },
                                 goto: const ConversationScreen())),

@@ -37,7 +37,7 @@ class ConversationScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image:
-                            AssetImage("assets/drawable/Conversasion/4k.jpg")),
+                            AssetImage("assets/drawable/Conversation/4k.jpg")),
                   ),
                 ),
                 Align(
