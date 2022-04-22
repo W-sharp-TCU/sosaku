@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 
 /// wrapper import
@@ -11,6 +12,9 @@ import 'UI_home_Button.dart';
 /// widget files import when tested.
 import '../Conversasion/UI_conversation_ConversationScreen.dart';
 import '../Load/UI_load_LoadScreen.dart';
+
+final homeScreenProvider =
+    ChangeNotifierProvider.autoDispose((ref) => HomeScreenProvider());
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
