@@ -79,14 +79,12 @@ class HomeScreen extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => NowLoadingScreen(
                                 process: () async {
-                                  print("START!");
                                   await precacheImage(
-                                      AssetImage(
+                                      const AssetImage(
                                           "assets/drawable/Conversasion/4k.jpg"),
                                       context);
-                                  print("FINISH!");
                                 },
-                                goto: ConversationScreen())),
+                                goto: const ConversationScreen())),
                       );
                     },
                   ),

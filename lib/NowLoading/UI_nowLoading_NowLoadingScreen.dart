@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NowLoadingScreen extends ConsumerWidget {
+  /// NowLoading Screen will show in [_minDuration] milliseconds at least.
+  static const int _minDuration = 1500; // [ms]
+
   bool _firstBuild = true;
   late final Function _process;
   late final ConsumerWidget _goto;
@@ -38,8 +41,11 @@ class NowLoadingScreen extends ConsumerWidget {
   }
 
   Future<void> _loadProcess(Function process) async {
-    //print("Start pressing.");
+    var startTime = DateTime.now().millisecondsSinceEpoch;
     await process();
-    //print("End processing.");
+    var diff = ((DateTime.now().millisecondsSinceEpoch) - (startTime));
+    if (diff < _minDuration) {
+      await Future.delayed(Duration(milliseconds: (_minDuration - diff)));
+    }
   }
 }
