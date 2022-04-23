@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Load/UI_load_LoadScreen.dart';
 ///other dart file
 import '../Wrapper/wrapper_GetScreenSize.dart';
+import 'Provider_Dialog_DialogProvider.dart';
+
+final dialogProvider =
+    ChangeNotifierProvider.autoDispose((ref) => DialogProvider());
 
 class DialogScreen extends ConsumerWidget{
   const DialogScreen({Key? key}) : super(key: key);
@@ -60,21 +64,22 @@ class DialogScreen extends ConsumerWidget{
                       child:GestureDetector(
                         onTap: (){
                           print("pushed yes");  ///debug
+                          ref.read(dialogProvider).animatedButton();
                         },
                         child: AnimatedContainer(
+                          duration: const Duration(seconds: 2),
                           width: GetScreenSize.screenWidth() * 0.2,
                           height: GetScreenSize.screenHeight() * 0.2,
                           color: Colors.redAccent,
-                          duration: const Duration(seconds: 2),
-                          //transform: Matrix4.diagonal3(,,1),
                           child: const Center(
                             child: Text(
                                 "YES"
                             ),
                           ),
                         ),
-                      )
+                      ),
                   ),
+
 
                   ///NO
                   Align(
