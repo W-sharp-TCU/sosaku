@@ -28,11 +28,11 @@ class ConversationScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setFileSelectText(String path) {}
-
   void start(BuildContext context) {
     _conversationScreenController.start(context, this);
   }
 
-  void stop() {}
+  void stop() {
+    _conversationScreenController.stop();
+  }
 }

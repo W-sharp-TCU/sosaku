@@ -24,7 +24,7 @@ class ConversationScreen extends ConsumerWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
-            provider.conversationScreenController.switchText();
+            provider.conversationScreenController.nextScene();
           },
           child: Container(
             height: GetScreenSize.screenHeight(),
@@ -32,33 +32,32 @@ class ConversationScreen extends ConsumerWidget {
             color: Colors.black,
             child: Stack(
               children: [
-                /* 背景の画像が上がり次第利用　それまではcontainerで代用
+                //背景の画像が上がり次第利用　それまではcontainerで代用
                 Image(
                   fit: BoxFit.cover,
-                  image:AssetImage(),
+                  image: AssetImage(
+                      ref.watch(conversationScreenProvider).mBGImagePath),
                 ),
-                */
 
                 //背景代用container
-                Container(
-                  height: GetScreenSize.screenHeight(),
-                  width: GetScreenSize.screenWidth(),
-                  color: Colors.green,
-                ),
+                // Container(
+                //   height: GetScreenSize.screenHeight(),
+                //   width: GetScreenSize.screenWidth(),
+                //   color: Colors.green,
+                // ),
 
                 Align(
                     alignment: const Alignment(0, 1),
                     child: Container(
-                      height: GetScreenSize.screenHeight() * 0.7,
-                      width: GetScreenSize.screenWidth() * 0.5,
-                      color: Colors.pink, //画像を用意したら消す
-                      /*
-                    child: Image(
-                      fit: BoxFit.cover,
-                      image:AssetImage(),
-                    )
-                    */
-                    )),
+                        height: GetScreenSize.screenHeight() * 0.7,
+                        width: GetScreenSize.screenWidth() * 0.5,
+                        // color: Colors.pink, //画像を用意したら消す
+                        child: Image(
+                          fit: BoxFit.cover,
+                          image: AssetImage(ref
+                              .watch(conversationScreenProvider)
+                              .characterImagePath),
+                        ))),
 
                 Align(
                   alignment: const Alignment(0, 1),
