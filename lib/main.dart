@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "想咲 - ソウサク -",
       scrollBehavior: CustomScrollBehavior(), // support drag scroll.
-      home: const TitleScreen(),
+      home: TitleScreen(),
     );
   }
 }

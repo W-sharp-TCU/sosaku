@@ -3,13 +3,12 @@ import 'package:sosaku/Title/Interface_title_SlideShowInterface.dart';
 
 class SlideShowController {
   final int _interval = 5000; // [ms]
-  final List<String> imagePaths = [
-    "assets/drawable/Title/Ocean.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg"
-  ];
+  final List<String> imagePaths;
+  late BuildContext _context;
   SlideShowInterface? _target;
   int _i = 0;
+
+  SlideShowController(this.imagePaths);
 
   /// Start changing images in [_interval] milli seconds.
   /// This function can be called in build() of Widget class repeatedly.
@@ -19,8 +18,12 @@ class SlideShowController {
   /// [SlideShowInterface].
   void start(BuildContext context, SlideShowInterface target) {
     if (_target == null) {
+      _context = context;
       _target = target;
-      _threadLoop(context);
+      _threadLoop();
+    } else {
+      _context = context;
+      _target = target;
     }
   }
 
@@ -29,11 +32,11 @@ class SlideShowController {
     _target = null;
   }
 
-  Future<void> _threadLoop(BuildContext context) async {
-    _changeImage(context).then((value) {
+  Future<void> _threadLoop() async {
+    _changeImage().then((value) {
       Future.delayed(Duration(milliseconds: _interval), () {
         if (_target != null) {
-          _threadLoop(context);
+          _threadLoop();
         } else {
           // do nothing.
         }
@@ -41,8 +44,8 @@ class SlideShowController {
     });
   }
 
-  Future<void> _changeImage(BuildContext context) async {
-    await precacheImage(AssetImage(imagePaths[_i]), context);
+  Future<void> _changeImage() async {
+    await precacheImage(AssetImage(imagePaths[_i]), _context);
     if (_i != imagePaths.length - 1) {
       _i++;
     } else {
