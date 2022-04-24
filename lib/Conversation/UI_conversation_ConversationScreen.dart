@@ -34,7 +34,7 @@ class ConversationScreen extends ConsumerWidget {
               children: [
                 //背景の画像が上がり次第利用　それまではcontainerで代用
                 Image(
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitHeight,
                   image: AssetImage(
                       ref.watch(conversationScreenProvider).mBGImagePath),
                 ),
@@ -53,7 +53,7 @@ class ConversationScreen extends ConsumerWidget {
                         width: GetScreenSize.screenWidth() * 0.5,
                         // color: Colors.pink, //画像を用意したら消す
                         child: Image(
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fitHeight,
                           image: AssetImage(ref
                               .watch(conversationScreenProvider)
                               .characterImagePath),

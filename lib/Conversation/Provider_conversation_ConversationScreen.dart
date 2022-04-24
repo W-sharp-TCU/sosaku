@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sosaku/Conversasion/Contoroller_conversation_ConversationScreen.dart';
+import 'package:sosaku/Conversation/Contoroller_conversation_ConversationScreen.dart';
 
 class ConversationScreenProvider extends ChangeNotifier {
   String _mBGImagePath = "drawable/Load/default.jpg";

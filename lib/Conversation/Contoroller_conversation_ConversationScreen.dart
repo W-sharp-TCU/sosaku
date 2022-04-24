@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:sosaku/Conversasion/Provider_conversation_ConversationScreen.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationScreen.dart';
 
 class ConversationScreenController {
   final int _interval = 40; // [ms]
@@ -18,25 +18,24 @@ class ConversationScreenController {
 
   ///List of character image path.
   final List<String> _characterImagePaths = [
-    "assets/drawable/Title/default.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
+    "assets/drawable/Conversation/no_character.png",
+    "assets/drawable/Conversation/character_sample1.png",
+    "assets/drawable/Conversation/character_sample1.png",
+    "assets/drawable/Conversation/no_character.png",
+    "assets/drawable/Conversation/no_character.png",
+    "assets/drawable/Conversation/character_sample2.png",
+    "assets/drawable/Conversation/no_character.png",
   ];
 
   ///List of background image path.
   final List<String> _backgroundImagePaths = [
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg",
+    "assets/drawable/Conversation/background_sample1.jpg",
+    "assets/drawable/Conversation/background_sample1.jpg",
+    "assets/drawable/Conversation/background_sample1.jpg",
+    "assets/drawable/Conversation/background_sample2.jpg",
+    "assets/drawable/Conversation/background_sample1.jpg",
+    "assets/drawable/Conversation/background_sample2.jpg",
+    "assets/drawable/Conversation/background_sample2.jpg",
   ];
 
   ///Scene number to display.
@@ -87,13 +86,13 @@ class ConversationScreenController {
   void nextScene() {
     if (_nowLength == _conversationTextList[_numOfScene].length) {
       _nowLength = 0;
-      _changeBackgroundImage();
-      _changeCharacterImage();
       if (_numOfScene != _conversationTextList.length - 1) {
         _numOfScene++;
       } else {
         _numOfScene = 0;
       }
+      _changeBackgroundImage();
+      _changeCharacterImage();
     } else {
       _nowLength = _conversationTextList[_numOfScene].length - 1;
     }
