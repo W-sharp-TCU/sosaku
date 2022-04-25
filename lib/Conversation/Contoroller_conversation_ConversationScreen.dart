@@ -1,9 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:sosaku/Conversation/Provider_conversation_ConversationScreen.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
+
+import 'Provider_conversation_ConversationText.dart';
 
 class ConversationScreenController {
   final int _interval = 40; // [ms]
-  ConversationScreenProvider? _conversationScreenProvider;
+  ConversationImageProvider? _conversationImageProvider;
+  ConversationTextProvider? _conversationTextProvider;
 
   ///List of conversations.
   final List<String> _conversationTextList = [
@@ -49,11 +52,13 @@ class ConversationScreenController {
 
   ///Start controller.
   ///
-  /// @param context : context
-  /// @param csp : conversation screen provider
-  void start(BuildContext context, ConversationScreenProvider csp) {
-    if (_conversationScreenProvider == null) {
-      _conversationScreenProvider = csp;
+  /// @param cip : ConversationImageProvider
+  /// @param ctp : ConversationTextProvider
+  void start(ConversationImageProvider cip, ConversationTextProvider ctp) {
+    if (_conversationImageProvider == null &&
+        _conversationTextProvider == null) {
+      _conversationImageProvider = cip;
+      _conversationTextProvider = ctp;
       _animationAsync();
       _changeBackgroundImage();
       _changeCharacterImage();
@@ -62,13 +67,15 @@ class ConversationScreenController {
 
   ///Stop controller
   void stop() {
-    _conversationScreenProvider = null;
+    _conversationImageProvider = null;
+    _conversationTextProvider = null;
   }
 
   void _animationAsync() async {
-    _textAnimation();
     await Future.delayed(Duration(milliseconds: _interval));
-    if (_conversationScreenProvider != null) {
+    _textAnimation();
+    if (_conversationImageProvider != null &&
+        _conversationTextProvider != null) {
       _animationAsync();
     }
   }
@@ -78,7 +85,7 @@ class ConversationScreenController {
     if (_nowLength < _conversationTextList[_numOfScene].length) {
       _nowLength++;
       _nowText = _conversationTextList[_numOfScene].substring(0, _nowLength);
-      _conversationScreenProvider!.setConversationText(_nowText);
+      _conversationTextProvider!.setConversationText(_nowText);
     }
   }
 
@@ -99,12 +106,12 @@ class ConversationScreenController {
   }
 
   void _changeBackgroundImage() {
-    _conversationScreenProvider!
+    _conversationImageProvider!
         .setBGImage((_backgroundImagePaths[_numOfScene]));
   }
 
   void _changeCharacterImage() {
-    _conversationScreenProvider!
+    _conversationImageProvider!
         .setCharacterImage(_characterImagePaths[_numOfScene]);
   }
 }

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Conversation/Contoroller_conversation_ConversationScreen.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
-import 'Provider_conversation_ConversationScreen.dart';
+import 'Provider_conversation_ConversationImage.dart';
+import 'Provider_conversation_ConversationText.dart';
 
-final conversationScreenProvider =
-    ChangeNotifierProvider.autoDispose((ref) => ConversationScreenProvider());
+final conversationTextProvider =
+    ChangeNotifierProvider.autoDispose((ref) => ConversationTextProvider());
+final conversationImageProvider =
+    ChangeNotifierProvider.autoDispose((ref) => ConversationImageProvider());
+final ConversationScreenController conversationScreenController =
+    ConversationScreenController();
 
 class ConversationScreen extends ConsumerWidget {
   const ConversationScreen({Key? key}) : super(key: key);
@@ -13,9 +19,9 @@ class ConversationScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    var provider = ref.watch(conversationScreenProvider);
-    provider.start(context);
-
+    ConversationImageProvider cip = ref.watch(conversationImageProvider);
+    ConversationTextProvider ctp = ref.watch(conversationTextProvider);
+    conversationScreenController.start(cip, ctp);
     return Scaffold(
         body: Container(
       width: double.infinity,
@@ -24,7 +30,7 @@ class ConversationScreen extends ConsumerWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
-            provider.conversationScreenController.nextScene();
+            conversationScreenController.nextScene();
           },
           child: Container(
             height: GetScreenSize.screenHeight(),
@@ -34,9 +40,11 @@ class ConversationScreen extends ConsumerWidget {
               children: [
                 //背景の画像が上がり次第利用　それまではcontainerで代用
                 Image(
-                  fit: BoxFit.fitHeight,
+                  height: GetScreenSize.screenHeight(),
+                  width: GetScreenSize.screenWidth(),
+                  fit: BoxFit.cover,
                   image: AssetImage(
-                      ref.watch(conversationScreenProvider).mBGImagePath),
+                      ref.watch(conversationImageProvider).mBGImagePath),
                 ),
 
                 //背景代用container
@@ -55,7 +63,7 @@ class ConversationScreen extends ConsumerWidget {
                         child: Image(
                           fit: BoxFit.fitHeight,
                           image: AssetImage(ref
-                              .watch(conversationScreenProvider)
+                              .watch(conversationImageProvider)
                               .characterImagePath),
                         ))),
 
@@ -84,7 +92,7 @@ class ConversationScreen extends ConsumerWidget {
                             alignment: const Alignment(-1, -1),
                             child: Text(
                               ref
-                                  .watch(conversationScreenProvider)
+                                  .watch(conversationTextProvider)
                                   .conversationText,
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
