@@ -12,8 +12,8 @@ void main() {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: []); // hide Android status bar & navigation bar.
+  SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersive); // hide Android status bar & navigation bar.
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
       title: "想咲 - ソウサク -",
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
-      scrollBehavior: CustomScrollBehavior(), // support drag scroll.
+      scrollBehavior:
+          CustomScrollBehavior(), // support dragging mouse to scroll on the web.
       home: TitleScreen(),
     );
   }
