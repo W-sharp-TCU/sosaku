@@ -58,7 +58,7 @@ class LoadScreen extends ConsumerWidget {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()));
+                                  builder: (context) => HomeScreen()));
                         },
                         child: Container(
                             margin: EdgeInsets.only(

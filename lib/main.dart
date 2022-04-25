@@ -3,13 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
 import 'Title/UI_title_TitleScreen.dart';
+import 'l10n/l10n.dart';
 
 void main() {
+  // restrict device screen orientation
   WidgetsFlutterBinding.ensureInitialized();
-  // 向き指定
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight, // 横固定
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
   ]);
+  SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersive); // hide Android status bar & navigation bar.
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -20,7 +24,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "想咲 - ソウサク -",
-      scrollBehavior: CustomScrollBehavior(), // support drag scroll.
+      localizationsDelegates: L10n.localizationsDelegates,
+      supportedLocales: L10n.supportedLocales,
+      scrollBehavior:
+          CustomScrollBehavior(), // support dragging mouse to scroll on the web.
       home: TitleScreen(),
     );
   }

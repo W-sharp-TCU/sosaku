@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
 import '../Home/UI_home_HomeScreen.dart';
@@ -8,14 +9,26 @@ final titleScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => TitleScreenProvider());
 
 class TitleScreen extends ConsumerWidget {
-  const TitleScreen({Key? key}) : super(key: key);
+  late final SlideShowController _slideShowController;
+
+  TitleScreen({Key? key, SlideShowController? slideShowController})
+      : super(key: key) {
+    if (slideShowController == null) {
+      _slideShowController = SlideShowController([
+        "assets/drawable/Title/Ocean.jpg",
+        "assets/drawable/Title/Lion.jpg",
+        "assets/drawable/Title/default.jpg"
+      ]);
+    } else {
+      _slideShowController = slideShowController;
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    var slideshow = ref.watch(titleScreenProvider);
-    slideshow.start(context);
+    _slideShowController.start(context, ref.read(titleScreenProvider));
 
     return ProviderScope(
       child: Scaffold(
@@ -26,12 +39,11 @@ class TitleScreen extends ConsumerWidget {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    slideshow.stop();
+                    _slideShowController.stop();
 
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeScreen()),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
 
                     print("tap"); //デバッグ用

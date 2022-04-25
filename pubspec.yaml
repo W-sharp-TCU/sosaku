@@ -68,14 +68,14 @@ flutter:
 
   assets:
     - assets/drawable/ActionResult/
-    - assets/drawable/Conversasion/
+    - assets/drawable/Conversation/
     - assets/drawable/Dialogs/
     - assets/drawable/Home/
     - assets/drawable/Load/
-    - assets/drawable/LoadingProgress/
+    - assets/drawable/NowLoading/
     - assets/drawable/Menu/
     - assets/drawable/SelectAction/
-    - assets/drawable/Setting/
+    - assets/drawable/Settings/
     - assets/drawable/Splash/
     - assets/drawable/Title/
     - assets/sound/ # 何かここに入れるときはBGM, SEなど種類ごとにフォルダ分けしてください。
