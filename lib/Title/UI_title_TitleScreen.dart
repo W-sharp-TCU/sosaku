@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
+import 'package:sosaku/l10n/l10n.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
 import '../Home/UI_home_HomeScreen.dart';
@@ -62,7 +63,7 @@ class TitleScreen extends ConsumerWidget {
                           Align(
                             alignment: const Alignment(0, 0.8),
                             child: Text(
-                              'Tap to Start',
+                              L10n.of(context)!.tapToStart,
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.2,
                                 color: Colors.white,

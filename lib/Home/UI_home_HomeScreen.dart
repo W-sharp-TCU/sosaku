@@ -4,6 +4,7 @@ import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Title/Provider_title_TitleScreenProvider.dart';
+import 'package:sosaku/l10n/l10n.dart';
 
 /// wrapper import
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -65,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
                 Align(
                   alignment: const Alignment(0.7, 0.20),
                   child: GestureDetector(
-                    child: Button(buttonName: "button_1"),
+                    child: Button(buttonName: L10n.of(context)!.newGame),
                     onTap: () {
                       print("pushed button 1");
                       _slideShowController.stop();
@@ -77,7 +78,7 @@ class HomeScreen extends ConsumerWidget {
                 Align(
                   alignment: const Alignment(0.7, 0.50),
                   child: GestureDetector(
-                    child: Button(buttonName: "button_2"),
+                    child: Button(buttonName: L10n.of(context)!.continueGame),
                     onTap: () {
                       print("pushed button 2");
                       _slideShowController.stop();
@@ -94,7 +95,7 @@ class HomeScreen extends ConsumerWidget {
                 Align(
                   alignment: const Alignment(0.7, 0.80),
                   child: GestureDetector(
-                    child: Button(buttonName: "button_3"),
+                    child: Button(buttonName: L10n.of(context)!.settings),
                     onTap: () {
                       print("pushed button 3");
                       _slideShowController.stop();
