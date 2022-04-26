@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_conversation_ConversationScreen.dart';
+import 'UI_conversation_ThreeDialog.dart';
 
 final conversationScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationScreenProvider());
@@ -18,90 +19,94 @@ class ConversationScreen extends ConsumerWidget {
 
     return Scaffold(
         body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.black,
-      child: Center(
-        child: GestureDetector(
-          onTap: () {
-            provider.conversationScreenController.nextScene();
-          },
-          child: Container(
-            height: GetScreenSize.screenHeight(),
-            width: GetScreenSize.screenWidth(),
-            color: Colors.black,
-            child: Stack(
-              children: [
-                //背景の画像が上がり次第利用　それまではcontainerで代用
-                Image(
-                  fit: BoxFit.fitHeight,
-                  image: AssetImage(
-                      ref.watch(conversationScreenProvider).mBGImagePath),
-                ),
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.black,
+          child: Center(
+            child: Container(
+             height: GetScreenSize.screenHeight(),
+             width: GetScreenSize.screenWidth(),
+             color: Colors.black,
 
-                //背景代用container
-                // Container(
-                //   height: GetScreenSize.screenHeight(),
-                //   width: GetScreenSize.screenWidth(),
-                //   color: Colors.green,
-                // ),
+               child: Stack(
+               children: [
+                 ///BGImage
+                 Container(
+                   width: GetScreenSize.screenWidth(),
+                   height: GetScreenSize.screenHeight(),
+                   child: Image(
+                     fit: BoxFit.cover,
+                     image: AssetImage(
+                         ref.watch(conversationScreenProvider).mBGImagePath),
+                   ),
+                 ),
 
-                Align(
-                    alignment: const Alignment(0, 1),
-                    child: Container(
-                        height: GetScreenSize.screenHeight() * 0.7,
-                        width: GetScreenSize.screenWidth() * 0.5,
-                        // color: Colors.pink, //画像を用意したら消す
-                        child: Image(
-                          fit: BoxFit.fitHeight,
-                          image: AssetImage(ref
-                              .watch(conversationScreenProvider)
-                              .characterImagePath),
-                        ))),
+                 ///character
+                 Align(
+                   alignment: const Alignment(0, 1),
+                   child: Container(
+                     height: GetScreenSize.screenHeight() * 0.7,
+                     width: GetScreenSize.screenWidth() * 0.5,
+                     child: Image(
+                       fit: BoxFit.fitHeight,
+                       image: AssetImage(ref
+                           .watch(conversationScreenProvider)
+                           .characterImagePath),
+                     )
+                   )
+                 ),
 
-                Align(
-                  alignment: const Alignment(0, 1),
-                  child: GestureDetector(
-                    onTap: () {
-                      print("tap");
-                    },
-                    child: Container(
-                      height: GetScreenSize.screenHeight() * 0.2,
-                      color: Colors.white.withOpacity(0.5), //画像を用意したら消す
-                      padding: EdgeInsets.all(
-                        GetScreenSize.screenWidth() * 0.005,
-                      ),
-                      child: Stack(
-                        children: [
-                          /* ここでImage置くより上のContainerでdecorationしたほうがいいかもね
-                          Image(
-                            fit: BoxFit.cover,
-                            image:AssetImage(),
-                          ),
-                          */
+                 ///3 choices dialog
+                 if(ref.watch(conversationScreenProvider).dialogFlag)
+                 const Align(
+                   alignment: Alignment(0, 0),
+                   child: ThreeDialog(),
+                 ),
 
-                          Align(
-                            alignment: const Alignment(-1, -1),
-                            child: Text(
-                              ref
-                                  .watch(conversationScreenProvider)
-                                  .conversationText,
-                              style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.04,
-                              ),
-                              maxLines: 3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                 ///text zone
+                 Align(
+                   alignment: const Alignment(0, 1),
+                   child: GestureDetector(
+                     onTap: () {
+                       provider.conversationScreenController.nextScene();
+                       print("tap");
+                       ref.read(conversationScreenProvider).changeDialogFlag();
+                     },
+
+                     child: Container(
+                       height: GetScreenSize.screenHeight() * 0.2,
+                       width: GetScreenSize.screenWidth(),
+                       color: Colors.white.withOpacity(0.5), //画像を用意したら消す
+                       padding: EdgeInsets.all(
+                         GetScreenSize.screenWidth() * 0.005,
+                       ),
+                       child: Stack(
+                         children: [
+
+                           ///text
+                           Align(
+                             alignment: const Alignment(-1, -1),
+                             child: Text(
+                               ref.watch(conversationScreenProvider).conversationText,
+                               style: TextStyle(
+                                 fontSize: GetScreenSize.screenHeight() * 0.04,
+                               ),
+                               maxLines: 3,
+                             ),
+                           ),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ),
+
+
+
+               ],
+             ),
             ),
-          ),
         ),
-      ),
-    ));
+      )
+    );
   }
 }
