@@ -60,15 +60,13 @@ class DialogScreen extends ConsumerWidget{
 
                   ///YES
                   Align(
-                      alignment: const Alignment(0.7, 0.7),
+                      alignment: const Alignment(-0.7, 0.7),
                       child:GestureDetector(
                         onTap: (){
                           print("pushed yes");  ///debug
-                          ref.read(dialogProvider).animatedButton();
                         },
-                        child: AnimatedContainer(
-                          duration: const Duration(seconds: 2),
-                          width: GetScreenSize.screenWidth() * 0.2,
+                        child: Container(
+                          width: GetScreenSize.screenWidth() * 0.2 ,
                           height: GetScreenSize.screenHeight() * 0.2,
                           color: Colors.redAccent,
                           child: const Center(

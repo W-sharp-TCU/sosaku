@@ -7,12 +7,15 @@ class ConversationScreenProvider extends ChangeNotifier {
   String _conversationText = "おためし  apple banana \nテキスト orange\nです\n４行目は表示なし";
   final ConversationScreenController _conversationScreenController =
       ConversationScreenController();
+  bool _dialogFlag = false;
 
   String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
   String get conversationText => _conversationText;
   ConversationScreenController get conversationScreenController =>
       _conversationScreenController;
+  bool get dialogFlag => _dialogFlag;
+
   void setBGImage(String path) {
     _mBGImagePath = path;
     notifyListeners();
@@ -34,5 +37,10 @@ class ConversationScreenProvider extends ChangeNotifier {
 
   void stop() {
     _conversationScreenController.stop();
+  }
+
+  void changeDialogFlag(){
+    _dialogFlag = !_dialogFlag;
+    notifyListeners();
   }
 }
