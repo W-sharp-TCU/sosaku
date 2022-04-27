@@ -61,49 +61,64 @@ class ConversationScreen extends ConsumerWidget {
 
                  ///3 choices dialog
                  if(ref.watch(conversationScreenProvider).dialogFlag)
-                 const Align(
-                   alignment: Alignment(0, 0),
-                   child: ThreeDialog(),
-                 ),
+                   const Align(
+                     alignment: Alignment(0, 0),
+                     child: ThreeDialog(),
+                   ),
 
                  ///text zone
                  Align(
                    alignment: const Alignment(0, 1),
-                   child: GestureDetector(
-                     onTap: () {
-                       provider.conversationScreenController.nextScene();
-                       print("tap");
-                       ref.read(conversationScreenProvider).changeDialogFlag();
-                     },
+                   child: Stack(
+                     children: [
+                       GestureDetector(
+                         onTap: () {
+                           provider.conversationScreenController.nextScene();
+                           print("tap");
+                           ref.read(conversationScreenProvider).changeDialogFlag();
+                         },
 
-                     child: Container(
-                       height: GetScreenSize.screenHeight() * 0.2,
-                       width: GetScreenSize.screenWidth(),
-                       color: Colors.white.withOpacity(0.5), //画像を用意したら消す
-                       padding: EdgeInsets.all(
-                         GetScreenSize.screenWidth() * 0.005,
-                       ),
-                       child: Stack(
-                         children: [
-
-                           ///text
-                           Align(
-                             alignment: const Alignment(-1, -1),
-                             child: Text(
-                               ref.watch(conversationScreenProvider).conversationText,
-                               style: TextStyle(
-                                 fontSize: GetScreenSize.screenHeight() * 0.04,
-                               ),
-                               maxLines: 3,
-                             ),
+                         child: Container(
+                           height: GetScreenSize.screenHeight() * 0.2,
+                           width: GetScreenSize.screenWidth(),
+                           color: Colors.white.withOpacity(0.5), //画像を用意したら消す
+                           padding: EdgeInsets.all(
+                             GetScreenSize.screenWidth() * 0.005,
                            ),
-                         ],
+                           child: Stack(
+                             children: [
+
+                               ///text
+                               Align(
+                                 alignment: const Alignment(-1, -1),
+                                 child: Text(
+                                   ref.watch(conversationScreenProvider).conversationText,
+                                   style: TextStyle(
+                                     fontSize: GetScreenSize.screenHeight() * 0.04,
+                                   ),
+                                   maxLines: 3,
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ),
                        ),
-                     ),
+
+                     ],
                    ),
                  ),
 
-
+                 ///unable text zone tap
+                 ///don't erase
+                 if(ref.watch(conversationScreenProvider).dialogFlag)
+                   Align(
+                     alignment: const Alignment(0, 1),
+                     child: Container(
+                       height: GetScreenSize.screenHeight() * 0.2,
+                       width: GetScreenSize.screenWidth(),
+                       color: Colors.white.withOpacity(0),
+                     ),
+                   )
 
                ],
              ),

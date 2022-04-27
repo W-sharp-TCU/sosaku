@@ -35,13 +35,22 @@ class NowLoadingScreen extends ConsumerWidget {
     // TODO: implement build
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(
-                    "assets/drawable/NowLoading/LoadingAnimation.gif"))),
-        child: Center(
-          child: Container(
-              color: Colors.white, child: const Text("Now Loading...")),
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black,
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                      "assets/drawable/NowLoading/LoadingAnimation.gif"))),
+          child: const Center(
+            child: Text(
+                "Now Loading...",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
     );

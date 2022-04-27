@@ -51,7 +51,7 @@ class DialogScreen extends ConsumerWidget{
               /// Stack以下は仕様が決まり次第改良
               child: Stack(
                 children: [
-
+                  
                   const Align(
                     ///表示メッセージ
                     alignment: Alignment(0, -0.7),
@@ -64,14 +64,23 @@ class DialogScreen extends ConsumerWidget{
                       child:GestureDetector(
                         onTap: (){
                           print("pushed yes");  ///debug
+                          ref.read(dialogProvider).animatedButton();
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 100),
+                          padding: EdgeInsets.all(
+                              GetScreenSize.screenHeight() * 0.01* ref.watch(dialogProvider).i
+                          ),
                           width: GetScreenSize.screenWidth() * 0.2 ,
                           height: GetScreenSize.screenHeight() * 0.2,
-                          color: Colors.redAccent,
-                          child: const Center(
-                            child: Text(
-                                "YES"
+                          child: Container(
+                            width: GetScreenSize.screenWidth() * 0.2 ,
+                            height: GetScreenSize.screenHeight() * 0.2,
+                            color: Colors.redAccent,
+                            child: const Center(
+                              child: Text(
+                                  "YES"
+                              ),
                             ),
                           ),
                         ),
