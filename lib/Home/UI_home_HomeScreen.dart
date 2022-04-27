@@ -1,9 +1,13 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Title/Provider_title_TitleScreenProvider.dart';
+import 'package:sosaku/Wrapper/wrapper_SoundBundle.dart';
+import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
 /// wrapper import
@@ -33,6 +37,10 @@ class HomeScreen extends ConsumerWidget {
     } else {
       _slideShowController = slideShowController;
     }
+    SoundPlayer.loadSE(
+        ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);
+    SoundPlayer.loadBGM(["assets/sound/fb.wav"]);
+    SoundPlayer.playBGM("assets/sound/fb.wav", loop: true);
   }
 
   @override
@@ -67,9 +75,10 @@ class HomeScreen extends ConsumerWidget {
                   alignment: const Alignment(0.7, 0.20),
                   child: GestureDetector(
                     child: Button(buttonName: L10n.of(context)!.newGame),
-                    onTap: () {
+                    onTap: () async {
                       print("pushed button 1");
                       _slideShowController.stop();
+                      SoundPlayer.playSE("assets/sound/pushButton.mp3");
                     },
                   ),
                 ),
@@ -80,6 +89,7 @@ class HomeScreen extends ConsumerWidget {
                   child: GestureDetector(
                     child: Button(buttonName: L10n.of(context)!.continueGame),
                     onTap: () {
+                      SoundPlayer.playSE("assets/sound/pushButton.mp3");
                       print("pushed button 2");
                       _slideShowController.stop();
                       Navigator.pushReplacement(
@@ -97,6 +107,7 @@ class HomeScreen extends ConsumerWidget {
                   child: GestureDetector(
                     child: Button(buttonName: L10n.of(context)!.settings),
                     onTap: () {
+                      SoundPlayer.playSE("assets/sound/next.mp3");
                       print("pushed button 3");
                       _slideShowController.stop();
                       Navigator.pushReplacement(
