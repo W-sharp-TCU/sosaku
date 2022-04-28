@@ -1,6 +1,7 @@
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_conversation_ConversationText.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 /// @Fields
 /// [_types], [_backgroundImagePaths], [_characterImagePaths], [_characterNames],
@@ -308,11 +309,12 @@ class ConversationScreenController {
       _conversationImageProvider!.setOptionTexts(_options[_nowScene]);
       _conversationImageProvider!.changeDialogFlag();
     } else if (_isAuto &&
-        _types[_nowScene] == "speech" &&
-        _nowLength ==
-            _conversationTexts[_nowScene]
-                .length /*&&
-        */ /*SoundPlayer.seState != PlayerState.PLAYING*/) {
+            _types[_nowScene] == "speech" &&
+            _nowLength ==
+                _conversationTexts[_nowScene]
+                    .length /* &&
+        SoundPlayer.seState != PlayerState.PLAYING*/
+        ) {
       //Todo : Rewrite the condition as when voice playback ends.
       goNextScene();
     }

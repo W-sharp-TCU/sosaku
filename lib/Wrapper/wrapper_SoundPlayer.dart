@@ -31,7 +31,7 @@ class SoundPlayer {
           _seState = event;
           print(_seState);
         });
-        // _bgmState = PlayerState.PLAYING;
+        _bgmState = PlayerState.PLAYING;
       } else {
         _sePlayer = await _seAudioCache.play(filePath,
             isNotification: true, volume: seVolume);
@@ -54,7 +54,7 @@ class SoundPlayer {
           _bgmState = event;
           print(_bgmState);
         });
-        // _bgmState = PlayerState.PLAYING;
+        _bgmState = PlayerState.PLAYING;
       } else {
         _bgmPlayer = await _bgmAudioCache.play(filePath,
             isNotification: true, volume: bgmVolume);
