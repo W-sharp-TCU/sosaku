@@ -66,6 +66,7 @@ class ConversationScreen extends ConsumerWidget {
               ),
 
               ///below Widgets
+              if (!ref.watch(conversationImageProvider).isHideUi)
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,13 +134,14 @@ class ConversationScreen extends ConsumerWidget {
               ),
 
               ///3 choices dialog
-              if (ref.watch(conversationImageProvider).dialogFlag)
+              if (ref.watch(conversationImageProvider).dialogFlag && !ref.watch(conversationImageProvider).isHideUi)
                 const Align(
                   alignment: Alignment(0, 0),
                   child: ThreeDialog(),
                 ),
 
               ///side Widgets
+              if (!ref.watch(conversationImageProvider).isHideUi)
               SizedBox(
                 width: GetScreenSize.screenWidth(),
                 height: GetScreenSize.screenHeight(),
