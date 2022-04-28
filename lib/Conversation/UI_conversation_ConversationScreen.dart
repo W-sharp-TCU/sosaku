@@ -25,19 +25,20 @@ class ConversationScreen extends ConsumerWidget {
     conversationScreenController.start(cip, ctp);
 
     return Scaffold(
-        body: Container(
+      body: Container(
       width: double.infinity,
       height: double.infinity,
       color: Colors.black,
-      child: Center(
+       child: Center(
         child: Container(
           height: GetScreenSize.screenHeight(),
           width: GetScreenSize.screenWidth(),
           color: Colors.black,
           child: Stack(
             children: [
+
               ///BGImage
-              Container(
+              SizedBox(
                 width: GetScreenSize.screenWidth(),
                 height: GetScreenSize.screenHeight(),
                 child: Image(
@@ -60,61 +61,9 @@ class ConversationScreen extends ConsumerWidget {
                               .watch(conversationImageProvider)
                               .characterImagePath,
                         ),
-                      ))),
-
-              ///upper Widgets
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ///UI appear
-                  GestureDetector(
-                    onTap: () {
-                      ref.read(conversationImageProvider).changeHideUi();
-                    },
-                    child: Container(
-                        width: GetScreenSize.screenWidth() * 0.05,
-                        height: GetScreenSize.screenWidth() * 0.05,
-                        margin:
-                            EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
-                        color: Colors.red.withOpacity(0.5),
-                        child: Center(
-                          child: Text(
-                            "UI",
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.04,
-                            ),
-                          ),
-                        )),
-                  ),
-
-                  ///menu
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                        width: GetScreenSize.screenWidth() * 0.05,
-                        height: GetScreenSize.screenWidth() * 0.05,
-                        margin:
-                            EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
-                        color: Colors.red.withOpacity(0.5),
-                        child: Center(
-                          child: Text(
-                            "三",
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.04,
-                            ),
-                          ),
-                        )),
-                  ),
-                ],
+                      )
+                  )
               ),
-
-              ///3 choices dialog
-              if (ref.watch(conversationImageProvider).dialogFlag)
-                const Align(
-                  alignment: Alignment(0, 0),
-                  child: ThreeDialog(),
-                ),
 
               ///below Widgets
               Column(
@@ -122,77 +71,27 @@ class ConversationScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ///character name
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: GetScreenSize.screenHeight() * 0.08,
-                        width: GetScreenSize.screenWidth() * 0.15,
-                        color: Colors.white.withOpacity(0.5),
-                        padding:
-                            EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
-                        child: Center(
-                          child: Text(
-                            ///initをproviderに書き換える
-                            ref.watch(conversationImageProvider).characterName,
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.04,
-                            ),
-                          ),
+                  Container(
+                    height: GetScreenSize.screenHeight() * 0.08,
+                    width: GetScreenSize.screenWidth() * 0.15,
+                    color: Colors.white.withOpacity(0.5),
+                    padding:
+                        EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
+                    child: Center(
+                      child: Text(
+                        ///initをproviderに書き換える
+                        ref.watch(conversationImageProvider).characterName,
+                        style: TextStyle(
+                          fontSize: GetScreenSize.screenHeight() * 0.04,
                         ),
                       ),
-
-                      ///auto button, log button
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              conversationScreenController.changeAutoPlay();
-                            },
-                            child: Container(
-                              height: GetScreenSize.screenHeight() * 0.05,
-                              width: GetScreenSize.screenWidth() * 0.1,
-                              color: Colors.red.withOpacity(0.5),
-                              child: Center(
-                                child: Text(
-                                  "Auto",
-                                  style: TextStyle(
-                                    fontSize:
-                                        GetScreenSize.screenHeight() * 0.04,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: GetScreenSize.screenWidth() * 0.05,
-                                right: GetScreenSize.screenWidth() * 0.02,
-                              ),
-                              height: GetScreenSize.screenHeight() * 0.05,
-                              width: GetScreenSize.screenWidth() * 0.1,
-                              color: Colors.red.withOpacity(0.5),
-                              child: Center(
-                                child: Text(
-                                  "Log",
-                                  style: TextStyle(
-                                    fontSize:
-                                        GetScreenSize.screenHeight() * 0.04,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                    ),
                   ),
 
                   ///text zone
                   GestureDetector(
                     onTap: () {
-                      conversationScreenController.goNextScene();
+                      //conversationScreenController.goNextScene();
                       print("tap");
                     },
                     child: Container(
@@ -221,19 +120,125 @@ class ConversationScreen extends ConsumerWidget {
                 ],
               ),
 
-              ///unable text zone tap
-              ///don't erase
-              if (ref.watch(conversationImageProvider).dialogFlag)
-                Align(
-                  alignment: const Alignment(0, 1),
-                  child: Container(
-                    height: GetScreenSize.screenHeight() * 0.25,
-                    width: GetScreenSize.screenWidth(),
-                    color: Colors.white.withOpacity(0),
+              ///tap to next screen
+              GestureDetector(
+                onTap:(){
+                  conversationScreenController.goNextScene();
+                },
+                child: Container(
+                  width: GetScreenSize.screenWidth(),
+                  height: GetScreenSize.screenHeight(),
+                  color: Colors.blueAccent.withOpacity(0),
+                ),
+              ),
 
-                    ///debug
-                  ),
-                )
+              ///3 choices dialog
+              if (ref.watch(conversationImageProvider).dialogFlag)
+                const Align(
+                  alignment: Alignment(0, 0),
+                  child: ThreeDialog(),
+                ),
+
+              ///side Widgets
+              SizedBox(
+                width: GetScreenSize.screenWidth(),
+                height: GetScreenSize.screenHeight(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+
+                    ///menu
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          height: GetScreenSize.screenWidth() * 0.05,
+                          margin:
+                          EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                          color: Colors.red.withOpacity(0.5),
+                          child: Center(
+                            child: Text(
+                              "三",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          )
+                      ),
+                    ),
+
+                    ///UI appear
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(conversationImageProvider).changeHideUi();
+                      },
+                      child: Container(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          height: GetScreenSize.screenWidth() * 0.05,
+                          margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                          color: Colors.red.withOpacity(0.5),
+                          child: Center(
+                            child: Text(
+                              "UI",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          )
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                    ///auto button
+                    GestureDetector(
+                      onTap: () {
+                        conversationScreenController.changeAutoPlay();
+                      },
+                      child: Container(
+                        height: GetScreenSize.screenHeight() * 0.05,
+                        width: GetScreenSize.screenWidth() * 0.1,
+                        color: Colors.red.withOpacity(0.5),
+                        margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                        child: Center(
+                          child: Text(
+                            "Auto",
+                            style: TextStyle(
+                              fontSize:
+                              GetScreenSize.screenHeight() * 0.04,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    ///Log button
+                    GestureDetector(
+                      child: Container(
+                        height: GetScreenSize.screenHeight() * 0.05,
+                        width: GetScreenSize.screenWidth() * 0.1,
+                        color: Colors.red.withOpacity(0.5),
+                        margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                        child: Center(
+                          child: Text(
+                            "Log",
+                            style: TextStyle(
+                              fontSize:
+                              GetScreenSize.screenHeight() * 0.04,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                  ],
+                ),
+              ),
+
+
             ],
           ),
         ),
