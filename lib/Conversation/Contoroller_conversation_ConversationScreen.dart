@@ -5,12 +5,12 @@ import 'package:audioplayers/audioplayers.dart';
 
 /// @Fields
 /// [_types], [_backgroundImagePaths], [_characterImagePaths], [_characterNames],
-/// [_conversationTexts], [_bgmPaths], [_voicePaths], [_options], [_gotoNumbers],
-/// [_nowScene], [_nowLength], [_nowText], [_isLogDisplay], [_conversationLogs]
+/// [_conversationTexts], [_bgmPaths], [_voicePaths], [_sePaths], [_options], [_gotoNumbers],
+/// [_nowScene], [_nowLength], [_nowText], [_conversationLogs]
 ///
 /// @Setters(for load json)
 /// [setTypes], [setBackgroundImagePaths], [setCharacterImagePaths], [setCharacterNames],
-/// [setConversationTexts], [setOptions], [setGotoNumbers], [setBgmPaths], [setVoicePaths]
+/// [setConversationTexts], [setBgmPaths], [setVoicePaths], [setSePaths], [setOptions], [setGotoNumbers]
 ///
 /// @Getters(for display logs,hide UI, auto play, )
 /// [characterNames], [conversationTexts], [voicePaths],
@@ -128,6 +128,9 @@ class ConversationScreenController {
     "assets/sound/voice_sample_009.wav",
     "assets/sound/voice_sample_010.wav",
   ];
+
+  /// List of SE.
+  List<String> _sePaths = [];
 
   /// List of options.
   List<List<String>> _options = [
@@ -299,7 +302,7 @@ class ConversationScreenController {
 
   /// Auto animation without operation.
   /// Text animation, display question dialog, autoplay, change log data, etc...
-  void _autoAnimation() {
+  void _autoAnimation() async {
     if (_nowLength < _conversationTexts[_nowScene].length) {
       _nowLength++;
       _nowText = _conversationTexts[_nowScene].substring(0, _nowLength);
@@ -335,7 +338,9 @@ class ConversationScreenController {
   ///Change background image.
   void _changeBackgroundImage() {
     // _backgroundImagePathsが空でなければ(変更があれば)
-    if (_backgroundImagePaths[_nowScene].isNotEmpty) {
+    if (_backgroundImagePaths[_nowScene].isNotEmpty &&
+        _conversationImageProvider!.mBGImagePath !=
+            _backgroundImagePaths[_nowScene]) {
       _conversationImageProvider!
           .setBGImage((_backgroundImagePaths[_nowScene]));
     }
@@ -344,7 +349,9 @@ class ConversationScreenController {
   ///Change character image.
   void _changeCharacterImage() {
     // _characterImagePathsが空でなければ(変更があれば)
-    if (_characterImagePaths[_nowScene].isNotEmpty) {
+    if (_characterImagePaths[_nowScene].isNotEmpty &&
+        _conversationImageProvider!.characterImagePath !=
+            _characterImagePaths[_nowScene]) {
       _conversationImageProvider!
           .setCharacterImage(_characterImagePaths[_nowScene]);
     }
@@ -369,6 +376,14 @@ class ConversationScreenController {
     SoundPlayer.stopSE();
     if (_voicePaths[_nowScene].isNotEmpty) {
       SoundPlayer.playSE(_voicePaths[_nowScene]);
+    }
+  }
+
+  /// Change se.
+  void _changeSe() {
+    SoundPlayer.stopSE();
+    if (_sePaths[_nowScene].isNotEmpty) {
+      SoundPlayer.playSE(_sePaths[_nowScene]);
     }
   }
 }
