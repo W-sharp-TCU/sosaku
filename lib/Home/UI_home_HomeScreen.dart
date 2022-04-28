@@ -37,10 +37,6 @@ class HomeScreen extends ConsumerWidget {
     } else {
       _slideShowController = slideShowController;
     }
-    SoundPlayer.loadSE(
-        ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);
-    SoundPlayer.loadBGM(["assets/sound/fb.wav"]);
-    SoundPlayer.playBGM("assets/sound/fb.wav", loop: true);
   }
 
   @override

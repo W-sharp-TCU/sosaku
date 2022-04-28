@@ -5,7 +5,7 @@ import 'package:sosaku/CustomScrollBehavior.dart';
 import 'Title/UI_title_TitleScreen.dart';
 import 'l10n/l10n.dart';
 
-void main() {
+Future<void> main() async {
   // restrict device screen orientation
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -14,6 +14,7 @@ void main() {
   ]);
   SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.immersive); // hide Android status bar & navigation bar.
+  await TitleScreen.prepare();
   runApp(const ProviderScope(child: MyApp()));
 }
 
