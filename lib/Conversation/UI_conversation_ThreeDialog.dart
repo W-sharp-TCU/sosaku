@@ -1,15 +1,17 @@
 ///package
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
+
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'UI_conversation_ConversationScreen.dart';
 
-class ThreeDialog extends ConsumerWidget{
+class ThreeDialog extends ConsumerWidget {
   const ThreeDialog({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
@@ -41,7 +43,6 @@ class ThreeDialog extends ConsumerWidget{
                     ),
                   )),
             ),
-          ),
 
             ///second
             GestureDetector(
@@ -63,7 +64,6 @@ class ThreeDialog extends ConsumerWidget{
                     ),
                   )),
             ),
-          ),
 
             ///third
             GestureDetector(
@@ -85,10 +85,7 @@ class ThreeDialog extends ConsumerWidget{
                     ),
                   )),
             ),
-          ),
-        ],
-      )
-    );
-
+          ],
+        ));
   }
 }
