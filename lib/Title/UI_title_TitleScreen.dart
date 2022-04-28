@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/l10n/l10n.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
+import '../Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_title_TitleScreenProvider.dart';
 import '../Home/UI_home_HomeScreen.dart';
 
@@ -40,14 +41,14 @@ class TitleScreen extends ConsumerWidget {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
+                    print("tap"); //デバッグ用
                     _slideShowController.stop();
-
+                    SoundPlayer.playSE("assets/sound/next.mp3");
+                    SoundPlayer.playBGM("assets/sound/fb.wav", loop: true);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
-
-                    print("tap"); //デバッグ用
                   },
                   child: Container(
                       height: GetScreenSize.screenHeight(),
@@ -76,5 +77,11 @@ class TitleScreen extends ConsumerWidget {
                 ),
               ))),
     );
+  }
+
+  static Future<void> prepare() async {
+    SoundPlayer.loadSE(
+        ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);
+    SoundPlayer.loadBGM(["assets/sound/fb.wav"]);
   }
 }
