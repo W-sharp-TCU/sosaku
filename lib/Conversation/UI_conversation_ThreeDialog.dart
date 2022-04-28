@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
-import 'UI_conversation_ConversationScreen.dart';
 
 class ThreeDialog extends ConsumerWidget{
   const ThreeDialog({Key? key}) : super(key: key);
@@ -27,7 +26,6 @@ class ThreeDialog extends ConsumerWidget{
             onTap:(){
               // ref.read(conversationScreenProvider).changeDialogFlag();
             },
-
             child: Container(
               width: GetScreenSize.screenWidth() * 0.6,
               height: GetScreenSize.screenHeight() * 0.15,
@@ -51,7 +49,6 @@ class ThreeDialog extends ConsumerWidget{
             onTap:(){
 
             },
-
             child: Container(
               width: GetScreenSize.screenWidth() * 0.6,
               height: GetScreenSize.screenHeight() * 0.15,
@@ -75,7 +72,6 @@ class ThreeDialog extends ConsumerWidget{
             onTap:(){
 
             },
-
             child: Container(
               width: GetScreenSize.screenWidth() * 0.6,
               height: GetScreenSize.screenHeight() * 0.15,

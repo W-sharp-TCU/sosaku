@@ -46,7 +46,7 @@ class TitleScreen extends ConsumerWidget {
                       context,
                       PageRouteBuilder(pageBuilder: (_, __, ___) =>
                           HomeScreen(),
-                        transitionDuration: const Duration(seconds: 0)
+                        transitionDuration: const Duration(milliseconds: 10)
                       ),
 
                       ///old page transition code
@@ -71,7 +71,7 @@ class TitleScreen extends ConsumerWidget {
                             child: Text(
                               L10n.of(context)!.tapToStart,
                               style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.2,
+                                fontSize: GetScreenSize.screenHeight() * 0.1,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
