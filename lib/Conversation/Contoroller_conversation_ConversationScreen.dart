@@ -73,11 +73,11 @@ class ConversationScreenController {
   List<String> _characterNames = [
     "車掌",
     "俺",
-    "人",
     "女子高生",
     "俺",
     "車掌",
     "あいつ",
+    "俺",
     "俺",
     "俺",
     "俺",
@@ -290,6 +290,14 @@ class ConversationScreenController {
     _isAuto = !_isAuto;
   }
 
+  void printLog() {
+    for (int i = 0; i < conversationLogs.length; i++) {
+      print("[" + _characterNames[conversationLogs[i]] + "]");
+      print("「" + _conversationTexts[conversationLogs[i]] + "」");
+      print("-----------------------------------------");
+    }
+  }
+
   ///Thread loop
   void _animationAsync() async {
     await Future.delayed(Duration(milliseconds: _interval));
@@ -328,7 +336,6 @@ class ConversationScreenController {
   void _refreshScreen() {
     _nowLength = 0;
     _conversationLogs.add(_nowScene);
-    // print("Log:" + _conversationLogs.toString());
     _changeBackgroundImage();
     _changeCharacterImage();
     _changeCharacterName();

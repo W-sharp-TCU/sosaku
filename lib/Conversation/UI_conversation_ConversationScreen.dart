@@ -25,11 +25,11 @@ class ConversationScreen extends ConsumerWidget {
     conversationScreenController.start(cip, ctp);
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.black,
-        child: Center(
+        body: Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.black,
+      child: Center(
         child: Container(
           height: GetScreenSize.screenHeight(),
           width: GetScreenSize.screenWidth(),
@@ -223,6 +223,9 @@ class ConversationScreen extends ConsumerWidget {
 
                       ///Log button
                       GestureDetector(
+                        onTap: () {
+                          conversationScreenController.printLog();
+                        },
                         child: Container(
                           height: GetScreenSize.screenHeight() * 0.05,
                           width: GetScreenSize.screenWidth() * 0.1,
