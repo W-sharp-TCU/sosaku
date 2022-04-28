@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       title: "想咲 - ソウサク -",
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
+      theme: ThemeData(fontFamily: "SourceHanSansJP"),
       scrollBehavior:
           CustomScrollBehavior(), // support dragging mouse to scroll on the web.
       home: TitleScreen(),

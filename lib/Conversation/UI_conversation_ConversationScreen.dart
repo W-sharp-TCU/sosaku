@@ -25,11 +25,11 @@ class ConversationScreen extends ConsumerWidget {
     conversationScreenController.start(cip, ctp);
 
     return Scaffold(
-        body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.black,
-      child: Center(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black,
+        child: Center(
         child: Container(
           height: GetScreenSize.screenHeight(),
           width: GetScreenSize.screenWidth(),
@@ -214,7 +214,7 @@ class ConversationScreen extends ConsumerWidget {
                             child: Text(
                               "Auto",
                               style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                                fontSize: GetScreenSize.screenHeight() * 0.02,
                               ),
                             ),
                           ),
@@ -233,7 +233,7 @@ class ConversationScreen extends ConsumerWidget {
                             child: Text(
                               "Log",
                               style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                                fontSize: GetScreenSize.screenHeight() * 0.02,
                               ),
                             ),
                           ),
