@@ -312,12 +312,13 @@ class ConversationScreenController {
       _conversationImageProvider!.setOptionTexts(_options[_nowScene]);
       _conversationImageProvider!.changeDialogFlag();
     } else if (_isAuto &&
-            _types[_nowScene] == "speech" &&
-            _nowLength ==
-                _conversationTexts[_nowScene]
-                    .length /* &&
+        _types[_nowScene] == "speech" &&
+        _nowLength ==
+            _conversationTexts[_nowScene]
+                .length /* &&
         SoundPlayer.seState != PlayerState.PLAYING*/
-        ) {
+        &&
+        !_conversationImageProvider!.isHideUi) {
       //Todo : Rewrite the condition as when voice playback ends.
       goNextScene();
     }

@@ -18,7 +18,9 @@ class ThreeDialog extends ConsumerWidget {
     return Container(
         width: GetScreenSize.screenWidth(),
         height: GetScreenSize.screenHeight(),
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withOpacity(0),
+
+        ///debug
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
