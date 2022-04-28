@@ -56,19 +56,23 @@ class ConversationScreen extends ConsumerWidget {
                       child: Image(
                         fit: BoxFit.fitHeight,
                         image: AssetImage(
-                          ref
-                              .watch(conversationImageProvider)
-                              .characterImagePath,
+                          ref.watch(conversationImageProvider).characterImagePath,
                         ),
-                      ))),
+                      )
+                  )
+              ),
 
               ///upper Widgets
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  ///UI appear
                   GestureDetector(
-                    onTap: () {},
+                    onTap:(){
+
+                    },
                     child: Container(
                         width: GetScreenSize.screenWidth() * 0.05,
                         height: GetScreenSize.screenWidth() * 0.05,
@@ -82,7 +86,30 @@ class ConversationScreen extends ConsumerWidget {
                               fontSize: GetScreenSize.screenHeight() * 0.04,
                             ),
                           ),
-                        )),
+                        )
+                    ),
+                  ),
+
+                  ///menu
+                  GestureDetector(
+                    onTap:(){
+
+                    },
+                    child: Container(
+                        width: GetScreenSize.screenWidth() * 0.05,
+                        height: GetScreenSize.screenWidth() * 0.05,
+                        margin:
+                        EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                        color: Colors.red.withOpacity(0.5),
+                        child: Center(
+                          child: Text(
+                            "三",
+                            style: TextStyle(
+                              fontSize: GetScreenSize.screenHeight() * 0.04,
+                            ),
+                          ),
+                        )
+                    ),
                   ),
                 ],
               ),
@@ -104,8 +131,8 @@ class ConversationScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        height: GetScreenSize.screenHeight() * 0.05,
-                        width: GetScreenSize.screenWidth() * 0.1,
+                        height: GetScreenSize.screenHeight() * 0.08,
+                        width: GetScreenSize.screenWidth() * 0.15,
                         color: Colors.white.withOpacity(0.5),
                         padding:
                             EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
@@ -142,7 +169,9 @@ class ConversationScreen extends ConsumerWidget {
                           GestureDetector(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: GetScreenSize.screenWidth() * 0.05),
+                                  left: GetScreenSize.screenWidth() * 0.05,
+                                  right: GetScreenSize.screenWidth() * 0.02,
+                              ),
                               height: GetScreenSize.screenHeight() * 0.05,
                               width: GetScreenSize.screenWidth() * 0.1,
                               color: Colors.red.withOpacity(0.5),
@@ -169,11 +198,14 @@ class ConversationScreen extends ConsumerWidget {
                       print("tap");
                     },
                     child: Container(
-                      height: GetScreenSize.screenHeight() * 0.2,
+                      height: GetScreenSize.screenHeight() * 0.25,
                       width: GetScreenSize.screenWidth(),
                       color: Colors.white.withOpacity(0.5), //画像を用意したら消す
-                      padding: EdgeInsets.all(
-                        GetScreenSize.screenWidth() * 0.005,
+                      padding: EdgeInsets.only(
+                        top: GetScreenSize.screenWidth() * 0.01,
+                        left: GetScreenSize.screenWidth() * 0.01,
+                        right: GetScreenSize.screenWidth() * 0.01,
+                        bottom: GetScreenSize.screenWidth() * 0.02,
                       ),
 
                       child: Align(
@@ -181,7 +213,7 @@ class ConversationScreen extends ConsumerWidget {
                         child: Text(
                           ref.watch(conversationTextProvider).conversationText,
                           style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                            fontSize: GetScreenSize.screenHeight() * 0.045,
                           ),
                           maxLines: 3,
                         ),
