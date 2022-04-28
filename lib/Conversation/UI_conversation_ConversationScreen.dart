@@ -56,22 +56,21 @@ class ConversationScreen extends ConsumerWidget {
                       child: Image(
                         fit: BoxFit.fitHeight,
                         image: AssetImage(
-                          ref.watch(conversationImageProvider).characterImagePath,
+                          ref
+                              .watch(conversationImageProvider)
+                              .characterImagePath,
                         ),
-                      )
-                  )
-              ),
+                      ))),
 
               ///upper Widgets
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   ///UI appear
                   GestureDetector(
-                    onTap:(){
-
+                    onTap: () {
+                      ref.read(conversationImageProvider).changeHideUi();
                     },
                     child: Container(
                         width: GetScreenSize.screenWidth() * 0.05,
@@ -86,20 +85,17 @@ class ConversationScreen extends ConsumerWidget {
                               fontSize: GetScreenSize.screenHeight() * 0.04,
                             ),
                           ),
-                        )
-                    ),
+                        )),
                   ),
 
                   ///menu
                   GestureDetector(
-                    onTap:(){
-
-                    },
+                    onTap: () {},
                     child: Container(
                         width: GetScreenSize.screenWidth() * 0.05,
                         height: GetScreenSize.screenWidth() * 0.05,
                         margin:
-                        EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                            EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
                         color: Colors.red.withOpacity(0.5),
                         child: Center(
                           child: Text(
@@ -108,8 +104,7 @@ class ConversationScreen extends ConsumerWidget {
                               fontSize: GetScreenSize.screenHeight() * 0.04,
                             ),
                           ),
-                        )
-                    ),
+                        )),
                   ),
                 ],
               ),
@@ -139,7 +134,7 @@ class ConversationScreen extends ConsumerWidget {
                         child: Center(
                           child: Text(
                             ///initをproviderに書き換える
-                            "init",
+                            ref.watch(conversationImageProvider).characterName,
                             style: TextStyle(
                               fontSize: GetScreenSize.screenHeight() * 0.04,
                             ),
@@ -151,6 +146,9 @@ class ConversationScreen extends ConsumerWidget {
                       Row(
                         children: [
                           GestureDetector(
+                            onTap: () {
+                              conversationScreenController.changeAutoPlay();
+                            },
                             child: Container(
                               height: GetScreenSize.screenHeight() * 0.05,
                               width: GetScreenSize.screenWidth() * 0.1,
@@ -169,8 +167,8 @@ class ConversationScreen extends ConsumerWidget {
                           GestureDetector(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: GetScreenSize.screenWidth() * 0.05,
-                                  right: GetScreenSize.screenWidth() * 0.02,
+                                left: GetScreenSize.screenWidth() * 0.05,
+                                right: GetScreenSize.screenWidth() * 0.02,
                               ),
                               height: GetScreenSize.screenHeight() * 0.05,
                               width: GetScreenSize.screenWidth() * 0.1,

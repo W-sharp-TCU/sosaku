@@ -327,7 +327,7 @@ class ConversationScreenController {
   void _refreshScreen() {
     _nowLength = 0;
     _conversationLogs.add(_nowScene);
-    print("Log:" + _conversationLogs.toString());
+    // print("Log:" + _conversationLogs.toString());
     _changeBackgroundImage();
     _changeCharacterImage();
     _changeCharacterName();
