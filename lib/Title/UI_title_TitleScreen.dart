@@ -44,7 +44,13 @@ class TitleScreen extends ConsumerWidget {
 
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      PageRouteBuilder(pageBuilder: (_, __, ___) =>
+                          HomeScreen(),
+                        transitionDuration: const Duration(seconds: 0)
+                      ),
+
+                      ///old page transition code
+                      //MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
 
                     print("tap"); //デバッグ用

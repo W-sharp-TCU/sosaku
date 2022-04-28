@@ -25,7 +25,7 @@ class ThreeDialog extends ConsumerWidget{
           ///first
           GestureDetector(
             onTap:(){
-              ref.read(conversationScreenProvider).changeDialogFlag();
+              // ref.read(conversationScreenProvider).changeDialogFlag();
             },
 
             child: Container(

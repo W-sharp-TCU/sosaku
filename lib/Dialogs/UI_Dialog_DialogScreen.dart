@@ -51,7 +51,7 @@ class DialogScreen extends ConsumerWidget{
               /// Stack以下は仕様が決まり次第改良
               child: Stack(
                 children: [
-                  
+
                   const Align(
                     ///表示メッセージ
                     alignment: Alignment(0, -0.7),
