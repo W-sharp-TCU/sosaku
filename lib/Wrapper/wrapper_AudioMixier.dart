@@ -1,35 +1,41 @@
+import 'dart:html';
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 
 class AudioMixer {
   /* interface */
-  static const int UI = 0; // UI audio (e.g sound played when button is pushed.)
+  static const int UI = 0; // UI audio
   static const int BGM = 1; // Back Ground Music audio
   static const int SE = 2; // Sound Effect audio
   static const int CV = 3; // Character Voice audio
 
   /* config */
-  static List<double> _volumes = [1.0, 1.0, 1.0, 1.0];
-
   /// Fade-in or fade-out effect takes [_fadeDuration] milli seconds.
   /// So, fade transition (fade-out then fade-in) takes [_fadeDuration]*2 milli seconds.
   static const int _fadeDuration = 1500; // [ms]
+  static const int _fadeStep = 10; // process will execute [_fadeStep] times.
+  static List<double> _volumes = [1.0, 1.0, 1.0, 1.0]; // 0.0 <= _volumes <= 1.0
 
+  /* static variances */
   static AudioMixer? _instance; // reference to the instance of this class.
+  static PlayerState _uiState = PlayerState.STOPPED;
+  static PlayerState _bgmState = PlayerState.STOPPED;
+  static PlayerState _seState = PlayerState.STOPPED;
+  static PlayerState _cvState = PlayerState.STOPPED;
 
   /* instance variances */
   AudioCache _ui = AudioCache(
       prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
   AudioCache _bgm = AudioCache(
+      prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.MEDIA_PLAYER));
+  Map<String, AudioCache> _seMap = {};
+  AudioCache _cv = AudioCache(
       prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-  List<AudioCache> _se = [];
-  List<String> _seFilePath = [];
-  List<AudioCache> _cv = [];
-  List<String> _cvFilePath = [];
 
   // todo: bgm, se, as, cvの実装
   // todo: state
   // todo: フェード
-  // todo: load改善
   // todo: pause(), resume()
 
   /// Make instance of this class.
@@ -55,26 +61,23 @@ class AudioMixer {
         break;
       case BGM:
         _instance!._bgm = AudioCache(
-            prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
+            prefix: '',
+            fixedPlayer: AudioPlayer(mode: PlayerMode.MEDIA_PLAYER));
         _instance!._bgm.loadAll(filePaths);
         break;
       case SE:
+        _instance!._seMap.clear();
         for (int i = 0; i < filePaths.length; i++) {
-          _instance!._se.add(AudioCache(
+          _instance!._seMap[filePaths[i]] = AudioCache(
               prefix: '',
-              fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)));
-          _instance!._se[i].load(filePaths[i]);
-          _instance!._seFilePath.add(filePaths[i]);
+              fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
+          _instance!._seMap[filePaths[i]]!.load(filePaths[i]);
         }
         break;
       case CV:
-        for (int i = 0; i < filePaths.length; i++) {
-          _instance!._cv.add(AudioCache(
-              prefix: '',
-              fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)));
-          _instance!._cv[i].load(filePaths[i]);
-          _instance!._cvFilePath.add(filePaths[i]);
-        }
+        _instance!._cv = AudioCache(
+            prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
+        _instance!._cv.loadAll(filePaths);
         break;
       default:
         throw AssertionError("AudioMixer: unexpected audioType.\n"
@@ -82,54 +85,110 @@ class AudioMixer {
     }
   }
 
+  /* play functions */
   /// Play UI audio file.
   /// This function must be called after the audio file you want to play is
-  /// loaded as [AudioMixer.UI].
+  /// loaded as [AudioMixer.UI] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
-  static void playUI(String filePath) {
+  static Future<void> playUI(String filePath) async {
     _instanceExistenceCheck();
-    var a = _instance!._ui.play(filePath);
+    AudioPlayer player = await _instance!._ui.play(filePath);
+    player.onPlayerStateChanged.listen((event) {
+      _uiState = event;
+    });
+    _uiState = player.state;
   }
 
   /// Play BGM audio file.
   /// This function must be called after the audio file you want to play is
-  /// loaded as [AudioMixer.BGM].
+  /// loaded as [AudioMixer.BGM] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
-  static void playBGM(String filePath, {bool loop = false}) {
+  static Future<void> playBGM(String filePath,
+      {bool loop = false,
+      bool fadeIn = false,
+      bool fadeTransition = false}) async {
     _instanceExistenceCheck();
-    if (loop) {
-      _instance!._bgm.loop(filePath);
-    } else {
-      _instance!._bgm.play(filePath);
+    double startVolume = bgmVolume;
+    AudioPlayer player;
+    if (fadeIn) {
+      startVolume = 0.0;
     }
+    if (loop) {
+      player = await _instance!._bgm.loop(filePath, volume: startVolume);
+    } else {
+      player = await _instance!._bgm.play(filePath, volume: startVolume);
+    }
+    player.onPlayerStateChanged.listen((event) {
+      _bgmState = event;
+    });
+    _bgmState = player.state;
   }
 
   /// Play SE audio file.
   /// This function must be called after the audio file you want to play is
-  /// loaded as [AudioMixer.SE].
+  /// loaded as [AudioMixer.SE] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
-  static void playSE(String filePath) {
+  static Future<void> playSE(String filePath) async {
     _instanceExistenceCheck();
-    int index = _instance!._seFilePath.indexOf(filePath);
-    _instance!._se[index].play(filePath);
+    if (_instance!._seMap[filePath] == null) {
+      throw AssertionError("WARNING: AudioMixer: $filePath is not loaded.");
+    }
+    AudioPlayer player = await _instance!._seMap[filePath]!.play(filePath);
+    player.onPlayerStateChanged.listen((event) {
+      _seState = event;
+    });
+    _seState = player.state;
   }
 
   /// Play CV audio file.
   /// This function must be called after the audio file you want to play is
-  /// loaded as [AudioMixer.CV].
+  /// loaded as [AudioMixer.CV] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
-  static void playCV(String filePath) {
+  static Future<void> playCV(String filePath) async {
     _instanceExistenceCheck();
-    int index = _instance!._cvFilePath.indexOf(filePath);
-    _instance!._cv[index].play(filePath);
+    AudioPlayer player = await _instance!._cv.play(filePath);
+    player.onPlayerStateChanged.listen((event) {
+      _cvState = event;
+    });
+    _cvState = player.state;
   }
 
+  /* pause functions */
+  static void pauseBGM() {}
+
+  /* resume functions */
+
+  /* stop functions */
+
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
-    double originalVolume = _volumes[audioType];
+    double volume = _volumes[audioType];
+    while (volume > 0) {
+      volume = volume - (volume / _fadeStep);
+      if (volume <= 0) {
+        volume = 0;
+      }
+      await audioPlayer.setVolume(volume);
+      await Future.delayed(
+          const Duration(milliseconds: (_fadeDuration ~/ _fadeStep)));
+    }
+  }
+
+  Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
+    double goal = _volumes[audioType];
+    double volume = 0;
+    while (volume < goal) {
+      volume = volume + (goal / _fadeStep);
+      if (volume >= goal) {
+        volume = goal;
+      }
+      await audioPlayer.setVolume(volume);
+      await Future.delayed(
+          const Duration(milliseconds: (_fadeDuration ~/ _fadeStep)));
+    }
   }
 
   static void _instanceExistenceCheck() {
@@ -156,16 +215,39 @@ class AudioMixer {
   }
 
   static set bgmVolume(double value) {
-    _volumes[BGM] = value;
+    if (value > 1.0) {
+      _volumes[BGM] = 1.0;
+    } else if (value < 0) {
+      _volumes[BGM] = 0.0;
+    } else {
+      _volumes[BGM] = value;
+    }
   }
 
   static set seVolume(double value) {
-    _volumes[SE] = value;
+    if (value > 1.0) {
+      _volumes[SE] = 1.0;
+    } else if (value < 0) {
+      _volumes[SE] = 0.0;
+    } else {
+      _volumes[SE] = value;
+    }
   }
 
   static set cvVolume(double value) {
-    _volumes[CV] = value;
+    if (value > 1.0) {
+      _volumes[CV] = 1.0;
+    } else if (value < 0) {
+      _volumes[CV] = 0.0;
+    } else {
+      _volumes[CV] = value;
+    }
   }
+
+  static PlayerState get uiState => _uiState;
+  static PlayerState get bgmState => _bgmState;
+  static PlayerState get seState => _seState;
+  static PlayerState get cvState => _cvState;
 
   /// private named constructor.
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
