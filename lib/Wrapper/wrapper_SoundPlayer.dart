@@ -1,8 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 
 class SoundPlayer {
-  static late final AudioCache _seAudioCache =
-      AudioCache(prefix: "", fixedPlayer: AudioPlayer());
+  static late final AudioCache _seAudioCache = AudioCache(
+      prefix: "", fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
   static AudioPlayer? _sePlayer;
   static PlayerState _seState = PlayerState.STOPPED;
   static double seVolume = 1.0;
