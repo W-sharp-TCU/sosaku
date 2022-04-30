@@ -28,6 +28,7 @@ class SettingContents extends ConsumerWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
+              ///text speed
               Container(
                 width: GetScreenSize.screenWidth(),
                 height: GetScreenSize.screenHeight() * 0.3,
@@ -72,6 +73,7 @@ class SettingContents extends ConsumerWidget{
               ),
 
 
+              ///sounds setting
               Container(
                 width: GetScreenSize.screenWidth(),
                 height: GetScreenSize.screenHeight() * 0.4,
@@ -86,6 +88,7 @@ class SettingContents extends ConsumerWidget{
                       ),
                     ),
 
+                    ///voice
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -129,6 +132,7 @@ class SettingContents extends ConsumerWidget{
                       ],
                     ),
 
+                    ///BGM
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -172,6 +176,7 @@ class SettingContents extends ConsumerWidget{
                       ],
                     ),
 
+                    ///SE
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
