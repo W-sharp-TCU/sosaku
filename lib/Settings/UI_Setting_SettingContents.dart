@@ -49,7 +49,7 @@ class SettingContents extends ConsumerWidget{
                           width: GetScreenSize.screenWidth() * 0.7,
                           height: GetScreenSize.screenHeight() * 0.2,
                           child: Slider(
-                            value: ref.watch(otameshi).sliderValue,
+                            value: ref.watch(otameshi).textSliderValue,
                             min: 1,
                             max: 5,
                             divisions: 4,
@@ -59,7 +59,7 @@ class SettingContents extends ConsumerWidget{
                           ),
                         ),
                         Text(
-                          ref.watch(otameshi).sliderValue.toString(),
+                          ref.watch(otameshi).textSliderValue.toString(),
                           style: TextStyle(
                             fontSize: GetScreenSize.screenHeight() * 0.04,
                           ),
@@ -71,6 +71,123 @@ class SettingContents extends ConsumerWidget{
 
               ),
 
+
+              Container(
+                width: GetScreenSize.screenWidth(),
+                height: GetScreenSize.screenHeight() * 0.4,
+                color: Colors.pink,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "サウンド",
+                      style: TextStyle(
+                        fontSize: GetScreenSize.screenHeight() * 0.04,
+                      ),
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Text(
+                          "Voice",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.7,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                          child: Slider(
+                            value: ref.watch(otameshi).textSliderValue,
+                            min: 1,
+                            max: 5,
+                            divisions: 4,
+                            onChanged: (double value){
+                              ref.read(otameshi).setSliderValue(value);
+                            },
+                          ),
+                        ),
+                        Text(
+                          ref.watch(otameshi).textSliderValue.toString(),
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Text(
+                          "BGM",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.7,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                          child: Slider(
+                            value: ref.watch(otameshi).textSliderValue,
+                            min: 1,
+                            max: 5,
+                            divisions: 4,
+                            onChanged: (double value){
+                              ref.read(otameshi).setSliderValue(value);
+                            },
+                          ),
+                        ),
+                        Text(
+                          ref.watch(otameshi).textSliderValue.toString(),
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        Text(
+                          "SE",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.7,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                          child: Slider(
+                            value: ref.watch(otameshi).textSliderValue,
+                            min: 1,
+                            max: 5,
+                            divisions: 4,
+                            onChanged: (double value){
+                              ref.read(otameshi).setSliderValue(value);
+                            },
+                          ),
+                        ),
+                        Text(
+                          ref.watch(otameshi).textSliderValue.toString(),
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+
+              ),
 
             ],
           )
