@@ -1,7 +1,5 @@
-import 'dart:html';
-
+import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
 
 class AudioMixer {
   /* interface */
@@ -13,30 +11,33 @@ class AudioMixer {
   /* config */
   /// Fade-in or fade-out effect takes [_fadeDuration] milli seconds.
   /// So, fade transition (fade-out then fade-in) takes [_fadeDuration]*2 milli seconds.
-  static const int _fadeDuration = 1500; // [ms]
-  static const int _fadeStep = 10; // process will execute [_fadeStep] times.
-  static List<double> _volumes = [1.0, 1.0, 1.0, 1.0]; // 0.0 <= _volumes <= 1.0
+  static const int _fadeDuration = 1700; // [ms]
+  static const int _fadeStep = 17; // process will execute [_fadeStep] times.
+  // recommend configure : _fadeDuration / _fadeStep > 100 [ms/step]
 
   /* static variances */
   static AudioMixer? _instance; // reference to the instance of this class.
-  static PlayerState _uiState = PlayerState.STOPPED;
-  static PlayerState _bgmState = PlayerState.STOPPED;
-  static PlayerState _seState = PlayerState.STOPPED;
-  static PlayerState _cvState = PlayerState.STOPPED;
+  static List<PlayerState> _playersState = [
+    PlayerState.STOPPED,
+    PlayerState.STOPPED,
+    PlayerState.STOPPED,
+    PlayerState.STOPPED
+  ];
+  static AudioPlayer? _uiController;
+  static AudioPlayer? _bgmController;
+  static List<AudioPlayer> _seControllers = [];
+  static List<AudioPlayer> _cvControllers = [];
+  static List<double> _volumes = [1.0, 1.0, 1.0, 1.0]; // 0.0 <= _volumes <= 1.0
 
   /* instance variances */
   AudioCache _ui = AudioCache(
       prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
   AudioCache _bgm = AudioCache(
       prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.MEDIA_PLAYER));
-  Map<String, AudioCache> _seMap = {};
+  AudioCache _se = AudioCache(
+      prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
   AudioCache _cv = AudioCache(
       prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-
-  // todo: bgm, se, as, cvの実装
-  // todo: state
-  // todo: フェード
-  // todo: pause(), resume()
 
   /// Make instance of this class.
   /// This function must be called first.
@@ -66,13 +67,9 @@ class AudioMixer {
         _instance!._bgm.loadAll(filePaths);
         break;
       case SE:
-        _instance!._seMap.clear();
-        for (int i = 0; i < filePaths.length; i++) {
-          _instance!._seMap[filePaths[i]] = AudioCache(
-              prefix: '',
-              fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-          _instance!._seMap[filePaths[i]]!.load(filePaths[i]);
-        }
+        _instance!._se = AudioCache(
+            prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
+        _instance!._se.loadAll(filePaths);
         break;
       case CV:
         _instance!._cv = AudioCache(
@@ -93,11 +90,16 @@ class AudioMixer {
   /// @param filePath : Specify audio file path you want to play.
   static Future<void> playUI(String filePath) async {
     _instanceExistenceCheck();
-    AudioPlayer player = await _instance!._ui.play(filePath);
-    player.onPlayerStateChanged.listen((event) {
-      _uiState = event;
+    _uiController = await _instance!._ui.play(filePath);
+    _uiController!.onPlayerStateChanged.listen((event) {
+      print("UI: $event");
+      _playersState[UI] = event;
+      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
+        print("BGM => null");
+        _uiController = null;
+      }
     });
-    _uiState = player.state;
+    _playersState[UI] = _uiController!.state;
   }
 
   /// Play BGM audio file.
@@ -106,24 +108,37 @@ class AudioMixer {
   ///
   /// @param filePath : Specify audio file path you want to play.
   static Future<void> playBGM(String filePath,
-      {bool loop = false,
-      bool fadeIn = false,
-      bool fadeTransition = false}) async {
+      {bool loop = false, bool fadeOut = true, bool fadeIn = false}) async {
+    print("start : $_bgmController, $uiState");
     _instanceExistenceCheck();
+    if (_bgmController != null) {
+      if (fadeOut) {
+        await _instance!._fadeOut(_bgmController!, AudioMixer.BGM);
+      }
+      stopBGM();
+    }
     double startVolume = bgmVolume;
-    AudioPlayer player;
     if (fadeIn) {
       startVolume = 0.0;
     }
     if (loop) {
-      player = await _instance!._bgm.loop(filePath, volume: startVolume);
+      _bgmController =
+          await _instance!._bgm.loop(filePath, volume: startVolume);
     } else {
-      player = await _instance!._bgm.play(filePath, volume: startVolume);
+      _bgmController =
+          await _instance!._bgm.play(filePath, volume: startVolume);
     }
-    player.onPlayerStateChanged.listen((event) {
-      _bgmState = event;
+    if (fadeIn) {
+      _instance!._fadeIn(_bgmController!, AudioMixer.BGM);
+    }
+    _bgmController!.onPlayerStateChanged.listen((event) {
+      _playersState[BGM] = event;
+      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
+        print("BGM => null");
+        _bgmController = null;
+      }
     });
-    _bgmState = player.state;
+    _playersState[BGM] = _bgmController!.state;
   }
 
   /// Play SE audio file.
@@ -131,16 +146,38 @@ class AudioMixer {
   /// loaded as [AudioMixer.SE] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
-  static Future<void> playSE(String filePath) async {
+  static Future<void> playSE(List<String> filePaths,
+      {bool loop = false, bool fadeOut = false, bool fadeIn = true}) async {
     _instanceExistenceCheck();
-    if (_instance!._seMap[filePath] == null) {
-      throw AssertionError("WARNING: AudioMixer: $filePath is not loaded.");
+    if (_bgmController != null) {
+      if (fadeOut) {
+        await _instance!._fadeOut(_bgmController!, AudioMixer.SE);
+      }
+      stopSEAll();
     }
-    AudioPlayer player = await _instance!._seMap[filePath]!.play(filePath);
-    player.onPlayerStateChanged.listen((event) {
-      _seState = event;
+    List<AudioPlayer> players = [];
+    double volume = seVolume;
+    if (fadeIn) {
+      volume = 0.0;
+    }
+    for (String element in filePaths) {
+      if (loop) {
+        players.add(await _instance!._se.loop(element, volume: volume));
+      } else {
+        players.add(await _instance!._se.play(element, volume: volume));
+      }
+      if (fadeIn) {
+        _instance!._fadeIn(players.last, AudioMixer.SE);
+      }
+    }
+    players[0].onPlayerStateChanged.listen((event) {
+      _playersState[SE] = event;
+      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
+        print("SE => null");
+        _seControllers = [];
+      }
     });
-    _seState = player.state;
+    _playersState[SE] = players[0].state;
   }
 
   /// Play CV audio file.
@@ -148,26 +185,103 @@ class AudioMixer {
   /// loaded as [AudioMixer.CV] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
-  static Future<void> playCV(String filePath) async {
+  static Future<void> playCV(List<String> filePaths) async {
     _instanceExistenceCheck();
-    AudioPlayer player = await _instance!._cv.play(filePath);
-    player.onPlayerStateChanged.listen((event) {
-      _cvState = event;
+    List<AudioPlayer> players = [];
+    for (String element in filePaths) {
+      players.add(await _instance!._cv.play(element));
+    }
+    players[0].onPlayerStateChanged.listen((event) {
+      _playersState[CV] = event;
+      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
+        print("CV => null");
+        _cvControllers = [];
+      }
     });
-    _cvState = player.state;
+    _playersState[CV] = players[0].state;
   }
 
   /* pause functions */
-  static void pauseBGM() {}
+  static Future<void> pauseBGM() async {
+    await _bgmController?.pause();
+  }
+
+  static Future<void> pauseSE() async {
+    for (AudioPlayer element in _seControllers) {
+      await element.pause();
+    }
+  }
+
+  static Future<void> pauseCV() async {
+    for (AudioPlayer element in _cvControllers) {
+      await element.pause();
+    }
+  }
+
+  static void pauseALL() {
+    pauseBGM();
+    pauseSE();
+    pauseCV();
+  }
 
   /* resume functions */
+  static Future<void> resumeBGM() async {
+    await _bgmController?.resume();
+  }
+
+  static Future<void> resumeSE() async {
+    for (AudioPlayer element in _seControllers) {
+      await element.resume();
+    }
+  }
+
+  static Future<void> resumeCV() async {
+    for (AudioPlayer element in _cvControllers) {
+      await element.resume();
+    }
+  }
+
+  static void resumeALL() async {
+    resumeBGM();
+    resumeSE();
+    resumeCV();
+  }
 
   /* stop functions */
+  static Future<void> stopUI() async {
+    await _uiController?.stop();
+    _uiController = null;
+  }
+
+  static Future<void> stopBGM() async {
+    await _bgmController?.stop();
+    _bgmController = null;
+  }
+
+  static Future<void> stopSEAll() async {
+    for (AudioPlayer element in _seControllers) {
+      await element.stop();
+    }
+  }
+
+  static Future<void> stopCVAll() async {
+    for (AudioPlayer element in _cvControllers) {
+      await element.stop();
+    }
+  }
+
+  static void stopALL() async {
+    stopUI();
+    stopBGM();
+    stopSEAll();
+    stopCVAll();
+  }
 
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
     double volume = _volumes[audioType];
     while (volume > 0) {
-      volume = volume - (volume / _fadeStep);
+      print(volume);
+      volume = volume - (_volumes[audioType] / _fadeStep);
       if (volume <= 0) {
         volume = 0;
       }
@@ -180,6 +294,7 @@ class AudioMixer {
   Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
     double goal = _volumes[audioType];
     double volume = 0;
+    int start = DateTime.now().millisecondsSinceEpoch;
     while (volume < goal) {
       volume = volume + (goal / _fadeStep);
       if (volume >= goal) {
@@ -189,6 +304,10 @@ class AudioMixer {
       await Future.delayed(
           const Duration(milliseconds: (_fadeDuration ~/ _fadeStep)));
     }
+    print("AudioMixer: "
+            "FadeIn transition took " +
+        (DateTime.now().millisecondsSinceEpoch - start).toString() +
+        " milli seconds.");
   }
 
   static void _instanceExistenceCheck() {
@@ -244,10 +363,10 @@ class AudioMixer {
     }
   }
 
-  static PlayerState get uiState => _uiState;
-  static PlayerState get bgmState => _bgmState;
-  static PlayerState get seState => _seState;
-  static PlayerState get cvState => _cvState;
+  static PlayerState get uiState => _playersState[UI];
+  static PlayerState get bgmState => _playersState[BGM];
+  static PlayerState get seState => _playersState[SE];
+  static PlayerState get cvState => _playersState[CV];
 
   /// private named constructor.
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.

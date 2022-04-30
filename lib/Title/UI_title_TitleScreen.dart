@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/l10n/l10n.dart';
+import '../Wrapper/wrapper_AudioMixier.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -44,13 +45,13 @@ class TitleScreen extends ConsumerWidget {
                     print("tap"); //デバッグ用
                     _slideShowController.stop();
                     SoundPlayer.playSE("assets/sound/next.mp3");
-                    SoundPlayer.playBGM("assets/sound/fb.wav", loop: true);
+                    AudioMixer.playBGM("assets/sound/fb.wav",
+                        loop: true, fadeOut: true);
                     Navigator.pushReplacement(
                       context,
-                      PageRouteBuilder(pageBuilder: (_, __, ___) =>
-                          HomeScreen(),
-                        transitionDuration: const Duration(milliseconds: 10)
-                      ),
+                      PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => HomeScreen(),
+                          transitionDuration: const Duration(milliseconds: 10)),
 
                       ///old page transition code
                       //MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -88,6 +89,8 @@ class TitleScreen extends ConsumerWidget {
   static Future<void> prepare() async {
     SoundPlayer.loadSE(
         ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);
-    SoundPlayer.loadBGM(["assets/sound/fb.wav"]);
+    AudioMixer.init();
+    AudioMixer.loadAll(
+        filePaths: ["assets/sound/fb.wav"], audioType: AudioMixer.BGM);
   }
 }

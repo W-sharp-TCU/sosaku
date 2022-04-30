@@ -1,5 +1,6 @@
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
+import '../Wrapper/wrapper_AudioMixier.dart';
 import 'Provider_conversation_ConversationText.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -226,7 +227,8 @@ class ConversationScreenController {
   ///
   /// @param cip : ConversationImageProvider
   /// @param ctp : ConversationTextProvider
-  void start(ConversationImageProvider cip, ConversationTextProvider ctp) {
+  Future<void> start(
+      ConversationImageProvider cip, ConversationTextProvider ctp) async {
     if (_conversationImageProvider == null &&
         _conversationTextProvider == null) {
       _conversationImageProvider = cip;
@@ -234,7 +236,7 @@ class ConversationScreenController {
       _animationAsync();
       _refreshScreen();
       // Todo : load in loadclass
-      SoundPlayer.loadBGM(_bgmPaths);
+      AudioMixer.loadAll(filePaths: _bgmPaths, audioType: AudioMixer.BGM);
       SoundPlayer.loadSE(_voicePaths);
     }
   }
@@ -336,9 +338,9 @@ class ConversationScreenController {
   void _refreshScreen() {
     _nowLength = 0;
     _conversationLogs.add(_nowScene);
-    _changeBackgroundImage();
-    _changeCharacterImage();
-    _changeCharacterName();
+    //_changeBackgroundImage();
+    //_changeCharacterImage();
+    //_changeCharacterName();
     _changeBgm();
     _changeVoice();
   }
@@ -373,9 +375,9 @@ class ConversationScreenController {
   /// Change bgm.
   void _changeBgm() async {
     if (_bgmPaths[_nowScene].isNotEmpty) {
-      SoundPlayer.stopBGM();
-      await Future.delayed(Duration(milliseconds: 10));
-      SoundPlayer.playBGM(_bgmPaths[_nowScene]);
+      //SoundPlayer.stopBGM();
+      /*await Future.delayed(Duration(milliseconds: 10));*/
+      AudioMixer.playBGM(_bgmPaths[_nowScene], loop: false);
     }
   }
 
