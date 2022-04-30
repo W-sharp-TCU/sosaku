@@ -54,7 +54,7 @@ class SettingContents extends ConsumerWidget{
                             max: 5,
                             divisions: 4,
                             onChanged: (double value){
-                              ref.read(otameshi).setSliderValue(value);
+                              ref.read(otameshi).setTextSliderValue(value);
                             },
                           ),
                         ),
@@ -90,10 +90,15 @@ class SettingContents extends ConsumerWidget{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
 
-                        Text(
-                          "Voice",
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.1,
+                          child: Center(
+                            child: Text(
+                              "Voice",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
                           ),
                         ),
 
@@ -101,19 +106,24 @@ class SettingContents extends ConsumerWidget{
                           width: GetScreenSize.screenWidth() * 0.7,
                           height: GetScreenSize.screenHeight() * 0.1,
                           child: Slider(
-                            value: ref.watch(otameshi).textSliderValue,
-                            min: 1,
-                            max: 5,
-                            divisions: 4,
+                            value: ref.watch(otameshi).voiceSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
                             onChanged: (double value){
-                              ref.read(otameshi).setSliderValue(value);
+                              ref.read(otameshi).setVoiceSliderValue(value);
                             },
                           ),
                         ),
-                        Text(
-                          ref.watch(otameshi).textSliderValue.toString(),
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          child: Center(
+                            child: Text(
+                              ref.watch(otameshi).voiceSliderValue.toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -123,10 +133,15 @@ class SettingContents extends ConsumerWidget{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
 
-                        Text(
-                          "BGM",
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.1,
+                          child: Center(
+                            child: Text(
+                              "BGM",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
                           ),
                         ),
 
@@ -134,19 +149,24 @@ class SettingContents extends ConsumerWidget{
                           width: GetScreenSize.screenWidth() * 0.7,
                           height: GetScreenSize.screenHeight() * 0.1,
                           child: Slider(
-                            value: ref.watch(otameshi).textSliderValue,
-                            min: 1,
-                            max: 5,
-                            divisions: 4,
+                            value: ref.watch(otameshi).bgmSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
                             onChanged: (double value){
-                              ref.read(otameshi).setSliderValue(value);
+                              ref.read(otameshi).setBGMSliderValue(value);
                             },
                           ),
                         ),
-                        Text(
-                          ref.watch(otameshi).textSliderValue.toString(),
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          child: Center(
+                            child: Text(
+                              ref.watch(otameshi).bgmSliderValue.toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -156,10 +176,15 @@ class SettingContents extends ConsumerWidget{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
 
-                        Text(
-                          "SE",
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.1,
+                          child: Center(
+                            child: Text(
+                              "SE",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
                           ),
                         ),
 
@@ -167,19 +192,24 @@ class SettingContents extends ConsumerWidget{
                           width: GetScreenSize.screenWidth() * 0.7,
                           height: GetScreenSize.screenHeight() * 0.1,
                           child: Slider(
-                            value: ref.watch(otameshi).textSliderValue,
-                            min: 1,
-                            max: 5,
-                            divisions: 4,
+                            value: ref.watch(otameshi).seSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
                             onChanged: (double value){
-                              ref.read(otameshi).setSliderValue(value);
+                              ref.read(otameshi).setSESliderValue(value);
                             },
                           ),
                         ),
-                        Text(
-                          ref.watch(otameshi).textSliderValue.toString(),
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          child: Center(
+                            child: Text(
+                              ref.watch(otameshi).seSliderValue.toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
                           ),
                         ),
                       ],
