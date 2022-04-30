@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
+import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Title/Provider_title_TitleScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundBundle.dart';
@@ -72,6 +73,13 @@ class HomeScreen extends ConsumerWidget {
                   child: GestureDetector(
                     child: Button(buttonName: L10n.of(context)!.newGame),
                     onTap: () async {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(pageBuilder: (_, __, ___) =>
+                            const SettingScreen(),
+                            transitionDuration: const Duration(milliseconds: 10)
+                        ),
+                      );
                       print("pushed button 1");
                       _slideShowController.stop();
                       SoundPlayer.playSE("assets/sound/pushButton.mp3");
