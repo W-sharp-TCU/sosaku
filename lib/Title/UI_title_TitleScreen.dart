@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/l10n/l10n.dart';
-import '../Wrapper/wrapper_AudioMixer.dart';
-import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
+import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
 import '../Home/UI_home_HomeScreen.dart';
 
@@ -31,7 +30,7 @@ class TitleScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    //_slideShowController.start(context, ref.read(titleScreenProvider));
+    _slideShowController.start(context, ref.read(titleScreenProvider));
 
     return ProviderScope(
       child: Scaffold(
@@ -43,11 +42,10 @@ class TitleScreen extends ConsumerWidget {
                 child: GestureDetector(
                   onTap: () {
                     print("tap"); //デバッグ用
-                    //_slideShowController.stop();
-                    //SoundPlayer.playSE("assets/sound/next.mp3");
-                    AudioMixer.playBGM("assets/sound/fb.wav",
+                    _slideShowController.stop();
+                    SoundPlayer.playBGM("assets/sound/fb.wav",
                         loop: true, fadeOut: true);
-                    AudioMixer.playUI("assets/sound/next.mp3");
+                    SoundPlayer.playUI("assets/sound/next.mp3");
                     Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
@@ -90,11 +88,11 @@ class TitleScreen extends ConsumerWidget {
   static Future<void> prepare() async {
     /*SoundPlayer.loadSE(
         ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);*/
-    AudioMixer.init();
-    AudioMixer.loadAll(
+    SoundPlayer.init();
+    SoundPlayer.loadAll(
         filePaths: ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"],
-        audioType: AudioMixer.UI);
-    AudioMixer.loadAll(
-        filePaths: ["assets/sound/fb.wav"], audioType: AudioMixer.BGM);
+        audioType: SoundPlayer.UI);
+    SoundPlayer.loadAll(
+        filePaths: ["assets/sound/fb.wav"], audioType: SoundPlayer.BGM);
   }
 }

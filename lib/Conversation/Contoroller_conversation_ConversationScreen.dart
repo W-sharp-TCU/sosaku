@@ -1,8 +1,6 @@
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
-import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
-import '../Wrapper/wrapper_AudioMixer.dart';
+import '../Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_conversation_ConversationText.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 /// @Fields
 /// [_types], [_backgroundImagePaths], [_characterImagePaths], [_characterNames],
@@ -236,11 +234,10 @@ class ConversationScreenController {
       _animationAsync();
       _refreshScreen();
       // Todo : load in loadclass
-      AudioMixer.loadAll(
-          filePaths: ["assets/sound/fb.wav"], audioType: AudioMixer.BGM);
-      //SoundPlayer.loadSE(_voicePaths);
-      AudioMixer.loadAll(filePaths: _sePaths, audioType: AudioMixer.SE);
-      AudioMixer.loadAll(filePaths: _voicePaths, audioType: AudioMixer.CV);
+      SoundPlayer.loadAll(
+          filePaths: ["assets/sound/fb.wav"], audioType: SoundPlayer.BGM);
+      SoundPlayer.loadAll(filePaths: _sePaths, audioType: SoundPlayer.SE);
+      SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
     }
   }
 
@@ -376,29 +373,23 @@ class ConversationScreenController {
   }
 
   /// Change bgm.
-  void _changeBgm() async {
+  void _changeBgm() {
     if (_bgmPaths[_nowScene].isNotEmpty) {
-      //SoundPlayer.stopBGM();
-      /*await Future.delayed(Duration(milliseconds: 10));*/
-      AudioMixer.playBGM(_bgmPaths[_nowScene]);
+      SoundPlayer.playBGM(_bgmPaths[_nowScene]);
     }
   }
 
   /// Change voice.
   void _changeVoice() {
-    SoundPlayer.stopSE();
     if (_voicePaths[_nowScene].isNotEmpty) {
-      //SoundPlayer.playSE(_voicePaths[_nowScene]);
-      AudioMixer.playCV([_voicePaths[_nowScene]]);
+      SoundPlayer.playCV([_voicePaths[_nowScene]]);
     }
   }
 
   /// Change se.
   void _changeSe() {
-    SoundPlayer.stopSE();
     if (_sePaths[_nowScene].isNotEmpty) {
-      //SoundPlayer.playSE(_sePaths[_nowScene]);
-      AudioMixer.playSE([_sePaths[_nowScene]]);
+      SoundPlayer.playSE([_sePaths[_nowScene]]);
     }
   }
 }
