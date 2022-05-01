@@ -88,7 +88,7 @@ class ConversationImageProvider extends ChangeNotifier {
   /// This function is for Controller and UI.
   void changeHideUi() {
     _isHideUi = !_isHideUi;
-    _isDim = _dialogFlag || _isMenu || _isLog;
+    _isDim = (_dialogFlag && !_isHideUi) || _isMenu || _isLog;
     notifyListeners();
   }
 

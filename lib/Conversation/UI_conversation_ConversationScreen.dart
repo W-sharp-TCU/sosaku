@@ -13,7 +13,7 @@ final conversationImageProvider =
 final conversationTextProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationTextProvider());
 final conversationLogProvider =
-ChangeNotifierProvider.autoDispose((ref) => ConversationLogProvider());
+    ChangeNotifierProvider.autoDispose((ref) => ConversationLogProvider());
 
 final ConversationScreenController conversationScreenController =
     ConversationScreenController();
@@ -27,7 +27,8 @@ class ConversationScreen extends ConsumerWidget {
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     ConversationImageProvider cip = ref.watch(conversationImageProvider);
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
-    conversationScreenController.start(cip, ctp);
+    ConversationLogProvider clp = ref.watch(conversationLogProvider);
+    conversationScreenController.start(cip, ctp, clp);
 
     return Scaffold(
         body: Container(
@@ -67,8 +68,7 @@ class ConversationScreen extends ConsumerWidget {
                         ),
                       ))),
 
-              if (!ref.watch(conversationImageProvider).isHideUi &&
-                  ref.watch(conversationImageProvider).dialogFlag)
+              if (ref.watch(conversationImageProvider).isDim)
                 Container(
                   width: GetScreenSize.screenWidth(),
                   height: GetScreenSize.screenHeight(),
@@ -101,10 +101,7 @@ class ConversationScreen extends ConsumerWidget {
 
                     ///text zone
                     GestureDetector(
-                      onTap: () {
-                        //conversationScreenController.goNextScene();
-                        print("tap");
-                      },
+                      onTap: () {},
                       child: Container(
                         height: GetScreenSize.screenHeight() * 0.25,
                         width: GetScreenSize.screenWidth(),
@@ -154,10 +151,11 @@ class ConversationScreen extends ConsumerWidget {
                 ),
 
               ///Log screen
-              const Align(
-                alignment: Alignment(0, 0),
-                child: LogUI(),
-              ),
+              if (ref.watch(conversationImageProvider).isLog)
+                const Align(
+                  alignment: Alignment(0, 0),
+                  child: LogUI(),
+                ),
 
               ///side Widgets
               if (!ref.watch(conversationImageProvider).isHideUi)
@@ -190,7 +188,7 @@ class ConversationScreen extends ConsumerWidget {
                       ///UI appear
                       GestureDetector(
                         onTap: () {
-                          ref.read(conversationImageProvider).changeHideUi();
+                          conversationScreenController.changeHideUi();
                         },
                         child: Container(
                             width: GetScreenSize.screenWidth() * 0.05,
@@ -235,7 +233,7 @@ class ConversationScreen extends ConsumerWidget {
                       ///Log button
                       GestureDetector(
                         onTap: () {
-                          conversationScreenController.printLog();
+                          conversationScreenController.openLog();
                         },
                         child: Container(
                           height: GetScreenSize.screenHeight() * 0.05,

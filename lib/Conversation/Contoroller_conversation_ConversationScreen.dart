@@ -236,16 +236,14 @@ class ConversationScreenController {
   /// @param cip : ConversationImageProvider
   /// @param ctp : ConversationTextProvider
   /// Todo : add arg
-  void start(ConversationImageProvider cip,
-      ConversationTextProvider ctp /*,
-      ConversationLogProvider clp*/
-      ) {
+  void start(ConversationImageProvider cip, ConversationTextProvider ctp,
+      ConversationLogProvider clp) {
     if (_conversationImageProvider == null &&
         _conversationTextProvider == null &&
         _conversationLogProvider == null) {
       _conversationImageProvider = cip;
       _conversationTextProvider = ctp;
-      // _conversationLogProvider = clp;
+      _conversationLogProvider = clp;
       _animationAsync();
       _refreshScreen();
       // Todo : load in load class
@@ -344,12 +342,14 @@ class ConversationScreenController {
       _conversationLogProvider!.setTexts(_logTexts);
       _conversationLogProvider!.setIconPaths(_logIconPaths);
       _conversationLogProvider!.setIsPlaying(_logIsPlaying);
-      printLog();
       changeHideUi();
       _conversationImageProvider!.changeLogDisplay();
-      playLogVoice(2);
     } else {
+      if (_conversationLogProvider!.isPlaying.contains(true)) {
+        SoundPlayer.stopSE();
+      }
       _conversationImageProvider!.changeLogDisplay();
+      changeHideUi();
     }
   }
 
@@ -360,16 +360,6 @@ class ConversationScreenController {
     _conversationLogProvider!.setIsPlaying(_logIsPlaying);
     SoundPlayer.stopSE;
     SoundPlayer.playSE(_voicePaths[_conversationLogProvider!.codes[numOfLog]]);
-  }
-
-  ///　For debug.
-  void printLog() {
-    for (int i = 0; i < conversationLogs.length - 1; i++) {
-      print("code : " + _conversationLogProvider!.codes[i].toString());
-      print("[" + _conversationLogProvider!.names[i] + "]");
-      print("「" + _conversationLogProvider!.texts[i] + "」");
-      print("-----------------------------------------");
-    }
   }
 
   ///Thread loop
