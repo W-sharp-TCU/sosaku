@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Title/Interface_title_SlideShowInterface.dart';
 
 class TitleScreenProvider extends ChangeNotifier implements SlideShowInterface {
