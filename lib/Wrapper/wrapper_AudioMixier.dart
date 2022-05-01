@@ -56,30 +56,75 @@ class AudioMixer {
     _instanceExistenceCheck();
     switch (audioType) {
       case UI:
+        clearUIAll();
         _instance!._ui = AudioCache(
             prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
         _instance!._ui.loadAll(filePaths);
         break;
       case BGM:
+        clearBGMAll();
         _instance!._bgm = AudioCache(
             prefix: '',
             fixedPlayer: AudioPlayer(mode: PlayerMode.MEDIA_PLAYER));
         _instance!._bgm.loadAll(filePaths);
         break;
       case SE:
+        clearSEAll();
         _instance!._se = AudioCache(
             prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
         _instance!._se.loadAll(filePaths);
         break;
       case CV:
+        clearCVAll();
         _instance!._cv = AudioCache(
             prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
         _instance!._cv.loadAll(filePaths);
         break;
       default:
-        throw AssertionError("AudioMixer: unexpected audioType.\n"
+        throw AssertionError("AudioMixer: unexpected audioType error\n"
             "Specify 'UI', 'BGM', 'SE' or 'CV' to audioType.");
     }
+  }
+
+  /* clear functions*/
+  /// Release all UI audio caches.
+  static Future<void> clearUIAll() async {
+    _instanceExistenceCheck();
+    await stopUI(fadeOut: false);
+    await _instance!._ui.clearAll();
+    _uiController = null;
+  }
+
+  /// Release all BGM caches.
+  static Future<void> clearBGMAll() async {
+    _instanceExistenceCheck();
+    await stopBGM(fadeOut: false);
+    await _instance!._bgm.clearAll();
+    _bgmController = null;
+  }
+
+  /// Release all SE caches.
+  static Future<void> clearSEAll() async {
+    _instanceExistenceCheck();
+    await stopSEAll(fadeOut: false);
+    await _instance!._bgm.clearAll();
+    _seControllers.clear();
+  }
+
+  /// Release all CV caches.
+  static Future<void> clearCVAll() async {
+    _instanceExistenceCheck();
+    await stopCVAll(fadeOut: false);
+    await _instance!._se.clearAll();
+    _cvControllers.clear();
+  }
+
+  /// Release all UI audio, BGM, SE, CV caches.
+  static void clearAll() {
+    clearUIAll();
+    clearBGMAll();
+    clearSEAll();
+    clearCVAll();
   }
 
   /* play functions */
@@ -90,16 +135,16 @@ class AudioMixer {
   /// @param filePath : Specify audio file path you want to play.
   static Future<void> playUI(String filePath) async {
     _instanceExistenceCheck();
-    _uiController = await _instance!._ui.play(filePath);
-    _uiController!.onPlayerStateChanged.listen((event) {
-      print("UI: $event");
+    /*_uiController = await _instance!._ui.play(filePath);
+    */ /*_uiController!.onPlayerStateChanged.listen((event) {
       _playersState[UI] = event;
+      print("UI State : " + _playersState[UI].toString());
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        print("BGM => null");
+        print("UI => null");
         _uiController = null;
       }
-    });
-    _playersState[UI] = _uiController!.state;
+    });*/ /*
+    _playersState[UI] = _uiController!.state;*/
   }
 
   /// Play BGM audio file.
@@ -107,15 +152,15 @@ class AudioMixer {
   /// loaded as [AudioMixer.BGM] type.
   ///
   /// @param filePath : Specify audio file path you want to play.
+  /// @param loop : if "true", BGM starts looping until you call stopBGM().
+  /// @param fadeOut : if "true", BGM playing now will be applied fade-out
+  ///                  effect and then stop before new audio file start playing.
+  /// @param fadeIn : if "true", new audio file start playing with fade-in effect.
   static Future<void> playBGM(String filePath,
       {bool loop = false, bool fadeOut = true, bool fadeIn = false}) async {
-    print("start : $_bgmController, $uiState");
     _instanceExistenceCheck();
     if (_bgmController != null) {
-      if (fadeOut) {
-        await _instance!._fadeOut(_bgmController!, AudioMixer.BGM);
-      }
-      stopBGM();
+      await stopBGM(fadeOut: fadeOut);
     }
     double startVolume = bgmVolume;
     if (fadeIn) {
@@ -133,27 +178,35 @@ class AudioMixer {
     }
     _bgmController!.onPlayerStateChanged.listen((event) {
       _playersState[BGM] = event;
+      print("BGM State : " + _playersState[BGM].toString());
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
         print("BGM => null");
         _bgmController = null;
       }
     });
-    _playersState[BGM] = _bgmController!.state;
+    /*_bgmController!.onPlayerCompletion.listen((event) =>
+        print("=======================Complete!============================"));
+    _playersState[BGM] = _bgmController!.state;*/
+    print(await _bgmController!.getDuration());
+    await Future.delayed(
+        Duration(milliseconds: await _bgmController!.getDuration()));
+    print("=======================Complete!============================");
   }
 
   /// Play SE audio file.
   /// This function must be called after the audio file you want to play is
   /// loaded as [AudioMixer.SE] type.
   ///
-  /// @param filePath : Specify audio file path you want to play.
+  /// @param filePaths : Specify the list of audio file paths you want to play.
+  /// @param loop : if "true", BGM starts looping until you call stopBGM().
+  /// @param fadeOut : if "true", BGM playing now will be applied fade-out
+  ///                  effect and then stop before new audio file start playing.
+  /// @param fadeIn : if "true", new audio file start playing with fade-in effect.
   static Future<void> playSE(List<String> filePaths,
       {bool loop = false, bool fadeOut = false, bool fadeIn = true}) async {
     _instanceExistenceCheck();
-    if (_bgmController != null) {
-      if (fadeOut) {
-        await _instance!._fadeOut(_bgmController!, AudioMixer.SE);
-      }
-      stopSEAll();
+    if (_seControllers.isNotEmpty) {
+      await stopSEAll(fadeOut: fadeOut);
     }
     List<AudioPlayer> players = [];
     double volume = seVolume;
@@ -172,9 +225,10 @@ class AudioMixer {
     }
     players[0].onPlayerStateChanged.listen((event) {
       _playersState[SE] = event;
+      print("SE State : " + _playersState[SE].toString());
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
         print("SE => null");
-        _seControllers = [];
+        _seControllers.clear();
       }
     });
     _playersState[SE] = players[0].state;
@@ -184,40 +238,49 @@ class AudioMixer {
   /// This function must be called after the audio file you want to play is
   /// loaded as [AudioMixer.CV] type.
   ///
-  /// @param filePath : Specify audio file path you want to play.
+  /// @param filePaths : Specify the list of  audio file paths you want to play.
   static Future<void> playCV(List<String> filePaths) async {
     _instanceExistenceCheck();
+    if (_cvControllers.isNotEmpty) {
+      stopCVAll(fadeOut: false);
+    }
     List<AudioPlayer> players = [];
     for (String element in filePaths) {
       players.add(await _instance!._cv.play(element));
     }
-    players[0].onPlayerStateChanged.listen((event) {
+    print("playCV() : $players");
+    players.first.onPlayerStateChanged.listen((event) {
       _playersState[CV] = event;
+      print(event);
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
         print("CV => null");
-        _cvControllers = [];
+        _cvControllers.clear();
       }
     });
-    _playersState[CV] = players[0].state;
+    _playersState[CV] = players.first.state;
   }
 
   /* pause functions */
+  /// Pause BGM.
   static Future<void> pauseBGM() async {
     await _bgmController?.pause();
   }
 
+  /// Pause SE.
   static Future<void> pauseSE() async {
     for (AudioPlayer element in _seControllers) {
       await element.pause();
     }
   }
 
+  /// Pause CV.
   static Future<void> pauseCV() async {
     for (AudioPlayer element in _cvControllers) {
       await element.pause();
     }
   }
 
+  /// Pause BGM, SE & CV.
   static void pauseALL() {
     pauseBGM();
     pauseSE();
@@ -225,22 +288,26 @@ class AudioMixer {
   }
 
   /* resume functions */
+  /// Resume BGM paused.
   static Future<void> resumeBGM() async {
     await _bgmController?.resume();
   }
 
+  /// Resume SE paused.
   static Future<void> resumeSE() async {
     for (AudioPlayer element in _seControllers) {
       await element.resume();
     }
   }
 
+  /// Resume CV paused.
   static Future<void> resumeCV() async {
     for (AudioPlayer element in _cvControllers) {
       await element.resume();
     }
   }
 
+  /// Resume BGM, SE & CV paused.
   static void resumeALL() async {
     resumeBGM();
     resumeSE();
@@ -248,28 +315,55 @@ class AudioMixer {
   }
 
   /* stop functions */
-  static Future<void> stopUI() async {
-    await _uiController?.stop();
-    _uiController = null;
+  /// Stop UI audio playing now.
+  static Future<void> stopUI({bool fadeOut = true}) async {
+    _instanceExistenceCheck();
+    if (_uiController != null) {
+      if (fadeOut) {
+        await _instance!._fadeOut(_uiController!, AudioMixer.UI);
+      }
+      await _uiController?.stop();
+      _uiController = null;
+    }
   }
 
-  static Future<void> stopBGM() async {
-    await _bgmController?.stop();
-    _bgmController = null;
+  /// Stop BGM playing now.
+  static Future<void> stopBGM({bool fadeOut = true}) async {
+    _instanceExistenceCheck();
+    if (_bgmController != null) {
+      if (fadeOut) {
+        await _instance!._fadeOut(_bgmController!, AudioMixer.BGM);
+      }
+      await _bgmController?.stop();
+      _bgmController = null;
+    }
   }
 
-  static Future<void> stopSEAll() async {
+  /// Stop all SE playing now.
+  static Future<void> stopSEAll({bool fadeOut = true}) async {
+    _instanceExistenceCheck();
     for (AudioPlayer element in _seControllers) {
+      if (fadeOut) {
+        await _instance!._fadeOut(element, AudioMixer.SE);
+      }
       await element.stop();
     }
+    _seControllers.clear();
   }
 
-  static Future<void> stopCVAll() async {
+  /// Stop all CV playing now.
+  static Future<void> stopCVAll({bool fadeOut = true}) async {
+    _instanceExistenceCheck();
     for (AudioPlayer element in _cvControllers) {
+      if (fadeOut) {
+        await _instance!._fadeOut(element, AudioMixer.CV);
+      }
       await element.stop();
     }
+    _cvControllers.clear();
   }
 
+  /// Stop all UI audio, BGM, SE, CV playing now.
   static void stopALL() async {
     stopUI();
     stopBGM();
@@ -277,10 +371,10 @@ class AudioMixer {
     stopCVAll();
   }
 
+  /* private functions */
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
     double volume = _volumes[audioType];
     while (volume > 0) {
-      print(volume);
       volume = volume - (_volumes[audioType] / _fadeStep);
       if (volume <= 0) {
         volume = 0;
@@ -294,7 +388,6 @@ class AudioMixer {
   Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
     double goal = _volumes[audioType];
     double volume = 0;
-    int start = DateTime.now().millisecondsSinceEpoch;
     while (volume < goal) {
       volume = volume + (goal / _fadeStep);
       if (volume >= goal) {
@@ -304,10 +397,6 @@ class AudioMixer {
       await Future.delayed(
           const Duration(milliseconds: (_fadeDuration ~/ _fadeStep)));
     }
-    print("AudioMixer: "
-            "FadeIn transition took " +
-        (DateTime.now().millisecondsSinceEpoch - start).toString() +
-        " milli seconds.");
   }
 
   static void _instanceExistenceCheck() {
@@ -331,6 +420,7 @@ class AudioMixer {
     } else {
       _volumes[UI] = value;
     }
+    _uiController?.setVolume(_volumes[UI]);
   }
 
   static set bgmVolume(double value) {
@@ -341,6 +431,7 @@ class AudioMixer {
     } else {
       _volumes[BGM] = value;
     }
+    _bgmController?.setVolume(_volumes[BGM]);
   }
 
   static set seVolume(double value) {
@@ -351,6 +442,11 @@ class AudioMixer {
     } else {
       _volumes[SE] = value;
     }
+    if (_cvControllers.isNotEmpty) {
+      for (AudioPlayer element in _cvControllers) {
+        element.setVolume(_volumes[SE]);
+      }
+    }
   }
 
   static set cvVolume(double value) {
@@ -360,6 +456,11 @@ class AudioMixer {
       _volumes[CV] = 0.0;
     } else {
       _volumes[CV] = value;
+    }
+    if (_cvControllers.isNotEmpty) {
+      for (AudioPlayer element in _cvControllers) {
+        element.setVolume(_volumes[CV]);
+      }
     }
   }
 

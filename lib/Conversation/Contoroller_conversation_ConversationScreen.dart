@@ -237,7 +237,9 @@ class ConversationScreenController {
       _refreshScreen();
       // Todo : load in loadclass
       AudioMixer.loadAll(filePaths: _bgmPaths, audioType: AudioMixer.BGM);
-      SoundPlayer.loadSE(_voicePaths);
+      //SoundPlayer.loadSE(_voicePaths);
+      AudioMixer.loadAll(filePaths: _sePaths, audioType: AudioMixer.SE);
+      AudioMixer.loadAll(filePaths: _voicePaths, audioType: AudioMixer.CV);
     }
   }
 
@@ -342,7 +344,7 @@ class ConversationScreenController {
     //_changeCharacterImage();
     //_changeCharacterName();
     _changeBgm();
-    _changeVoice();
+    //_changeVoice();
   }
 
   ///Change background image.
@@ -377,7 +379,7 @@ class ConversationScreenController {
     if (_bgmPaths[_nowScene].isNotEmpty) {
       //SoundPlayer.stopBGM();
       /*await Future.delayed(Duration(milliseconds: 10));*/
-      AudioMixer.playBGM(_bgmPaths[_nowScene], loop: false);
+      AudioMixer.playBGM(_bgmPaths[_nowScene]);
     }
   }
 
@@ -385,7 +387,8 @@ class ConversationScreenController {
   void _changeVoice() {
     SoundPlayer.stopSE();
     if (_voicePaths[_nowScene].isNotEmpty) {
-      SoundPlayer.playSE(_voicePaths[_nowScene]);
+      //SoundPlayer.playSE(_voicePaths[_nowScene]);
+      AudioMixer.playCV([_voicePaths[_nowScene]]);
     }
   }
 
@@ -393,7 +396,8 @@ class ConversationScreenController {
   void _changeSe() {
     SoundPlayer.stopSE();
     if (_sePaths[_nowScene].isNotEmpty) {
-      SoundPlayer.playSE(_sePaths[_nowScene]);
+      //SoundPlayer.playSE(_sePaths[_nowScene]);
+      AudioMixer.playSE([_sePaths[_nowScene]]);
     }
   }
 }

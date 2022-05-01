@@ -10,6 +10,8 @@ import 'package:sosaku/Wrapper/wrapper_SoundBundle.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
+import '../Wrapper/wrapper_AudioMixier.dart';
+
 /// wrapper import
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
@@ -43,7 +45,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    _slideShowController.start(context, ref.read(homeScreenProvider));
+    //_slideShowController.start(context, ref.read(homeScreenProvider));
 
     return Scaffold(
       body: Container(
@@ -74,7 +76,8 @@ class HomeScreen extends ConsumerWidget {
                     onTap: () async {
                       print("pushed button 1");
                       _slideShowController.stop();
-                      SoundPlayer.playSE("assets/sound/pushButton.mp3");
+                      //SoundPlayer.playSE("assets/sound/pushButton.mp3");
+                      AudioMixer.playUI("assets/sound/pushButton.mp3");
                     },
                   ),
                 ),
@@ -85,7 +88,8 @@ class HomeScreen extends ConsumerWidget {
                   child: GestureDetector(
                     child: Button(buttonName: L10n.of(context)!.continueGame),
                     onTap: () {
-                      SoundPlayer.playSE("assets/sound/pushButton.mp3");
+                      //SoundPlayer.playSE("assets/sound/pushButton.mp3");
+                      AudioMixer.playUI("assets/sound/pushButton.mp3");
                       print("pushed button 2");
                       _slideShowController.stop();
                       Navigator.pushReplacement(
@@ -103,7 +107,8 @@ class HomeScreen extends ConsumerWidget {
                   child: GestureDetector(
                     child: Button(buttonName: L10n.of(context)!.settings),
                     onTap: () {
-                      SoundPlayer.playSE("assets/sound/next.mp3");
+                      //SoundPlayer.playSE("assets/sound/next.mp3");
+                      AudioMixer.playUI("assets/sound/next.mp3");
                       print("pushed button 3");
                       _slideShowController.stop();
                       Navigator.pushReplacement(
