@@ -1,23 +1,27 @@
 import 'package:flutter/cupertino.dart';
-import 'package:sosaku/Conversation/Contoroller_conversation_ConversationScreen.dart';
-import 'package:sosaku/Conversation/Provider_conversation_ConversationText.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
   String _mBGImagePath = "drawable/Load/default.jpg";
   String _characterImagePath = "drawable/Load/default.jpg";
   String _characterName = "";
   List<String> _optionTexts = [];
+  bool _isAuto = false;
   bool _dialogFlag = false;
+  bool _isMenu = false;
+  bool _isLog = false;
   bool _isHideUi = false;
-  bool _isLogDisplay = false;
+  bool _isDim = false;
 
   String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
   String get characterName => _characterName;
   List<String> get optionTexts => _optionTexts;
+  bool get isAuto => _isAuto;
   bool get dialogFlag => _dialogFlag;
+  bool get isMenu => _isMenu;
+  bool get isLog => _isLog;
   bool get isHideUi => _isHideUi;
-  bool get isLogDisplay => _isLogDisplay;
+  bool get isDim => _isDim;
 
   /// Set character image.
   /// This function is for Controller.
@@ -34,13 +38,13 @@ class ConversationImageProvider extends ChangeNotifier {
   }
 
   /// Set character image.
-  ///  This function is for Controller.
+  /// This function is for Controller.
   void setCharacterName(String characterName) {
     _characterName = characterName;
     notifyListeners();
   }
 
-  ///　Set a list of optionTexts.
+  /// Set a list of optionTexts.
   /// This function is for Controller.
   ///
   /// @param optionTexts : list of text to be displayed in the options.
@@ -49,10 +53,34 @@ class ConversationImageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Change auto play.
+  /// This function is for Controller.
+  void changeAuto() {
+    _isAuto = !_isAuto;
+    notifyListeners();
+  }
+
   /// Change the display of the option dialog.
   /// This function is for Controller.
   void changeDialogFlag() {
     _dialogFlag = !_dialogFlag;
+    _isDim = _dialogFlag || _isMenu || _isLog;
+    notifyListeners();
+  }
+
+  /// Change the display of the menu dialog.
+  /// This function is for Controller.
+  void changeMenuDisplay() {
+    _isMenu = !_isMenu;
+    _isDim = _dialogFlag || _isMenu || _isLog;
+    notifyListeners();
+  }
+
+  /// Change the log screen display.
+  /// This function is for Controller and UI.
+  void changeLogDisplay() {
+    _isLog = !_isLog;
+    _isDim = _dialogFlag || _isMenu || _isLog;
     notifyListeners();
   }
 
@@ -60,13 +88,14 @@ class ConversationImageProvider extends ChangeNotifier {
   /// This function is for Controller and UI.
   void changeHideUi() {
     _isHideUi = !_isHideUi;
+    _isDim = _dialogFlag || _isMenu || _isLog;
     notifyListeners();
   }
 
-  /// Change the log screen display.
-  /// This function is for Controller and UI.
-  void changeLogDisplay() {
-    _isLogDisplay = !_isLogDisplay;
+  /// set the dim of screen.
+  /// This function is for Controller.
+  void setDim(bool isDim) {
+    _isDim = isDim;
     notifyListeners();
   }
 }
