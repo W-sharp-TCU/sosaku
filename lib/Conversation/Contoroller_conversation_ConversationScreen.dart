@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
@@ -247,8 +248,8 @@ class ConversationScreenController {
       _animationAsync();
       _refreshScreen();
       // Todo : load in load class
-      SoundPlayer.loadBGM(_bgmPaths);
-      SoundPlayer.loadSE(_voicePaths);
+      SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
+      SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
     }
   }
 
@@ -346,7 +347,7 @@ class ConversationScreenController {
       _conversationImageProvider!.changeLogDisplay();
     } else {
       if (_conversationLogProvider!.isPlaying.contains(true)) {
-        SoundPlayer.stopSE();
+        SoundPlayer.stopCVAll();
       }
       _conversationImageProvider!.changeLogDisplay();
       changeHideUi();
@@ -358,8 +359,9 @@ class ConversationScreenController {
         List<bool>.filled(_conversationLogProvider!.codes.length, false);
     _logIsPlaying[numOfLog] = true;
     _conversationLogProvider!.setIsPlaying(_logIsPlaying);
-    SoundPlayer.stopSE;
-    SoundPlayer.playSE(_voicePaths[_conversationLogProvider!.codes[numOfLog]]);
+    SoundPlayer.clearCVAll();
+    SoundPlayer.playCV(
+        [_voicePaths[_conversationLogProvider!.codes[numOfLog]]]);
   }
 
   ///Thread loop
@@ -377,10 +379,8 @@ class ConversationScreenController {
   void _autoAnimation() async {
     if (_conversationImageProvider!.isLog) {
       // processing on the log screen
-      if (_conversationLogProvider!.isPlaying
-              .contains(true) /*&& SoundPlayer.playerState == STOP*/
-          // Todo : サウンドプレーヤーが停止しているときの条件を追加
-          ) {
+      if (_conversationLogProvider!.isPlaying.contains(true) &&
+          SoundPlayer.cvState == PlayerState.STOPPED) {
         _conversationLogProvider!.setIsPlaying(
             List<bool>.filled(_conversationLogProvider!.codes.length, false));
       }
@@ -459,17 +459,17 @@ class ConversationScreenController {
 
   /// Change voice.
   void _changeVoice() {
-    SoundPlayer.stopSE();
+    SoundPlayer.stopCVAll();
     if (_voicePaths[_nowCode].isNotEmpty) {
-      SoundPlayer.playSE(_voicePaths[_nowCode]);
+      SoundPlayer.playSE([_voicePaths[_nowCode]]);
     }
   }
 
   /// Change se.
   void _changeSe() {
-    SoundPlayer.stopSE();
+    SoundPlayer.stopSEAll();
     if (_sePaths[_nowCode].isNotEmpty) {
-      SoundPlayer.playSE(_sePaths[_nowCode]);
+      SoundPlayer.playSE([_sePaths[_nowCode]]);
     }
   }
 }
