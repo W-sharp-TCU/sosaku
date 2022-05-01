@@ -128,11 +128,11 @@ class AudioMixer {
   /// @param filePath : Specify audio file path you want to play.
   static void playUI(String filePath) async {
     _instanceExistenceCheck();
-    _uiController = await _instance!._ui.play(filePath);
-    _uiController!.onPlayerStateChanged.listen((event) {
+    AudioPlayer player = await _instance!._ui.play(filePath);
+    _uiController = player;
+    player.onPlayerStateChanged.listen((event) {
       _playersState[UI] = event;
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        _uiController!.dispose();
         _uiController = null;
       }
     });
@@ -150,6 +150,7 @@ class AudioMixer {
   /// @param fadeIn : if "true", new audio file start playing with fade-in effect.
   static Future<void> playBGM(String filePath,
       {bool loop = true, bool fadeOut = true, bool fadeIn = false}) async {
+    AudioPlayer player;
     _instanceExistenceCheck();
     if (_bgmController != null) {
       await stopBGM(fadeOut: fadeOut);
@@ -159,19 +160,17 @@ class AudioMixer {
       startVolume = 0.0;
     }
     if (loop) {
-      _bgmController =
-          await _instance!._bgm.loop(filePath, volume: startVolume);
+      player = await _instance!._bgm.loop(filePath, volume: startVolume);
     } else {
-      _bgmController =
-          await _instance!._bgm.play(filePath, volume: startVolume);
+      player = await _instance!._bgm.play(filePath, volume: startVolume);
     }
+    _bgmController = player;
     if (fadeIn) {
-      _instance!._fadeIn(_bgmController!, AudioMixer.BGM);
+      _instance!._fadeIn(player, AudioMixer.BGM);
     }
-    _bgmController!.onPlayerStateChanged.listen((event) {
+    player.onPlayerStateChanged.listen((event) {
       _playersState[BGM] = event;
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        _bgmController!.dispose();
         _bgmController = null;
       }
     });
@@ -208,12 +207,9 @@ class AudioMixer {
         _instance!._fadeIn(players.last, AudioMixer.SE);
       }
     }
-    players[0].onPlayerStateChanged.listen((event) {
+    players.first.onPlayerStateChanged.listen((event) {
       _playersState[SE] = event;
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        for (var element in _seControllers) {
-          element.dispose();
-        }
         _seControllers.clear();
       }
     });
@@ -237,13 +233,12 @@ class AudioMixer {
     players.first.onPlayerStateChanged.listen((event) {
       _playersState[CV] = event;
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        for (var element in _cvControllers) {
-          element.dispose();
-        }
         _cvControllers.clear();
       }
     });
     _playersState[CV] = players.first.state;
+    await Future.delayed(const Duration(seconds: 15));
+    print(players.first.state);
     /** provisional */
     if (UniversalPlatform.isWeb) {
       await Future.delayed(const Duration(seconds: 17));

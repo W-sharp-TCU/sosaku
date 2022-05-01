@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../Wrapper/wrapper_AudioMixer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Contoroller_conversation_ConversationScreen.dart';
 import 'Provider_conversation_ConversationImage.dart';
@@ -159,7 +160,9 @@ class ConversationScreen extends ConsumerWidget {
                     children: [
                       ///menu
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          print(AudioMixer.cvState);
+                        },
                         child: Container(
                             width: GetScreenSize.screenWidth() * 0.05,
                             height: GetScreenSize.screenWidth() * 0.05,

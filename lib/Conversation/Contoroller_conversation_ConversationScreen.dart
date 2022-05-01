@@ -236,7 +236,8 @@ class ConversationScreenController {
       _animationAsync();
       _refreshScreen();
       // Todo : load in loadclass
-      AudioMixer.loadAll(filePaths: _bgmPaths, audioType: AudioMixer.BGM);
+      AudioMixer.loadAll(
+          filePaths: ["assets/sound/fb.wav"], audioType: AudioMixer.BGM);
       //SoundPlayer.loadSE(_voicePaths);
       AudioMixer.loadAll(filePaths: _sePaths, audioType: AudioMixer.SE);
       AudioMixer.loadAll(filePaths: _voicePaths, audioType: AudioMixer.CV);
