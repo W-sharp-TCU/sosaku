@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Contoroller_conversation_ConversationScreen.dart';
 import 'Provider_conversation_ConversationImage.dart';
 import 'Provider_conversation_ConversationText.dart';
 import 'UI_conversation_ThreeDialog.dart';
+import 'UI_conversation_LogUI.dart';
 
 final conversationImageProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationImageProvider());
 final conversationTextProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationTextProvider());
+final conversationLogProvider =
+ChangeNotifierProvider.autoDispose((ref) => ConversationLogProvider());
+
 final ConversationScreenController conversationScreenController =
     ConversationScreenController();
 
@@ -147,6 +152,12 @@ class ConversationScreen extends ConsumerWidget {
                   alignment: Alignment(0, 0),
                   child: ThreeDialog(),
                 ),
+
+              ///Log screen
+              const Align(
+                alignment: Alignment(0, 0),
+                child: LogUI(),
+              ),
 
               ///side Widgets
               if (!ref.watch(conversationImageProvider).isHideUi)

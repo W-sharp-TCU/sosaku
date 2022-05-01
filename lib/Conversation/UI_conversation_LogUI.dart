@@ -1,0 +1,180 @@
+///package
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
+///other dart files
+import '../Wrapper/wrapper_GetScreenSize.dart';
+
+class LogUI extends ConsumerWidget{
+  const LogUI({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    GetScreenSize.setSize(
+        MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+
+    return SizedBox(
+      width: GetScreenSize.screenWidth(),
+      height: GetScreenSize.screenHeight(),
+      child: Center(
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: GetScreenSize.screenHeight() * 0.01,
+              sigmaY: GetScreenSize.screenHeight() * 0.01,
+            ),
+            child: Container(
+              width: GetScreenSize.screenHeight() * 1.2,
+              height: GetScreenSize.screenHeight() * 0.95,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.5),
+                border: Border.all(
+                  color: Colors.white,
+                  width: GetScreenSize.screenWidth()* 0.003,
+                )
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+
+                  Container(
+                    width: GetScreenSize.screenHeight() * 1.2,
+                    height: GetScreenSize.screenHeight() * 0.1,
+                    color: Colors.black.withOpacity(0.2),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: GetScreenSize.screenHeight() * 0.1,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                        ),
+
+                        const Spacer(),
+
+                        Text(
+                          "会話ログ",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.05,
+                            color: Colors.white
+                          ),
+                        ),
+
+                        const Spacer(),
+
+                        GestureDetector(
+                          onTap:(){
+                            print("batu");
+                          },
+                          child: SizedBox(
+                            width: GetScreenSize.screenHeight() * 0.1,
+                            height: GetScreenSize.screenHeight() * 0.1,
+                            child: Center(
+                              child: Text(
+                                "×",
+                                style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.05,
+                                    color: Colors.white
+                                ),
+                              )
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Container(
+                    width: GetScreenSize.screenHeight() * 1.2,
+                    height: GetScreenSize.screenHeight() * 0.837,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+
+                          for(var _i = 0; /*_i < ref.watch(conversationLogProvider).texts.length - 1*/ _i < 5; _i++)
+                            Container(
+                              width: GetScreenSize.screenHeight() * 1.1,
+                              height: GetScreenSize.screenHeight() * 0.25,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  top: BorderSide(
+                                    color: Colors.white,
+                                    width: GetScreenSize.screenWidth()* 0.001,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: GetScreenSize.screenHeight() * 0.2,
+                                    height: GetScreenSize.screenHeight() * 0.24,
+                                    child: Align(
+                                      alignment: const Alignment(0, -0.7),
+                                      child: Container(
+                                        width: GetScreenSize.screenHeight() * 0.15,
+                                        height: GetScreenSize.screenHeight() * 0.15,
+                                        color: Colors.white,
+                                        child: Text(
+                                          "Image"
+                                        ),
+                                      ),
+                                    )
+                                  ),
+
+                                  SizedBox(
+                                    width: GetScreenSize.screenHeight() * 0.9,
+                                    height: GetScreenSize.screenHeight() * 0.24,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: GetScreenSize.screenHeight() * 0.9,
+                                          height: GetScreenSize.screenHeight() * 0.08,
+                                          child: Align(
+                                            alignment: const Alignment(-1, 0),
+                                            child: Text(
+                                              "Name",
+                                              style: TextStyle(
+                                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: GetScreenSize.screenHeight() * 0.9,
+                                          height: GetScreenSize.screenHeight() * 0.15,
+                                          padding: EdgeInsets.only(
+                                            left: GetScreenSize.screenWidth() * 0.015,
+                                          ),
+                                          child: Text(
+                                            "Naadfdsdsadalaぽme\nfasdjflkあｓｄふぁｓｄｆ  asj\nkafhdksふぁふぁふぁｆｄjhfk",
+                                            style: TextStyle(
+                                              fontSize: GetScreenSize.screenHeight() * 0.034,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
