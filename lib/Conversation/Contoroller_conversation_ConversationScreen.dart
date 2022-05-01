@@ -1,6 +1,6 @@
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
-import '../Wrapper/wrapper_AudioMixier.dart';
+import '../Wrapper/wrapper_AudioMixer.dart';
 import 'Provider_conversation_ConversationText.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -340,11 +340,11 @@ class ConversationScreenController {
   void _refreshScreen() {
     _nowLength = 0;
     _conversationLogs.add(_nowScene);
-    //_changeBackgroundImage();
-    //_changeCharacterImage();
-    //_changeCharacterName();
+    _changeBackgroundImage();
+    _changeCharacterImage();
+    _changeCharacterName();
     _changeBgm();
-    //_changeVoice();
+    _changeVoice();
   }
 
   ///Change background image.

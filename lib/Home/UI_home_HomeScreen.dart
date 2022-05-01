@@ -10,7 +10,7 @@ import 'package:sosaku/Wrapper/wrapper_SoundBundle.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
-import '../Wrapper/wrapper_AudioMixier.dart';
+import '../Wrapper/wrapper_AudioMixer.dart';
 
 /// wrapper import
 import '../Wrapper/wrapper_GetScreenSize.dart';

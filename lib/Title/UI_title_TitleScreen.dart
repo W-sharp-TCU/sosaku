@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/l10n/l10n.dart';
-import '../Wrapper/wrapper_AudioMixier.dart';
+import '../Wrapper/wrapper_AudioMixer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -47,6 +47,7 @@ class TitleScreen extends ConsumerWidget {
                     //SoundPlayer.playSE("assets/sound/next.mp3");
                     AudioMixer.playBGM("assets/sound/fb.wav",
                         loop: true, fadeOut: true);
+                    AudioMixer.playUI("assets/sound/next.mp3");
                     Navigator.pushReplacement(
                       context,
                       PageRouteBuilder(
