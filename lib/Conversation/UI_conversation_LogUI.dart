@@ -1,6 +1,7 @@
 ///package
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
@@ -102,15 +103,35 @@ class LogUI extends ConsumerWidget {
                                   SizedBox(
                                       width: GetScreenSize.screenHeight() * 0.2,
                                       height: GetScreenSize.screenHeight() * 0.24,
-                                      child: Align(
-                                        alignment: const Alignment(0, -0.7),
-                                        child: Container(
-                                          width: GetScreenSize.screenHeight() * 0.1,
-                                          height: GetScreenSize.screenHeight() * 0.1,
-                                          color: Colors.white,
-                                          child: Text("Image"),
-                                        ),
-                                      )),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: GetScreenSize.screenHeight() * 0.1,
+                                            height: GetScreenSize.screenHeight() * 0.1,
+                                            color: Colors.white,
+                                            margin: EdgeInsets.only(top: GetScreenSize.screenHeight() * 0.01),
+                                            child: Text("Image"),
+                                          ),
+
+                                          GestureDetector(
+                                            onTap: (){
+
+                                            },
+                                            child: Container(
+                                              width: GetScreenSize.screenHeight() * 0.1,
+                                              height: GetScreenSize.screenHeight() * 0.1,
+                                              child: Icon(
+                                                Icons.volume_up,
+                                                color: Colors.white,
+                                                size: GetScreenSize.screenWidth() * 0.03,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                  ),
                                   SizedBox(
                                     width: GetScreenSize.screenHeight() * 0.9,
                                     height: GetScreenSize.screenHeight() * 0.24,
