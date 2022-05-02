@@ -58,7 +58,6 @@ class LogUI extends ConsumerWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            print("batu");
                             conversationScreenController.openLog();
                           },
                           child: SizedBox(
@@ -106,8 +105,8 @@ class LogUI extends ConsumerWidget {
                                       child: Align(
                                         alignment: const Alignment(0, -0.7),
                                         child: Container(
-                                          width: GetScreenSize.screenHeight() * 0.15,
-                                          height: GetScreenSize.screenHeight() * 0.15,
+                                          width: GetScreenSize.screenHeight() * 0.1,
+                                          height: GetScreenSize.screenHeight() * 0.1,
                                           color: Colors.white,
                                           child: Text("Image"),
                                         ),
@@ -119,13 +118,13 @@ class LogUI extends ConsumerWidget {
                                       children: [
                                         Container(
                                           width: GetScreenSize.screenHeight() * 0.9,
-                                          height: GetScreenSize.screenHeight() * 0.08,
+                                          height: GetScreenSize.screenHeight() * 0.06,
                                           child: Align(
                                             alignment: const Alignment(-1, 0),
                                             child: Text(
                                               ref.watch(conversationLogProvider).names[_i],
                                               style: TextStyle(
-                                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                                                fontSize: GetScreenSize.screenHeight() * 0.03,
                                                 color: Colors.white,
                                               ),
                                             ),
@@ -133,14 +132,14 @@ class LogUI extends ConsumerWidget {
                                         ),
                                         Container(
                                           width: GetScreenSize.screenHeight() * 0.9,
-                                          height: GetScreenSize.screenHeight() * 0.15,
+                                          height: GetScreenSize.screenHeight() * 0.17,
                                           padding: EdgeInsets.only(
                                             left: GetScreenSize.screenWidth() * 0.015,
                                           ),
                                           child: Text(
                                             ref.watch(conversationLogProvider).texts[_i],
                                             style: TextStyle(
-                                              fontSize: GetScreenSize.screenHeight() * 0.034,
+                                              fontSize: GetScreenSize.screenHeight() * 0.025,
                                               color: Colors.white,
                                             ),
                                           ),
