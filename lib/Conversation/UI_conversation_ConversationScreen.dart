@@ -152,8 +152,8 @@ class ConversationScreen extends ConsumerWidget {
 
               ///Log screen
               if (ref.watch(conversationImageProvider).isLog)
-                const Align(
-                  alignment: Alignment(0, 0),
+                Align(
+                  alignment: const Alignment(0, 0),
                   child: LogUI(),
                 ),
 
