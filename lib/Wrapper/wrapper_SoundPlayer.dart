@@ -207,6 +207,7 @@ class SoundPlayer {
         _instance!._fadeIn(players.last, SoundPlayer.SE);
       }
     }
+    _seControllers = players;
     players.first.onPlayerStateChanged.listen((event) {
       _playersState[SE] = event;
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
@@ -230,6 +231,7 @@ class SoundPlayer {
     for (String element in filePaths) {
       players.add(await _instance!._cvCache.play(element));
     }
+    _cvControllers = players;
     players.first.onPlayerStateChanged.listen((event) {
       _playersState[CV] = event;
       if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
@@ -336,7 +338,7 @@ class SoundPlayer {
   }
 
   /// Stop all CV playing now.
-  static Future<void> stopCVAll({bool fadeOut = true}) async {
+  static Future<void> stopCVAll({bool fadeOut = false}) async {
     _instanceExistenceCheck();
     for (AudioPlayer element in _cvControllers) {
       if (fadeOut) {
