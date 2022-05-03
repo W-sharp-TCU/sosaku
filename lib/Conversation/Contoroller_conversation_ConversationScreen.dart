@@ -347,8 +347,8 @@ class ConversationScreenController {
       _conversationImageProvider!.changeLogDisplay();
     } else {
       if (_conversationLogProvider!.isPlaying.contains(true)) {
-        SoundPlayer
-            .stopCVAll(); // When the x button is pressed, stop audio if it was playing in the conversation log.
+        // When the x button is pressed, stop audio if it was playing in the conversation log.
+        SoundPlayer.stopCVAll();
       } // FIXME : CV could not be stopped.
       changeHideUi();
       _conversationImageProvider!.changeLogDisplay();
