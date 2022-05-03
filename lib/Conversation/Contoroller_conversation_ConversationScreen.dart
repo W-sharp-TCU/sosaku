@@ -23,7 +23,7 @@ import 'package:audioplayers/audioplayers.dart';
 /// [start], [stop], [goNextScene], [goSelectedScene],
 /// [changeAutoPlay], [changeHideUi],
 /// [openLog], [openMenu]
-/// Todo[save]
+/// TODO[save]
 class ConversationScreenController {
   final int _interval = 40; // [ms]
   ConversationImageProvider? _conversationImageProvider;
@@ -236,7 +236,7 @@ class ConversationScreenController {
   ///
   /// @param cip : ConversationImageProvider
   /// @param ctp : ConversationTextProvider
-  /// Todo : add arg
+  /// TODO : add arg
   void start(ConversationImageProvider cip, ConversationTextProvider ctp,
       ConversationLogProvider clp) {
     if (_conversationImageProvider == null &&
@@ -247,7 +247,7 @@ class ConversationScreenController {
       _conversationLogProvider = clp;
       _animationAsync();
       _refreshScreen();
-      // Todo : load in load class
+      // TODO : load in load class
       SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
       SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
     }
@@ -273,7 +273,7 @@ class ConversationScreenController {
         if (_gotoNumbers[_nowCode].isEmpty) {
           _nowCode++;
         } else if (_gotoNumbers[_nowCode][0] == -1) {
-          // Todo : イベント終了時の処理を追加
+          // TODO : イベント終了時の処理を追加
         } else {
           _nowCode = _gotoNumbers[_nowCode][0];
         }
@@ -283,14 +283,14 @@ class ConversationScreenController {
       if (_nowLength != _conversationTexts[_nowCode].length) {
         _nowLength = _conversationTexts[_nowCode].length - 1;
       }
-      if (_conversationImageProvider!.isHideUi) {
-        _conversationImageProvider!.changeHideUi();
-      }
       if (_conversationImageProvider!.isLog) {
-        _conversationImageProvider!.changeLogDisplay();
+        openLog();
       }
       if (_conversationImageProvider!.isMenu) {
         _conversationImageProvider!.changeMenuDisplay();
+      }
+      if (_conversationImageProvider!.isHideUi) {
+        changeHideUi();
       }
     }
   }
@@ -304,7 +304,7 @@ class ConversationScreenController {
       _conversationImageProvider!.changeDialogFlag();
     }
     if (_gotoNumbers[_nowCode][optionNumber] == -1) {
-      // Todo : イベント終了時の処理を追加
+      // TODO : イベント終了時の処理を追加
     } else {
       _nowCode = _gotoNumbers[_nowCode][optionNumber];
     }
@@ -335,7 +335,7 @@ class ConversationScreenController {
       List<bool> _logIsPlaying = [];
       for (int i = 0; i < _conversationLogs.length; i++) {
         _logNames.add(_characterNames[_conversationLogs[i]]);
-        // _logIconPaths.add(); // Todo : iconのpathを代入する処理を描く
+        // _logIconPaths.add(); // TODO : iconのpathを代入する処理を書く
         _logTexts.add(_conversationTexts[_conversationLogs[i]]);
         _logIsPlaying.add(false);
       }
@@ -347,10 +347,11 @@ class ConversationScreenController {
       _conversationImageProvider!.changeLogDisplay();
     } else {
       if (_conversationLogProvider!.isPlaying.contains(true)) {
-        SoundPlayer.stopCVAll();
-      }
-      _conversationImageProvider!.changeLogDisplay();
+        SoundPlayer
+            .stopCVAll(); // When the x button is pressed, stop audio if it was playing in the conversation log.
+      } // FIXME : CV could not be stopped.
       changeHideUi();
+      _conversationImageProvider!.changeLogDisplay();
     }
   }
 
@@ -359,7 +360,6 @@ class ConversationScreenController {
         List<bool>.filled(_conversationLogProvider!.codes.length, false);
     _logIsPlaying[numOfLog] = true;
     _conversationLogProvider!.setIsPlaying(_logIsPlaying);
-    SoundPlayer.clearCVAll();
     SoundPlayer.playCV(
         [_voicePaths[_conversationLogProvider!.codes[numOfLog]]]);
   }
@@ -405,7 +405,7 @@ class ConversationScreenController {
         SoundPlayer.seState != PlayerState.PLAYING*/
           &&
           !_conversationImageProvider!.isHideUi) {
-        //Todo : Rewrite the condition as when voice playback ends.
+        //TODO : Rewrite the condition as when voice playback ends.
         goNextScene();
       }
     }
@@ -451,7 +451,6 @@ class ConversationScreenController {
   /// Change bgm.
   void _changeBgm() async {
     if (_bgmPaths[_nowCode].isNotEmpty) {
-      SoundPlayer.stopBGM();
       await Future.delayed(Duration(milliseconds: 10));
       SoundPlayer.playBGM(_bgmPaths[_nowCode]);
     }
@@ -459,15 +458,13 @@ class ConversationScreenController {
 
   /// Change voice.
   void _changeVoice() {
-    SoundPlayer.stopCVAll();
     if (_voicePaths[_nowCode].isNotEmpty) {
-      SoundPlayer.playSE([_voicePaths[_nowCode]]);
+      SoundPlayer.playCV([_voicePaths[_nowCode]]);
     }
   }
 
   /// Change se.
   void _changeSe() {
-    SoundPlayer.stopSEAll();
     if (_sePaths[_nowCode].isNotEmpty) {
       SoundPlayer.playSE([_sePaths[_nowCode]]);
     }
