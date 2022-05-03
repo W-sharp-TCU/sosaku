@@ -32,7 +32,6 @@ class SettingContents extends ConsumerWidget{
               Container(
                 width: GetScreenSize.screenWidth(),
                 height: GetScreenSize.screenHeight() * 0.3,
-                color: Colors.red,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -77,7 +76,6 @@ class SettingContents extends ConsumerWidget{
               Container(
                 width: GetScreenSize.screenWidth(),
                 height: GetScreenSize.screenHeight() * 0.4,
-                color: Colors.pink,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

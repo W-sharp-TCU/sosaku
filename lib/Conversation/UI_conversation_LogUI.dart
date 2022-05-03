@@ -28,7 +28,7 @@ class LogUI extends ConsumerWidget {
               sigmaY: GetScreenSize.screenHeight() * 0.01,
             ),
             child: Container(
-              width: GetScreenSize.screenHeight() * 1.2,
+              width: GetScreenSize.screenHeight() * 1.5,
               height: GetScreenSize.screenHeight() * 0.95,
               decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.5),
@@ -40,7 +40,7 @@ class LogUI extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: GetScreenSize.screenHeight() * 1.2,
+                    width: GetScreenSize.screenHeight() * 1.5,
                     height: GetScreenSize.screenHeight() * 0.1,
                     color: Colors.black.withOpacity(0.2),
                     child: Row(
@@ -77,7 +77,7 @@ class LogUI extends ConsumerWidget {
                     ),
                   ),
                   Container(
-                    width: GetScreenSize.screenHeight() * 1.2,
+                    width: GetScreenSize.screenHeight() * 1.5,
                     height: GetScreenSize.screenHeight() * 0.837,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -86,8 +86,8 @@ class LogUI extends ConsumerWidget {
                         children: [
                           for (var _i = 0; _i < ref.watch(conversationLogProvider).texts.length; _i++)
                             Container(
-                              width: GetScreenSize.screenHeight() * 1.1,
-                              height: GetScreenSize.screenHeight() * 0.25,
+                              width: GetScreenSize.screenHeight() * 1.45,
+                              height: GetScreenSize.screenHeight() * 0.28,
                               decoration: BoxDecoration(
                                 border: Border(
                                   top: BorderSide(
@@ -102,7 +102,7 @@ class LogUI extends ConsumerWidget {
                                 children: [
                                   SizedBox(
                                       width: GetScreenSize.screenHeight() * 0.2,
-                                      height: GetScreenSize.screenHeight() * 0.24,
+                                      height: GetScreenSize.screenHeight() * 0.28,
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -115,9 +115,11 @@ class LogUI extends ConsumerWidget {
                                             child: Text("Image"),
                                           ),
 
+                                          const Spacer(),
+
                                           GestureDetector(
                                             onTap: (){
-
+                                              conversationScreenController.playLogVoice(_i);
                                             },
                                             child: Container(
                                               width: GetScreenSize.screenHeight() * 0.1,
@@ -125,42 +127,44 @@ class LogUI extends ConsumerWidget {
                                               child: Icon(
                                                 Icons.volume_up,
                                                 color: Colors.white,
-                                                size: GetScreenSize.screenWidth() * 0.03,
+                                                size: GetScreenSize.screenWidth() * 0.04,
                                               ),
                                             ),
                                           ),
+
+                                          const Spacer(),
                                         ],
                                       )
                                   ),
                                   SizedBox(
-                                    width: GetScreenSize.screenHeight() * 0.9,
-                                    height: GetScreenSize.screenHeight() * 0.24,
+                                    width: GetScreenSize.screenHeight() * 1.2,
+                                    height: GetScreenSize.screenHeight() * 0.28,
                                     child: Column(
                                       children: [
                                         Container(
-                                          width: GetScreenSize.screenHeight() * 0.9,
+                                          width: GetScreenSize.screenHeight() * 1.2,
                                           height: GetScreenSize.screenHeight() * 0.06,
                                           child: Align(
                                             alignment: const Alignment(-1, 0),
                                             child: Text(
                                               ref.watch(conversationLogProvider).names[_i],
                                               style: TextStyle(
-                                                fontSize: GetScreenSize.screenHeight() * 0.03,
+                                                fontSize: GetScreenSize.screenHeight() * 0.038,
                                                 color: Colors.white,
                                               ),
                                             ),
                                           ),
                                         ),
                                         Container(
-                                          width: GetScreenSize.screenHeight() * 0.9,
-                                          height: GetScreenSize.screenHeight() * 0.17,
+                                          width: GetScreenSize.screenHeight() * 1.2,
+                                          height: GetScreenSize.screenHeight() * 0.21,
                                           padding: EdgeInsets.only(
                                             left: GetScreenSize.screenWidth() * 0.015,
                                           ),
                                           child: Text(
                                             ref.watch(conversationLogProvider).texts[_i],
                                             style: TextStyle(
-                                              fontSize: GetScreenSize.screenHeight() * 0.025,
+                                              fontSize: GetScreenSize.screenHeight() * 0.0307,
                                               color: Colors.white,
                                             ),
                                           ),
