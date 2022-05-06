@@ -1,6 +1,6 @@
 ///package
 import 'dart:ui';
-
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,10 +33,10 @@ class LogUI extends ConsumerWidget {
               width: GetScreenSize.screenHeight() * 1.5,
               height: GetScreenSize.screenHeight() * 0.95,
               decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.5),
+                  color: const Color.fromRGBO(255, 201, 210, 0.5),
                   border: Border.all(
                     color: Colors.white,
-                    width: GetScreenSize.screenWidth() * 0.003,
+                    width: GetScreenSize.screenWidth() * 0.003
                   )),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -44,7 +44,7 @@ class LogUI extends ConsumerWidget {
                   Container(
                     width: GetScreenSize.screenHeight() * 1.5,
                     height: GetScreenSize.screenHeight() * 0.1,
-                    color: Colors.black.withOpacity(0.2),
+                    color: const Color.fromRGBO(255, 201, 210, 0.2),
                     child: Row(
                       children: [
                         SizedBox(
@@ -52,13 +52,19 @@ class LogUI extends ConsumerWidget {
                           height: GetScreenSize.screenHeight() * 0.1,
                         ),
                         const Spacer(),
-                        Text(
-                          "会話ログ",
-                          style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.05,
-                              color: Colors.white),
+                        BorderedText(
+                          strokeWidth: GetScreenSize.screenHeight() * 0.005,
+                          strokeColor: Colors.pinkAccent,
+                          child: Text(
+                            "会話ログ",
+                            style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.05,
+                                color: Colors.white
+                            ),
+                          ),
                         ),
                         const Spacer(),
+
                         GestureDetector(
                           onTap: () {
                             conversationScreenController.openLog();
@@ -71,8 +77,10 @@ class LogUI extends ConsumerWidget {
                               "×",
                               style: TextStyle(
                                   fontSize: GetScreenSize.screenHeight() * 0.05,
-                                  color: Colors.white),
-                            )),
+                                  color: Colors.white
+                              ),
+                              )
+                            ),
                           ),
                         ),
                       ],
@@ -156,11 +164,15 @@ class LogUI extends ConsumerWidget {
                                                   height: GetScreenSize.screenHeight() * 0.06,
                                                   child: Align(
                                                     alignment: const Alignment(-1, 0),
-                                                    child: Text(
-                                                      ref.watch(conversationLogProvider).names[_i],
-                                                      style: TextStyle(
-                                                        fontSize: GetScreenSize.screenHeight() * 0.038,
-                                                        color: Colors.white,
+                                                    child: BorderedText(
+                                                      strokeWidth: GetScreenSize.screenHeight() * 0.003,
+                                                      strokeColor: Colors.pinkAccent,
+                                                      child: Text(
+                                                        ref.watch(conversationLogProvider).names[_i],
+                                                        style: TextStyle(
+                                                          fontSize: GetScreenSize.screenHeight() * 0.038,
+                                                          color: Colors.white,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -171,11 +183,18 @@ class LogUI extends ConsumerWidget {
                                                   padding: EdgeInsets.only(
                                                     left: GetScreenSize.screenWidth() * 0.015,
                                                   ),
-                                                  child: Text(
-                                                    ref.watch(conversationLogProvider).texts[_i],
-                                                    style: TextStyle(
-                                                      fontSize: GetScreenSize.screenHeight() * 0.0307,
-                                                      color: Colors.white,
+                                                  child: Align(
+                                                    alignment: const Alignment(-1, -1),
+                                                    child: BorderedText(
+                                                      strokeWidth: GetScreenSize.screenHeight() * 0.002,
+                                                      strokeColor: Colors.pinkAccent,
+                                                      child: Text(
+                                                        ref.watch(conversationLogProvider).texts[_i],
+                                                        style: TextStyle(
+                                                          fontSize: GetScreenSize.screenHeight() * 0.0307,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 )
