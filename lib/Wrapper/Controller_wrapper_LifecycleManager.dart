@@ -44,16 +44,16 @@ class _LifecycleManagerState extends State<LifecycleManager>
     print('state = $state');
     switch (state) {
       case AppLifecycleState.resumed:
-        widget.callback?.onResumed();
+        widget.callback.onResumed();
         break;
       case AppLifecycleState.inactive:
-        widget.callback?.onInactive();
+        widget.callback.onInactive();
         break;
       case AppLifecycleState.paused:
-        widget.callback?.onPaused();
+        widget.callback.onPaused();
         break;
       case AppLifecycleState.detached:
-        widget.callback?.onDetached();
+        widget.callback.onDetached();
         break;
     }
   }
@@ -68,11 +68,17 @@ class _LifecycleManagerState extends State<LifecycleManager>
 
 /// callback interface
 abstract class LifecycleCallback {
-  void onResumed() {}
+  /// Called when the app is put in foreground from background.
+  void onResumed();
 
-  void onPaused() {}
+  /// Called when the app is put in background.
+  void onPaused();
 
-  void onInactive() {}
+  /// Called when the app is not controllable.
+  /// ex) Time when user receive telephone calls
+  /// ex) Time when user open notification center or control center.
+  void onInactive();
 
-  void onDetached() {}
+  /// Called when the app is terminated.
+  void onDetached();
 }
