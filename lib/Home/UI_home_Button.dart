@@ -10,10 +10,11 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GetScreenSize.setSize(
-        MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+      MediaQuery.of(context).size.height, MediaQuery.of(context).size.width
+    );
 
     return Container(
-      color: Colors.red,
+      color: Colors.white.withOpacity(0.5), //画像を用意したら消す
       width: GetScreenSize.screenWidth() * 0.3,
       height: GetScreenSize.screenHeight() * 0.1,
       child: Stack(
