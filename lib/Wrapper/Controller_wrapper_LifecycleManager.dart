@@ -4,9 +4,14 @@ import 'package:flutter/widgets.dart';
 /// === Usage ===
 /// Widget build(BuildContext context) {
 ///   return LifecycleManager(
-///     callback: LifecycleCallback(), // override function
+///     callback: _screenState(),  // Create new class implements LifecycleCallback.
 ///     child: Container(
 ///       .....
+/// }
+/// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/// class _screenState() implements LifecycleCallback {
+///   << Override functions >>
+/// }
 /// =============
 class LifecycleManager extends StatefulWidget {
   final Widget child;
@@ -62,7 +67,7 @@ class _LifecycleManagerState extends State<LifecycleManager>
 }
 
 /// callback interface
-class LifecycleCallback {
+abstract class LifecycleCallback {
   void onResumed() {}
 
   void onPaused() {}
