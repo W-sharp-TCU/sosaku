@@ -2,6 +2,15 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+/// WARNING: Playing state is not implemented.
+///
+/// Play UI sounds, background musics, sound effects & character voices.
+/// Depended package: audio_players
+/// Features
+///   1. Playing, stopping, pausing, resuming sounds.
+///   2. fade-in & fade-out effect
+///   3. Volume config (UI, BGM, SE, CV)
+///   4. playing state // todo: add state support on web
 class SoundPlayer {
   /* interface */
   static const int UI = 0; // UI audio

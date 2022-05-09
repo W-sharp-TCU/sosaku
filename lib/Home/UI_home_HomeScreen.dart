@@ -42,7 +42,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
-      MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+        MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     _slideShowController.start(context, ref.read(homeScreenProvider));
 
     return Scaffold(
@@ -67,95 +67,97 @@ class HomeScreen extends ConsumerWidget {
                         AssetImage(ref.watch(homeScreenProvider).mBGImagePath),
                   ),
 
-                /// widget button 1
-                Align(
-                  alignment: const Alignment(0.7, -0.40),
-                  child: GestureDetector(
-                    child: Button(buttonName: L10n.of(context)!.newGame),
-                    onTap: () async {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => const SettingScreen(),
-                            transitionDuration:
-                                const Duration(milliseconds: 10)),
-                      );
-                      print("pushed button 1");
-                      _slideShowController.stop();
-                      SoundPlayer.playUI("assets/sound/pushButton.mp3");
-                    },
+                  /// widget button 1
+                  Align(
+                    alignment: const Alignment(0.7, -0.40),
+                    child: GestureDetector(
+                      child: Button(buttonName: L10n.of(context)!.newGame),
+                      onTap: () async {
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                              pageBuilder: (_, __, ___) =>
+                                  const SettingScreen(),
+                              transitionDuration:
+                                  const Duration(milliseconds: 10)),
+                        );
+                        print("pushed button 1");
+                        _slideShowController.stop();
+                        SoundPlayer.playUI("assets/sound/pushButton.mp3");
+                      },
+                    ),
                   ),
-                ),
 
-                /// widget button 2
-                Align(
-                  alignment: const Alignment(0.7, -0.10),
-                  child: GestureDetector(
-                    child: Button(buttonName: L10n.of(context)!.continueGame),
-                    onTap: () {
-                      SoundPlayer.playUI("assets/sound/pushButton.mp3");
-                      print("pushed button 2");
-                      _slideShowController.stop();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoadScreen()),
-                      );
-                    },
+                  /// widget button 2
+                  Align(
+                    alignment: const Alignment(0.7, -0.10),
+                    child: GestureDetector(
+                      child: Button(buttonName: L10n.of(context)!.continueGame),
+                      onTap: () {
+                        SoundPlayer.playUI("assets/sound/pushButton.mp3");
+                        print("pushed button 2");
+                        _slideShowController.stop();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoadScreen()),
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                /// widget button 3
-                Align(
-                  alignment: const Alignment(0.7, 0.20),
-                  child: GestureDetector(
-                    child: Button(buttonName: L10n.of(context)!.settings),
-                    onTap: () {
-                      SoundPlayer.playUI("assets/sound/next.mp3");
-                      print("pushed button 3");
-                      _slideShowController.stop();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NowLoadingScreen(
-                                process: () async {
-                                  await precacheImage(
-                                      const AssetImage(
-                                          "assets/drawable/Conversation/4k.jpg"),
-                                      context);
-                                },
-                                goto: const ConversationScreen())),
-                      );
-                    },
+                  /// widget button 3
+                  Align(
+                    alignment: const Alignment(0.7, 0.20),
+                    child: GestureDetector(
+                      child: Button(buttonName: L10n.of(context)!.settings),
+                      onTap: () {
+                        SoundPlayer.playUI("assets/sound/next.mp3");
+                        print("pushed button 3");
+                        _slideShowController.stop();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NowLoadingScreen(
+                                  process: () async {
+                                    await precacheImage(
+                                        const AssetImage(
+                                            "assets/drawable/Conversation/4k.jpg"),
+                                        context);
+                                  },
+                                  goto: const ConversationScreen())),
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                /// widget button 4
-                Align(
-                  alignment: const Alignment(0.7, 0.50),
-                  child: GestureDetector(
-                    child: Button(buttonName: L10n.of(context)!.gallery),
-                    onTap: () {
-                      /// call methods when button pushed 4.
-                      /// print("pushed button 4"); delete.
-                      print("pushed button 4");
-                    },
+                  /// widget button 4
+                  Align(
+                    alignment: const Alignment(0.7, 0.50),
+                    child: GestureDetector(
+                      child: Button(buttonName: L10n.of(context)!.gallery),
+                      onTap: () {
+                        /// call methods when button pushed 4.
+                        /// print("pushed button 4"); delete.
+                        print("pushed button 4");
+                      },
+                    ),
                   ),
-                ),
 
-                /// widget button 5
-                Align(
-                  alignment: const Alignment(0.7, 0.80),
-                  child: GestureDetector(
-                    child: Button(buttonName: L10n.of(context)!.documents),
-                    onTap: () {
-                      /// call methods when button pushed 5.
-                      /// print("pushed button 4"); delete.
-                      print("pushed button 5");
-                    },
+                  /// widget button 5
+                  Align(
+                    alignment: const Alignment(0.7, 0.80),
+                    child: GestureDetector(
+                      child: Button(buttonName: L10n.of(context)!.documents),
+                      onTap: () {
+                        /// call methods when button pushed 5.
+                        /// print("pushed button 4"); delete.
+                        print("pushed button 5");
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
