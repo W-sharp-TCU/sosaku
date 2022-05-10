@@ -1,12 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class sharedPref{
-
+class SharedPref {
   ///Save an integer value with key.
   ///
   /// @param key: name of key
   /// @param num: integer value to be saved
-  static setInt(String key, int num)async{
+  static setInt(String key, int num) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     await _pref.setInt(key, num);
@@ -16,7 +15,7 @@ class sharedPref{
   ///
   /// @param key: name of key
   /// @param boolean: boolean value to be saved
-  static void setBool(String key, bool boolean)async{
+  static void setBool(String key, bool boolean) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     await _pref.setBool(key, boolean);
@@ -26,7 +25,7 @@ class sharedPref{
   ///
   /// @param key: name of key
   /// @param num: double value to be saved
-  static void setDouble(String key, double num)async{
+  static void setDouble(String key, double num) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     await _pref.setDouble(key, num);
@@ -36,7 +35,7 @@ class sharedPref{
   ///
   /// @param key: name of key
   /// @param str: string value to be saved
-  static void setString(String key, String str)async{
+  static void setString(String key, String str) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     await _pref.setString(key, str);
@@ -46,13 +45,11 @@ class sharedPref{
   ///
   /// @param key: name of key
   /// @param list: list to be saved
-  static void setList(String key, List<String> list)async{
+  static void setList(String key, List<String> list) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     await _pref.setStringList(key, list);
   }
-
-
 
   ///get an integer value saved with key
   ///
@@ -60,7 +57,7 @@ class sharedPref{
   static Future<int> getInt(String key) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
-    if(_pref.getInt(key)==null){
+    if (_pref.getInt(key) == null) {
       throw "there is no data for key called " + key;
     }
     return _pref.getInt(key)!;
@@ -69,7 +66,7 @@ class sharedPref{
   ///get a boolean value saved with key
   ///
   /// @param key: key associated with value gotten
-  static Future<bool> getBool(String key) async{
+  static Future<bool> getBool(String key) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     if (_pref.getBool(key) == null) {
@@ -81,7 +78,7 @@ class sharedPref{
   ///get a double value saved with key
   ///
   /// @param key: key associated with value gotten
-  static Future<double> getDouble(String key) async{
+  static Future<double> getDouble(String key) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     if (_pref.getDouble(key) == null) {
@@ -93,7 +90,7 @@ class sharedPref{
   ///get a string value saved with key
   ///
   /// @param key: key associated with value gotten
-  static Future<String> getString(String key) async{
+  static Future<String> getString(String key) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     if (_pref.getString(key) == null) {
@@ -105,7 +102,7 @@ class sharedPref{
   ///get a list of string saved with key
   ///
   /// @param key: key associated with value gotten
-  static Future<List<String>> getList(String key) async{
+  static Future<List<String>> getList(String key) async {
     SharedPreferences? _pref;
     _pref = await SharedPreferences.getInstance();
     if (_pref.getStringList(key) == null) {
@@ -113,6 +110,4 @@ class sharedPref{
     }
     return _pref.getStringList(key)!;
   }
-
-
 }
