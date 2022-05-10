@@ -2,11 +2,13 @@ import 'package:flutter/widgets.dart';
 
 /// StatefulWidget witch manage app lifecycle
 /// === Usage ===
-/// Widget build(BuildContext context) {
-///   return LifecycleManager(
-///     callback: _screenState(),  // Create new class implements LifecycleCallback.
-///     child: Container(
-///       .....
+/// class XXScreen extends StatelessWidget {
+///   Widget build(BuildContext context) {
+///     return LifecycleManager(
+///       callback: _screenState(),  // Create new class implements LifecycleCallback.
+///       child: Container(
+///         .....
+///   }
 /// }
 /// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /// class _screenState() implements LifecycleCallback {
