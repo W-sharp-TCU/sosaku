@@ -1,7 +1,6 @@
 ///package
 import 'dart:ui';
 import 'package:bordered_text/bordered_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';

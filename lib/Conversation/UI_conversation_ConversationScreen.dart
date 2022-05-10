@@ -34,11 +34,11 @@ class ConversationScreen extends ConsumerWidget {
     conversationScreenController.start(cip, ctp, clp);
 
     return Scaffold(
-        body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.black,
-      child: LifecycleManager(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black,
+        child: LifecycleManager(
         callback: CommonLifecycleCallback(),
         child: Center(
           child: Container(
