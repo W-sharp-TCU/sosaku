@@ -107,14 +107,14 @@ class ConversationScreenController {
 
   /// List of bgm paths.
   List<String> _bgmPaths = [
-    "assets/sound/fb.wav",
+    "assets/sound/Full-bloomer.mp3",
     "",
     "",
     "",
     "",
     "",
     "",
-    "assets/sound/fb.wav",
+    "assets/sound/Full-bloomer.mp3",
     "",
     "",
     "",
