@@ -1,6 +1,8 @@
 ///package
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -25,76 +27,79 @@ class LoadScreen extends ConsumerWidget {
 
     return ProviderScope(
       child: Scaffold(
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.black,
-          child: Center(
-            child: Container(
-              height: GetScreenSize.screenHeight(),
-              width: GetScreenSize.screenWidth(),
-              color: Colors.green,
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (var i = 0; i < 10; i++)
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                for (var j = 0; j < 2; j++) SelectLoadFile(i, j)
-                              ],
-                            )
-                        ],
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
-                        },
-                        child: Container(
+        body: LifecycleManager(
+          callback: CommonLifecycleCallback(),
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.black,
+            child: Center(
+              child: Container(
+                height: GetScreenSize.screenHeight(),
+                width: GetScreenSize.screenWidth(),
+                color: Colors.green,
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (var i = 0; i < 10; i++)
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  for (var j = 0; j < 2; j++)
+                                    SelectLoadFile(i, j)
+                                ],
+                              )
+                          ],
+                        )),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
+                          },
+                          child: Container(
+                              margin: EdgeInsets.only(
+                                  right: GetScreenSize.screenWidth() * 0.02,
+                                  top: GetScreenSize.screenWidth() * 0.02),
+                              width: GetScreenSize.screenWidth() * 0.07,
+                              height: GetScreenSize.screenWidth() * 0.1,
+                              color: Colors.white,
+                              child: const Center(
+                                child: Text("back"),
+                              )),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            ref.read(loadUIProvider).changeFlag();
+                          },
+                          child: Container(
                             margin: EdgeInsets.only(
-                                right: GetScreenSize.screenWidth() * 0.02,
                                 top: GetScreenSize.screenWidth() * 0.02),
-                            width: GetScreenSize.screenWidth() * 0.07,
+                            width: GetScreenSize.screenWidth() * 0.3,
                             height: GetScreenSize.screenWidth() * 0.1,
                             color: Colors.white,
                             child: const Center(
-                              child: Text("back"),
-                            )),
-                      ),
-
-                      GestureDetector(
-                        onTap:(){
-                          ref.read(loadUIProvider).changeFlag();
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: GetScreenSize.screenWidth() * 0.02),
-                          width: GetScreenSize.screenWidth() * 0.3,
-                          height: GetScreenSize.screenWidth() * 0.1,
-                          color: Colors.white,
-                          child: const Center(
-                            child: Text("File Select Text"),
+                              child: Text("File Select Text"),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  if (ref.watch(loadUIProvider).popFlag)
-                    Align(
-                      alignment: Alignment(0, 0),
-                      child: const DialogScreen(),
+                      ],
                     ),
-                ],
+                    if (ref.watch(loadUIProvider).popFlag)
+                      Align(
+                        alignment: Alignment(0, 0),
+                        child: const DialogScreen(),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 class NowLoadingScreen extends ConsumerWidget {
   /// NowLoading Screen will show in [_minDuration] milliseconds at least.
@@ -34,20 +36,23 @@ class NowLoadingScreen extends ConsumerWidget {
     /*************************************/
     // TODO: implement build
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.black,
+      body: LifecycleManager(
+        callback: CommonLifecycleCallback(),
         child: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                      "assets/drawable/NowLoading/LoadingAnimation.gif"))),
-          child: const Center(
-            child: Text(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.black,
+          child: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                        "assets/drawable/NowLoading/LoadingAnimation.gif"))),
+            child: const Center(
+              child: Text(
                 "Now Loading...",
-              style: TextStyle(
-                color: Colors.white,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
