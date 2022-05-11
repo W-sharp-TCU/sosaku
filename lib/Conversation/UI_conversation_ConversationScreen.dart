@@ -225,8 +225,8 @@ class ConversationScreen extends ConsumerWidget {
                               ? '■'
                               : '▶'),
                           textStyle: TextStyle(
-                              fontSize: GetScreenSize.screenWidth() * 0.04,
-                              color: Colors.pinkAccent),
+                            fontSize: GetScreenSize.screenWidth() * 0.04,
+                          ),
                           image:
                               "assets/drawable/Conversation/button_sample.png",
                           color: Colors.white,
