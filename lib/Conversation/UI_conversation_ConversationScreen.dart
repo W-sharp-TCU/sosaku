@@ -10,6 +10,7 @@ import 'Provider_conversation_ConversationImage.dart';
 import 'Provider_conversation_ConversationText.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
+import 'package:bordered_text/bordered_text.dart';
 
 final conversationImageProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationImageProvider());
@@ -34,11 +35,11 @@ class ConversationScreen extends ConsumerWidget {
     conversationScreenController.start(cip, ctp, clp);
 
     return Scaffold(
-        body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.black,
-      child: LifecycleManager(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black,
+        child: LifecycleManager(
         callback: CommonLifecycleCallback(),
         child: Center(
           child: Container(
@@ -80,60 +81,80 @@ class ConversationScreen extends ConsumerWidget {
                     color: Colors.black.withOpacity(0.5),
                   ),
 
-                ///below Widgets
-                if (!ref.watch(conversationImageProvider).isHideUi)
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ///character name
-                      Container(
-                        height: GetScreenSize.screenHeight() * 0.08,
-                        width: GetScreenSize.screenWidth() * 0.15,
-                        color: Colors.white.withOpacity(0.5),
-                        padding:
-                            EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
-                        child: Center(
+              ///below Widgets
+              if (!ref.watch(conversationImageProvider).isHideUi)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ///character name
+                    Container(
+                      height: GetScreenSize.screenHeight() * 0.08,
+                      width: GetScreenSize.screenWidth() * 0.15,
+                      color: const Color.fromRGBO(255, 201, 210, 0.1),
+                      padding:
+                          EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
+                      child: Align(
+                        alignment: const Alignment(-0.3, 0),
+                        child:BorderedText(
+                          strokeWidth: GetScreenSize.screenHeight() * 0.004,
+                          strokeColor: Colors.purple,
                           child: Text(
-                            ///initをproviderに書き換える
-                            ref.watch(conversationImageProvider).characterName,
+                            "[ " + ref.watch(conversationImageProvider).characterName + " ]",
                             style: TextStyle(
                               fontSize: GetScreenSize.screenHeight() * 0.04,
+                              color: Colors.white,
+                              shadows: [
+                              Shadow(blurRadius: GetScreenSize.screenHeight() * 0.005),
+                              ]
                             ),
                           ),
                         ),
                       ),
+                    ),
 
-                      ///text zone
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          height: GetScreenSize.screenHeight() * 0.25,
-                          width: GetScreenSize.screenWidth(),
-                          color: Colors.white.withOpacity(0.5), //画像を用意したら消す
-                          padding: EdgeInsets.only(
-                            top: GetScreenSize.screenWidth() * 0.01,
-                            left: GetScreenSize.screenWidth() * 0.01,
-                            right: GetScreenSize.screenWidth() * 0.01,
-                            bottom: GetScreenSize.screenWidth() * 0.02,
-                          ),
+                    ///text zone
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        height: GetScreenSize.screenHeight() * 0.25,
+                        width: GetScreenSize.screenWidth(),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color.fromRGBO(255, 201, 210, 0.7), Color.fromRGBO(255, 201, 210, 0.1)],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          )
+                        ),
+                        padding: EdgeInsets.only(
+                          top: GetScreenSize.screenWidth() * 0.01,
+                          left: GetScreenSize.screenWidth() * 0.07,
+                          right: GetScreenSize.screenWidth() * 0.04,
+                          bottom: GetScreenSize.screenWidth() * 0.02,
+                        ),
 
-                          child: Align(
-                            alignment: const Alignment(-1, -1),
+                        child: Align(
+                          alignment: const Alignment(-1, -1),
+                          child: BorderedText(
+                            strokeWidth: GetScreenSize.screenHeight() * 0.004,
+                            strokeColor: Colors.purple,
                             child: Text(
-                              ref
-                                  .watch(conversationTextProvider)
-                                  .conversationText,
+                              ref.watch(conversationTextProvider).conversationText,
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.045,
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(blurRadius: GetScreenSize.screenHeight() * 0.005),
+                                ]
                               ),
                               maxLines: 3,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
 
                 ///tap to next screen
                 GestureDetector(

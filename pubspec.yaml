@@ -37,6 +37,7 @@ dependencies:
   path_provider:          # search location apps can access
   audioplayers:           # play sounds
   universal_platform:     # support isWeb() function
+  bordered_text: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
