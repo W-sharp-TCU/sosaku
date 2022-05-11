@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import '../Wrapper/wrapper_AnimationButton.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Contoroller_conversation_ConversationScreen.dart';
 import 'Provider_conversation_ConversationImage.dart';
@@ -210,6 +211,28 @@ class ConversationScreen extends ConsumerWidget {
                                   ),
                                 ),
                               )),
+                        ),
+
+                        AnimationButton(
+                          id: "buttonAuto",
+                          onTap: () {
+                            conversationScreenController.changeAutoPlay();
+                          },
+                          width: GetScreenSize.screenWidth() * 0.07,
+                          height: GetScreenSize.screenWidth() * 0.07,
+                          margin: 0,
+                          text: (ref.watch(conversationImageProvider).isAuto
+                              ? '■'
+                              : '▶'),
+                          textStyle: TextStyle(
+                              fontSize: GetScreenSize.screenWidth() * 0.04,
+                              color: Colors.pinkAccent),
+                          image:
+                              "assets/drawable/Conversation/button_sample.png",
+                          color: Colors.white,
+                          opacity: 0,
+                          ratio: 1.1,
+                          duration: 64,
                         ),
 
                         const Spacer(),
