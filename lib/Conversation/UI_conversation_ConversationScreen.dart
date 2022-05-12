@@ -11,6 +11,7 @@ import 'Provider_conversation_ConversationText.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
 import 'package:bordered_text/bordered_text.dart';
+import 'UI_conversation_MenuUI.dart';
 
 final conversationImageProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationImageProvider());
@@ -184,6 +185,13 @@ class ConversationScreen extends ConsumerWidget {
                     alignment: const Alignment(0, 0),
                     child: LogUI(),
                   ),
+
+                ///Menu screen
+                //if文おねがいします
+                Align(
+                  alignment: const Alignment(0, 0),
+                  child: MenuUI(),
+                ),
 
                 ///side Widgets
                 if (!ref.watch(conversationImageProvider).isHideUi)
