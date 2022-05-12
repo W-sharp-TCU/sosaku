@@ -82,7 +82,7 @@ class ConversationScreen extends ConsumerWidget {
                   Container(
                     width: GetScreenSize.screenWidth(),
                     height: GetScreenSize.screenHeight(),
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withOpacity(0.5)
                   ),
 
               ///below Widgets(text zone,chara name)
