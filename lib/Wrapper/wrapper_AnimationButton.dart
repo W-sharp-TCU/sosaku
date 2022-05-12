@@ -30,7 +30,7 @@ class _DefaultValues {
 }
 
 class AnimationButton extends ConsumerWidget {
-  String _id = _DefaultValues.id;
+  late final String _id;
   AnimationButton(
       {Key? key,
       required String id,
@@ -176,15 +176,14 @@ class AnimationButtonProvider extends ChangeNotifier {
   }
 
   void setMarginVertical(double? marginVertical) {
-    _marginVertical = (marginVertical ?? _marginVertical) /*.ceilToDouble()*/;
+    _marginVertical = (marginVertical ?? _marginVertical).ceilToDouble();
     if (_marginVertical.isNegative) {
       _marginVertical = 0;
     }
   }
 
   void setMarginHorizontal(double? marginHorizontal) {
-    _marginHorizontal =
-        (marginHorizontal ?? _marginHorizontal) /*.ceilToDouble()*/;
+    _marginHorizontal = (marginHorizontal ?? _marginHorizontal).ceilToDouble();
     if (_marginHorizontal.isNegative) {
       _marginHorizontal = 0;
     }
@@ -196,7 +195,7 @@ class AnimationButtonProvider extends ChangeNotifier {
 
   void setTextStyle(TextStyle? textStyle) {
     _textStyle = (TextStyle(
-        fontSize: (textStyle ?? _textStyle).fontSize! /*.ceilToDouble()*/));
+        fontSize: (textStyle ?? _textStyle).fontSize!.ceilToDouble()));
   }
 
   void setImage(String? image) {
@@ -317,7 +316,7 @@ class AnimationButtonController {
 
   void updateProvider(String id) async {
     // TODO : Change from delay to build callbacks.
-    await Future.delayed(const Duration(microseconds: _animationInterval));
+    await Future.delayed(const Duration(microseconds: 8));
     _providers[id]?.setWidth(_widths[id]);
     _providers[id]?.setHeight(_heights[id]);
     _providers[id]?.setMarginVertical(_margins[id]! +
