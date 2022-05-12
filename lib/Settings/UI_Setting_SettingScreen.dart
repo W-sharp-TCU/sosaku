@@ -69,13 +69,15 @@ class SettingScreen extends ConsumerWidget {
                                       color: Colors.white,
                                       child: const Center(
                                         child: Text("back"),
-                                      )),
+                                      ),
+                                  ),
                                 ),
 
                                 ///Setting text
                                 Container(
                                   margin: EdgeInsets.only(
-                                      top: GetScreenSize.screenWidth() * 0.01),
+                                      top: GetScreenSize.screenWidth() * 0.01
+                                  ),
                                   width: GetScreenSize.screenWidth() * 0.3,
                                   height: GetScreenSize.screenWidth() * 0.07,
                                   color: Colors.white,
@@ -89,9 +91,31 @@ class SettingScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
+
+                                const Spacer(),
+
+                                ///reset to init
+                                GestureDetector(
+                                  onTap: (){
+
+                                  },
+                                  child: Container(
+                                    width: GetScreenSize.screenWidth() * 0.1,
+                                    height: GetScreenSize.screenWidth() * 0.07,
+                                    margin: EdgeInsets.only(
+                                      top: GetScreenSize.screenWidth() * 0.01,
+                                      right: GetScreenSize.screenWidth() * 0.1,
+                                    ),
+                                    color: Colors.white,
+                                    child: const Text(
+                                      "resetButton",
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
-                          )),
+                          ),
+                      ),
 
                       ///scroll widget(UI_Setting_SettingContexts.dart)
                       const Align(
@@ -99,8 +123,10 @@ class SettingScreen extends ConsumerWidget {
                         child: SettingContents(),
                       ),
                     ],
-                  )),
-            )),
+                  ),
+              ),
+            ),
+        ),
       ),
     );
   }
