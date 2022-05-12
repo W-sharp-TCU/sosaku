@@ -2,8 +2,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
-import 'package:bordered_text/bordered_text.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -169,7 +167,7 @@ class MenuUI extends ConsumerWidget{
                     ),
                   ),
 
-                  ///status window
+                  ///status window(仮)
                   Align(
                     alignment: const Alignment(-1, 0),
                     child: Container(

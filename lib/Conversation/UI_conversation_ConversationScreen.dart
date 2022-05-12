@@ -10,8 +10,9 @@ import 'Provider_conversation_ConversationImage.dart';
 import 'Provider_conversation_ConversationText.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
-import 'package:bordered_text/bordered_text.dart';
 import 'UI_conversation_MenuUI.dart';
+import 'UI_conversation_BelowUIs.dart';
+import 'UI_conversation_SideUIs.dart';
 
 final conversationImageProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationImageProvider());
@@ -84,80 +85,9 @@ class ConversationScreen extends ConsumerWidget {
                     color: Colors.black.withOpacity(0.5),
                   ),
 
-              ///below Widgets
+              ///below Widgets(text zone,chara name)
               if (!ref.watch(conversationImageProvider).isHideUi)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ///character name
-                    Container(
-                      height: GetScreenSize.screenHeight() * 0.08,
-                      width: GetScreenSize.screenWidth() * 0.15,
-                      color: const Color.fromRGBO(255, 201, 210, 0.1),
-                      padding:
-                          EdgeInsets.all(GetScreenSize.screenWidth() * 0.005),
-                      child: Align(
-                        alignment: const Alignment(-0.3, 0),
-                        child:BorderedText(
-                          strokeWidth: GetScreenSize.screenHeight() * 0.004,
-                          strokeColor: Colors.purple,
-                          child: Text(
-                            "[ " + ref.watch(conversationImageProvider).characterName + " ]",
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.04,
-                              color: Colors.white,
-                              shadows: [
-                              Shadow(blurRadius: GetScreenSize.screenHeight() * 0.005),
-                              ]
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    ///text zone
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: GetScreenSize.screenHeight() * 0.25,
-                        width: GetScreenSize.screenWidth(),
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Color.fromRGBO(255, 201, 210, 0.7), Color.fromRGBO(255, 201, 210, 0.1)],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          )
-                        ),
-                        padding: EdgeInsets.only(
-                          top: GetScreenSize.screenWidth() * 0.01,
-                          left: GetScreenSize.screenWidth() * 0.07,
-                          right: GetScreenSize.screenWidth() * 0.04,
-                          bottom: GetScreenSize.screenWidth() * 0.02,
-                        ),
-
-                        child: Align(
-                          alignment: const Alignment(-1, -1),
-                          child: BorderedText(
-                            strokeWidth: GetScreenSize.screenHeight() * 0.004,
-                            strokeColor: Colors.purple,
-                            child: Text(
-                              ref.watch(conversationTextProvider).conversationText,
-                              style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.045,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(blurRadius: GetScreenSize.screenHeight() * 0.005),
-                                ]
-                              ),
-                              maxLines: 3,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                const BelowUIs(),
 
                 ///tap to next screen
                 GestureDetector(
@@ -188,137 +118,17 @@ class ConversationScreen extends ConsumerWidget {
 
                 ///Menu screen
                 //if文おねがいします
-                Align(
-                  alignment: const Alignment(0, 0),
-                  child: MenuUI(),
-                ),
+                if(false)
+                  const Align(
+                    alignment: Alignment(0, 0),
+                    child: MenuUI(),
+                  ),
 
                 ///side Widgets
                 if (!ref.watch(conversationImageProvider).isHideUi)
-                  Align(
-                    alignment: const Alignment(1, 0),
-                    child: SizedBox(
-                      width: GetScreenSize.screenWidth() * 0.1,
-                      height: GetScreenSize.screenHeight(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ///menu
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                                width: GetScreenSize.screenWidth() * 0.05,
-                                height: GetScreenSize.screenWidth() * 0.05,
-                                margin: EdgeInsets.all(
-                                    GetScreenSize.screenHeight() * 0.02),
-                                color: Colors.red.withOpacity(0.5),
-                                child: Center(
-                                  child: Text(
-                                    "三",
-                                    style: TextStyle(
-                                      fontSize:
-                                          GetScreenSize.screenHeight() * 0.04,
-                                    ),
-                                  ),
-                                )),
-                          ),
-
-                          ///UI appear
-                          GestureDetector(
-                            onTap: () {
-                              conversationScreenController.changeHideUi();
-                            },
-                            child: Container(
-                                width: GetScreenSize.screenWidth() * 0.05,
-                                height: GetScreenSize.screenWidth() * 0.05,
-                                margin: EdgeInsets.all(
-                                    GetScreenSize.screenHeight() * 0.02),
-                                color: Colors.red.withOpacity(0.5),
-                                child: Center(
-                                  child: Text(
-                                    "UI",
-                                    style: TextStyle(
-                                      fontSize:
-                                          GetScreenSize.screenHeight() * 0.04,
-                                    ),
-                                  ),
-                                ),
-                            ),
-                          ),
-
-                          AnimationButton(
-                            id: "buttonAuto",
-                            onTap: () {
-                              conversationScreenController.changeAutoPlay();
-                            },
-                            width: GetScreenSize.screenWidth() * 0.07,
-                            height: GetScreenSize.screenWidth() * 0.07,
-                            margin: 0,
-                            text: (ref.watch(conversationImageProvider).isAuto
-                                ? '■'
-                                : '▶'),
-                            textStyle: TextStyle(
-                              fontSize: GetScreenSize.screenWidth() * 0.04,
-                            ),
-                            image:
-                                "assets/drawable/Conversation/button_sample.png",
-                            color: Colors.white,
-                            opacity: 0,
-                            ratio: 1.1,
-                            duration: 64,
-                          ),
-
-                          const Spacer(),
-
-                          ///auto button
-                          GestureDetector(
-                            onTap: () {
-                              conversationScreenController.changeAutoPlay();
-                            },
-                            child: Container(
-                              height: GetScreenSize.screenHeight() * 0.05,
-                              width: GetScreenSize.screenWidth() * 0.1,
-                              color: Colors.red.withOpacity(0.5),
-                              margin: EdgeInsets.all(
-                                  GetScreenSize.screenHeight() * 0.02),
-                              child: Center(
-                                child: Text(
-                                  "Auto",
-                                  style: TextStyle(
-                                    fontSize: GetScreenSize.screenHeight() * 0.02,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          ///Log button
-                          GestureDetector(
-                            onTap: () {
-                              conversationScreenController.openLog();
-                            },
-                            child: Container(
-                              height: GetScreenSize.screenHeight() * 0.05,
-                              width: GetScreenSize.screenWidth() * 0.1,
-                              color: Colors.red.withOpacity(0.5),
-                              margin: EdgeInsets.all(
-                                  GetScreenSize.screenHeight() * 0.02),
-                              child: Center(
-                                child: Text(
-                                  "Log",
-                                  style: TextStyle(
-                                    fontSize: GetScreenSize.screenHeight() * 0.02,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
+                  const Align(
+                    alignment: Alignment(1, 0),
+                    child: SideUIs(),
                   ),
               ],
             ),
