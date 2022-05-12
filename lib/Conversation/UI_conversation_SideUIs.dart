@@ -14,7 +14,7 @@ class SideUIs extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height,
-        MediaQuery.of(context).size.width
+        MediaQuery.of(context).size.width,
     );
 
     return SizedBox(
