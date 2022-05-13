@@ -39,8 +39,6 @@ class DialogScreen extends ConsumerWidget{
             child: Container(
                 width: GetScreenSize.screenWidth() * 0.7,
                 height: GetScreenSize.screenHeight() * 0.7,
-                color: Colors.white,  ///need to delete when ImagePaths are written
-
                  decoration: BoxDecoration(
                    /*
                    image: DecorationImage(
@@ -48,8 +46,9 @@ class DialogScreen extends ConsumerWidget{
                      fit: BoxFit.cover
                    )
                    */
+                   color: Colors.white,
                    borderRadius: BorderRadius.circular(
-                       GetScreenSize.screenWidth() * 0.05
+                       GetScreenSize.screenWidth() * 0.03
                    ),
                  ),
               /// Stack以下は仕様が決まり次第改良
@@ -64,7 +63,6 @@ class DialogScreen extends ConsumerWidget{
                       style: TextStyle(
                         fontSize: GetScreenSize.screenHeight() * 0.05
                       ),
-
                     ),
                   ),
 
@@ -79,10 +77,18 @@ class DialogScreen extends ConsumerWidget{
                         child: Container(
                           width: GetScreenSize.screenWidth() * 0.2 ,
                           height: GetScreenSize.screenHeight() * 0.2,
-                          color: Colors.redAccent,
-                          child: const Center(
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(
+                                GetScreenSize.screenHeight() * 0.03
+                            ),
+                          ),
+                          child: Center(
                             child: Text(
-                                "YES"
+                                "YES",
+                              style: TextStyle(
+                                  fontSize: GetScreenSize.screenHeight() * 0.05
+                              ),
                             ),
                           ),
                         ),
@@ -100,10 +106,18 @@ class DialogScreen extends ConsumerWidget{
                         child: Container(
                           width: GetScreenSize.screenWidth() * 0.2,
                           height: GetScreenSize.screenHeight() * 0.2,
-                          color: Colors.blueAccent,
-                          child: const Center(
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(
+                                GetScreenSize.screenHeight() * 0.03
+                            ),
+                          ),
+                          child: Center(
                             child: Text(
-                                "NO"
+                                "NO",
+                              style: TextStyle(
+                                  fontSize: GetScreenSize.screenHeight() * 0.05
+                              ),
                             ),
                           ),
                         ),
