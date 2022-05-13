@@ -40,22 +40,32 @@ class DialogScreen extends ConsumerWidget{
                 width: GetScreenSize.screenWidth() * 0.7,
                 height: GetScreenSize.screenHeight() * 0.7,
                 color: Colors.white,  ///need to delete when ImagePaths are written
-                /*イメージパスが来たときよう
+
                  decoration: BoxDecoration(
+                   /*
                    image: DecorationImage(
                      image: AssetImage(""),
                      fit: BoxFit.cover
                    )
+                   */
+                   borderRadius: BorderRadius.circular(
+                       GetScreenSize.screenWidth() * 0.05
+                   ),
                  ),
-                 */
               /// Stack以下は仕様が決まり次第改良
               child: Stack(
                 children: [
 
-                  const Align(
+                  Align(
                     ///表示メッセージ
-                    alignment: Alignment(0, -0.7),
-                    child: Text("DialogScreen"),
+                    alignment: const Alignment(0, -0.7),
+                    child: Text(
+                        "DialogScreen",
+                      style: TextStyle(
+                        fontSize: GetScreenSize.screenHeight() * 0.05
+                      ),
+
+                    ),
                   ),
 
                   ///YES
@@ -66,21 +76,13 @@ class DialogScreen extends ConsumerWidget{
                           print("pushed yes");  ///debug
                           ref.read(dialogProvider).animatedButton();
                         },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 100),
-                          padding: EdgeInsets.all(
-                              GetScreenSize.screenHeight() * 0.01* ref.watch(dialogProvider).i
-                          ),
+                        child: Container(
                           width: GetScreenSize.screenWidth() * 0.2 ,
                           height: GetScreenSize.screenHeight() * 0.2,
-                          child: Container(
-                            width: GetScreenSize.screenWidth() * 0.2 ,
-                            height: GetScreenSize.screenHeight() * 0.2,
-                            color: Colors.redAccent,
-                            child: const Center(
-                              child: Text(
-                                  "YES"
-                              ),
+                          color: Colors.redAccent,
+                          child: const Center(
+                            child: Text(
+                                "YES"
                             ),
                           ),
                         ),

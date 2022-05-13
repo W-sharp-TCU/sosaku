@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
-import '../Wrapper/wrapper_AnimationButton.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Contoroller_conversation_ConversationScreen.dart';
 import 'Provider_conversation_ConversationImage.dart';
