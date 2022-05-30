@@ -5,8 +5,8 @@ import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvide
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Contoroller_conversation_ConversationScreenController.dart';
-import 'Provider_conversation_ConversationImage.dart';
-import 'Provider_conversation_ConversationText.dart';
+import 'Provider_conversation_ConversationImageProvider.dart';
+import 'Provider_conversation_ConversationTextProvider.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
 import 'UI_conversation_MenuUI.dart';
