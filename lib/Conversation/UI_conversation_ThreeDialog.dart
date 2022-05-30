@@ -1,7 +1,6 @@
 ///package
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sosaku/Conversation/Contoroller_conversation_ConversationScreen.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 
 ///other dart files

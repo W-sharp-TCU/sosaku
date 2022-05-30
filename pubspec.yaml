@@ -84,13 +84,17 @@ flutter:
     - assets/drawable/Settings/
     - assets/drawable/Splash/
     - assets/drawable/Title/
-    - assets/sound/ # 何かここに入れるときはBGM, SEなど種類ごとにフォルダ分けしてください。
-    - assets/text/ # 何かここに入れるときはscenario_data, configなど種類ごとにフォルダ分けしてください。
+    - assets/sound/BGM/
+    - assets/sound/CharacterVoice/
+    - assets/sound/SE/
+    - assets/sound/UISound/
+    - assets/text/fonts/
+    - assets/text/ScenarioData/
 
   fonts:
     - family: SourceHanSansJP
       fonts:
-        - asset: assets/text/SourceHanSansJP-Normal.otf
+        - asset: assets/text/fonts/SourceHanSansJP-Normal.otf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

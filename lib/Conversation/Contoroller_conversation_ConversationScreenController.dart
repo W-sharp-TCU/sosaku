@@ -1,5 +1,4 @@
 import 'package:audioplayers/audioplayers_api.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
@@ -107,14 +106,14 @@ class ConversationScreenController {
 
   /// List of bgm paths.
   List<String> _bgmPaths = [
-    "assets/sound/Full-bloomer.mp3",
+    "assets/sound/BGM/Full-bloomer.mp3",
     "",
     "",
     "",
     "",
     "",
     "",
-    "assets/sound/Full-bloomer.mp3",
+    "assets/sound/BGM/Full-bloomer.mp3",
     "",
     "",
     "",
@@ -122,17 +121,17 @@ class ConversationScreenController {
 
   /// List of voice paths.
   List<String> _voicePaths = [
-    "assets/sound/voice_sample_000.wav",
-    "assets/sound/voice_sample_001.wav",
-    "assets/sound/voice_sample_002.wav",
-    "assets/sound/voice_sample_003.wav",
-    "assets/sound/voice_sample_004.wav",
-    "assets/sound/voice_sample_005.wav",
-    "assets/sound/voice_sample_006.wav",
-    "assets/sound/voice_sample_007.wav",
-    "assets/sound/voice_sample_008.wav",
-    "assets/sound/voice_sample_009.wav",
-    "assets/sound/voice_sample_010.wav",
+    "assets/sound/CharacterVoice/voice_sample_000.wav",
+    "assets/sound/CharacterVoice/voice_sample_001.wav",
+    "assets/sound/CharacterVoice/voice_sample_002.wav",
+    "assets/sound/CharacterVoice/voice_sample_003.wav",
+    "assets/sound/CharacterVoice/voice_sample_004.wav",
+    "assets/sound/CharacterVoice/voice_sample_005.wav",
+    "assets/sound/CharacterVoice/voice_sample_006.wav",
+    "assets/sound/CharacterVoice/voice_sample_007.wav",
+    "assets/sound/CharacterVoice/voice_sample_008.wav",
+    "assets/sound/CharacterVoice/voice_sample_009.wav",
+    "assets/sound/CharacterVoice/voice_sample_010.wav",
   ];
 
   /// List of SE.
