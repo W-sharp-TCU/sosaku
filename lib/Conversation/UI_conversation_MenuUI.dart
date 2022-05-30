@@ -2,17 +2,26 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Menu/Provider_menu_MenuProvider.dart';
+
+import '../Menu/Controller_menu_MenuController.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
-class MenuUI extends ConsumerWidget{
+final menuScreenProvider =
+    ChangeNotifierProvider.autoDispose((ref) => MenuScreenProvider());
+final MenuScreenController menuScreenController = MenuScreenController();
+
+class MenuUI extends ConsumerWidget {
   const MenuUI({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+    MenuScreenProvider msp = ref.watch(menuScreenProvider);
+    menuScreenController.start(msp, context);
 
     return SizedBox(
       width: GetScreenSize.screenWidth(),
@@ -32,29 +41,25 @@ class MenuUI extends ConsumerWidget{
               ),
               child: Stack(
                 children: [
-
                   ///close button
                   Align(
                     alignment: const Alignment(1, -1),
                     child: GestureDetector(
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                       child: Container(
-                          width: GetScreenSize.screenWidth() * 0.05,
-                          height: GetScreenSize.screenWidth() * 0.05,
-                          margin: EdgeInsets.all(
-                              GetScreenSize.screenHeight() * 0.02),
-                          color: Colors.red.withOpacity(0.5),
-                          child: Center(
-                            child: Text(
-                              "×",
-                              style: TextStyle(
-                                fontSize:
-                                GetScreenSize.screenHeight() * 0.04,
-                              ),
+                        width: GetScreenSize.screenWidth() * 0.05,
+                        height: GetScreenSize.screenWidth() * 0.05,
+                        margin:
+                            EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
+                        color: Colors.red.withOpacity(0.5),
+                        child: Center(
+                          child: Text(
+                            "×",
+                            style: TextStyle(
+                              fontSize: GetScreenSize.screenHeight() * 0.04,
                             ),
                           ),
+                        ),
                       ),
                     ),
                   ),
@@ -69,99 +74,78 @@ class MenuUI extends ConsumerWidget{
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-
                           GestureDetector(
-                            onTap:(){
-
-                            },
+                            onTap: () {},
                             child: Container(
                               width: GetScreenSize.screenWidth() * 0.3,
                               height: GetScreenSize.screenHeight() * 0.1,
-                              decoration: const BoxDecoration(
-                                color: Colors.white
-                              ),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                               child: Center(
                                 child: Text(
                                   "セーブ",
                                   style: TextStyle(
-                                    fontSize: GetScreenSize.screenHeight() * 0.04
-                                  ),
+                                      fontSize:
+                                          GetScreenSize.screenHeight() * 0.04),
                                 ),
                               ),
                             ),
                           ),
-
                           const Spacer(),
-
                           GestureDetector(
-                            onTap:(){
-
-                            },
+                            onTap: () {},
                             child: Container(
                               width: GetScreenSize.screenWidth() * 0.3,
                               height: GetScreenSize.screenHeight() * 0.1,
-                              decoration: const BoxDecoration(
-                                  color: Colors.white
-                              ),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                               child: Center(
                                 child: Text(
                                   "オプション",
                                   style: TextStyle(
-                                      fontSize: GetScreenSize.screenHeight() * 0.04
-                                  ),
+                                      fontSize:
+                                          GetScreenSize.screenHeight() * 0.04),
                                 ),
                               ),
                             ),
                           ),
-
                           const Spacer(),
-
                           GestureDetector(
-                            onTap:(){
-
-                            },
+                            onTap: () {},
                             child: Container(
                               width: GetScreenSize.screenWidth() * 0.3,
                               height: GetScreenSize.screenHeight() * 0.1,
-                              decoration: const BoxDecoration(
-                                  color: Colors.white
-                              ),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                               child: Center(
                                 child: Text(
                                   "ヘルプ",
                                   style: TextStyle(
-                                      fontSize: GetScreenSize.screenHeight() * 0.04
-                                  ),
+                                      fontSize:
+                                          GetScreenSize.screenHeight() * 0.04),
                                 ),
                               ),
                             ),
                           ),
-
                           const Spacer(),
-
                           GestureDetector(
-                            onTap:(){
-
-                            },
+                            onTap: () {},
                             child: Container(
                               width: GetScreenSize.screenWidth() * 0.3,
                               height: GetScreenSize.screenHeight() * 0.1,
-                              decoration: const BoxDecoration(
-                                  color: Colors.white
-                              ),
+                              decoration:
+                                  const BoxDecoration(color: Colors.white),
                               child: Center(
                                 child: Text(
                                   "タイトルへ戻る",
                                   style: TextStyle(
-                                      fontSize: GetScreenSize.screenHeight() * 0.04
-                                  ),
+                                      fontSize:
+                                          GetScreenSize.screenHeight() * 0.04),
                                 ),
                               ),
                             ),
                           ),
-
                           const Spacer(),
-
                         ],
                       ),
                     ),
@@ -176,9 +160,7 @@ class MenuUI extends ConsumerWidget{
                       margin: EdgeInsets.only(
                         left: GetScreenSize.screenWidth() * 0.03,
                       ),
-                      decoration: const BoxDecoration(
-                        color: Colors.white
-                      ),
+                      decoration: const BoxDecoration(color: Colors.white),
                     ),
                   ),
                 ],

@@ -3,13 +3,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
 Map<String, AutoDisposeChangeNotifierProvider<AnimationButtonProvider>> _abp =
     {};
-AnimationButtonController _abc = AnimationButtonController();
+AnimationButtonController abc = AnimationButtonController();
 
 class _DefaultValues {
   static const String id = "buttonDefault";
@@ -26,6 +27,9 @@ class _DefaultValues {
   static const double ratio = 1.1;
   static const int duration = 32;
   static const void Function()? onTap = null;
+  static const void Function()? onTapDown = null;
+  static const void Function()? onTapUp = null;
+  static const void Function()? onTapCancel = null;
   static const Widget? child = null;
 }
 
@@ -45,10 +49,13 @@ class AnimationButton extends ConsumerWidget {
       double? ratio = _DefaultValues.ratio,
       int? duration = _DefaultValues.duration,
       void Function()? onTap = _DefaultValues.onTap,
+      void Function()? onTapDown = _DefaultValues.onTapDown,
+      void Function()? onTapUp = _DefaultValues.onTapUp,
+      void Function()? onTapCancel = _DefaultValues.onTapCancel,
       Widget? child = _DefaultValues.child})
       : super(key: key) {
     _id = id;
-    _abc.setControllerState(
+    abc.setControllerState(
         id: id,
         width: width,
         height: height,
@@ -61,8 +68,11 @@ class AnimationButton extends ConsumerWidget {
         ratio: ratio,
         duration: duration,
         onTap: onTap,
+        onTapDown: onTapDown,
+        onTapUp: onTapUp,
+        onTapCancel: onTapCancel,
         child: child);
-    _abc.updateProvider(_id);
+    abc.updateProvider(_id);
   }
 
   @override
@@ -73,26 +83,44 @@ class AnimationButton extends ConsumerWidget {
     if (!_abp.containsKey(_id)) {
       _abp[_id] = ChangeNotifierProvider.autoDispose(
           (ref) => AnimationButtonProvider(_id));
-      _abc.setProvider(_id, ref.watch(_abp[_id]!));
+      abc.setProvider(_id, ref.watch(_abp[_id]!));
     }
 
     return SizedBox(
-        width: /*_width ?? */ ref.watch(_abp[_id]!).width,
-        height: /*_height ?? */ ref.watch(_abp[_id]!).height,
-        child: GestureDetector(
-          // TODO : Allows for the addition of animation.
+        width: ref.watch(_abp[_id]!).width,
+        height: ref.watch(_abp[_id]!).height,
+        child: AnimationWidget(
+          onTap: () {
+            // If onTap is null, animate zoomInOut.
+            (ref.watch(_abp[_id]!).onTap ??
+                    () {
+                      abc.startZoomInOut(_id);
+                    })
+                .call();
+          },
           onTapDown: (detail) {
-            _abc.startZoomIn(_id);
+            // If onTapDown is null, animate zoomIn.
+            (ref.watch(_abp[_id]!).onTapDown ??
+                    () {
+                      abc.startZoomIn(_id);
+                    })
+                .call();
           },
           onTapUp: (detail) {
-            _abc.startZoomOut(_id);
+            // If onTapUp is null, animate zoomOut.
+            (ref.watch(_abp[_id]!).onTapUp ??
+                    () {
+                      abc.startZoomOut(_id);
+                    })
+                .call();
           },
           onTapCancel: () {
-            _abc.startZoomOut(_id);
-          },
-          onTap: () {
-            _abc.startZoomInOut(_id);
-            ref.watch(_abp[_id]!).onTap?.call();
+            // If onTapCancel is null, animate zoomOut.
+            (ref.watch(_abp[_id]!).onTapCancel ??
+                    () {
+                      abc.startZoomOut(_id);
+                    })
+                .call();
           },
           child: Container(
               // alignment: Alignment(0, 0),
@@ -145,6 +173,9 @@ class AnimationButtonProvider extends ChangeNotifier {
   Color _color = _DefaultValues.color;
   double _opacity = _DefaultValues.opacity;
   void Function()? _onTap = _DefaultValues.onTap;
+  void Function()? _onTapDown = _DefaultValues.onTapDown;
+  void Function()? _onTapUp = _DefaultValues.onTapUp;
+  void Function()? _onTapCancel = _DefaultValues.onTapCancel;
   Widget? _child = _DefaultValues.child;
 
   double get width => _width;
@@ -157,6 +188,9 @@ class AnimationButtonProvider extends ChangeNotifier {
   Color get color => _color;
   double get opacity => _opacity;
   void Function()? get onTap => _onTap;
+  void Function()? get onTapDown => _onTapDown;
+  void Function()? get onTapUp => _onTapUp;
+  void Function()? get onTapCancel => _onTapCancel;
   Widget? get child => _child;
 
   AnimationButtonProvider(String id) {
@@ -214,13 +248,25 @@ class AnimationButtonProvider extends ChangeNotifier {
     _onTap = onTap ?? _onTap;
   }
 
+  void setOnTapDown(void Function()? onTapDown) {
+    _onTapDown = onTapDown ?? _onTapDown;
+  }
+
+  void setOnTapUp(void Function()? onTapUp) {
+    _onTapUp = onTapUp ?? _onTapUp;
+  }
+
+  void setOnTapCancel(void Function()? onTapCancel) {
+    _onTapCancel = onTapCancel ?? _onTapCancel;
+  }
+
   void setChild(Widget? child) {
     _child = child ?? _child;
   }
 
   @override
   void dispose() {
-    _abc.providerDispose(_id);
+    abc.providerDispose(_id);
     _abp.remove(_id);
     super.dispose();
   }
@@ -241,6 +287,9 @@ class AnimationButtonController {
   final Map<String, double?> _ratios = {};
   final Map<String, int?> _durations = {};
   final Map<String, void Function()?> _onTaps = {};
+  final Map<String, void Function()?> _onTapDowns = {};
+  final Map<String, void Function()?> _onTapUps = {};
+  final Map<String, void Function()?> _onTapCancels = {};
   final Map<String, Widget?> _children = {};
 
   final Map<String, double> _nowMarginRatios = {};
@@ -285,6 +334,9 @@ class AnimationButtonController {
       required double? ratio,
       required int? duration,
       required void Function()? onTap,
+      required void Function()? onTapDown,
+      required void Function()? onTapUp,
+      required void Function()? onTapCancel,
       required Widget? child}) {
     _isAnimation[id] ??= false;
     _nowAnimations[id] ??= null;
@@ -299,6 +351,9 @@ class AnimationButtonController {
     _ratios[id] = ratio;
     _durations[id] = duration;
     _onTaps[id] = onTap;
+    _onTapDowns[id] = onTapDown;
+    _onTapUps[id] = onTapUp;
+    _onTapCancels[id] = onTapCancel;
     _children[id] = child;
 
     if (_isAnimation[id]! == false) {
@@ -314,25 +369,33 @@ class AnimationButtonController {
     updateProvider(id);
   }
 
-  void updateProvider(String id) async {
+  void updateProvider(String id) {
     // TODO : Change from delay to build callbacks.
-    await Future.delayed(const Duration(microseconds: 8));
-    _providers[id]?.setWidth(_widths[id]);
-    _providers[id]?.setHeight(_heights[id]);
-    _providers[id]?.setMarginVertical(_margins[id]! +
-        (_heights[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-    _providers[id]?.setMarginHorizontal(_margins[id]! +
-        (_widths[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-    _providers[id]?.setText(_texts[id]);
-    _providers[id]?.setTextStyle(TextStyle(
-        fontSize:
-            _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
-    _providers[id]?.setImage(_images[id]);
-    _providers[id]?.setColor(_colors[id]);
-    _providers[id]?.setOpacity(_opacities[id]);
-    _providers[id]?.setOnTap(_onTaps[id]);
-    _providers[id]?.setChild(_children[id]);
-    _providers[id]?.changeNotification();
+    void _updateProvider(Timer? timer) {
+      _providers[id]?.setWidth(_widths[id]);
+      _providers[id]?.setHeight(_heights[id]);
+      _providers[id]?.setMarginVertical(_margins[id]! +
+          (_heights[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
+      _providers[id]?.setMarginHorizontal(_margins[id]! +
+          (_widths[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
+      _providers[id]?.setText(_texts[id]);
+      _providers[id]?.setTextStyle(TextStyle(
+          fontSize:
+              _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
+      _providers[id]?.setImage(_images[id]);
+      _providers[id]?.setColor(_colors[id]);
+      _providers[id]?.setOpacity(_opacities[id]);
+      _providers[id]?.setOnTap(_onTaps[id]);
+      _providers[id]?.setOnTapDown(_onTapDowns[id]);
+      _providers[id]?.setOnTapUp(_onTapUps[id]);
+      _providers[id]?.setOnTapCancel(_onTapCancels[id]);
+      _providers[id]?.setChild(_children[id]);
+      _providers[id]?.changeNotification();
+      timer?.cancel();
+    }
+
+    Timer.periodic(const Duration(milliseconds: 8), _updateProvider);
+    // await Future.delayed(const Duration(microseconds: 8));
   }
 
   void startZoomIn(String id) {
@@ -364,6 +427,8 @@ class AnimationButtonController {
               _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
 
       _providers[id]?.changeNotification();
+    } else {
+      _isAnimation[id] = false;
     }
   }
 
@@ -381,9 +446,7 @@ class AnimationButtonController {
           fontSize:
               _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
       _providers[id]?.changeNotification();
-    }
-    if (!(_nowMarginRatios[id]! < (_ratios[id]! - 1) / (2 * _ratios[id]!) &&
-        _durations[id]! > 0)) {
+    } else {
       _isAnimation[id] = false;
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImage.dart';
@@ -14,10 +16,10 @@ import 'package:audioplayers/audioplayers.dart';
 /// @Setters(for load json)
 /// [setTypes], [setBackgroundImagePaths], [setCharacterImagePaths], [setCharacterNames],
 /// [setConversationTexts], [setBgmPaths], [setVoicePaths], [setSePaths], [setOptions], [setGotoNumbers]
-///
+/// [setSettings],
 /// @Getters(for hide UI, auto play, )
 /// [characterNames], [conversationTexts], [voicePaths],
-/// [_nowCode], [nowLength], [isAuto], [conversationLogs]
+/// [nowCode], [nowLength], [isAuto], [conversationLogs]
 ///
 /// @Methods
 /// [start], [stop], [goNextScene], [goSelectedScene],
@@ -25,7 +27,7 @@ import 'package:audioplayers/audioplayers.dart';
 /// [openLog], [openMenu]
 /// TODO[save]
 class ConversationScreenController {
-  final int _interval = 40; // [ms]
+  int _interval = 40; // [ms]
   ConversationImageProvider? _conversationImageProvider;
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
@@ -191,6 +193,12 @@ class ConversationScreenController {
   bool get isAuto => _isAuto;
   List<int> get conversationLogs => _conversationLogs;
 
+  void setSettings({
+    int? interval,
+  }) {
+    _interval = interval ?? _interval;
+  }
+
   void setTypes(List<String> typeList) {
     _types = typeList;
   }
@@ -245,7 +253,7 @@ class ConversationScreenController {
       _conversationImageProvider = cip;
       _conversationTextProvider = ctp;
       _conversationLogProvider = clp;
-      _animationAsync();
+      _animationLoop();
       _refreshScreen();
       // TODO : load in load class
       SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
@@ -366,13 +374,17 @@ class ConversationScreenController {
   }
 
   ///Thread loop
-  void _animationAsync() async {
-    await Future.delayed(Duration(milliseconds: _interval));
-    _autoAnimation();
-    if (_conversationImageProvider != null &&
-        _conversationTextProvider != null) {
-      _animationAsync();
+  void _animationLoop() {
+    void _animationCallback(Timer timer) {
+      if (_conversationImageProvider != null &&
+          _conversationTextProvider != null) {
+        _autoAnimation();
+      } else {
+        timer.cancel();
+      }
     }
+
+    Timer.periodic(const Duration(milliseconds: 40), _animationCallback);
   }
 
   /// Auto animation without operation.
