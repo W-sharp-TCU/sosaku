@@ -83,7 +83,8 @@ class HomeScreen extends ConsumerWidget {
                         );
                         print("pushed button 1");
                         _slideShowController.stop();
-                        SoundPlayer.playUI("assets/sound/pushButton.mp3");
+                        SoundPlayer.playUI(
+                            "assets/sound/UISound/pushButton.mp3");
                       },
                     ),
                   ),
@@ -94,7 +95,8 @@ class HomeScreen extends ConsumerWidget {
                     child: GestureDetector(
                       child: Button(buttonName: L10n.of(context)!.continueGame),
                       onTap: () {
-                        SoundPlayer.playUI("assets/sound/pushButton.mp3");
+                        SoundPlayer.playUI(
+                            "assets/sound/UISound/pushButton.mp3");
                         print("pushed button 2");
                         _slideShowController.stop();
                         Navigator.pushReplacement(
@@ -112,7 +114,7 @@ class HomeScreen extends ConsumerWidget {
                     child: GestureDetector(
                       child: Button(buttonName: L10n.of(context)!.settings),
                       onTap: () {
-                        SoundPlayer.playUI("assets/sound/next.mp3");
+                        SoundPlayer.playUI("assets/sound/UISound/next.mp3");
                         print("pushed button 3");
                         _slideShowController.stop();
                         Navigator.pushReplacement(

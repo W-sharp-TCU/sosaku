@@ -47,9 +47,9 @@ class TitleScreen extends ConsumerWidget {
                 onTap: () {
                   print("tap"); //デバッグ用
                   _slideShowController.stop();
-                  SoundPlayer.playBGM("assets/sound/Full-bloomer.mp3",
+                  SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
                       loop: true, fadeOut: true);
-                  SoundPlayer.playUI("assets/sound/next.mp3");
+                  SoundPlayer.playUI("assets/sound/UISound/next.mp3");
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
@@ -94,11 +94,12 @@ class TitleScreen extends ConsumerWidget {
     /*SoundPlayer.loadSE(
         ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);*/
     SoundPlayer.init();
+    SoundPlayer.loadAll(filePaths: [
+      "assets/sound/UISound/pushButton.mp3",
+      "assets/sound/UISound/next.mp3"
+    ], audioType: SoundPlayer.UI);
     SoundPlayer.loadAll(
-        filePaths: ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"],
-        audioType: SoundPlayer.UI);
-    SoundPlayer.loadAll(
-        filePaths: ["assets/sound/Full-bloomer.mp3"],
+        filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
         audioType: SoundPlayer.BGM);
   }
 }
