@@ -1,0 +1,532 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:audioplayers/audioplayers_api.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
+import 'package:sosaku/Title/UI_title_TitleScreen.dart';
+import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
+import 'Provider_conversation_ConversationTextProvider.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+/// @Fields
+/// [_types], [_backgroundImagePaths], [_characterImagePaths], [_characterNames],
+/// [_texts], [_bgmPaths], [_voicePaths], [_sePaths], [_options], [_gotoNumbers],
+/// [_nowCode], [_nowLength], [_nowText], [_conversationLogs]
+///
+/// @Setters(for load json)
+/// [setTypes], [setBackgroundImagePaths], [setCharacterImagePaths], [setCharacterNames],
+/// [setTexts], [setBgmPaths], [setVoicePaths], [setSePaths], [setOptions], [setGotoNumbers]
+/// [setSettings],
+///
+/// @Methods
+/// [start], [stop], [goNextScene], [goSelectedScene], [goLogScene]
+/// [changeAutoPlay], [changeHideUi],
+/// [openLog], [openMenu]
+/// TODO[save]
+class ConversationScreenController {
+  int _interval = 40; // [ms]
+  ConversationImageProvider? _conversationImageProvider;
+  ConversationTextProvider? _conversationTextProvider;
+  ConversationLogProvider? _conversationLogProvider;
+  BuildContext? _context;
+
+  /// List of conversation types(speech or question or action).
+  List<int> _types = [
+    1,
+  ];
+
+  /// List of background image paths.
+  List<String> _backgroundImagePaths = [
+    'assets/drawable/Conversation/background_sample1.jpg',
+  ];
+
+  /// List of character image paths.
+  List<String> _characterImagePaths = [
+    'assets/drawable/Conversation/no_character.png',
+  ];
+
+  /// List of character names.
+  List<String> _characterNames = [
+    '車掌',
+  ];
+
+  /// List of conversation texts.
+  List<String> _texts = [
+    '「次は～、耶麻台～」',
+  ];
+
+  /// List of bgm paths.
+  List<String> _bgmPaths = [
+    'assets/sound/BGM/Full-bloomer.mp3',
+  ];
+
+  /// List of voice paths.
+  List<String> _voicePaths = [
+    'assets/sound/CharacterVoice/voice_sample_000.wav',
+  ];
+
+  /// List of SE.
+  List<String> _sePaths = [''];
+
+  /// List of options.
+  List<List<String>> _options = [[]];
+
+  /// List of goto numbers.
+  List<List<int>> _gotoNumbers = [[]];
+
+  /// Code number to display.
+  int _nowCode = 0;
+
+  /// Length of teIs auto play?xt being displayed.
+  int _nowLength = 0;
+
+  /// Text being displayed.
+  String _nowText = '';
+
+  /// Is on auto play?
+  bool _isAuto = false;
+
+  /// List of conversation logs.
+  List<int> _conversationLogs = [];
+
+  void setTypes(List<int> typeList) {
+    _types = typeList;
+  }
+
+  void setBackgroundImagePaths(List<String> backgroundImagePathList) {
+    _backgroundImagePaths = backgroundImagePathList;
+  }
+
+  void setCharacterImagePaths(List<String> characterImagePathList) {
+    _characterImagePaths = characterImagePathList;
+  }
+
+  void setCharacterNames(List<String> characterNameList) {
+    _characterNames = characterNameList;
+  }
+
+  void setTexts(List<String> conversationTextList) {
+    _texts = conversationTextList;
+  }
+
+  void setBgmPaths(List<String> bgmPathList) {
+    _bgmPaths = bgmPathList;
+  }
+
+  void setVoicePaths(List<String> voicePathList) {
+    _voicePaths = voicePathList;
+  }
+
+  void setSePaths(List<String> sePathList) {
+    _sePaths = sePathList;
+  }
+
+  void setOptions(List<List<String>> optionList) {
+    _options = optionList;
+  }
+
+  void setGotoNumbers(List<List<int>> gotoNumberList) {
+    _gotoNumbers = gotoNumberList;
+  }
+
+  void setSettings({
+    int? interval,
+  }) {
+    _interval = interval ?? _interval;
+  }
+
+  /// Start controller.
+  /// This function is for ConversationScreenUI.
+  ///
+  /// @param cip : ConversationImageProvider
+  /// @param ctp : ConversationTextProvider
+  /// TODO : add arg
+  Future<void> start(
+      ConversationImageProvider cip,
+      ConversationTextProvider ctp,
+      ConversationLogProvider clp,
+      BuildContext context) async {
+    if (_conversationImageProvider == null &&
+        _conversationTextProvider == null &&
+        _conversationLogProvider == null) {
+      _conversationImageProvider = cip;
+      _conversationTextProvider = ctp;
+      _conversationLogProvider = clp;
+      // TODO : デモ用
+      _context = context;
+      _isVoicePlaying = false;
+
+      // init
+      _nowCode = 0;
+      _nowLength = 0;
+      _nowText = '';
+      _isAuto = false;
+      _conversationLogs = [];
+
+      // TODO : load in load class
+      SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
+      SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
+      await loadJsonAsset('assets/text/ScenarioData/ChapterTest/event1.json');
+      _animationLoop();
+      _refreshScreen();
+    }
+  }
+
+  /// Stop controller.
+  /// This function is for ConversationScreenUI.
+  void stop() {
+    _conversationImageProvider = null;
+    _conversationTextProvider = null;
+    _conversationLogProvider = null;
+  }
+
+  /// Load json to list.
+  /// @param path : Json path.;
+  Future<void> loadJsonAsset(String path) async {
+    Map<String, dynamic> jsonData = json.decode(await rootBundle
+        .loadString('assets/text/ScenarioData/ChapterTest/event1.json'));
+    List<dynamic> context = jsonData['context'];
+    List<int> _types = [];
+    List<String> _backgroundImagePaths = [];
+    List<String> _characterImagePaths = [];
+    List<String> _characterNames = [];
+    List<String> _texts = [];
+    List<String> _bgmPaths = [];
+    List<String> _voicePaths = [];
+    List<String> _sePaths = [];
+    List<List<String>> _options = [];
+    List<List<int>> _gotoNumbers = [];
+    for (int i = 0; i < context.length; i++) {
+      _types.add(context[i]['type']);
+      _backgroundImagePaths.add(context[i]['BGImage']);
+      _characterImagePaths.add(context[i]['CharacterImage']);
+      _characterNames.add(context[i]['name']);
+      _texts.add(context[i]['text']);
+      _bgmPaths.add(context[i]['BGM']);
+      // TODO: ボイスとSEをListにするなら書き換える
+      _voicePaths
+          .add(context[i]['Voice'].isEmpty ? '' : context[i]['Voice'][0]);
+      _sePaths.add(context[i]['SE'].isEmpty ? '' : context[i]['Voice'][0]);
+      _options.add(context[i]['option'].cast<String>());
+      _gotoNumbers.add(context[i]['goto'].cast<int>());
+    }
+    setTypes(_types);
+    setBackgroundImagePaths(_backgroundImagePaths);
+    setCharacterImagePaths(_characterImagePaths);
+    setCharacterNames(_characterNames);
+    setTexts(_texts);
+    setBgmPaths(_bgmPaths);
+    setVoicePaths(_voicePaths);
+    setSePaths(_sePaths);
+    setOptions(_options);
+    setGotoNumbers(_gotoNumbers);
+  }
+
+  /// Go to the next scene on the speech screen.
+  /// This function is for ConversationScreenUI.
+  void goNextScene() {
+    //テキストが最後まで表示されていて、ログの表示やUIの非表示がされていないか
+    if (_nowLength == _texts[_nowCode].length &&
+        !_conversationImageProvider!.isHideUi &&
+        !_conversationImageProvider!.isLog &&
+        !_conversationImageProvider!.isMenu) {
+      //speech画面ならば次のシーンへ進む
+      if (_types[_nowCode] == 1) {
+        if (_gotoNumbers[_nowCode].isEmpty) {
+          if (_nowCode + 1 < _types.length) {
+            _nowCode++;
+          } else {
+            throw FormatException(
+                'Code ${_nowCode + 1} does not exist.  Set the correct goto.');
+          }
+        } else if (_gotoNumbers[_nowCode][0] == -1) {
+          // TODO : イベント終了時の処理を追加
+          print("end");
+          stop();
+          Navigator.pushReplacement(
+            _context!,
+            PageRouteBuilder(
+                pageBuilder: (_, __, ___) => TitleScreen(),
+                transitionDuration: const Duration(milliseconds: 100)),
+          );
+        } else {
+          if (_gotoNumbers[_nowCode][0] < _types.length) {
+            _nowCode = _gotoNumbers[_nowCode][0];
+          } else {
+            throw FormatException(
+                'Code ${_gotoNumbers[_nowCode][0]} does not exist.  Set the correct goto.');
+          }
+        }
+        _refreshScreen();
+      }
+    } else {
+      if (_nowLength != _texts[_nowCode].length) {
+        _nowLength = _texts[_nowCode].length - 1;
+      }
+      if (_conversationImageProvider!.isLog) {
+        openLog();
+      }
+      if (_conversationImageProvider!.isMenu) {
+        _conversationImageProvider!.changeMenuDisplay();
+      }
+      if (_conversationImageProvider!.isHideUi) {
+        changeHideUi();
+      }
+    }
+  }
+
+  /// Go to selected scene.
+  /// This function is for ThreeChoicesDialog.
+  ///
+  /// @param optionNumber :　number of the selected option (0,1,2,...)
+  void goSelectedScene(int optionNumber) {
+    if (_conversationImageProvider!.dialogFlag) {
+      _conversationImageProvider!.changeDialogFlag();
+    }
+    if (_gotoNumbers[_nowCode][optionNumber] == -1) {
+      // TODO : イベント終了時の処理を追加
+      print("end");
+      stop();
+      Navigator.pushReplacement(
+        _context!,
+        PageRouteBuilder(
+            pageBuilder: (_, __, ___) => TitleScreen(),
+            transitionDuration: const Duration(milliseconds: 100)),
+      );
+    } else {
+      if (_gotoNumbers[_nowCode][optionNumber] < _types.length) {
+        _nowCode = _gotoNumbers[_nowCode][optionNumber];
+      } else {
+        throw FormatException(
+            'Code ${_gotoNumbers[_nowCode][optionNumber]} does not exist.  Set the correct goto.');
+      }
+    }
+    _refreshScreen();
+  }
+
+  /// Jump to the selected scene in the log.
+  /// This function is for Log.
+  ///
+  /// @param logNumber :　Number in the log list of the selected scene.(Not a code number.)
+  void goLogScene(int logNumber) {
+    if (_conversationImageProvider!.dialogFlag) {
+      _conversationImageProvider!.changeDialogFlag();
+    }
+    if (_conversationImageProvider!.isLog) {
+      _conversationImageProvider!.changeLogDisplay();
+    }
+    if (_conversationImageProvider!.isMenu) {
+      _conversationImageProvider!.changeMenuDisplay();
+    }
+    if (_conversationImageProvider!.isHideUi) {
+      changeHideUi();
+    }
+    if (_conversationLogs[logNumber] < _types.length) {
+      _nowCode = _conversationLogs[logNumber];
+      _conversationLogs.removeRange(logNumber, _conversationLogs.length);
+    } else {
+      throw FormatException(
+          'Code ${_conversationLogs[logNumber]} does not exist.  Set the correct goto.');
+    }
+    _refreshScreen();
+  }
+
+  /// Change auto play.
+  /// This function is for ConversationScreenUI.
+  void changeAutoPlay() {
+    _isAuto = !_isAuto;
+    _conversationImageProvider!.changeAuto();
+  }
+
+  /// Change hide ui.
+  /// This function is for ConversationScreenUi.
+  void changeHideUi() {
+    _conversationImageProvider!.changeHideUi();
+  }
+
+  /// Open the log screen.(If already open, close it.)
+  /// This function is for ConversationScreenUi
+  void openLog() {
+    if (!_conversationImageProvider!.isLog) {
+      _conversationLogProvider!.setCodes(_conversationLogs);
+      List<String> _logNames = [];
+      List<String> _logIconPaths = [];
+      List<String> _logTexts = [];
+      List<bool> _logIsPlaying = [];
+      for (int i = 0; i < _conversationLogs.length; i++) {
+        _logNames.add(_characterNames[_conversationLogs[i]]);
+        switch (_characterNames[_conversationLogs[i]]) {
+          case ('あやな'):
+            _logIconPaths.add('assets/drawable/Conversation/icon_ayana.png');
+            break;
+          case ('ののの'):
+            _logIconPaths.add('assets/drawable/Conversation/icon_nonono.png');
+            break;
+          case ('榊'):
+            _logIconPaths.add('assets/drawable/Conversation/icon_sakaki.png');
+            break;
+          default:
+            _logIconPaths.add('assets/drawable/Conversation/icon_unknown.png');
+            break;
+        }
+        _logTexts.add(_texts[_conversationLogs[i]]);
+        _logIsPlaying.add(false);
+      }
+      _conversationLogProvider!.setNames(_logNames);
+      _conversationLogProvider!.setTexts(_logTexts);
+      _conversationLogProvider!.setIconPaths(_logIconPaths);
+      _conversationLogProvider!.setIsPlaying(_logIsPlaying);
+      changeHideUi();
+      _conversationImageProvider!.changeLogDisplay();
+    } else {
+      if (_conversationLogProvider!.isPlaying.contains(true)) {
+        // FIXED : CV could not be stopped.
+        // When the x button is pressed, stop audio if it was playing in the conversation log.
+        SoundPlayer.stopCVAll();
+      }
+      changeHideUi();
+      _conversationImageProvider!.changeLogDisplay();
+    }
+  }
+
+  /// Open the menu screen.(If already open, close it.)
+  /// This function is for ConversationScreenUi
+  void openMenu() {
+    _conversationImageProvider!.changeMenuDisplay();
+    changeHideUi();
+  }
+
+  void playLogVoice(int numOfLog) {
+    List<bool> _logIsPlaying =
+        List<bool>.filled(_conversationLogProvider!.codes.length, false);
+    _logIsPlaying[numOfLog] = true;
+    _conversationLogProvider!.setIsPlaying(_logIsPlaying);
+    SoundPlayer.playCV(
+        [_voicePaths[_conversationLogProvider!.codes[numOfLog]]]);
+  }
+
+  ///Thread loop
+  void _animationLoop() {
+    void _animationCallback(Timer timer) {
+      if (_conversationImageProvider != null &&
+          _conversationTextProvider != null) {
+        _autoAnimation();
+      } else {
+        timer.cancel();
+      }
+    }
+
+    Timer.periodic(const Duration(milliseconds: 40), _animationCallback);
+  }
+
+  /// Auto animation without operation.
+  /// Text animation, display question dialog, autoplay, change log data, etc...
+  void _autoAnimation() async {
+    if (_conversationImageProvider!.isLog) {
+      // processing on the log screen
+      if (_conversationLogProvider!.isPlaying.contains(true) &&
+          SoundPlayer.cvState == PlayerState.STOPPED) {
+        // TODO : デモ用
+        _conversationLogProvider!.setIsPlaying(
+            List<bool>.filled(_conversationLogProvider!.codes.length, false));
+      }
+    } else if (_conversationImageProvider!.isMenu) {
+      // processing on the menu screen
+    } else {
+      // Processing on other screens
+      if (_nowLength < _texts[_nowCode].length) {
+        _nowLength++;
+        _nowText = _texts[_nowCode].substring(0, _nowLength);
+        _conversationTextProvider!.setConversationText(_nowText);
+      } else if ((_types[_nowCode] == 2 || _types[_nowCode] == 3) &&
+          !_conversationImageProvider!.dialogFlag) {
+        _conversationImageProvider!.setOptionTexts(_options[_nowCode]);
+        _conversationImageProvider!.changeDialogFlag();
+      } else if (_isAuto &&
+          _types[_nowCode] == 1 &&
+          _nowLength == _texts[_nowCode].length &&
+          _isVoicePlaying == false // TODO : デモ用
+          /* &&
+        SoundPlayer.seState != PlayerState.PLAYING*/
+          &&
+          !_conversationImageProvider!.isHideUi) {
+        //TODO : Rewrite the condition as when voice playback ends.
+        goNextScene();
+      }
+    }
+  }
+
+  /// Refresh the screen and save the Logs.
+  void _refreshScreen() {
+    _nowLength = 0;
+    _conversationLogs.add(_nowCode);
+    _changeBackgroundImage();
+    _changeCharacterImage();
+    _changeCharacterName();
+    _changeBgm();
+    _changeVoice();
+    _changeSe();
+  }
+
+  ///Change background image.
+  void _changeBackgroundImage() {
+    // _backgroundImagePathsが空でなければ(変更があれば)
+    if (_backgroundImagePaths[_nowCode].isNotEmpty &&
+        _conversationImageProvider!.mBGImagePath !=
+            _backgroundImagePaths[_nowCode]) {
+      _conversationImageProvider!.setBGImage((_backgroundImagePaths[_nowCode]));
+    }
+  }
+
+  ///Change character image.
+  void _changeCharacterImage() {
+    // _characterImagePathsが空でなければ(変更があれば)
+    if (_characterImagePaths[_nowCode].isNotEmpty &&
+        _conversationImageProvider!.characterImagePath !=
+            _characterImagePaths[_nowCode]) {
+      _conversationImageProvider!
+          .setCharacterImage(_characterImagePaths[_nowCode]);
+    }
+  }
+
+  /// Change character name.
+  void _changeCharacterName() {
+    _conversationImageProvider!.setCharacterName(_characterNames[_nowCode]);
+  }
+
+  /// Change bgm.
+  void _changeBgm() async {
+    if (_bgmPaths[_nowCode].isNotEmpty) {
+      // await Future.delayed(Duration(milliseconds: 10));
+      SoundPlayer.playBGM(_bgmPaths[_nowCode]);
+    }
+  }
+
+  // TODO : デモ用
+  // 音声が再生されているか(SoundPlayerが完成したら削除)
+  bool _isVoicePlaying = false;
+  Timer? _timer;
+
+  /// Change voice.
+  void _changeVoice() {
+    if (_voicePaths[_nowCode].isNotEmpty) {
+      SoundPlayer.playCV([_voicePaths[_nowCode]]);
+      // TODO : デモ用
+      _timer?.cancel();
+      _isVoicePlaying = true;
+      _timer = Timer(const Duration(milliseconds: 13500), () {
+        _isVoicePlaying = false;
+      });
+    }
+  }
+
+  /// Change se.
+  void _changeSe() {
+    if (_sePaths[_nowCode].isNotEmpty) {
+      SoundPlayer.playSE([_sePaths[_nowCode]]);
+    }
+  }
+}
