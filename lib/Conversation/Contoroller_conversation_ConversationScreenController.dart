@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:audioplayers/audioplayers_api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
+import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -29,6 +31,7 @@ class ConversationScreenController {
   ConversationImageProvider? _conversationImageProvider;
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
+  BuildContext? _context;
 
   /// List of conversation types(speech or question or action).
   List<int> _types = [
@@ -87,7 +90,7 @@ class ConversationScreenController {
   bool _isAuto = false;
 
   /// List of conversation logs.
-  final List<int> _conversationLogs = [];
+  List<int> _conversationLogs = [];
 
   void setTypes(List<int> typeList) {
     _types = typeList;
@@ -141,14 +144,27 @@ class ConversationScreenController {
   /// @param cip : ConversationImageProvider
   /// @param ctp : ConversationTextProvider
   /// TODO : add arg
-  Future<void> start(ConversationImageProvider cip,
-      ConversationTextProvider ctp, ConversationLogProvider clp) async {
+  Future<void> start(
+      ConversationImageProvider cip,
+      ConversationTextProvider ctp,
+      ConversationLogProvider clp,
+      BuildContext context) async {
     if (_conversationImageProvider == null &&
         _conversationTextProvider == null &&
         _conversationLogProvider == null) {
       _conversationImageProvider = cip;
       _conversationTextProvider = ctp;
       _conversationLogProvider = clp;
+      // TODO : デモ用
+      _context = context;
+      _isVoicePlaying = false;
+
+      // init
+      _nowCode = 0;
+      _nowLength = 0;
+      _nowText = '';
+      _isAuto = false;
+      _conversationLogs = [];
 
       // TODO : load in load class
       SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
@@ -164,6 +180,7 @@ class ConversationScreenController {
   void stop() {
     _conversationImageProvider = null;
     _conversationTextProvider = null;
+    _conversationLogProvider = null;
   }
 
   /// Load json to list.
@@ -227,6 +244,14 @@ class ConversationScreenController {
           }
         } else if (_gotoNumbers[_nowCode][0] == -1) {
           // TODO : イベント終了時の処理を追加
+          print("end");
+          stop();
+          Navigator.pushReplacement(
+            _context!,
+            PageRouteBuilder(
+                pageBuilder: (_, __, ___) => TitleScreen(),
+                transitionDuration: const Duration(milliseconds: 100)),
+          );
         } else {
           if (_gotoNumbers[_nowCode][0] < _types.length) {
             _nowCode = _gotoNumbers[_nowCode][0];
@@ -263,6 +288,14 @@ class ConversationScreenController {
     }
     if (_gotoNumbers[_nowCode][optionNumber] == -1) {
       // TODO : イベント終了時の処理を追加
+      print("end");
+      stop();
+      Navigator.pushReplacement(
+        _context!,
+        PageRouteBuilder(
+            pageBuilder: (_, __, ___) => TitleScreen(),
+            transitionDuration: const Duration(milliseconds: 100)),
+      );
     } else {
       if (_gotoNumbers[_nowCode][optionNumber] < _types.length) {
         _nowCode = _gotoNumbers[_nowCode][optionNumber];

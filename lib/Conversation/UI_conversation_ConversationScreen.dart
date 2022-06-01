@@ -33,7 +33,7 @@ class ConversationScreen extends ConsumerWidget {
     ConversationImageProvider cip = ref.watch(conversationImageProvider);
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
-    conversationScreenController.start(cip, ctp, clp);
+    conversationScreenController.start(cip, ctp, clp, context);
 
     return Scaffold(
       body: Container(
