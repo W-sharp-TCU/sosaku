@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 
+import '../Wrapper/wrapper_AnimationButton.dart';
+
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
@@ -24,67 +26,62 @@ class ThreeDialog extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(
+              height: GetScreenSize.screenHeight() * 0.05,
+            ),
+
             ///first
-            GestureDetector(
+            AnimationButton(
+              id: 'buttonOption0',
               onTap: () {
                 conversationScreenController.goSelectedScene(0);
+                abc.startZoomInOut('buttonOption0');
               },
-              child: Container(
-                  width: GetScreenSize.screenWidth() * 0.6,
-                  height: GetScreenSize.screenHeight() * 0.15,
-                  margin: EdgeInsets.only(
-                    top: GetScreenSize.screenHeight() * 0.1,
-                  ),
-                  color: Colors.white,
-                  child: Center(
-                    child: Text(
-                      ref.watch(conversationImageProvider).optionTexts[0],
-                      style: TextStyle(
-                          fontSize: GetScreenSize.screenHeight() * 0.04),
-                    ),
-                  )),
+              width: GetScreenSize.screenWidth() * 0.7,
+              height: GetScreenSize.screenHeight() * 0.2,
+              margin: GetScreenSize.screenHeight() * 0.015,
+              opacity: 1,
+              text: ref.watch(conversationImageProvider).optionTexts[0],
+              textStyle: TextStyle(
+                fontSize: GetScreenSize.screenHeight() * 0.04,
+              ),
+              ratio: 1.05,
             ),
 
             ///second
-            GestureDetector(
+            AnimationButton(
+              id: 'buttonOption1',
               onTap: () {
                 conversationScreenController.goSelectedScene(1);
+                abc.startZoomInOut('buttonOption1');
               },
-              child: Container(
-                  width: GetScreenSize.screenWidth() * 0.6,
-                  height: GetScreenSize.screenHeight() * 0.15,
-                  margin: EdgeInsets.only(
-                    top: GetScreenSize.screenHeight() * 0.1,
-                  ),
-                  color: Colors.white,
-                  child: Center(
-                    child: Text(
-                      ref.watch(conversationImageProvider).optionTexts[1],
-                      style: TextStyle(
-                          fontSize: GetScreenSize.screenHeight() * 0.04),
-                    ),
-                  )),
+              width: GetScreenSize.screenWidth() * 0.7,
+              height: GetScreenSize.screenHeight() * 0.2,
+              margin: GetScreenSize.screenHeight() * 0.015,
+              opacity: 1,
+              text: ref.watch(conversationImageProvider).optionTexts[1],
+              textStyle: TextStyle(
+                fontSize: GetScreenSize.screenHeight() * 0.04,
+              ),
+              ratio: 1.05,
             ),
 
             ///third
-            GestureDetector(
+            AnimationButton(
+              id: 'buttonOption2',
               onTap: () {
                 conversationScreenController.goSelectedScene(2);
+                abc.startZoomInOut('buttonOption2');
               },
-              child: Container(
-                  width: GetScreenSize.screenWidth() * 0.6,
-                  height: GetScreenSize.screenHeight() * 0.15,
-                  margin: EdgeInsets.only(
-                    top: GetScreenSize.screenHeight() * 0.1,
-                  ),
-                  color: Colors.white,
-                  child: Center(
-                    child: Text(
-                      ref.watch(conversationImageProvider).optionTexts[2],
-                      style: TextStyle(
-                          fontSize: GetScreenSize.screenHeight() * 0.04),
-                    ),
-                  )),
+              width: GetScreenSize.screenWidth() * 0.7,
+              height: GetScreenSize.screenHeight() * 0.2,
+              margin: GetScreenSize.screenHeight() * 0.015,
+              opacity: 1,
+              text: ref.watch(conversationImageProvider).optionTexts[2],
+              textStyle: TextStyle(
+                fontSize: GetScreenSize.screenHeight() * 0.04,
+              ),
+              ratio: 1.05,
             ),
           ],
         ));

@@ -2,7 +2,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sosaku/Menu/Provider_menu_MenuProvider.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
+import 'package:sosaku/Menu/Provider_menu_MenuScreenProvider.dart';
 
 import '../Menu/Controller_menu_MenuController.dart';
 
@@ -45,7 +46,9 @@ class MenuUI extends ConsumerWidget {
                   Align(
                     alignment: const Alignment(1, -1),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        conversationScreenController.openMenu();
+                      },
                       child: Container(
                         width: GetScreenSize.screenWidth() * 0.05,
                         height: GetScreenSize.screenWidth() * 0.05,

@@ -90,6 +90,7 @@ flutter:
     - assets/sound/UISound/
     - assets/text/fonts/
     - assets/text/ScenarioData/
+    - assets/text/ScenarioData/ChapterTest/
 
   fonts:
     - family: SourceHanSansJP

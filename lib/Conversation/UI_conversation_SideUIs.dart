@@ -24,119 +24,73 @@ class SideUIs extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          ///menu
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-                width: GetScreenSize.screenWidth() * 0.05,
-                height: GetScreenSize.screenWidth() * 0.05,
-                margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
-                color: Colors.red.withOpacity(0.5),
-                child: Center(
-                  child: Text(
-                    "三",
-                    style: TextStyle(
-                      fontSize: GetScreenSize.screenHeight() * 0.04,
-                    ),
-                  ),
-                )),
-          ),
-
-          ///UI appear
-          GestureDetector(
-            onTap: () {
-              conversationScreenController.changeHideUi();
-            },
-            child: Container(
-              width: GetScreenSize.screenWidth() * 0.05,
-              height: GetScreenSize.screenWidth() * 0.05,
-              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
-              color: Colors.red.withOpacity(0.5),
-              child: Center(
-                child: Text(
-                  "UI",
-                  style: TextStyle(
-                    fontSize: GetScreenSize.screenHeight() * 0.04,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
+          /// MENU
           AnimationButton(
-            id: "buttonAuto",
+            id: 'buttonMenu',
             onTap: () {
-              conversationScreenController.changeAutoPlay();
-              abc.startZoomInOut("buttonAuto");
-            },
-            onTapDown: () {
-              abc.startZoomOut("buttonAuto");
-            },
-            onTapUp: () {
-              abc.startZoomIn("buttonAuto");
-            },
-            onTapCancel: () {
-              abc.startZoomIn("buttonAuto");
+              conversationScreenController.openMenu();
+              abc.startZoomInOut('buttonMenu');
             },
             width: GetScreenSize.screenWidth() * 0.07,
             height: GetScreenSize.screenWidth() * 0.07,
-            margin: 0,
-            text: (ref.watch(conversationImageProvider).isAuto ? '■' : '▶'),
+            opacity: 0,
+            text: '三',
+            textStyle: TextStyle(
+              fontSize: GetScreenSize.screenWidth() * 0.02,
+            ),
+            image: "assets/drawable/Conversation/button_sample.png",
+          ),
+
+          /// UI
+          AnimationButton(
+            id: 'buttonUI',
+            onTap: () {
+              conversationScreenController.changeHideUi();
+              abc.startZoomInOut('buttonUI');
+            },
+            width: GetScreenSize.screenWidth() * 0.07,
+            height: GetScreenSize.screenWidth() * 0.07,
+            opacity: 0,
+            text: '×',
             textStyle: TextStyle(
               fontSize: GetScreenSize.screenWidth() * 0.04,
             ),
             image: "assets/drawable/Conversation/button_sample.png",
-            color: Colors.white,
-            opacity: 0,
-            ratio: 1.1,
-            duration: 64,
           ),
 
-          const Spacer(),
-
-          ///auto button
-          GestureDetector(
+          /// AUTO
+          AnimationButton(
+            id: 'buttonAuto',
             onTap: () {
               conversationScreenController.changeAutoPlay();
+              abc.startZoomInOut('buttonAuto');
             },
-            child: Container(
-              height: GetScreenSize.screenHeight() * 0.05,
-              width: GetScreenSize.screenWidth() * 0.1,
-              color: Colors.red.withOpacity(0.5),
-              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
-              child: Center(
-                child: Text(
-                  "Auto",
-                  style: TextStyle(
-                    fontSize: GetScreenSize.screenHeight() * 0.02,
-                  ),
-                ),
-              ),
+            width: GetScreenSize.screenWidth() * 0.07,
+            height: GetScreenSize.screenWidth() * 0.07,
+            opacity: 0,
+            text: ref.watch(conversationImageProvider).isAuto ? '■' : '▶',
+            textStyle: TextStyle(
+              fontSize: GetScreenSize.screenWidth() * 0.04,
             ),
+            image: "assets/drawable/Conversation/button_sample.png",
           ),
 
-          ///Log button
-          GestureDetector(
+          /// LOG
+          AnimationButton(
+            id: 'buttonLog',
             onTap: () {
               conversationScreenController.openLog();
+              abc.startZoomInOut('buttonLog');
             },
-            child: Container(
-              height: GetScreenSize.screenHeight() * 0.05,
-              width: GetScreenSize.screenWidth() * 0.1,
-              color: Colors.red.withOpacity(0.5),
-              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.02),
-              child: Center(
-                child: Text(
-                  "Log",
-                  style: TextStyle(
-                    fontSize: GetScreenSize.screenHeight() * 0.02,
-                  ),
-                ),
-              ),
+            width: GetScreenSize.screenWidth() * 0.07,
+            height: GetScreenSize.screenWidth() * 0.07,
+            opacity: 0,
+            text: 'LOG',
+            textStyle: TextStyle(
+              fontSize: GetScreenSize.screenWidth() * 0.02,
             ),
-          ),
-
-          const Spacer(),
+            image: "assets/drawable/Conversation/button_sample.png",
+          )
         ],
       ),
     );

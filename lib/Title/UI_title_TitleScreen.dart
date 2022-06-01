@@ -4,6 +4,7 @@ import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import 'package:sosaku/l10n/l10n.dart';
+import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -53,7 +54,9 @@ class TitleScreen extends ConsumerWidget {
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => HomeScreen(),
+                        // TODO : for demo
+                        // pageBuilder: (_, __, ___) => HomeScreen(),
+                        pageBuilder: (_, __, ___) => const ConversationScreen(),
                         transitionDuration: const Duration(milliseconds: 10)),
 
                     ///old page transition code

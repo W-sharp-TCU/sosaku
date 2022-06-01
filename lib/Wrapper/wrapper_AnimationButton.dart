@@ -25,7 +25,7 @@ class _DefaultValues {
   static const Color color = Colors.white;
   static const double opacity = 1;
   static const double ratio = 1.1;
-  static const int duration = 32;
+  static const int duration = 64;
   static const void Function()? onTap = null;
   static const void Function()? onTapDown = null;
   static const void Function()? onTapUp = null;
@@ -464,7 +464,12 @@ class AnimationButtonController {
           fontSize:
               _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
       _providers[id]?.changeNotification();
+    } else {
+      _nowAnimations[id] = _zoomOut;
     }
+  }
+
+  void _zoomOutIn(String id) {
     if (!(_nowMarginRatios[id]! > 0 && _durations[id]! > 0)) {
       _nowAnimations[id] = _zoomOut;
     }

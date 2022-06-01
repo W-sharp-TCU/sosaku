@@ -1,19 +1,18 @@
-import 'dart:html';
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 
 import '../Home/UI_home_HomeScreen.dart';
 import '../Settings/UI_Setting_SettingScreen.dart';
-import 'Provider_menu_MenuProvider.dart';
+import 'Provider_menu_MenuScreenProvider.dart';
 
 class MenuScreenController {
-  late final MenuScreenProvider _menuProvider;
-  late final BuildContext _context;
+  MenuScreenProvider? _menuScreenProvider;
+  late BuildContext _context;
   MenuScreenController();
 
   void start(MenuScreenProvider menuScreenProvider, BuildContext context) {
-    _menuProvider = menuScreenProvider;
+    if (_menuScreenProvider != null) {
+      _menuScreenProvider = menuScreenProvider;
+    }
     _context = context;
   }
 
@@ -26,10 +25,10 @@ class MenuScreenController {
   }
 
   void openHelp() {
-    if (_menuProvider.isHelp == false) {
-      _menuProvider.setIsHelp(isHelp: true);
+    if (_menuScreenProvider?.isHelp == false) {
+      _menuScreenProvider?.setIsHelp(isHelp: true);
     } else {
-      _menuProvider.setIsHelp(isHelp: false);
+      _menuScreenProvider?.setIsHelp(isHelp: false);
     }
   }
 

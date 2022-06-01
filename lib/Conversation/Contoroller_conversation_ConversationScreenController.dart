@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:audioplayers/audioplayers_api.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
@@ -6,22 +7,20 @@ import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvide
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 /// @Fields
 /// [_types], [_backgroundImagePaths], [_characterImagePaths], [_characterNames],
-/// [_conversationTexts], [_bgmPaths], [_voicePaths], [_sePaths], [_options], [_gotoNumbers],
+/// [_texts], [_bgmPaths], [_voicePaths], [_sePaths], [_options], [_gotoNumbers],
 /// [_nowCode], [_nowLength], [_nowText], [_conversationLogs]
 ///
 /// @Setters(for load json)
 /// [setTypes], [setBackgroundImagePaths], [setCharacterImagePaths], [setCharacterNames],
-/// [setConversationTexts], [setBgmPaths], [setVoicePaths], [setSePaths], [setOptions], [setGotoNumbers]
+/// [setTexts], [setBgmPaths], [setVoicePaths], [setSePaths], [setOptions], [setGotoNumbers]
 /// [setSettings],
-/// @Getters(for hide UI, auto play, )
-/// [characterNames], [conversationTexts], [voicePaths],
-/// [nowCode], [nowLength], [isAuto], [conversationLogs]
 ///
 /// @Methods
-/// [start], [stop], [goNextScene], [goSelectedScene],
+/// [start], [stop], [goNextScene], [goSelectedScene], [goLogScene]
 /// [changeAutoPlay], [changeHideUi],
 /// [openLog], [openMenu]
 /// TODO[save]
@@ -32,142 +31,48 @@ class ConversationScreenController {
   ConversationLogProvider? _conversationLogProvider;
 
   /// List of conversation types(speech or question or action).
-  List<String> _types = [
-    "speech",
-    "speech",
-    "speech",
-    "speech",
-    "speech",
-    "speech",
-    "speech",
-    "question",
-    "speech",
-    "speech",
-    "speech",
+  List<int> _types = [
+    1,
   ];
 
   /// List of background image paths.
   List<String> _backgroundImagePaths = [
-    "assets/drawable/Conversation/background_sample1.jpg",
-    "",
-    "",
-    "assets/drawable/Conversation/background_sample2.jpg",
-    "assets/drawable/Conversation/background_sample1.jpg",
-    "assets/drawable/Conversation/background_sample2.jpg",
-    "",
-    "",
-    "",
-    "assets/drawable/Conversation/background_sample1.jpg",
-    "",
+    'assets/drawable/Conversation/background_sample1.jpg',
   ];
 
   /// List of character image paths.
   List<String> _characterImagePaths = [
-    "assets/drawable/Conversation/no_character.png",
-    "assets/drawable/Conversation/character_sample1.png",
-    "",
-    "assets/drawable/Conversation/no_character.png",
-    "",
-    "assets/drawable/Conversation/character_sample2.png",
-    "assets/drawable/Conversation/no_character.png",
-    "assets/drawable/Conversation/character_sample2.png",
-    "",
-    "",
-    "",
+    'assets/drawable/Conversation/no_character.png',
   ];
 
   /// List of character names.
   List<String> _characterNames = [
-    "車掌",
-    "俺",
-    "女子高生",
-    "俺",
-    "車掌",
-    "あいつ",
-    "俺",
-    "俺",
-    "俺",
-    "俺",
-    "俺",
+    '車掌',
   ];
 
   /// List of conversation texts.
-  List<String> _conversationTexts = [
-    "「次は～、耶麻台～」",
-    "桜が舞い落ちる四月。\n新年度ということもあってか、俺が飛び乗った電車はいつもより人が多い気がした。",
-    "進学し、ぴかぴかな制服で登校するであろう女子高生。\n就職し、社会人として荒波に揉まれていくサラリーマン。\n電車内でいちゃいちゃしてる、派手な髪色の男女。\n改行デバック \n改行デバッグ",
-    "世の中は皆、何かしら変化が起きている。\nそして、",
-    "「まもなく～、耶麻台～、お出口は～右側です」",
-    "「9時23分、こりゃ早朝マラソン確定だな……。いつも通りあいつに連絡するか」",
-    "「俺のように、なーんにも変わっていない人もいる。」",
-    "「次の授業なんだっけ？」",
-    "「次の授業は国語だよ」",
-    "「次の授業は数学だよ」",
-    "「次の授業は英語だよ」",
+  List<String> _texts = [
+    '「次は～、耶麻台～」',
   ];
 
   /// List of bgm paths.
   List<String> _bgmPaths = [
-    "assets/sound/BGM/Full-bloomer.mp3",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "assets/sound/BGM/Full-bloomer.mp3",
-    "",
-    "",
-    "",
+    'assets/sound/BGM/Full-bloomer.mp3',
   ];
 
   /// List of voice paths.
   List<String> _voicePaths = [
-    "assets/sound/CharacterVoice/voice_sample_000.wav",
-    "assets/sound/CharacterVoice/voice_sample_001.wav",
-    "assets/sound/CharacterVoice/voice_sample_002.wav",
-    "assets/sound/CharacterVoice/voice_sample_003.wav",
-    "assets/sound/CharacterVoice/voice_sample_004.wav",
-    "assets/sound/CharacterVoice/voice_sample_005.wav",
-    "assets/sound/CharacterVoice/voice_sample_006.wav",
-    "assets/sound/CharacterVoice/voice_sample_007.wav",
-    "assets/sound/CharacterVoice/voice_sample_008.wav",
-    "assets/sound/CharacterVoice/voice_sample_009.wav",
-    "assets/sound/CharacterVoice/voice_sample_010.wav",
+    'assets/sound/CharacterVoice/voice_sample_000.wav',
   ];
 
   /// List of SE.
-  List<String> _sePaths = [];
+  List<String> _sePaths = [''];
 
   /// List of options.
-  List<List<String>> _options = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    ["国語", "数学", "英語"],
-    [],
-    [],
-    [],
-  ];
+  List<List<String>> _options = [[]];
 
   /// List of goto numbers.
-  List<List<int>> _gotoNumbers = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [8, 9, 10],
-    [0],
-    [0],
-    [0],
-  ];
+  List<List<int>> _gotoNumbers = [[]];
 
   /// Code number to display.
   int _nowCode = 0;
@@ -176,29 +81,15 @@ class ConversationScreenController {
   int _nowLength = 0;
 
   /// Text being displayed.
-  String _nowText = "";
+  String _nowText = '';
 
   /// Is on auto play?
   bool _isAuto = false;
 
   /// List of conversation logs.
-  List<int> _conversationLogs = [];
+  final List<int> _conversationLogs = [];
 
-  List<String> get characterNames => _characterNames;
-  List<String> get conversationTexts => _conversationTexts;
-  List<String> get voicePaths => _voicePaths;
-  int get nowCode => _nowCode;
-  int get nowLength => _nowLength;
-  bool get isAuto => _isAuto;
-  List<int> get conversationLogs => _conversationLogs;
-
-  void setSettings({
-    int? interval,
-  }) {
-    _interval = interval ?? _interval;
-  }
-
-  void setTypes(List<String> typeList) {
+  void setTypes(List<int> typeList) {
     _types = typeList;
   }
 
@@ -214,8 +105,8 @@ class ConversationScreenController {
     _characterNames = characterNameList;
   }
 
-  void setConversationTexts(List<String> conversationTextList) {
-    _conversationTexts = conversationTextList;
+  void setTexts(List<String> conversationTextList) {
+    _texts = conversationTextList;
   }
 
   void setBgmPaths(List<String> bgmPathList) {
@@ -238,25 +129,33 @@ class ConversationScreenController {
     _gotoNumbers = gotoNumberList;
   }
 
+  void setSettings({
+    int? interval,
+  }) {
+    _interval = interval ?? _interval;
+  }
+
   /// Start controller.
   /// This function is for ConversationScreenUI.
   ///
   /// @param cip : ConversationImageProvider
   /// @param ctp : ConversationTextProvider
   /// TODO : add arg
-  void start(ConversationImageProvider cip, ConversationTextProvider ctp,
-      ConversationLogProvider clp) {
+  Future<void> start(ConversationImageProvider cip,
+      ConversationTextProvider ctp, ConversationLogProvider clp) async {
     if (_conversationImageProvider == null &&
         _conversationTextProvider == null &&
         _conversationLogProvider == null) {
       _conversationImageProvider = cip;
       _conversationTextProvider = ctp;
       _conversationLogProvider = clp;
-      _animationLoop();
-      _refreshScreen();
+
       // TODO : load in load class
       SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
       SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
+      await loadJsonAsset('assets/text/ScenarioData/ChapterTest/event1.json');
+      _animationLoop();
+      _refreshScreen();
     }
   }
 
@@ -267,28 +166,80 @@ class ConversationScreenController {
     _conversationTextProvider = null;
   }
 
+  /// Load json to list.
+  /// @param path : Json path.;
+  Future<void> loadJsonAsset(String path) async {
+    Map<String, dynamic> jsonData = json.decode(await rootBundle
+        .loadString('assets/text/ScenarioData/ChapterTest/event1.json'));
+    List<dynamic> context = jsonData['context'];
+    List<int> _types = [];
+    List<String> _backgroundImagePaths = [];
+    List<String> _characterImagePaths = [];
+    List<String> _characterNames = [];
+    List<String> _texts = [];
+    List<String> _bgmPaths = [];
+    List<String> _voicePaths = [];
+    List<String> _sePaths = [];
+    List<List<String>> _options = [];
+    List<List<int>> _gotoNumbers = [];
+    for (int i = 0; i < context.length; i++) {
+      _types.add(context[i]['type']);
+      _backgroundImagePaths.add(context[i]['BGImage']);
+      _characterImagePaths.add(context[i]['CharacterImage']);
+      _characterNames.add(context[i]['name']);
+      _texts.add(context[i]['text']);
+      _bgmPaths.add(context[i]['BGM']);
+      // TODO: ボイスとSEをListにするなら書き換える
+      _voicePaths
+          .add(context[i]['Voice'].isEmpty ? '' : context[i]['Voice'][0]);
+      _sePaths.add(context[i]['SE'].isEmpty ? '' : context[i]['Voice'][0]);
+      _options.add(context[i]['option'].cast<String>());
+      _gotoNumbers.add(context[i]['goto'].cast<int>());
+    }
+    setTypes(_types);
+    setBackgroundImagePaths(_backgroundImagePaths);
+    setCharacterImagePaths(_characterImagePaths);
+    setCharacterNames(_characterNames);
+    setTexts(_texts);
+    setBgmPaths(_bgmPaths);
+    setVoicePaths(_voicePaths);
+    setSePaths(_sePaths);
+    setOptions(_options);
+    setGotoNumbers(_gotoNumbers);
+  }
+
   /// Go to the next scene on the speech screen.
   /// This function is for ConversationScreenUI.
   void goNextScene() {
     //テキストが最後まで表示されていて、ログの表示やUIの非表示がされていないか
-    if (_nowLength == _conversationTexts[_nowCode].length &&
+    if (_nowLength == _texts[_nowCode].length &&
         !_conversationImageProvider!.isHideUi &&
         !_conversationImageProvider!.isLog &&
         !_conversationImageProvider!.isMenu) {
       //speech画面ならば次のシーンへ進む
-      if (_types[_nowCode] == "speech") {
+      if (_types[_nowCode] == 1) {
         if (_gotoNumbers[_nowCode].isEmpty) {
-          _nowCode++;
+          if (_nowCode + 1 < _types.length) {
+            _nowCode++;
+          } else {
+            throw FormatException(
+                'Code ${_nowCode + 1} does not exist.  Set the correct goto.');
+          }
         } else if (_gotoNumbers[_nowCode][0] == -1) {
           // TODO : イベント終了時の処理を追加
         } else {
-          _nowCode = _gotoNumbers[_nowCode][0];
+          if (_gotoNumbers[_nowCode][0] < _types.length) {
+            _nowCode = _gotoNumbers[_nowCode][0];
+          } else {
+            throw FormatException(
+                'Code ${_gotoNumbers[_nowCode][0]} does not exist.  Set the correct goto.');
+          }
         }
         _refreshScreen();
       }
     } else {
-      if (_nowLength != _conversationTexts[_nowCode].length) {
-        _nowLength = _conversationTexts[_nowCode].length - 1;
+      if (_nowLength != _texts[_nowCode].length) {
+        _nowLength = _texts[_nowCode].length - 1;
       }
       if (_conversationImageProvider!.isLog) {
         openLog();
@@ -303,7 +254,7 @@ class ConversationScreenController {
   }
 
   /// Go to selected scene.
-  /// This function is for ThreeChoicesDialog
+  /// This function is for ThreeChoicesDialog.
   ///
   /// @param optionNumber :　number of the selected option (0,1,2,...)
   void goSelectedScene(int optionNumber) {
@@ -313,7 +264,39 @@ class ConversationScreenController {
     if (_gotoNumbers[_nowCode][optionNumber] == -1) {
       // TODO : イベント終了時の処理を追加
     } else {
-      _nowCode = _gotoNumbers[_nowCode][optionNumber];
+      if (_gotoNumbers[_nowCode][optionNumber] < _types.length) {
+        _nowCode = _gotoNumbers[_nowCode][optionNumber];
+      } else {
+        throw FormatException(
+            'Code ${_gotoNumbers[_nowCode][optionNumber]} does not exist.  Set the correct goto.');
+      }
+    }
+    _refreshScreen();
+  }
+
+  /// Jump to the selected scene in the log.
+  /// This function is for Log.
+  ///
+  /// @param logNumber :　Number in the log list of the selected scene.(Not a code number.)
+  void goLogScene(int logNumber) {
+    if (_conversationImageProvider!.dialogFlag) {
+      _conversationImageProvider!.changeDialogFlag();
+    }
+    if (_conversationImageProvider!.isLog) {
+      _conversationImageProvider!.changeLogDisplay();
+    }
+    if (_conversationImageProvider!.isMenu) {
+      _conversationImageProvider!.changeMenuDisplay();
+    }
+    if (_conversationImageProvider!.isHideUi) {
+      changeHideUi();
+    }
+    if (_conversationLogs[logNumber] < _types.length) {
+      _nowCode = _conversationLogs[logNumber];
+      _conversationLogs.removeRange(logNumber, _conversationLogs.length);
+    } else {
+      throw FormatException(
+          'Code ${_conversationLogs[logNumber]} does not exist.  Set the correct goto.');
     }
     _refreshScreen();
   }
@@ -342,8 +325,21 @@ class ConversationScreenController {
       List<bool> _logIsPlaying = [];
       for (int i = 0; i < _conversationLogs.length; i++) {
         _logNames.add(_characterNames[_conversationLogs[i]]);
-        // _logIconPaths.add(); // TODO : iconのpathを代入する処理を書く
-        _logTexts.add(_conversationTexts[_conversationLogs[i]]);
+        switch (_characterNames[_conversationLogs[i]]) {
+          case ('あやな'):
+            _logIconPaths.add('assets/drawable/Conversation/icon_ayana.png');
+            break;
+          case ('ののの'):
+            _logIconPaths.add('assets/drawable/Conversation/icon_nonono.png');
+            break;
+          case ('榊'):
+            _logIconPaths.add('assets/drawable/Conversation/icon_sakaki.png');
+            break;
+          default:
+            _logIconPaths.add('assets/drawable/Conversation/icon_unknown.png');
+            break;
+        }
+        _logTexts.add(_texts[_conversationLogs[i]]);
         _logIsPlaying.add(false);
       }
       _conversationLogProvider!.setNames(_logNames);
@@ -361,6 +357,13 @@ class ConversationScreenController {
       changeHideUi();
       _conversationImageProvider!.changeLogDisplay();
     }
+  }
+
+  /// Open the menu screen.(If already open, close it.)
+  /// This function is for ConversationScreenUi
+  void openMenu() {
+    _conversationImageProvider!.changeMenuDisplay();
+    changeHideUi();
   }
 
   void playLogVoice(int numOfLog) {
@@ -393,6 +396,7 @@ class ConversationScreenController {
       // processing on the log screen
       if (_conversationLogProvider!.isPlaying.contains(true) &&
           SoundPlayer.cvState == PlayerState.STOPPED) {
+        // TODO : デモ用
         _conversationLogProvider!.setIsPlaying(
             List<bool>.filled(_conversationLogProvider!.codes.length, false));
       }
@@ -400,20 +404,19 @@ class ConversationScreenController {
       // processing on the menu screen
     } else {
       // Processing on other screens
-      if (_nowLength < _conversationTexts[_nowCode].length) {
+      if (_nowLength < _texts[_nowCode].length) {
         _nowLength++;
-        _nowText = _conversationTexts[_nowCode].substring(0, _nowLength);
+        _nowText = _texts[_nowCode].substring(0, _nowLength);
         _conversationTextProvider!.setConversationText(_nowText);
-      } else if ((_types[_nowCode] == "question" ||
-              _types[_nowCode] == "action") &&
+      } else if ((_types[_nowCode] == 2 || _types[_nowCode] == 3) &&
           !_conversationImageProvider!.dialogFlag) {
         _conversationImageProvider!.setOptionTexts(_options[_nowCode]);
         _conversationImageProvider!.changeDialogFlag();
       } else if (_isAuto &&
-          _types[_nowCode] == "speech" &&
-          _nowLength ==
-              _conversationTexts[_nowCode]
-                  .length /* &&
+          _types[_nowCode] == 1 &&
+          _nowLength == _texts[_nowCode].length &&
+          _isVoicePlaying == false // TODO : デモ用
+          /* &&
         SoundPlayer.seState != PlayerState.PLAYING*/
           &&
           !_conversationImageProvider!.isHideUi) {
@@ -432,6 +435,7 @@ class ConversationScreenController {
     _changeCharacterName();
     _changeBgm();
     _changeVoice();
+    _changeSe();
   }
 
   ///Change background image.
@@ -463,15 +467,26 @@ class ConversationScreenController {
   /// Change bgm.
   void _changeBgm() async {
     if (_bgmPaths[_nowCode].isNotEmpty) {
-      await Future.delayed(Duration(milliseconds: 10));
+      // await Future.delayed(Duration(milliseconds: 10));
       SoundPlayer.playBGM(_bgmPaths[_nowCode]);
     }
   }
+
+  // TODO : デモ用
+  // 音声が再生されているか(SoundPlayerが完成したら削除)
+  bool _isVoicePlaying = false;
+  Timer? _timer;
 
   /// Change voice.
   void _changeVoice() {
     if (_voicePaths[_nowCode].isNotEmpty) {
       SoundPlayer.playCV([_voicePaths[_nowCode]]);
+      // TODO : デモ用
+      _timer?.cancel();
+      _isVoicePlaying = true;
+      _timer = Timer(const Duration(milliseconds: 13500), () {
+        _isVoicePlaying = false;
+      });
     }
   }
 
