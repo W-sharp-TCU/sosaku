@@ -15,6 +15,8 @@ final titleScreenProvider =
 
 class TitleScreen extends ConsumerWidget {
   late final SlideShowController _slideShowController;
+  bool isFirstBuild = true; // 突貫工事部品
+  bool isReady = false; // 突貫工事部品
 
   TitleScreen({Key? key, SlideShowController? slideShowController})
       : super(key: key) {
@@ -33,7 +35,13 @@ class TitleScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    _slideShowController.start(context, ref.read(titleScreenProvider));
+    //_slideShowController.start(context, ref.read(titleScreenProvider));
+
+    // デモ用突貫工事
+    // pre-load conversation assets
+    if (isFirstBuild) {
+      preLoad(context).then((value) => isReady = true);
+    }
 
     return ProviderScope(
       child: Scaffold(
@@ -47,21 +55,24 @@ class TitleScreen extends ConsumerWidget {
               child: GestureDetector(
                 onTap: () {
                   print("tap"); //デバッグ用
-                  _slideShowController.stop();
-                  SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
-                      loop: true, fadeOut: true);
-                  SoundPlayer.playUI("assets/sound/UISound/next.mp3");
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        // TODO : for demo
-                        // pageBuilder: (_, __, ___) => HomeScreen(),
-                        pageBuilder: (_, __, ___) => const ConversationScreen(),
-                        transitionDuration: const Duration(milliseconds: 10)),
+                  //_slideShowController.stop();
+                  if (isReady) {
+                    SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
+                        loop: true, fadeOut: true);
+                    SoundPlayer.playUI("assets/sound/UISound/next.mp3");
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          // TODO : for demo
+                          // pageBuilder: (_, __, ___) => HomeScreen(),
+                          pageBuilder: (_, __, ___) =>
+                              const ConversationScreen(),
+                          transitionDuration: const Duration(milliseconds: 10)),
 
-                    ///old page transition code
-                    //MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
+                      ///old page transition code
+                      //MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  }
                 },
                 child: Container(
                     height: GetScreenSize.screenHeight(),
@@ -104,5 +115,17 @@ class TitleScreen extends ConsumerWidget {
     SoundPlayer.loadAll(
         filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
         audioType: SoundPlayer.BGM);
+  }
+
+  // 突貫工事用
+  Future<void> preLoad(BuildContext context) async {
+    List<String> images = [];
+    List<String> cvs = [];
+    for (var e in images) {
+      await precacheImage(AssetImage(e), context);
+    }
+    if (cvs.isNotEmpty) {
+      SoundPlayer.loadAll(filePaths: cvs, audioType: SoundPlayer.CV);
+    }
   }
 }
