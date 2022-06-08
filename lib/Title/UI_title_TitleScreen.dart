@@ -4,6 +4,7 @@ import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import 'package:sosaku/l10n/l10n.dart';
+import 'package:sosaku/main.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -21,11 +22,8 @@ class TitleScreen extends ConsumerWidget {
   TitleScreen({Key? key, SlideShowController? slideShowController})
       : super(key: key) {
     if (slideShowController == null) {
-      _slideShowController = SlideShowController([
-        "assets/drawable/Title/Ocean.jpg",
-        "assets/drawable/Title/Lion.jpg",
-        "assets/drawable/Title/default.jpg"
-      ]);
+      _slideShowController = SlideShowController(
+          ["assets/drawable/Title/wsharp_banner_expanded.png"]);
     } else {
       _slideShowController = slideShowController;
     }
@@ -45,9 +43,9 @@ class TitleScreen extends ConsumerWidget {
 
     return ProviderScope(
       child: Scaffold(
-          body: LifecycleManager(
-        callback: CommonLifecycleCallback(),
-        child: Container(
+        body: LifecycleManager(
+          callback: CommonLifecycleCallback(),
+          child: Container(
             width: double.infinity,
             height: double.infinity,
             color: Colors.black,
@@ -75,32 +73,45 @@ class TitleScreen extends ConsumerWidget {
                   }
                 },
                 child: Container(
-                    height: GetScreenSize.screenHeight(),
-                    width: GetScreenSize.screenWidth(),
-                    color: Colors.black,
-                    child: Stack(
-                      children: [
-                        Image(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                              ref.watch(titleScreenProvider).mBGImagePath),
-                        ),
-                        Align(
-                          alignment: const Alignment(0, 0.8),
-                          child: Text(
-                            L10n.of(context)!.tapToStart,
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.1,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  height: GetScreenSize.screenHeight(),
+                  width: GetScreenSize.screenWidth(),
+                  color: Colors.black,
+                  child: Stack(
+                    children: [
+                      Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                            ref.watch(titleScreenProvider).mBGImagePath),
+                      ),
+                      Align(
+                        alignment: const Alignment(-0.98, -0.98),
+                        child: Text(
+                          "Package name : ${packageInfo.packageName},  Version : ${packageInfo.version}",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.025,
+                            color: Colors.white,
                           ),
                         ),
-                      ],
-                    )),
+                      ),
+                      Align(
+                        alignment: const Alignment(0, 0.8),
+                        child: Text(
+                          L10n.of(context)!.tapToStart,
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.1,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            )),
-      )),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
