@@ -3,8 +3,8 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "index.html": "049428eb1c87c4974f690e326448abfb",
-"/": "049428eb1c87c4974f690e326448abfb",
+  "index.html": "56505cb38102fafd1e972485285e8990",
+"/": "56505cb38102fafd1e972485285e8990",
 "manifest.json": "d972698b08eea4363fbc1eb84e4112de",
 "splash/img/dark-2x.png": "2333a1ea1f3ece57279f33777e50d743",
 "splash/img/dark-1x.png": "f38855856eed656f9736611975e3cd85",
@@ -22,12 +22,13 @@ const RESOURCES = {
 "canvaskit/canvaskit.js": "c2b4e5f3d7a3d82aed024e7249a78487",
 "assets/fonts/MaterialIcons-Regular.otf": "7e7a6cccddf6d7b20012a548461d5d81",
 "assets/NOTICES": "492a41813e1904690eec48c56b2b6294",
-"assets/AssetManifest.json": "ff211c7e833119f2a9dcecedf7a18e12",
+"assets/AssetManifest.json": "c7726bc1f5081abcbbe0ac741f749abd",
 "assets/assets/drawable/Load/default.jpg": "7630955ff829ce1348e43f66a07151e9",
 "assets/assets/drawable/Settings/PlaceHolder": "ec1eca5992fef5a5eb244ef9a42c93bb",
 "assets/assets/drawable/Title/Ocean.jpg": "af102b47f1dc15005311b886018aa959",
 "assets/assets/drawable/Title/Lion.jpg": "6f4304ebf9a572c03e2c2eac426111df",
 "assets/assets/drawable/Title/default.jpg": "7630955ff829ce1348e43f66a07151e9",
+"assets/assets/drawable/appIcon.png": "193e2d5c8494c30d892d0f2183f98296",
 "assets/assets/drawable/Conversation/icon_sakaki.png": "c9c7bc2250f6193c4c49809d9b84a864",
 "assets/assets/drawable/Conversation/background_sample1.jpg": "d76d34323544a82c193ca7564b8db97f",
 "assets/assets/drawable/Conversation/background_sample2.jpg": "66f24712c1911596ce910c512b93503d",
