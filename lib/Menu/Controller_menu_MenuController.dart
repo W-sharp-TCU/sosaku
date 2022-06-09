@@ -18,9 +18,11 @@ class MenuScreenController {
 
   void save() {}
   void openOption() {
-    Navigator.pushReplacement(
-      _context,
-      MaterialPageRoute(builder: (context) => const SettingScreen()),
+    Navigator.push(
+      _context!,
+      PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const SettingScreen(),
+          transitionDuration: const Duration(milliseconds: 100)),
     );
   }
 

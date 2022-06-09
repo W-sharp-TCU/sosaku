@@ -28,6 +28,7 @@ import 'package:flutter/services.dart' show rootBundle;
 /// TODO[save]
 class ConversationScreenController {
   int _interval = 40; // [ms]
+  String _playerName = 'プレイヤー';
   ConversationImageProvider? _conversationImageProvider;
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
@@ -132,10 +133,9 @@ class ConversationScreenController {
     _gotoNumbers = gotoNumberList;
   }
 
-  void setSettings({
-    int? interval,
-  }) {
+  void setSettings({int? interval, String? playerName}) {
     _interval = interval ?? _interval;
+    _playerName = playerName ?? _playerName;
   }
 
   /// Start controller.
@@ -186,8 +186,10 @@ class ConversationScreenController {
   /// Load json to list.
   /// @param path : Json path.;
   Future<void> loadJsonAsset(String path) async {
-    Map<String, dynamic> jsonData = json.decode(await rootBundle
-        .loadString('assets/text/ScenarioData/ChapterTest/event1.json'));
+    String jsonString = await rootBundle.loadString(path);
+    // 文字の置換(<Player>を_playerNameに)
+    jsonString = jsonString.replaceAll('<Player>', _playerName);
+    Map<String, dynamic> jsonData = json.decode(jsonString);
     List<dynamic> context = jsonData['context'];
     List<int> _types = [];
     List<String> _backgroundImagePaths = [];
@@ -244,7 +246,6 @@ class ConversationScreenController {
           }
         } else if (_gotoNumbers[_nowCode][0] == -1) {
           // TODO : イベント終了時の処理を追加
-          print("end");
           stop();
           Navigator.pushReplacement(
             _context!,
@@ -288,7 +289,6 @@ class ConversationScreenController {
     }
     if (_gotoNumbers[_nowCode][optionNumber] == -1) {
       // TODO : イベント終了時の処理を追加
-      print("end");
       stop();
       Navigator.pushReplacement(
         _context!,
@@ -359,13 +359,18 @@ class ConversationScreenController {
       for (int i = 0; i < _conversationLogs.length; i++) {
         _logNames.add(_characterNames[_conversationLogs[i]]);
         switch (_characterNames[_conversationLogs[i]]) {
+          case ('籾原彩菜'):
+          case ('彩菜'):
           case ('あやな'):
             _logIconPaths.add('assets/drawable/Conversation/icon_ayana.png');
             break;
+          case ('栃ノ瀬ののの'):
           case ('ののの'):
             _logIconPaths.add('assets/drawable/Conversation/icon_nonono.png');
             break;
+          case ('銀田榊'):
           case ('榊'):
+          case ('さかき'):
             _logIconPaths.add('assets/drawable/Conversation/icon_sakaki.png');
             break;
           default:
