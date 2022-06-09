@@ -53432,7 +53432,7 @@ q.go=A.a([],t.t)
 A.a_D(1,q.ch)
 A.a_D(3,q.cx)
 s=4
-return A.V(q.pO("assets/text/ScenarioData/ChapterTest/event1.json"),$async$nL)
+return A.V(q.pO("assets/text/ScenarioData/ChapterTest/102.json"),$async$nL)
 case 4:q.Le()
 q.oE()
 case 3:return A.O(null,r)}})
