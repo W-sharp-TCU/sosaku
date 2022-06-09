@@ -19,7 +19,7 @@ class MenuScreenController {
   void save() {}
   void openOption() {
     Navigator.push(
-      _context!,
+      _context,
       PageRouteBuilder(
           pageBuilder: (_, __, ___) => const SettingScreen(),
           transitionDuration: const Duration(milliseconds: 100)),
