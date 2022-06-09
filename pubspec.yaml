@@ -56,7 +56,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.4
-  flutter_launcher_icons:
+  icons_launcher:
   flutter_native_splash: ^2.1.2+1
 
 
@@ -74,7 +74,12 @@ flutter:
 
 
   assets:
+    - assets/drawable/
     - assets/drawable/ActionResult/
+    - assets/drawable/CharacterImage/Ayana/
+    - assets/drawable/CharacterImage/Nonono/
+    - assets/drawable/CharacterImage/Sakaki/
+    - assets/drawable/CharacterImage/Sakaki/
     - assets/drawable/Conversation/
     - assets/drawable/Dialogs/
     - assets/drawable/Home/
@@ -127,10 +132,11 @@ flutter:
 # native app icon support
 # Run "flutter pub run flutter_launcher_icons:main" to generate native icons when descriptions
 # mentioned below is changed.
-#flutter_icons:
-#  android: true
-#  ios: true
-#  image_path: "lib/assets/icon.png"
+flutter_icons:
+ android: true
+ ios: true
+ web: true
+ image_path: "assets/drawable/appIcon.png"
 #  image_path_android: "for_Android.png"
 #  adaptive_icon_background: "for_Android-adaptiveIcon.png"
 #  adaptive_icon_foreground: "for_Android-adaptiveIcon.png"

@@ -169,7 +169,8 @@ class ConversationScreenController {
       // TODO : load in load class
       SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
       SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
-      await loadJsonAsset('assets/text/ScenarioData/ChapterTest/event1.json');
+      await loadJsonAsset(
+          'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
       _animationLoop();
       _refreshScreen();
     }
