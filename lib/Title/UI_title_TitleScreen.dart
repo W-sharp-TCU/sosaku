@@ -130,7 +130,27 @@ class TitleScreen extends ConsumerWidget {
 
   // 突貫工事用
   Future<void> preLoad(BuildContext context) async {
-    List<String> images = [];
+    List<String> images = [
+      "assets/drawable/CharacterImage/Ayana/angry(eyeClosed).png",
+      "assets/drawable/CharacterImage/Ayana/angry(eyeOpend).png",
+      "assets/drawable/CharacterImage/Ayana/flat(eyeClosed-mouthClosed).png",
+      "assets/drawable/CharacterImage/Ayana/flat(eyeClosed-mouthOpend).png",
+      "assets/drawable/CharacterImage/Ayana/flat(eyeOpend-mouthClosed).png",
+      "assets/drawable/CharacterImage/Ayana/flat(eyeOpend-mouthOpend).png",
+      "assets/drawable/CharacterImage/Ayana/normal.png",
+      "assets/drawable/CharacterImage/Ayana/puzzled(eyeClosed).png",
+      "assets/drawable/CharacterImage/Ayana/puzzled(eyeOpend).png",
+      "assets/drawable/CharacterImage/Ayana/smiled(eyeClosed).png",
+      "assets/drawable/Conversation/black_screen.png",
+      "assets/drawable/Conversation/background_sample1.jpg",
+      "assets/drawable/Conversation/background_sample2.jpg",
+      "assets/drawable/Conversation/button_sample.png",
+      "assets/drawable/Conversation/icon_ayana.png",
+      "assets/drawable/Conversation/icon_nonono.png",
+      "assets/drawable/Conversation/icon_sakaki.png",
+      "assets/drawable/Conversation/icon_unknown.png",
+      "assets/drawable/Conversation/no_character.png"
+    ];
     List<String> cvs = [];
     for (var e in images) {
       await precacheImage(AssetImage(e), context);
