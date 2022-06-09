@@ -55,7 +55,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.4
-  flutter_launcher_icons:
+  icons_launcher:
   flutter_native_splash: ^2.1.2+1
 
 
@@ -134,6 +134,7 @@ flutter:
 flutter_icons:
  android: true
  ios: true
+ web: true
  image_path: "assets/drawable/appIcon.png"
 #  image_path_android: "for_Android.png"
 #  adaptive_icon_background: "for_Android-adaptiveIcon.png"
