@@ -226,8 +226,8 @@ class LogUI extends ConsumerWidget {
                                                   GestureDetector(
                                                       onTap: () {
                                                         // TODO : ログジャンプのテスト
-                                                        conversationScreenController
-                                                            .goLogScene(_i);
+                                                        // conversationScreenController
+                                                        //     .goLogScene(_i);
                                                       },
                                                       child: Container(
                                                         width: GetScreenSize
