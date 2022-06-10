@@ -17078,7 +17078,8 @@ Qx:function Qx(){},
 Qu:function Qu(a){this.a=a},
 Qv:function Qv(a){this.a=a},
 i9:function i9(a,b){var _=this
-_.b=_.a="drawable/Load/default.jpg"
+_.a="drawable/Conversation/back_screen.png"
+_.b="drawable/Conversation/no_character.png"
 _.c=""
 _.d=a
 _.z=_.y=_.x=_.r=_.f=_.e=!1
@@ -17097,7 +17098,7 @@ _.a4$=f
 _.a8$=_.aq$=0
 _.aS$=!1},
 ib:function ib(a){var _=this
-_.a="\u304a\u305f\u3081\u3057  apple banana \n\u30c6\u30ad\u30b9\u30c8 orange\n\u3067\u3059\n\uff14\u884c\u76ee\u306f\u8868\u793a\u306a\u3057"
+_.a=""
 _.Y$=0
 _.a4$=a
 _.a8$=_.aq$=0
