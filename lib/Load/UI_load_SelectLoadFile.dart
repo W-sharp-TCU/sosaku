@@ -27,16 +27,17 @@ class SelectLoadFile extends ConsumerWidget{
       child: Container(
           height: GetScreenSize.screenHeight() * 0.3,
           width: GetScreenSize.screenWidth() * 0.35,
-          color: Colors.white,
+
           margin: EdgeInsets.only(
               bottom:GetScreenSize.screenWidth() * 0.03,
               left: GetScreenSize.screenWidth() * 0.01,
               right: GetScreenSize.screenWidth() * 0.01
           ),
-          padding: EdgeInsets.all(
-              GetScreenSize.screenWidth() * 0.005
-          ),
-
+          child: const Image(
+            fit: BoxFit.cover,
+            image: AssetImage("assets/drawable/load/file.png"),
+          )
+          /*
           child:Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -45,6 +46,7 @@ class SelectLoadFile extends ConsumerWidget{
               Text(ref.watch(loadScreenProvider).mBGImagePath)
             ],
           )
+          */
       ),
     );
   }

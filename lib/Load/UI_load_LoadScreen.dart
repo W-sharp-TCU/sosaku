@@ -39,7 +39,7 @@ class LoadScreen extends ConsumerWidget {
                 width: GetScreenSize.screenWidth(),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/drawable/background.png"),
+                    image: AssetImage("assets/drawable/load/background.png"),
                   )
                 ),
 
