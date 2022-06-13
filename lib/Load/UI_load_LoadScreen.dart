@@ -37,7 +37,12 @@ class LoadScreen extends ConsumerWidget {
               child: Container(
                 height: GetScreenSize.screenHeight(),
                 width: GetScreenSize.screenWidth(),
-                color: Colors.green,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/drawable/background.png"),
+                  )
+                ),
+
                 child: Stack(
                   children: [
                     SingleChildScrollView(
