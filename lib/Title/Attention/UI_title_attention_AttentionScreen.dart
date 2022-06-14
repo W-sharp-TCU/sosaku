@@ -5,6 +5,7 @@ import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 /// class AttentionScreen.
 class AttentionScreen extends StatelessWidget {
   const AttentionScreen({Key? key}) : super(key: key);
+  static String _imagePath = "./assets/drawable/Title/Lion.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +19,11 @@ class AttentionScreen extends StatelessWidget {
             child: Container(
               width: GetScreenSize.screenWidth(),
               height: GetScreenSize.screenHeight(),
-              color: Colors.amber,
-              child: const Image(
+              child: Image(
                 fit: BoxFit.cover,
                 image: AssetImage(
-                  "./assets/drawable/Title/Lion.jpg",
+                  /// change image.
+                  _imagePath,
                 ),
               ),
             ),
@@ -30,5 +31,10 @@ class AttentionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// pre cache image on attention screen.
+  static Future<void> prepare(BuildContext context) async {
+    await prechacheImage(AssetImage(_imagePath), context);
   }
 }
