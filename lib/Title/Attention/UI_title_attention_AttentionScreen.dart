@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
-
 /// class AttentionScreen.
 class AttentionScreen extends StatelessWidget {
   const AttentionScreen({Key? key}) : super(key: key);
@@ -12,7 +11,7 @@ class AttentionScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        height:double.infinity,
+        height: double.infinity,
         color: Colors.black,
         child: Center(
           child: GestureDetector(
@@ -35,6 +34,6 @@ class AttentionScreen extends StatelessWidget {
 
   /// pre cache image on attention screen.
   static Future<void> prepare(BuildContext context) async {
-    await prechacheImage(AssetImage(_imagePath), context);
+    await precacheImage(AssetImage(_imagePath), context);
   }
 }

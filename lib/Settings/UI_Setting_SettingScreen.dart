@@ -8,9 +8,10 @@ import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import '../Home/UI_home_HomeScreen.dart';
 import 'UI_Setting_SettingContents.dart';
-import 'Provider_Setting_otameshi.dart';
+import 'Provider_Settings_SettingsProvider.dart';
 
-final otameshi = ChangeNotifierProvider.autoDispose((ref) => Otameshi());
+final otameshi =
+    ChangeNotifierProvider.autoDispose((ref) => SettingsProvider());
 
 class SettingScreen extends ConsumerWidget {
   const SettingScreen({Key? key}) : super(key: key);

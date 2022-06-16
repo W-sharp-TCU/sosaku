@@ -3,8 +3,8 @@ import 'Controller_Settings_SettingsController.dart';
 
 SettingsController settingsController = SettingsController();
 
-class Otameshi extends ChangeNotifier {
-  Otameshi() : super() {
+class SettingsProvider extends ChangeNotifier {
+  SettingsProvider() : super() {
     this.setAllValue();
   }
   double _textSliderValue = settingsController.textSpeed;
