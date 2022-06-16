@@ -7,11 +7,10 @@ class Otameshi extends ChangeNotifier {
   Otameshi() : super() {
     this.setAllValue();
   }
-  double _textSliderValue = 1;
-  double _voiceSliderValue = 5;
-  double _bgmSliderValue = 5;
-  double _seSliderValue = 5;
-//_settingsController.getTextSpeedValue() as double
+  double _textSliderValue = settingsController.textSpeed;
+  double _voiceSliderValue = settingsController.CvVolume;
+  double _bgmSliderValue = settingsController.BgmVolume;
+  double _seSliderValue = settingsController.UiVolume;
   double get textSliderValue => _textSliderValue;
   double get voiceSliderValue => _voiceSliderValue;
   double get bgmSliderValue => _bgmSliderValue;
@@ -21,7 +20,7 @@ class Otameshi extends ChangeNotifier {
     _textSliderValue = await settingsController.getTextSpeedValue();
     _voiceSliderValue = await settingsController.getVoiceVolumeValue();
     _bgmSliderValue = await settingsController.getBgmVolumeValue();
-    _seSliderValue = await settingsController.getSeVolumeValue();
+    _seSliderValue = await settingsController.getUiVolumeValue();
     notifyListeners();
   }
 
@@ -45,7 +44,7 @@ class Otameshi extends ChangeNotifier {
 
   void setSESliderValue(double value) {
     _seSliderValue = value;
-    settingsController.setSeVolumeValue(value);
+    settingsController.setUiVolumeValue(value);
     notifyListeners();
   }
 }
