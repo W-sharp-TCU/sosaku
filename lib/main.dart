@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'Settings/Controller_Settings_SettingsController.dart';
 import 'Title/UI_title_TitleScreen.dart';
 import 'Wrapper/wrapper_SoundPlayer.dart';
 import 'l10n/l10n.dart';
+
+late PackageInfo packageInfo;
 
 Future<void> main() async {
   // restrict device screen orientation
@@ -17,6 +20,7 @@ Future<void> main() async {
   ]);
   SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.immersive); // hide Android status bar & navigation bar.
+  packageInfo = await PackageInfo.fromPlatform();
   await TitleScreen.prepare();
   SoundPlayer.init();
   SettingsController settingsController = SettingsController();
