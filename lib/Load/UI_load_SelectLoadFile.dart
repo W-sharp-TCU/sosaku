@@ -25,18 +25,43 @@ class SelectLoadFile extends ConsumerWidget{
         print("you tapped File$fileNumber");
       },
       child: Container(
-          height: GetScreenSize.screenHeight() * 0.3,
-          width: GetScreenSize.screenWidth() * 0.35,
+          height: GetScreenSize.screenHeight() * 0.4,
+          width: GetScreenSize.screenWidth() * 0.3,
 
           margin: EdgeInsets.only(
               bottom:GetScreenSize.screenWidth() * 0.03,
               left: GetScreenSize.screenWidth() * 0.01,
               right: GetScreenSize.screenWidth() * 0.01
           ),
-          child: const Image(
-            fit: BoxFit.cover,
-            image: AssetImage("assets/drawable/load/file.png"),
-          )
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/drawable/load/file.png"),
+              fit: BoxFit.cover
+            )
+          ),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment(-0.73, -0.95),
+                child: Text(
+                  "FILE$fileNumber",
+                  style: TextStyle(
+                    fontSize: GetScreenSize.screenHeight() * 0.03
+                  ),
+                ),
+              ),
+
+              Align(
+                alignment: Alignment(0, 0),
+                child: Container(
+                  width: GetScreenSize.screenWidth() * 0.25,
+                  height: GetScreenSize.screenHeight() * 0.25,
+                  color: Colors.white,
+                )
+              )
+
+            ],
+          ),
           /*
           child:Column(
             mainAxisAlignment: MainAxisAlignment.start,

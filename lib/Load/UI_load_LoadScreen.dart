@@ -45,10 +45,17 @@ class LoadScreen extends ConsumerWidget {
 
                 child: Stack(
                   children: [
+
                     SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
+
+                            SizedBox(
+                              width: GetScreenSize.screenWidth() * 0.05,
+                              height: GetScreenSize.screenHeight(),
+                            ),
+
                             for (var i = 0; i < 10; i++)
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -58,7 +65,8 @@ class LoadScreen extends ConsumerWidget {
                                 ],
                               )
                           ],
-                        )),
+                        ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +87,8 @@ class LoadScreen extends ConsumerWidget {
                               color: Colors.white,
                               child: const Center(
                                 child: Text("back"),
-                              )),
+                              )
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -103,6 +112,26 @@ class LoadScreen extends ConsumerWidget {
                         alignment: Alignment(0, 0),
                         child: const DialogScreen(),
                       ),
+
+                    Align(
+                      alignment: Alignment(-1, -0),
+                      child: Container(
+                        width: GetScreenSize.screenWidth() * 0.05,
+                        height: GetScreenSize.screenHeight(),
+                        color: Colors.black.withOpacity(0.5),
+                        padding: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                        child: Center(
+                          child: Text(
+                            "LOAD",
+                            style: TextStyle(
+                              fontSize: GetScreenSize.screenHeight() * 0.07,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
               ),
