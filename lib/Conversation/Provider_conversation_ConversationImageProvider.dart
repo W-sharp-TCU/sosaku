@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
-  String _mBGImagePath = "drawable/Conversation/back_screen.png";
+  String _mBGImagePath = "drawable/Conversation/black_screen.png";
   String _characterImagePath = "drawable/Conversation/no_character.png";
   String _characterName = "";
   List<String> _optionTexts = [];

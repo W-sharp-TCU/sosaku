@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
+import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
@@ -33,50 +34,37 @@ class ConversationScreenController {
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
   BuildContext? _context;
+  late Timer _timer;
 
   /// List of conversation types(speech or question or action).
-  List<int> _types = [
-    1,
-  ];
+  List<int> _types = [];
 
   /// List of background image paths.
-  List<String> _backgroundImagePaths = [
-    'assets/drawable/Conversation/background_sample1.jpg',
-  ];
+  List<String> _backgroundImagePaths = [];
 
   /// List of character image paths.
-  List<String> _characterImagePaths = [
-    'assets/drawable/Conversation/no_character.png',
-  ];
+  List<String> _characterImagePaths = [];
 
   /// List of character names.
-  List<String> _characterNames = [
-    '車掌',
-  ];
+  List<String> _characterNames = [];
 
   /// List of conversation texts.
-  List<String> _texts = [
-    '「次は～、耶麻台～」',
-  ];
+  List<String> _texts = [];
 
   /// List of bgm paths.
-  List<String> _bgmPaths = [
-    'assets/sound/BGM/Full-bloomer.mp3',
-  ];
+  List<String> _bgmPaths = [];
 
   /// List of voice paths.
-  List<String> _voicePaths = [
-    'assets/sound/CharacterVoice/voice_sample_000.wav',
-  ];
+  List<String> _voicePaths = [];
 
   /// List of SE.
-  List<String> _sePaths = [''];
+  List<String> _sePaths = [];
 
   /// List of options.
-  List<List<String>> _options = [[]];
+  List<List<String>> _options = [];
 
   /// List of goto numbers.
-  List<List<int>> _gotoNumbers = [[]];
+  List<List<int>> _gotoNumbers = [];
 
   /// Code number to display.
   int _nowCode = 0;
@@ -86,9 +74,6 @@ class ConversationScreenController {
 
   /// Text being displayed.
   String _nowText = '';
-
-  /// Is on auto play?
-  bool _isAuto = false;
 
   /// List of conversation logs.
   List<int> _conversationLogs = [];
@@ -136,6 +121,8 @@ class ConversationScreenController {
   void setSettings({int? interval, String? playerName}) {
     _interval = interval ?? _interval;
     _playerName = playerName ?? _playerName;
+    _timer.cancel();
+    _animationLoop();
   }
 
   /// Start controller.
@@ -143,30 +130,27 @@ class ConversationScreenController {
   ///
   /// @param cip : ConversationImageProvider
   /// @param ctp : ConversationTextProvider
-  /// TODO : add arg
+  /// @param clp : ConversationLogProvider
+  /// @param contest : BuildContext
   Future<void> start(
       ConversationImageProvider cip,
       ConversationTextProvider ctp,
       ConversationLogProvider clp,
       BuildContext context) async {
-    if (_conversationImageProvider == null &&
-        _conversationTextProvider == null &&
+    if (_conversationImageProvider == null ||
+        _conversationTextProvider == null ||
         _conversationLogProvider == null) {
       _conversationImageProvider = cip;
       _conversationTextProvider = ctp;
       _conversationLogProvider = clp;
-      // TODO : デモ用
       _context = context;
-      _isVoicePlaying = false;
 
       // init
       _nowCode = 0;
       _nowLength = 0;
       _nowText = '';
-      _isAuto = false;
       _conversationLogs = [];
 
-      // TODO : load in load class
       SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
       SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
       await loadJsonAsset(
@@ -178,7 +162,8 @@ class ConversationScreenController {
 
   /// Stop controller.
   /// This function is for ConversationScreenUI.
-  void stop() {
+  void stop() async {
+    _timer.cancel();
     _conversationImageProvider = null;
     _conversationTextProvider = null;
     _conversationLogProvider = null;
@@ -246,14 +231,7 @@ class ConversationScreenController {
                 'Code ${_nowCode + 1} does not exist.  Set the correct goto.');
           }
         } else if (_gotoNumbers[_nowCode][0] == -1) {
-          // TODO : イベント終了時の処理を追加
-          stop();
-          Navigator.pushReplacement(
-            _context!,
-            PageRouteBuilder(
-                pageBuilder: (_, __, ___) => TitleScreen(),
-                transitionDuration: const Duration(milliseconds: 100)),
-          );
+          endEvent();
         } else {
           if (_gotoNumbers[_nowCode][0] < _types.length) {
             _nowCode = _gotoNumbers[_nowCode][0];
@@ -272,7 +250,7 @@ class ConversationScreenController {
         openLog();
       }
       if (_conversationImageProvider!.isMenu) {
-        _conversationImageProvider!.changeMenuDisplay();
+        _conversationImageProvider?.changeMenuDisplay();
       }
       if (_conversationImageProvider!.isHideUi) {
         changeHideUi();
@@ -286,17 +264,10 @@ class ConversationScreenController {
   /// @param optionNumber :　number of the selected option (0,1,2,...)
   void goSelectedScene(int optionNumber) {
     if (_conversationImageProvider!.dialogFlag) {
-      _conversationImageProvider!.changeDialogFlag();
+      _conversationImageProvider?.changeDialogFlag();
     }
     if (_gotoNumbers[_nowCode][optionNumber] == -1) {
-      // TODO : イベント終了時の処理を追加
-      stop();
-      Navigator.pushReplacement(
-        _context!,
-        PageRouteBuilder(
-            pageBuilder: (_, __, ___) => TitleScreen(),
-            transitionDuration: const Duration(milliseconds: 100)),
-      );
+      endEvent();
     } else {
       if (_gotoNumbers[_nowCode][optionNumber] < _types.length) {
         _nowCode = _gotoNumbers[_nowCode][optionNumber];
@@ -314,13 +285,13 @@ class ConversationScreenController {
   /// @param logNumber :　Number in the log list of the selected scene.(Not a code number.)
   void goLogScene(int logNumber) {
     if (_conversationImageProvider!.dialogFlag) {
-      _conversationImageProvider!.changeDialogFlag();
+      _conversationImageProvider?.changeDialogFlag();
     }
     if (_conversationImageProvider!.isLog) {
-      _conversationImageProvider!.changeLogDisplay();
+      _conversationImageProvider?.changeLogDisplay();
     }
     if (_conversationImageProvider!.isMenu) {
-      _conversationImageProvider!.changeMenuDisplay();
+      _conversationImageProvider?.changeMenuDisplay();
     }
     if (_conversationImageProvider!.isHideUi) {
       changeHideUi();
@@ -338,21 +309,20 @@ class ConversationScreenController {
   /// Change auto play.
   /// This function is for ConversationScreenUI.
   void changeAutoPlay() {
-    _isAuto = !_isAuto;
-    _conversationImageProvider!.changeAuto();
+    _conversationImageProvider?.changeAuto();
   }
 
   /// Change hide ui.
   /// This function is for ConversationScreenUi.
   void changeHideUi() {
-    _conversationImageProvider!.changeHideUi();
+    _conversationImageProvider?.changeHideUi();
   }
 
   /// Open the log screen.(If already open, close it.)
   /// This function is for ConversationScreenUi
   void openLog() {
     if (!_conversationImageProvider!.isLog) {
-      _conversationLogProvider!.setCodes(_conversationLogs);
+      _conversationLogProvider?.setCodes(_conversationLogs);
       List<String> _logNames = [];
       List<String> _logIconPaths = [];
       List<String> _logTexts = [];
@@ -381,12 +351,12 @@ class ConversationScreenController {
         _logTexts.add(_texts[_conversationLogs[i]]);
         _logIsPlaying.add(false);
       }
-      _conversationLogProvider!.setNames(_logNames);
-      _conversationLogProvider!.setTexts(_logTexts);
-      _conversationLogProvider!.setIconPaths(_logIconPaths);
-      _conversationLogProvider!.setIsPlaying(_logIsPlaying);
+      _conversationLogProvider?.setNames(_logNames);
+      _conversationLogProvider?.setTexts(_logTexts);
+      _conversationLogProvider?.setIconPaths(_logIconPaths);
+      _conversationLogProvider?.setIsPlaying(_logIsPlaying);
       changeHideUi();
-      _conversationImageProvider!.changeLogDisplay();
+      _conversationImageProvider?.changeLogDisplay();
     } else {
       if (_conversationLogProvider!.isPlaying.contains(true)) {
         // FIXED : CV could not be stopped.
@@ -394,14 +364,14 @@ class ConversationScreenController {
         SoundPlayer.stopCVAll();
       }
       changeHideUi();
-      _conversationImageProvider!.changeLogDisplay();
+      _conversationImageProvider?.changeLogDisplay();
     }
   }
 
   /// Open the menu screen.(If already open, close it.)
   /// This function is for ConversationScreenUi
   void openMenu() {
-    _conversationImageProvider!.changeMenuDisplay();
+    _conversationImageProvider?.changeMenuDisplay();
     changeHideUi();
   }
 
@@ -409,34 +379,35 @@ class ConversationScreenController {
     List<bool> _logIsPlaying =
         List<bool>.filled(_conversationLogProvider!.codes.length, false);
     _logIsPlaying[numOfLog] = true;
-    _conversationLogProvider!.setIsPlaying(_logIsPlaying);
+    _conversationLogProvider?.setIsPlaying(_logIsPlaying);
     SoundPlayer.playCV(
         [_voicePaths[_conversationLogProvider!.codes[numOfLog]]]);
   }
 
-  ///Thread loop
+  /// Thread loop
   void _animationLoop() {
     void _animationCallback(Timer timer) {
+      _timer = timer;
       if (_conversationImageProvider != null &&
-          _conversationTextProvider != null) {
+          _conversationTextProvider != null &&
+          _conversationLogProvider != null) {
         _autoAnimation();
       } else {
-        timer.cancel();
+        _timer.cancel();
       }
     }
 
-    Timer.periodic(const Duration(milliseconds: 40), _animationCallback);
+    Timer.periodic(Duration(milliseconds: _interval), _animationCallback);
   }
 
   /// Auto animation without operation.
   /// Text animation, display question dialog, autoplay, change log data, etc...
-  void _autoAnimation() async {
+  void _autoAnimation() {
     if (_conversationImageProvider!.isLog) {
       // processing on the log screen
       if (_conversationLogProvider!.isPlaying.contains(true) &&
           SoundPlayer.cvState == PlayerState.STOPPED) {
-        // TODO : デモ用
-        _conversationLogProvider!.setIsPlaying(
+        _conversationLogProvider?.setIsPlaying(
             List<bool>.filled(_conversationLogProvider!.codes.length, false));
       }
     } else if (_conversationImageProvider!.isMenu) {
@@ -446,18 +417,14 @@ class ConversationScreenController {
       if (_nowLength < _texts[_nowCode].length) {
         _nowLength++;
         _nowText = _texts[_nowCode].substring(0, _nowLength);
-        _conversationTextProvider!.setConversationText(_nowText);
+        _conversationTextProvider?.setConversationText(_nowText);
       } else if ((_types[_nowCode] == 2 || _types[_nowCode] == 3) &&
           !_conversationImageProvider!.dialogFlag) {
-        _conversationImageProvider!.setOptionTexts(_options[_nowCode]);
+        _conversationImageProvider?.setOptionTexts(_options[_nowCode]);
         _conversationImageProvider!.changeDialogFlag();
-      } else if (_isAuto &&
+      } else if (_conversationImageProvider!.isAuto &&
           _types[_nowCode] == 1 &&
           _nowLength == _texts[_nowCode].length &&
-          _isVoicePlaying == false // TODO : デモ用
-          /* &&
-        SoundPlayer.seState != PlayerState.PLAYING*/
-          &&
           !_conversationImageProvider!.isHideUi) {
         //TODO : Rewrite the condition as when voice playback ends.
         goNextScene();
@@ -465,16 +432,37 @@ class ConversationScreenController {
     }
   }
 
+  /// Processing at the end of an event.
+  void endEvent() async {
+    _timer.cancel();
+    if (_conversationImageProvider != null &&
+        _conversationTextProvider != null &&
+        _conversationLogProvider != null &&
+        _context != null) {
+      await Navigator.pushReplacement(
+        _context!,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => TitleScreen(),
+        ),
+      );
+      stop();
+    }
+  }
+
   /// Refresh the screen and save the Logs.
   void _refreshScreen() {
-    _nowLength = 0;
-    _conversationLogs.add(_nowCode);
-    _changeBackgroundImage();
-    _changeCharacterImage();
-    _changeCharacterName();
-    _changeBgm();
-    _changeVoice();
-    _changeSe();
+    if (_conversationImageProvider != null &&
+        _conversationTextProvider != null &&
+        _conversationLogProvider != null) {
+      _nowLength = 0;
+      _conversationLogs.add(_nowCode);
+      _changeBackgroundImage();
+      _changeCharacterImage();
+      _changeCharacterName();
+      _changeBgm();
+      _changeVoice();
+      _changeSe();
+    }
   }
 
   ///Change background image.
@@ -483,7 +471,7 @@ class ConversationScreenController {
     if (_backgroundImagePaths[_nowCode].isNotEmpty &&
         _conversationImageProvider!.mBGImagePath !=
             _backgroundImagePaths[_nowCode]) {
-      _conversationImageProvider!.setBGImage((_backgroundImagePaths[_nowCode]));
+      _conversationImageProvider?.setBGImage((_backgroundImagePaths[_nowCode]));
     }
   }
 
@@ -500,7 +488,7 @@ class ConversationScreenController {
 
   /// Change character name.
   void _changeCharacterName() {
-    _conversationImageProvider!.setCharacterName(_characterNames[_nowCode]);
+    _conversationImageProvider?.setCharacterName(_characterNames[_nowCode]);
   }
 
   /// Change bgm.
@@ -511,21 +499,10 @@ class ConversationScreenController {
     }
   }
 
-  // TODO : デモ用
-  // 音声が再生されているか(SoundPlayerが完成したら削除)
-  bool _isVoicePlaying = false;
-  Timer? _timer;
-
   /// Change voice.
   void _changeVoice() {
     if (_voicePaths[_nowCode].isNotEmpty) {
       SoundPlayer.playCV([_voicePaths[_nowCode]]);
-      // TODO : デモ用
-      _timer?.cancel();
-      _isVoicePlaying = true;
-      _timer = Timer(const Duration(milliseconds: 13500), () {
-        _isVoicePlaying = false;
-      });
     }
   }
 
