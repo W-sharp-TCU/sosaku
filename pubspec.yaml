@@ -148,7 +148,7 @@ flutter_icons:
 # mentioned below is changed.
 flutter_native_splash:
   color: "#FFFFFF"
-  image: assets/drawable/Splash/Wsharp.png
+  #image: assets/drawable/Splash/Wsharp.png
   fullscreen: true
   android_gravity: center
   ios_content_modes: center

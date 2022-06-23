@@ -1,12 +1,12 @@
 {
-    "name": "sosaku",
-    "short_name": "sosaku",
+    "name": "想咲 - ソウサク -",
+    "short_name": "想咲 -ｿｳｻｸ-",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
-    "theme_color": "#0175C2",
+    "theme_color": "#FFB6C1",
     "description": "Novel Game",
-    "orientation": "portrait-primary",
+    "orientation": "landscape-primary",
     "prefer_related_applications": false,
     "icons": [
         {
