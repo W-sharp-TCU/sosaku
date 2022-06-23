@@ -22,7 +22,6 @@ Future<void> main() async {
       SystemUiMode.immersive); // hide Android status bar & navigation bar.
   packageInfo = await PackageInfo.fromPlatform();
   SoundPlayer.init();
-  await TitleScreen.prepare();
   SettingsController settingsController = SettingsController();
   settingsController.getBgmVolumeValue();
   settingsController.getUiVolumeValue();
