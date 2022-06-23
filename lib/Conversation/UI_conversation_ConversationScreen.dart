@@ -116,7 +116,7 @@ class ConversationScreen extends ConsumerWidget {
 
                   ///Menu screen
                   //if文おねがいします
-                  if (false)
+                  if (ref.watch(conversationImageProvider).isMenu)
                     const Align(
                       alignment: Alignment(0, 0),
                       child: MenuUI(),

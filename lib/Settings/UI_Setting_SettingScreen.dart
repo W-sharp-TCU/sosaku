@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 ///import other dart files
@@ -10,7 +11,7 @@ import '../Home/UI_home_HomeScreen.dart';
 import 'UI_Setting_SettingContents.dart';
 import 'Provider_Settings_SettingsProvider.dart';
 
-final otameshi =
+final settingsProvider =
     ChangeNotifierProvider.autoDispose((ref) => SettingsProvider());
 
 class SettingScreen extends ConsumerWidget {
@@ -52,10 +53,16 @@ class SettingScreen extends ConsumerWidget {
                           ///back button
                           GestureDetector(
                             onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
+                              // Set the speed of the conversation
+                              conversationScreenController.setSettings(
+                                  interval: 85 -
+                                      (ref
+                                                  .watch(settingsProvider)
+                                                  .textSliderValue)
+                                              .toInt() *
+                                          15);
+                              // Close the settings screen.
+                              Navigator.pop(context);
                             },
                             child: Container(
                               margin: EdgeInsets.only(
