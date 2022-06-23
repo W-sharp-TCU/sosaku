@@ -73,18 +73,22 @@ class HomeScreen extends ConsumerWidget {
                     child: GestureDetector(
                       child: Button(buttonName: L10n.of(context)!.newGame),
                       onTap: () async {
-                        Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                              pageBuilder: (_, __, ___) =>
-                                  const SettingScreen(),
-                              transitionDuration:
-                                  const Duration(milliseconds: 10)),
-                        );
                         print("pushed button 1");
                         _slideShowController.stop();
                         SoundPlayer.playUI(
                             "assets/sound/UISound/pushButton.mp3");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NowLoadingScreen(
+                                  process: () async {
+                                    await precacheImage(
+                                        const AssetImage(
+                                            "assets/drawable/Conversation/4k.jpg"),
+                                        context);
+                                  },
+                                  goto: const ConversationScreen())),
+                        );
                       },
                     ),
                   ),
@@ -117,17 +121,13 @@ class HomeScreen extends ConsumerWidget {
                         SoundPlayer.playUI("assets/sound/UISound/next.mp3");
                         print("pushed button 3");
                         _slideShowController.stop();
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => NowLoadingScreen(
-                                  process: () async {
-                                    await precacheImage(
-                                        const AssetImage(
-                                            "assets/drawable/Conversation/4k.jpg"),
-                                        context);
-                                  },
-                                  goto: const ConversationScreen())),
+                          PageRouteBuilder(
+                              pageBuilder: (_, __, ___) =>
+                                  const SettingScreen(),
+                              transitionDuration:
+                                  const Duration(milliseconds: 10)),
                         );
                       },
                     ),

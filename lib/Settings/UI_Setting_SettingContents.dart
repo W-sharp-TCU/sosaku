@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 
 ///other dart files
@@ -56,6 +57,8 @@ class SettingContents extends ConsumerWidget {
                               ref
                                   .read(settingsProvider)
                                   .setTextSliderValue(value);
+                              conversationScreenController.setSettings(
+                                  textSpeed: value);
                             },
                           ),
                         ),
