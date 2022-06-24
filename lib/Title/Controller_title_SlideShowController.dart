@@ -15,9 +15,10 @@ class SlideShowController {
   /// @param context : specify [BuildContext] of build().
   /// @param target : specify the instance of [ChangeNotifier] which extends
   /// [SlideShowInterface].
-  void start(SlideShowInterface target) {
+  void start(SlideShowInterface target) async {
     if (_target == null) {
       _target = target;
+      await Future.delayed(const Duration(milliseconds: 500));
       _threadLoop();
     } else {
       _target = target;
