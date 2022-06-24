@@ -4,7 +4,6 @@ import 'package:sosaku/Title/Interface_title_SlideShowInterface.dart';
 class SlideShowController {
   final int _interval = 5000; // [ms]
   final List<String> imagePaths;
-  late BuildContext _context;
   SlideShowInterface? _target;
   int _i = 0;
 
@@ -16,13 +15,11 @@ class SlideShowController {
   /// @param context : specify [BuildContext] of build().
   /// @param target : specify the instance of [ChangeNotifier] which extends
   /// [SlideShowInterface].
-  void start(BuildContext context, SlideShowInterface target) {
+  void start(SlideShowInterface target) {
     if (_target == null) {
-      _context = context;
       _target = target;
       _threadLoop();
     } else {
-      _context = context;
       _target = target;
     }
   }
@@ -45,7 +42,6 @@ class SlideShowController {
   }
 
   Future<void> _changeImage() async {
-    await precacheImage(AssetImage(imagePaths[_i]), _context);
     if (_i != imagePaths.length - 1) {
       _i++;
     } else {
