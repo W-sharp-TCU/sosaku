@@ -53,14 +53,6 @@ class SettingScreen extends ConsumerWidget {
                           ///back button
                           GestureDetector(
                             onTap: () {
-                              // Set the speed of the conversation
-                              conversationScreenController.setSettings(
-                                  interval: 85 -
-                                      (ref
-                                                  .watch(settingsProvider)
-                                                  .textSliderValue)
-                                              .toInt() *
-                                          15);
                               // Close the settings screen.
                               Navigator.pop(context);
                             },

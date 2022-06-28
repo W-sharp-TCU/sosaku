@@ -36,7 +36,7 @@ class TitleScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    _slideShowController.start(context, ref.read(titleScreenProvider));
+    _slideShowController.start(ref.read(titleScreenProvider));
 
     return ProviderScope(
       child: Scaffold(

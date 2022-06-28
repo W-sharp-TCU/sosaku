@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
+import 'package:sosaku/Settings/Provider_Settings_SettingsProvider.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
@@ -34,7 +35,7 @@ class ConversationScreenController {
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
   BuildContext? _context;
-  late Timer _timer;
+  Timer? _timer;
 
   /// List of conversation types(speech or question or action).
   List<int> _types = [];
@@ -118,10 +119,13 @@ class ConversationScreenController {
     _gotoNumbers = gotoNumberList;
   }
 
-  void setSettings({int? interval, String? playerName}) {
-    _interval = interval ?? _interval;
+  void setSettings({double? textSpeed, String? playerName}) {
+    if (textSpeed != null) {
+      int interval = 85 - textSpeed.toInt() * 15;
+      _interval = interval;
+    }
     _playerName = playerName ?? _playerName;
-    _timer.cancel();
+    _timer?.cancel();
     _animationLoop();
   }
 
@@ -155,6 +159,7 @@ class ConversationScreenController {
       SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
       await loadJsonAsset(
           'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
+      setSettings(textSpeed: await settingsController.getTextSpeedValue());
       _animationLoop();
       _refreshScreen();
     }
@@ -163,7 +168,7 @@ class ConversationScreenController {
   /// Stop controller.
   /// This function is for ConversationScreenUI.
   void stop() async {
-    _timer.cancel();
+    _timer?.cancel();
     _conversationImageProvider = null;
     _conversationTextProvider = null;
     _conversationLogProvider = null;
@@ -393,7 +398,7 @@ class ConversationScreenController {
           _conversationLogProvider != null) {
         _autoAnimation();
       } else {
-        _timer.cancel();
+        _timer?.cancel();
       }
     }
 
@@ -434,7 +439,7 @@ class ConversationScreenController {
 
   /// Processing at the end of an event.
   void endEvent() async {
-    _timer.cancel();
+    _timer?.cancel();
     if (_conversationImageProvider != null &&
         _conversationTextProvider != null &&
         _conversationLogProvider != null &&
