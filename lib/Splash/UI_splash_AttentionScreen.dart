@@ -14,6 +14,8 @@ class AttentionScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    GetScreenSize.setSize(
+        MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     if (_isFirstBuild) {
       _preLoad(context);
       _isFirstBuild = false;
