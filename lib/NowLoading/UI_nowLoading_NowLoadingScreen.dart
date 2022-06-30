@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
@@ -7,8 +8,8 @@ class NowLoadingScreen extends ConsumerWidget {
   /// NowLoading Screen will show in [_minDuration] milliseconds at least.
   static const int _minDuration = 3000; // [ms]
 
-  bool _firstBuild = true;
-  late final Function _process;
+  bool _isFirstBuild = true;
+  late final Function? _process;
   late final ConsumerWidget _goto;
 
   /// Show NowLoading Screen while processing.
@@ -17,22 +18,27 @@ class NowLoadingScreen extends ConsumerWidget {
   /// @param process : Specify processes you want to do while Now Loading Screen is appeared.
   ///                   ex) () async { await precacheImage(AssetImage("FILENAME"), context) }
   /// @param goto : Specify [Widget] you want to show after load processes finish.
-  NowLoadingScreen(
-      {Key? key, required Function process, required ConsumerWidget goto})
+  NowLoadingScreen({Key? key, Function? process, ConsumerWidget? goto})
       : super(key: key) {
-    _process = process;
-    _goto = goto;
+    if (goto != null) {
+      _process = process;
+      _goto = goto;
+    } else {
+      // GameManger()
+      // todo: Functionは実行されるようにする
+      // ex) セーブデータ読み込み -> GameManager()など
+    }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /***** execute load process area *****/
     /*           DO NOT ERASE!           */
-    if (_firstBuild) {
+    if (_isFirstBuild) {
       _loadProcess(_process).then((value) => Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) => _goto)));
     }
-    _firstBuild = false;
+    _isFirstBuild = false;
     /*************************************/
     // TODO: implement build
     return Scaffold(
@@ -61,9 +67,16 @@ class NowLoadingScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _loadProcess(Function process) async {
+  Future<void> _loadProcess(Function? process) async {
     var startTime = DateTime.now().millisecondsSinceEpoch;
-    await process();
+    if (process != null) {
+      await process();
+    } else {
+      if (kDebugMode) {
+        print(
+            "[WARNING] NowLoadingScreen._loadProcess(): Do nothing because variant \"process\" is null.");
+      }
+    }
     var diff = ((DateTime.now().millisecondsSinceEpoch) - (startTime));
     if (diff < _minDuration) {
       await Future.delayed(Duration(milliseconds: (_minDuration - diff)));
