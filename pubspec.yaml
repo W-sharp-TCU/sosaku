@@ -130,8 +130,8 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # native app icon support
-# Run "flutter pub run icons_launcher:create" to generate native icons when descriptions
-# mentioned below is changed.
+# Run "flutter pub run icons_launcher:create" or "flutter pub run icons_launcher:main" to generate
+# native icons when descriptions mentioned below is changed.
 flutter_icons:
   android: true
   ios: true
