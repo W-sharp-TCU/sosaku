@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
-import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
@@ -43,7 +42,9 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
-        MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+        MediaQuery.of(context).size.height,
+        MediaQuery.of(context).size.width
+    );
     _slideShowController.start(context, ref.read(homeScreenProvider));
 
     return Scaffold(
@@ -142,7 +143,6 @@ class HomeScreen extends ConsumerWidget {
                       onTap: () {
                         /// call methods when button pushed 4.
                         /// print("pushed button 4"); delete.
-                        print("pushed button 4");
                       },
                     ),
                   ),
