@@ -1,4 +1,5 @@
 ///package
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
@@ -46,26 +47,18 @@ class LoadScreen extends ConsumerWidget {
                 child: Stack(
                   children: [
 
-                    SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
+                    SizedBox(
+                      height: GetScreenSize.screenHeight(),
+                      width: GetScreenSize.screenWidth(),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-
-                            SizedBox(
-                              width: GetScreenSize.screenWidth() * 0.05,
-                              height: GetScreenSize.screenHeight(),
-                            ),
-
-                            for (var i = 0; i < 10; i++)
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  for (var j = 0; j < 2; j++)
-                                    SelectLoadFile(i, j)
-                                ],
-                              )
+                            for(var i = 0; i < 10; i++)
+                              SelectLoadFile(i)
                           ],
                         ),
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -113,24 +106,6 @@ class LoadScreen extends ConsumerWidget {
                         child: const DialogScreen(),
                       ),
 
-                    Align(
-                      alignment: Alignment(-1, -0),
-                      child: Container(
-                        width: GetScreenSize.screenWidth() * 0.05,
-                        height: GetScreenSize.screenHeight(),
-                        color: Colors.black.withOpacity(0.5),
-                        padding: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
-                        child: Center(
-                          child: Text(
-                            "LOAD",
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.07,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
 
                   ],
                 ),
