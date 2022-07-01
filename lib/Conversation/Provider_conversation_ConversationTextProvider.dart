@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class ConversationTextProvider extends ChangeNotifier {
-  String _conversationText = "おためし  apple banana \nテキスト orange\nです\n４行目は表示なし";
+  String _conversationText = "";
 
   String get conversationText => _conversationText;
 

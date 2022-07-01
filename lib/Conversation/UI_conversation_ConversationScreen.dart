@@ -4,7 +4,7 @@ import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
-import 'Contoroller_conversation_ConversationScreenController.dart';
+import 'Controller_conversation_ConversationScreenController.dart';
 import 'Provider_conversation_ConversationImageProvider.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'UI_conversation_ThreeDialog.dart';
@@ -33,7 +33,7 @@ class ConversationScreen extends ConsumerWidget {
     ConversationImageProvider cip = ref.watch(conversationImageProvider);
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
-    conversationScreenController.start(cip, ctp, clp);
+    conversationScreenController.start(cip, ctp, clp, context);
 
     return Scaffold(
       body: Container(
@@ -116,7 +116,7 @@ class ConversationScreen extends ConsumerWidget {
 
                   ///Menu screen
                   //if文おねがいします
-                  if (false)
+                  if (ref.watch(conversationImageProvider).isMenu)
                     const Align(
                       alignment: Alignment(0, 0),
                       child: MenuUI(),

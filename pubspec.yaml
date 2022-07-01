@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.0.1+1
+version: 0.0.5+1
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -35,9 +35,10 @@ dependencies:
   intl: ^0.17.0           # L18n support
   shared_preferences:     # local app storage access
   path_provider:          # search location apps can access
-  audioplayers:           # play sounds
+  audioplayers: ^0.20.1          # play sounds
   universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
+  package_info_plus:      # for checking running app version
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,7 +56,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.4
-  flutter_launcher_icons:
+  icons_launcher:
   flutter_native_splash: ^2.1.2+1
 
 
@@ -73,7 +74,12 @@ flutter:
 
 
   assets:
+    - assets/drawable/
     - assets/drawable/ActionResult/
+    - assets/drawable/CharacterImage/Ayana/
+    - assets/drawable/CharacterImage/Nonono/
+    - assets/drawable/CharacterImage/Sakaki/
+    - assets/drawable/CharacterImage/Kawamoto/
     - assets/drawable/Conversation/
     - assets/drawable/Dialogs/
     - assets/drawable/Home/
@@ -90,6 +96,7 @@ flutter:
     - assets/sound/UISound/
     - assets/text/fonts/
     - assets/text/ScenarioData/
+    - assets/text/ScenarioData/ChapterTest/
 
   fonts:
     - family: SourceHanSansJP
@@ -123,12 +130,13 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # native app icon support
-# Run "flutter pub run flutter_launcher_icons:main" to generate native icons when descriptions
+# Run "flutter pub run icons_launcher:create" to generate native icons when descriptions
 # mentioned below is changed.
-#flutter_icons:
-#  android: true
-#  ios: true
-#  image_path: "lib/assets/icon.png"
+flutter_icons:
+  android: true
+  ios: true
+  web: true
+  image_path: "assets/drawable/appIcon.png"
 #  image_path_android: "for_Android.png"
 #  adaptive_icon_background: "for_Android-adaptiveIcon.png"
 #  adaptive_icon_foreground: "for_Android-adaptiveIcon.png"
@@ -140,7 +148,7 @@ flutter:
 # mentioned below is changed.
 flutter_native_splash:
   color: "#FFFFFF"
-  image: assets/drawable/Splash/Wsharp.png
+  #image: assets/drawable/Splash/Wsharp.png
   fullscreen: true
   android_gravity: center
   ios_content_modes: center

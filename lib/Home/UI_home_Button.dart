@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-/// wrapper import
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
 class Button extends StatelessWidget {
@@ -22,7 +20,7 @@ class Button extends StatelessWidget {
           /// asset background screen without image path.
           ///
           /// Image(
-          /// image: AssetImage(""),
+          ///   image: AssetImage(""),
           /// ),
           ///
           Center(

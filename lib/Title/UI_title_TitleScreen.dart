@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -14,50 +15,51 @@ final titleScreenProvider =
 
 class TitleScreen extends ConsumerWidget {
   late final SlideShowController _slideShowController;
+  static const _backgroundImages = [
+    "assets/drawable/Title/Ocean.jpg",
+    "assets/drawable/Title/Lion.jpg",
+    "assets/drawable/Title/default.jpg"
+  ];
 
   TitleScreen({Key? key, SlideShowController? slideShowController})
       : super(key: key) {
     if (slideShowController == null) {
-      _slideShowController = SlideShowController([
-        "assets/drawable/Title/Ocean.jpg",
-        "assets/drawable/Title/Lion.jpg",
-        "assets/drawable/Title/default.jpg"
-      ]);
+      _slideShowController = SlideShowController(_backgroundImages);
     } else {
       _slideShowController = slideShowController;
     }
+    SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
+        loop: true, fadeOut: true);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    _slideShowController.start(context, ref.read(titleScreenProvider));
+    _slideShowController.start(ref.read(titleScreenProvider));
 
     return ProviderScope(
       child: Scaffold(
-          body: LifecycleManager(
-        callback: CommonLifecycleCallback(),
-        child: Container(
+        body: LifecycleManager(
+          callback: CommonLifecycleCallback(),
+          child: Container(
             width: double.infinity,
             height: double.infinity,
             color: Colors.black,
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  print("tap"); //デバッグ用
                   _slideShowController.stop();
-                  SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
-                      loop: true, fadeOut: true);
                   SoundPlayer.playUI("assets/sound/UISound/next.mp3");
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
                         pageBuilder: (_, __, ___) => HomeScreen(),
-                        transitionDuration: const Duration(milliseconds: 10)),
-
-                    ///old page transition code
-                    //MaterialPageRoute(builder: (context) => HomeScreen()),
+                        transitionDuration: const Duration(milliseconds: 500),
+                        transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) =>
+                            buildFadeTransition(
+                                context, animation, secondaryAnimation, child)),
                   );
                 },
                 child: Container(
@@ -85,15 +87,14 @@ class TitleScreen extends ConsumerWidget {
                       ],
                     )),
               ),
-            )),
-      )),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  static Future<void> prepare() async {
-    /*SoundPlayer.loadSE(
-        ["assets/sound/pushButton.mp3", "assets/sound/next.mp3"]);*/
-    SoundPlayer.init();
+  static Future<void> prepare(BuildContext context) async {
     SoundPlayer.loadAll(filePaths: [
       "assets/sound/UISound/pushButton.mp3",
       "assets/sound/UISound/next.mp3"
@@ -101,5 +102,8 @@ class TitleScreen extends ConsumerWidget {
     SoundPlayer.loadAll(
         filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
         audioType: SoundPlayer.BGM);
+    for (var e in _backgroundImages) {
+      await precacheImage(AssetImage(e), context);
+    }
   }
 }

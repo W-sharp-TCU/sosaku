@@ -5,6 +5,7 @@
   "@gameName": {
     "description": "このノベルゲームアプリの正式名称"
   },
+  "attentionMessage": "注意!\n\nテレビから離れてみてください。\nこのゲームはBGMが流れます。音量設定を確認してください。",
   "tapToStart": "Tap to Start",
   "continueGame": "つづきから",
   "newGame": "はじめから",
