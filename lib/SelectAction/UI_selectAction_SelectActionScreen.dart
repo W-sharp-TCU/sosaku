@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
@@ -10,6 +12,10 @@ class SelectActionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GetScreenSize.setSize(
+      MediaQuery.of(context).size.height,
+      MediaQuery.of(context).size.width,
+    );
     return Scaffold(
       body: Container(
         width: double.infinity,
