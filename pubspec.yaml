@@ -39,10 +39,12 @@ dependencies:
   universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
   package_info_plus:      # for checking running app version
+  table_calendar:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+
 
 
 

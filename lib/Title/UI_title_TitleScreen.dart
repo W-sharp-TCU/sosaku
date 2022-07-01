@@ -5,6 +5,7 @@ import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -65,23 +66,19 @@ class TitleScreen extends ConsumerWidget {
                 child: Container(
                     height: GetScreenSize.screenHeight(),
                     width: GetScreenSize.screenWidth(),
-                    color: Colors.black,
+                    color: Colors.white,
                     child: Stack(
                       children: [
-                        Image(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                              ref.watch(titleScreenProvider).mBGImagePath),
-                        ),
-                        Align(
-                          alignment: const Alignment(0, 0.8),
-                          child: Text(
-                            L10n.of(context)!.tapToStart,
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.1,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        // Image(
+                        //   fit: BoxFit.cover,
+                        //   image: AssetImage(
+                        //       ref.watch(titleScreenProvider).mBGImagePath),
+                        // ),
+                        Center(
+                          child: TableCalendar(
+                            firstDay: DateTime.utc(2022, 7, 1),
+                            lastDay: DateTime.utc(2022, 7, 31),
+                            focusedDay: DateTime.utc(2022, 7, 1),
                           ),
                         ),
                       ],
