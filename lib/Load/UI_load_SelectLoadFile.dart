@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
-import 'UI_load_LoadScreen.dart';
 
 class SelectLoadFile extends ConsumerWidget{
   const SelectLoadFile(this.i, {Key? key}) : super(key: key);
@@ -49,13 +48,56 @@ class SelectLoadFile extends ConsumerWidget{
                 height: GetScreenSize.screenHeight() * 0.35,
                 color: Colors.white,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "ファイル$fileNumber",
                       style: TextStyle(
                         fontSize: GetScreenSize.screenHeight() * 0.05,
                       ),
-                    )
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "chap3-1",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                            color: Colors.lightBlue,
+                          ),
+                        ),
+
+                        Text(
+                          "2022/5/30 20:00",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.045,
+                            color: Colors.lightBlue,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const Spacer(),
+
+                    Text(
+                      "~comments~",
+                      style: TextStyle(
+                        fontSize: GetScreenSize.screenHeight() * 0.04,
+                      ),
+                    ),
+
+                    Text(
+                      "昔々あるところにおじいさんとおばあさんが住んでおりました。野山に"
+                          "混じりて",
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontSize: GetScreenSize.screenHeight() * 0.045,
+                        color: Colors.lightGreen
+                      ),
+                    ),
+
+                    const Spacer(),
                   ],
                 )
 
