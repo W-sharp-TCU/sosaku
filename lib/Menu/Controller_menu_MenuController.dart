@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 
 import '../Home/UI_home_HomeScreen.dart';
 import '../Settings/UI_Setting_SettingScreen.dart';
+import '../Wrapper/wrapper_TransitionBuilders.dart';
 import 'Provider_menu_MenuScreenProvider.dart';
 
 class MenuScreenController {
@@ -38,6 +40,19 @@ class MenuScreenController {
     Navigator.pushReplacement(
       _context,
       MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+  }
+
+  void goTitle() {
+    conversationScreenController.stop();
+    Navigator.pushReplacement(
+      _context,
+      PageRouteBuilder(
+          pageBuilder: (_, __, ___) => HomeScreen(),
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              buildFadeTransition(
+                  context, animation, secondaryAnimation, child)),
     );
   }
 }
