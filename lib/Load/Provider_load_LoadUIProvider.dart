@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
 class LoadUIProvider extends ChangeNotifier {
-  bool _popFlag = false;
-  bool get popFlag => _popFlag;
+  bool _popFlagDialog = false;
+  bool get popFlagDialog => _popFlagDialog;
+  bool _popFlagSaveMenu = true;
+  bool get popFlagSaveMenu => _popFlagSaveMenu;
 
-  void changeFlag(){
-    _popFlag = !_popFlag;
+  void changeFlagDialog(){
+    _popFlagDialog = !_popFlagDialog;
+    notifyListeners();
+  }
+
+  void changeFlagSaveMenu(){
+    _popFlagSaveMenu != _popFlagSaveMenu;
     notifyListeners();
   }
 }

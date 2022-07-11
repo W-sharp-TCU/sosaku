@@ -25,7 +25,7 @@ class DialogScreen extends ConsumerWidget{
         children: [
           GestureDetector(
             onTap: (){
-              ref.read(loadUIProvider).changeFlag();  ///debug
+              ref.read(loadUIProvider).changeFlagDialog();  ///debug
             },
             child: Container(
               width: GetScreenSize.screenWidth(),
