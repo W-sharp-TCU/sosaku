@@ -59,7 +59,7 @@ class GameManager {
   ///
   /// If you specify "true", ConversationScreen and SelectActionScreen is
   /// called alternately. If you specify "false", ConversationScreen will be called.
-  static const bool _toggle = true;
+  static const bool _toggle = false;
 
   /// class status type
   static const int finished = 0;
