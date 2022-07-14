@@ -35,7 +35,7 @@ dependencies:
   intl: ^0.17.0           # L18n support
   shared_preferences:     # local app storage access
   path_provider:          # search location apps can access
-  audioplayers: ^0.20.1          # play sounds
+  audioplayers:           # play sounds
   universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
   package_info_plus:      # for checking running app version
@@ -57,7 +57,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.4
   icons_launcher:
-  flutter_native_splash: ^2.1.2+1
+  flutter_native_splash:
 
 
 # For information on the generic Dart part of this file, see the

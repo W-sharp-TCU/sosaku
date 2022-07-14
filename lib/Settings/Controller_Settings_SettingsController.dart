@@ -23,7 +23,7 @@ class SettingsController {
   Future<double> getBgmVolumeValue() async {
     double _bgmVolumeValue = await SharedPref.getDouble('bgmVolume', 5.0);
     SoundPlayer.bgmVolume = _bgmVolumeValue / 10;
-    SoundPlayer.seVolume = _bgmVolumeValue / 10;
+    SoundPlayer.asVolume = _bgmVolumeValue / 10;
     BgmVolume = _bgmVolumeValue;
     return _bgmVolumeValue;
   }
@@ -49,7 +49,7 @@ class SettingsController {
   void setBgmVolumeValue(double value) {
     SharedPref.setDouble('bgmVolume', value);
     SoundPlayer.bgmVolume = value / 10;
-    SoundPlayer.seVolume = value / 10;
+    SoundPlayer.asVolume = value / 10;
     BgmVolume = value;
   }
 

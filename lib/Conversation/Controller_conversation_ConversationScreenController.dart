@@ -155,8 +155,10 @@ class ConversationScreenController {
       _nowText = '';
       _conversationLogs = [];
 
-      SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
-      SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
+      SoundPlayer.precacheAudio(
+          filePaths: _bgmPaths, audioType: SoundPlayer.bgm);
+      SoundPlayer.precacheAudio(
+          filePaths: _voicePaths, audioType: SoundPlayer.cv);
       await loadJsonAsset(
           'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
       setSettings(textSpeed: await settingsController.getTextSpeedValue());
@@ -514,7 +516,7 @@ class ConversationScreenController {
   /// Change se.
   void _changeSe() {
     if (_sePaths[_nowCode].isNotEmpty) {
-      SoundPlayer.playSE([_sePaths[_nowCode]]);
+      SoundPlayer.playAS([_sePaths[_nowCode]]);
     }
   }
 }

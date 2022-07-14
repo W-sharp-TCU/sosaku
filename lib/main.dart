@@ -21,7 +21,6 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.immersive); // hide Android status bar & navigation bar.
   packageInfo = await PackageInfo.fromPlatform();
-  SoundPlayer.init();
   SettingsController settingsController = SettingsController();
   await settingsController.getBgmVolumeValue();
   await settingsController.getUiVolumeValue();
