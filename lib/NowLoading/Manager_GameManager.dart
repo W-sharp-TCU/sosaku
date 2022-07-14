@@ -1,13 +1,9 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
-import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
 import '../Conversation/UI_conversation_ConversationScreen.dart';
-import '../Wrapper/wrapper_TransitionBuilders.dart';
 
 /// Determine which screen will be show.
 ///
@@ -62,11 +58,11 @@ class GameManager {
   ///
   /// App's screen will transition to new page determined by this class automatically
   /// some milliseconds after this function is executed.
-  void processing(BuildContext context) async {
+  Future<Widget> processing(BuildContext context) async {
     _clear();
-    Type nextScreen = _determineScreen();
+    Type nextScreen = _determineNextScreen();
     await _prepareForNextScreen(context, nextScreen);
-    _goNextScreen(context, nextScreen);
+    return _getNextScreenObject(context, nextScreen);
   }
 
   /// notify current status to GameManager
@@ -82,12 +78,15 @@ class GameManager {
     _lastScreenType = from;
     _lastScreenStatus = status;
     _lastScreenDetails = details;
+    print("|||||\nGameManager.notify(): _lastScreenType: $_lastScreenType, "
+        "_lastScreenStatus: $_lastScreenStatus, _lastScreenDetails:\n\t$_lastScreenDetails \n|||||");
   }
 
   /// determine next screen
   ///
   /// @return 0:Conversation, 1:SelectAction
-  Type _determineScreen() {
+  Type _determineNextScreen() {
+    Type nextScreen = ConversationScreen;
     // [temporary code] always go conversation screen
     // if (_lastScreenType is ConversationScreenController) {
     //   return 0;
@@ -96,7 +95,8 @@ class GameManager {
     // } else {
     //   throw "Unexpected class notification @GameManager";
     // }
-    return ConversationScreen;
+    print("GameManager._determineNextScreen(): nextScreen Type is $nextScreen");
+    return nextScreen;
   }
 
   void _clear() {
@@ -105,17 +105,8 @@ class GameManager {
     _lastScreenDetails = null;
   }
 
-  void _goNextScreen(BuildContext context, Type screenType) {
-    Widget nextScreen = const ConversationScreen();
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-          pageBuilder: (_, __, ___) => nextScreen,
-          transitionDuration: const Duration(milliseconds: 500),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              buildFadeTransition(
-                  context, animation, secondaryAnimation, child)),
-    );
+  Widget _getNextScreenObject(BuildContext context, Type screenType) {
+    return const ConversationScreen();
   }
 
   Future<Map<String, dynamic>> _loadJson(String filePath) async {
@@ -137,6 +128,7 @@ class GameManager {
       // load json files of scenario data.
       Map jsonMap =
           await _loadJson("assets/text/ScenarioData/ChapterTest/event1.json");
+      print("GameManager._prepareForNextScreen(): event1.json loaded.");
       List<int> types = List.empty(growable: true);
       List<String> cNames = List.empty(growable: true);
       List<String> texts = List.empty(growable: true);
@@ -196,14 +188,16 @@ class GameManager {
       conversationScreenController.setSePaths(sePaths);
       conversationScreenController.setOptions(options);
       conversationScreenController.setGotoNumbers(gotos);
-    } else if (nextScreenType is SelectActionScreen) {
+      print(
+          "GameManager._prepareForNextScreen(): Set data to conversationScreenController.");
+    } /*else if (nextScreenType is SelectActionScreen) {
       // todo: SelectActionScreenで使うassetsを列挙する
       // bgImagePaths = [];
       // cvPaths = [];
       // sePaths = [];
       // bgImagePaths = [];
       // characterImagePaths = [];
-    }
+    }*/
 
     // pre-cache sound sources
     if (bgmPaths.isNotEmpty) {
@@ -227,12 +221,13 @@ class GameManager {
     for (var e in characterImagePaths) {
       await precacheImage(AssetImage(e), context);
     }
+    print("GameManager._prepareForNextScreen(): Finished pre-caching assets.");
   }
 
-  void _getEventCode() {
+  /*void _getEventCode() {
     // note: SaveDataクラスから既出のイベントを取得する
     // note: この関数内で条件文をべた書き?
-  }
+  }*/
 
   /// private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.

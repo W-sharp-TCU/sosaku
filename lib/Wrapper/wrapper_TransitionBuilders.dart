@@ -39,11 +39,11 @@ FadeTransition buildFadeTransition(
 ///   Navigator.pushReplacement(
 ///     context,
 ///     PageRouteBuilder(
-///     pageBuilder: (_, __, ___) => HomeScreen(),
+///     pageBuilder: (_, __, ___) => NextScreen(),
 ///     transitionDuration: const Duration(milliseconds: 1500),
 ///     transitionsBuilder: (context, animation,
 ///             secondaryAnimation, child) =>
-///         buildFadingToColor(Colors.black, context,
+///         buildFlashTransition(Colors.black, context,
 ///             animation, secondaryAnimation, child)));
 AnimatedBuilder buildFlashTransition(
     bgColor, context, animation, secondaryAnimation, child) {

@@ -6,6 +6,7 @@ import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
 import '../Wrapper/wrapper_SoundPlayer.dart';
@@ -16,8 +17,6 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 /// widget files import
 import 'UI_home_Button.dart';
 
-/// widget files import when tested.
-import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../Load/UI_load_LoadScreen.dart';
 
 final homeScreenProvider =
@@ -79,15 +78,15 @@ class HomeScreen extends ConsumerWidget {
                             "assets/sound/UISound/pushButton.mp3");
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => NowLoadingScreen(
-                                  process: () async {
-                                    await precacheImage(
-                                        const AssetImage(
-                                            "assets/drawable/Conversation/4k.jpg"),
-                                        context);
-                                  },
-                                  goto: const ConversationScreen())),
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) => NowLoadingScreen(),
+                            transitionDuration:
+                                const Duration(milliseconds: 1000),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                buildFlashTransition(Colors.black, context,
+                                    animation, secondaryAnimation, child),
+                          ),
                         );
                       },
                     ),
