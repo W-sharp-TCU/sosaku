@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
+import 'package:sosaku/Home/UI_home_HomeScreen.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_AttentionScreen.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "SourceHanSansJP"),
       scrollBehavior:
           CustomScrollBehavior(), // support dragging mouse to scroll on the web.
-      home: AttentionScreen(), // todo: リリース前には SplashScreen() に書き換える
+      home: HomeScreen(), // todo: リリース前には SplashScreen() に書き換える
     );
   }
 }
