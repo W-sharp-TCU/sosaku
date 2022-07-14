@@ -7,6 +7,7 @@ import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
 import '../Conversation/UI_conversation_ConversationScreen.dart';
+import '../Wrapper/wrapper_TransitionBuilders.dart';
 
 /// Determine which screen will be show.
 ///
@@ -55,9 +56,7 @@ class GameManager {
   Map<String, int>? _lastScreenDetails;
 
   /// get single-ton
-  factory GameManager() {
-    return _singletonInstance;
-  }
+  factory GameManager() => _singletonInstance;
 
   /// Start all process.
   ///
@@ -106,7 +105,18 @@ class GameManager {
     _lastScreenDetails = null;
   }
 
-  void _goNextScreen(BuildContext context, Type screenType) {}
+  void _goNextScreen(BuildContext context, Type screenType) {
+    Widget nextScreen = const ConversationScreen();
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+          pageBuilder: (_, __, ___) => nextScreen,
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              buildFadeTransition(
+                  context, animation, secondaryAnimation, child)),
+    );
+  }
 
   Future<Map<String, dynamic>> _loadJson(String filePath) async {
     String jsonString = await rootBundle.loadString(filePath);
