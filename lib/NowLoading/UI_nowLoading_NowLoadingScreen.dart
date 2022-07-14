@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
@@ -7,6 +6,7 @@ import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 import '../Wrapper/wrapper_TransitionBuilders.dart';
 
+// ignore: must_be_immutable
 class NowLoadingScreen extends ConsumerWidget {
   /// NowLoading Screen will show in [_minDuration] milliseconds at least.
   static const int _minDuration = 3000; // [ms]
@@ -27,9 +27,7 @@ class NowLoadingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     /***** execute load process area *****/
     /*           DO NOT ERASE!           */
-    if (_isFirstBuild) {
-      _loadProcess(context);
-    }
+    if (_isFirstBuild) _loadProcess(context);
     _isFirstBuild = false;
     /*************************************/
     // TODO: implement build
@@ -59,7 +57,7 @@ class NowLoadingScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _loadProcess(BuildContext context) async {
+  void _loadProcess(BuildContext context) async {
     Widget nextScreen;
     var startTime = DateTime.now().millisecondsSinceEpoch;
     if (process != null) {

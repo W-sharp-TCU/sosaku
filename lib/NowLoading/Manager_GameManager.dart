@@ -1,13 +1,27 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
+import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 
-/// Determine which screen will be show.
+/// **Determine which screen will be show.**
+/// This class provides single-ton instance.
 ///
-/// This class is single-ton.
+/// ## Information
+/// This class is still incomplete.
+/// For debug or test this class, you can change the value of parameter named [_toggle].
+///
+/// ### Interfaces
+/// [finished], [started]
+///
+/// ### Global Fields
+/// None.
+///
+/// ### Global Methods
+/// [processing], [notify]
 class GameManager {
   // note: どうやって次の画面を決めるか
   // たった今なんの画面だったか知る必要がある
@@ -40,6 +54,13 @@ class GameManager {
   // 1. ロールバックする -> もう一度同じ画面を見せるのは良くない
   // 2. onPausedで次の画面決定まで頑張る -> 次回のNow Loadingで高速化できる
   //    -> ロード画面ではどう表示する? -> 次の画面・No image でもあり?
+
+  /// Debug Parameter
+  ///
+  /// If you specify "true", ConversationScreen and SelectActionScreen is
+  /// called alternately. If you specify "false", ConversationScreen will be called.
+  static const bool _toggle = true;
+
   /// class status type
   static const int finished = 0;
   static const int started = 1;
@@ -85,8 +106,15 @@ class GameManager {
   /// determine next screen
   ///
   /// @return 0:Conversation, 1:SelectAction
+  int _times = 0; // [_toggle]用
   Type _determineNextScreen() {
     Type nextScreen = ConversationScreen;
+    if (_toggle) {
+      if (_times % 2 == 1) {
+        nextScreen = SelectActionScreen;
+      }
+      _times++;
+    }
     // [temporary code] always go conversation screen
     // if (_lastScreenType is ConversationScreenController) {
     //   return 0;
@@ -106,7 +134,16 @@ class GameManager {
   }
 
   Widget _getNextScreenObject(BuildContext context, Type screenType) {
-    return const ConversationScreen();
+    if (screenType == ConversationScreen) {
+      return const ConversationScreen();
+    } else if (screenType == SelectActionScreen) {
+      return const SelectActionScreen();
+    } else {
+      print(
+          "[WARNING] GameManager._getNextScreenObject(): screenType is invalid."
+          "Return to TitleScreen().");
+    }
+    return TitleScreen();
   }
 
   Future<Map<String, dynamic>> _loadJson(String filePath) async {
@@ -190,14 +227,9 @@ class GameManager {
       conversationScreenController.setGotoNumbers(gotos);
       print(
           "GameManager._prepareForNextScreen(): Set data to conversationScreenController.");
-    } /*else if (nextScreenType is SelectActionScreen) {
+    } else if (nextScreenType is SelectActionScreen) {
       // todo: SelectActionScreenで使うassetsを列挙する
-      // bgImagePaths = [];
-      // cvPaths = [];
-      // sePaths = [];
-      // bgImagePaths = [];
-      // characterImagePaths = [];
-    }*/
+    }
 
     // pre-cache sound sources
     if (bgmPaths.isNotEmpty) {
