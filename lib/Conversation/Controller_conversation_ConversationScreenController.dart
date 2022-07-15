@@ -155,9 +155,9 @@ class ConversationScreenController {
       _nowText = '';
       _conversationLogs = [];
 
-      SoundPlayer.precacheAudio(
+      SoundPlayer.precacheSounds(
           filePaths: _bgmPaths, audioType: SoundPlayer.bgm);
-      SoundPlayer.precacheAudio(
+      SoundPlayer.precacheSounds(
           filePaths: _voicePaths, audioType: SoundPlayer.cv);
       await loadJsonAsset(
           'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます

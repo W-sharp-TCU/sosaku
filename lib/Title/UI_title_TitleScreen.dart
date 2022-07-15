@@ -95,11 +95,11 @@ class TitleScreen extends ConsumerWidget {
   }
 
   static Future<void> prepare(BuildContext context) async {
-    SoundPlayer.precacheAudio(filePaths: [
+    SoundPlayer.precacheSounds(filePaths: [
       "assets/sound/UISound/pushButton.mp3",
       "assets/sound/UISound/next.mp3"
     ], audioType: SoundPlayer.ui);
-    SoundPlayer.precacheAudio(
+    SoundPlayer.precacheSounds(
         filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
         audioType: SoundPlayer.bgm);
     for (var e in _backgroundImages) {
