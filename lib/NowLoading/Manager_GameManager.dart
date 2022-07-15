@@ -234,16 +234,18 @@ class GameManager {
     // pre-cache sound sources
     if (bgmPaths.isNotEmpty) {
       bgmPaths = bgmPaths.toSet().toList();
-      SoundPlayer.precacheSounds(
-          filePaths: bgmPaths, audioType: SoundPlayer.bgm);
+      SoundPlayer()
+          .precacheSounds(filePaths: bgmPaths, audioType: SoundPlayer.bgm);
     }
     if (cvPaths.isNotEmpty) {
       cvPaths = cvPaths.toSet().toList();
-      SoundPlayer.precacheSounds(filePaths: cvPaths, audioType: SoundPlayer.cv);
+      SoundPlayer()
+          .precacheSounds(filePaths: cvPaths, audioType: SoundPlayer.cv);
     }
     if (sePaths.isNotEmpty) {
       sePaths = sePaths.toSet().toList();
-      SoundPlayer.precacheSounds(filePaths: sePaths, audioType: SoundPlayer.as);
+      SoundPlayer()
+          .precacheSounds(filePaths: sePaths, audioType: SoundPlayer.as);
     }
     // pre-cache image sources
     bgImagePaths = bgImagePaths.toSet().toList();

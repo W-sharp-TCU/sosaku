@@ -28,7 +28,7 @@ class TitleScreen extends ConsumerWidget {
     } else {
       _slideShowController = slideShowController;
     }*/
-    SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
+    SoundPlayer().playBGM("assets/sound/BGM/Full-bloomer.mp3",
         loop: true, fadeOut: true);
   }
 
@@ -50,7 +50,7 @@ class TitleScreen extends ConsumerWidget {
               child: GestureDetector(
                 onTap: () {
                   // _slideShowController.stop();
-                  SoundPlayer.playUI("assets/sound/UISound/next.mp3");
+                  SoundPlayer().playUI("assets/sound/UISound/next.mp3");
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
@@ -95,11 +95,11 @@ class TitleScreen extends ConsumerWidget {
   }
 
   static Future<void> prepare(BuildContext context) async {
-    SoundPlayer.precacheSounds(filePaths: [
+    SoundPlayer().precacheSounds(filePaths: [
       "assets/sound/UISound/pushButton.mp3",
       "assets/sound/UISound/next.mp3"
     ], audioType: SoundPlayer.ui);
-    SoundPlayer.precacheSounds(
+    SoundPlayer().precacheSounds(
         filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
         audioType: SoundPlayer.bgm);
     for (var e in _backgroundImages) {

@@ -52,6 +52,10 @@ class SoundPlayer {
   /// SoundPlayer soundPlayer = SoundPlayer();
   /// soundPlayer.precacheSounds([foo.mp3], SoundPlayer.ui);
   /// ```
+  /// or
+  /// ```dart
+  /// SoundPlayer().precacheSounds([foo.mp3], SoundPlayer.ui);
+  /// ```
   factory SoundPlayer() => _singleton; // Always return same instance
 
   /* Load function */
