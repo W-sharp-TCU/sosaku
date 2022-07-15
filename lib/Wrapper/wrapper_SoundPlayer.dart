@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 
+// todo: configure AudioContext
 /// **Play UI sounds, Background Musics, Ambient Sounds & Character's voices.**
 ///
 /// This class is Singleton.
@@ -92,15 +93,15 @@ class SoundPlayer {
         throw AssertionError("SoundPlayer: unexpected audioType error\n"
             "Specify 'ui', 'bgm', 'as' or 'cv' to audioType.");
     }
-    print("[list content] $filePaths");
+    print("[list content before] $filePaths");
     await _deleteUnnecessaryCaches(filePaths, caches);
-    print("[list content] $filePaths");
+    print("[list content after] $filePaths");
     for (String element in filePaths) {
       AudioPlayer newPlayer = AudioPlayer();
       newPlayer.setPlayerMode(playerMode);
       newPlayer.setReleaseMode(ReleaseMode.stop);
       newPlayer.setVolume(volume);
-      newPlayer.setSourceAsset(element);
+      newPlayer.setSourceAsset(element.replaceAll('assets/', ''));
       caches[element] = _PlayerTuple(element, newPlayer, newPlayer.state);
       newPlayer.onPlayerStateChanged.listen((event) {
         print(event);
@@ -342,45 +343,49 @@ class SoundPlayer {
   /* Stop functions */
   /// Stop User Interface audio playing now.
   Future<void> stopUI({bool fadeOut = true}) async {
-    await Future.forEach(_uiCaches.keys, (value) async {
-      value = value as _PlayerTuple;
-      if (fadeOut) {
-        await _fadeOut(value.player, ui);
+    await Future.forEach(_uiCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _uiCaches[key]!;
+      if (playerTuple.state == PlayerState.playing) {
+        if (fadeOut) {
+          await _fadeOut(playerTuple.player, ui);
+        }
+        await playerTuple.player.stop();
       }
-      await value.player.stop();
     });
   }
 
   /// Stop Back Ground Music playing now.
   Future<void> stopBGM({bool fadeOut = true}) async {
-    await Future.forEach(_bgmCaches.keys, (value) async {
-      value = value as _PlayerTuple;
-      if (fadeOut) {
-        await _fadeOut(value.player, bgm);
+    await Future.forEach(_bgmCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _bgmCaches[key]!;
+      if (playerTuple.state == PlayerState.playing) {
+        if (fadeOut) {
+          await _fadeOut(playerTuple.player, bgm);
+        }
+        await playerTuple.player.stop();
       }
-      await value.player.stop();
     });
   }
 
   /// Stop all Ambient Sounds playing now.
   Future<void> stopASAll({bool fadeOut = true}) async {
-    await Future.forEach(_asCaches.keys, (value) async {
-      value = value as _PlayerTuple;
+    await Future.forEach(_asCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _asCaches[key]!;
       if (fadeOut) {
-        await _fadeOut(value.player, as);
+        await _fadeOut(playerTuple.player, as);
       }
-      await value.player.stop();
+      await playerTuple.player.stop();
     });
   }
 
   /// Stop all Character's Voice audios playing now.
   Future<void> stopCVAll({bool fadeOut = false}) async {
-    await Future.forEach(_cvCaches.keys, (value) async {
-      value = value as _PlayerTuple;
+    await Future.forEach(_cvCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _cvCaches[key]!;
       if (fadeOut) {
-        await _fadeOut(value.player, cv);
+        await _fadeOut(playerTuple.player, cv);
       }
-      await value.player.stop();
+      await playerTuple.player.stop();
     });
   }
 
@@ -582,7 +587,7 @@ class SoundPlayer {
   /// Private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
   SoundPlayer._internalConstructor() {
-    // Configure audio context
+    /*// Configure audio context
     AudioContextAndroid androidConfig = AudioContextAndroid(
         isSpeakerphoneOn: false,
         stayAwake: false,
@@ -602,7 +607,7 @@ class SoundPlayer {
 
     // Configure log level
     AudioPlayer.global
-        .changeLogLevel(LogLevel.info); // todo: delete when release
+        .changeLogLevel(LogLevel.error); // todo: delete when release*/
   }
 }
 
