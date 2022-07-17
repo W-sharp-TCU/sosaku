@@ -93,9 +93,9 @@ class SoundPlayer {
         throw AssertionError("SoundPlayer: unexpected audioType error\n"
             "Specify 'ui', 'bgm', 'as' or 'cv' to audioType.");
     }
-    print("[list content before] $filePaths");
+    print("SoundPlayer.precacheSounds(): [list content original] $filePaths");
     await _deleteUnnecessaryCaches(filePaths, caches);
-    print("[list content after] $filePaths");
+    print("SoundPlayer.precacheSounds(): [list content deleted] $filePaths");
     for (String element in filePaths) {
       AudioPlayer newPlayer = AudioPlayer();
       newPlayer.setPlayerMode(playerMode);
@@ -104,12 +104,14 @@ class SoundPlayer {
       newPlayer.setSourceAsset(element.replaceAll('assets/', ''));
       caches[element] = _PlayerTuple(element, newPlayer, newPlayer.state);
       newPlayer.onPlayerStateChanged.listen((event) {
-        print(event);
         caches[element]?.state = event;
+        print(
+            "SoundPlayer: Player's state was changed to $event.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
       });
       newPlayer.onPlayerComplete.listen((event) {
         caches[element]?.state = PlayerState.completed;
-        print("Finished. tuple.state=${caches[element]?.state}");
+        print(
+            "SoundPlayer: Player's state was changed to ${PlayerState.completed}.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
       });
     }
   }
