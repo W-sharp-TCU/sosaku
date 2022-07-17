@@ -55,7 +55,7 @@ class ConversationScreenController {
   /// List of voice paths.
   List<String> _voicePaths = [];
 
-  /// List of SE.
+  /// List of AS.
   List<String> _sePaths = [];
 
   /// List of options.
@@ -201,7 +201,7 @@ class ConversationScreenController {
       // TODO: ボイスとSEをListにするなら書き換える
       _voicePaths
           .add(context[i]['Voice'].isEmpty ? '' : context[i]['Voice'][0]);
-      _sePaths.add(context[i]['SE'].isEmpty ? '' : context[i]['Voice'][0]);
+      _sePaths.add(context[i]['AS'].isEmpty ? '' : context[i]['Voice'][0]);
       _options.add(context[i]['option'].cast<String>());
       _gotoNumbers.add(context[i]['goto'].cast<int>());
     }

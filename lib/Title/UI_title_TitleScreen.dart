@@ -50,7 +50,7 @@ class TitleScreen extends ConsumerWidget {
               child: GestureDetector(
                 onTap: () {
                   // _slideShowController.stop();
-                  SoundPlayer().playUI("assets/sound/UISound/next.mp3");
+                  SoundPlayer().playUI("assets/sound/UI/next.mp3");
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
@@ -96,8 +96,8 @@ class TitleScreen extends ConsumerWidget {
 
   static Future<void> prepare(BuildContext context) async {
     SoundPlayer().precacheSounds(filePaths: [
-      "assets/sound/UISound/pushButton.mp3",
-      "assets/sound/UISound/next.mp3"
+      "assets/sound/UI/pushButton.mp3",
+      "assets/sound/UI/next.mp3"
     ], audioType: SoundPlayer.ui);
     SoundPlayer().precacheSounds(
         filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],

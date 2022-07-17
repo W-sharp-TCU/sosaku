@@ -196,8 +196,8 @@ class GameManager {
         if (e.containsKey('BGM')) {
           bgmPaths.add(e['BGM'].cast<String>());
         }
-        if (e.containsKey('SE')) {
-          sePaths.add(e['SE'].cast<String>());
+        if (e.containsKey('AS')) {
+          sePaths.add(e['AS'].cast<String>());
         }
         if (e.containsKey('Voice')) {
           cvPaths.add(e['Voice'].cast<String>());

@@ -91,9 +91,9 @@ flutter:
     - assets/drawable/Splash/
     - assets/drawable/Title/
     - assets/sound/BGM/
-    - assets/sound/CharacterVoice/
-    - assets/sound/SE/
-    - assets/sound/UISound/
+    - assets/sound/CV/
+    - assets/sound/AS/
+    - assets/sound/UI/
     - assets/text/fonts/
     - assets/text/ScenarioData/
     - assets/text/ScenarioData/ChapterTest/
