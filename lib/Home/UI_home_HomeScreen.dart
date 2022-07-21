@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
@@ -79,7 +80,8 @@ class HomeScreen extends ConsumerWidget {
                         Navigator.pushReplacement(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => NowLoadingScreen(),
+                            pageBuilder: (_, __, ___) =>
+                                const ConversationScreen(),
                             transitionDuration:
                                 const Duration(milliseconds: 1000),
                             transitionsBuilder: (context, animation,

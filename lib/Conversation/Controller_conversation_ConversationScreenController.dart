@@ -151,13 +151,12 @@ class ConversationScreenController {
       _nowLength = 0;
       _nowText = '';
       _conversationLogs = [];
-
+      await loadJsonAsset(
+          'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
       SoundPlayer()
           .precacheSounds(filePaths: _bgmPaths, audioType: SoundPlayer.bgm);
       SoundPlayer()
           .precacheSounds(filePaths: _voicePaths, audioType: SoundPlayer.cv);
-      await loadJsonAsset(
-          'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
       setSettings(textSpeed: await settingsController.getTextSpeedValue());
       _animationLoop();
       _refreshScreen();
@@ -201,7 +200,7 @@ class ConversationScreenController {
       // TODO: ボイスとSEをListにするなら書き換える
       _voicePaths
           .add(context[i]['Voice'].isEmpty ? '' : context[i]['Voice'][0]);
-      _sePaths.add(context[i]['AS'].isEmpty ? '' : context[i]['Voice'][0]);
+      _sePaths.add(context[i]['SE'].isEmpty ? '' : context[i]['Voice'][0]);
       _options.add(context[i]['option'].cast<String>());
       _gotoNumbers.add(context[i]['goto'].cast<int>());
     }
