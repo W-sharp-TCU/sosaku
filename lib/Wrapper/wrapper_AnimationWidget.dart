@@ -11,6 +11,7 @@ AnimationWidgetController animationController = AnimationWidgetController();
 class AnimationProvider extends ChangeNotifier {
   late final String _id;
   final Map<String, double> _stateDouble = {};
+  final Map<String, double> _defaultState = {};
   final Map<String, void Function()?> _animations = {};
   final Map<String, Stopwatch> _stopwatches = {};
   Map<String, double> get stateDouble => _stateDouble;
@@ -20,6 +21,9 @@ class AnimationProvider extends ChangeNotifier {
   void addNewState(String stateName, double initialValue) {
     if (!_stateDouble.containsKey(stateName)) {
       _stateDouble[stateName] = initialValue;
+      if (!_defaultState.containsKey(stateName)) {
+        _defaultState[stateName] = initialValue;
+      }
       _animations[stateName] = null;
       _stopwatches[stateName] = Stopwatch();
     }
@@ -28,7 +32,7 @@ class AnimationProvider extends ChangeNotifier {
   void setStateDouble(Map<String, double> states) {
     for (String stateName in states.keys) {
       if (_stateDouble.containsKey(stateName)) {
-        _stateDouble[stateName] = states[stateName]!;
+        _stateDouble[stateName] = states[stateName] ?? 0;
       }
     }
     notifyListeners();
@@ -48,7 +52,7 @@ class AnimationProvider extends ChangeNotifier {
         _animations[stateName]?.call();
       }
       notifyListeners();
-      await Future.delayed(const Duration(milliseconds: 10));
+      await Future.delayed(const Duration(milliseconds: 16));
     }
   }
 
@@ -59,21 +63,29 @@ class AnimationProvider extends ChangeNotifier {
     super.dispose();
   }
 }
+// state = controller.createProvider()
+// state.addState('', 0)
+// ref.watch(state).stateName
 
 class AnimationWidgetController {
   AutoDisposeChangeNotifierProvider<AnimationProvider> createProvider(
-      String id) {
-    if (!_animationProviders.containsKey(id)) {
-      _animationProviders[id] = AnimationProvider(id);
-      _animationADProviders[id] =
-          ChangeNotifierProvider.autoDispose((ref) => _animationProviders[id]!);
+      String providerId, Map<String, double> states) {
+    if (!_animationProviders.containsKey(providerId)) {
+      _animationProviders[providerId] = AnimationProvider(providerId);
+      _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
+          (ref) => _animationProviders[providerId]!);
     }
-    return _animationADProviders[id]!;
-  }
+    for (String stateName in states.keys) {
+      _animationProviders[providerId]
+          ?.addNewState(stateName, states[stateName] ?? 0);
+    }
 
-  void addNewState(String widgetId, String stateName, double initialValue) {
-    _animationProviders[widgetId]?.addNewState(stateName, initialValue);
+    return _animationADProviders[providerId]!;
   }
+  //
+  // void addNewState(String widgetId, String stateName, double initialValue) {
+  //   _animationProviders[widgetId]?.addNewState(stateName, initialValue);
+  // }
 
   void animate(String widgetId, String stateId, List<Animation> animations) {
     if (_animationProviders.containsKey(widgetId) &&
@@ -163,6 +175,8 @@ class Wave extends Animation {
 
   @override
   double func(int time) {
-    return min + ((max - min) / 2) * sin((1 / 500 * t) * pi * time);
+    return ((max - min) / 2) +
+        min +
+        ((max - min) / 2) * sin((1 / 500 * t) * pi * time);
   }
 }

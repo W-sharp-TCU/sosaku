@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import '../Wrapper/wrapper_AnimationWidget.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Controller_conversation_ConversationScreenController.dart';
 import 'Provider_conversation_ConversationImageProvider.dart';
@@ -34,6 +36,10 @@ class ConversationScreen extends ConsumerWidget {
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
     conversationScreenController.start(cip, ctp, clp, context);
+    final animationProvider =
+        animationController.createProvider('conversationScreen', {
+      'sankaku': 0,
+    });
 
     return Scaffold(
       body: Container(
@@ -128,6 +134,27 @@ class ConversationScreen extends ConsumerWidget {
                       alignment: Alignment(1, 0),
                       child: SideUIs(),
                     ),
+
+                  if (ref.watch(conversationImageProvider).canNext)
+                    Align(
+                      alignment: const Alignment(1, 1),
+                      child: Container(
+                          margin: EdgeInsets.only(
+                            bottom: ref
+                                .watch(animationProvider)
+                                .stateDouble['sankaku']!,
+                            right: GetScreenSize.screenWidth() * 0.05,
+                          ),
+                          width: GetScreenSize.screenWidth() * 0.04,
+                          height: GetScreenSize.screenWidth() * 0.04,
+                          child: Text(
+                            '▼',
+                            style: TextStyle(
+                              fontSize: GetScreenSize.screenWidth() * 0.03,
+                              color: Colors.white,
+                            ),
+                          )),
+                    )
                 ],
               ),
             ),

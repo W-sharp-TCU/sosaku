@@ -423,6 +423,9 @@ class ConversationScreenController {
         _nowLength++;
         _nowText = _texts[_nowCode].substring(0, _nowLength);
         _conversationTextProvider?.setConversationText(_nowText);
+        if (_conversationImageProvider!.canNext) {
+          _conversationImageProvider!.setCanNext(false);
+        }
       } else if ((_types[_nowCode] == 2 || _types[_nowCode] == 3) &&
           !_conversationImageProvider!.dialogFlag) {
         _conversationImageProvider?.setOptionTexts(_options[_nowCode]);
@@ -433,6 +436,8 @@ class ConversationScreenController {
           !_conversationImageProvider!.isHideUi) {
         //TODO : Rewrite the condition as when voice playback ends.
         goNextScene();
+      } else if (!_conversationImageProvider!.canNext) {
+        _conversationImageProvider!.setCanNext(true);
       }
     }
   }
