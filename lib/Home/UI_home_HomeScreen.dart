@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
+import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
 import '../Wrapper/wrapper_SoundPlayer.dart';
@@ -16,19 +18,17 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 /// widget files import
 import 'UI_home_Button.dart';
 
-/// widget files import when tested.
-import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../Load/UI_load_LoadScreen.dart';
 
 final homeScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => HomeScreenProvider());
 
 class HomeScreen extends ConsumerWidget {
-  late final SlideShowController _slideShowController;
+  // late final SlideShowController _slideShowController;
 
   HomeScreen({Key? key, SlideShowController? slideShowController})
       : super(key: key) {
-    if (slideShowController == null) {
+    /*if (slideShowController == null) {
       _slideShowController = SlideShowController([
         "assets/drawable/Title/Ocean.jpg",
         "assets/drawable/Title/Lion.jpg",
@@ -36,14 +36,14 @@ class HomeScreen extends ConsumerWidget {
       ]);
     } else {
       _slideShowController = slideShowController;
-    }
+    }*/
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    _slideShowController.start(context, ref.read(homeScreenProvider));
+    // _slideShowController.start(ref.read(homeScreenProvider));
 
     return Scaffold(
       body: LifecycleManager(
@@ -74,20 +74,19 @@ class HomeScreen extends ConsumerWidget {
                       child: Button(buttonName: L10n.of(context)!.newGame),
                       onTap: () async {
                         print("pushed button 1");
-                        _slideShowController.stop();
-                        SoundPlayer.playUI(
-                            "assets/sound/UISound/pushButton.mp3");
+                        // _slideShowController.stop();
+                        SoundPlayer.playUI("assets/sound/UISound/next.mp3");
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => NowLoadingScreen(
-                                  process: () async {
-                                    await precacheImage(
-                                        const AssetImage(
-                                            "assets/drawable/Conversation/4k.jpg"),
-                                        context);
-                                  },
-                                  goto: const ConversationScreen())),
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) => NowLoadingScreen(),
+                            transitionDuration:
+                                const Duration(milliseconds: 1000),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                buildFlashTransition(Colors.black, context,
+                                    animation, secondaryAnimation, child),
+                          ),
                         );
                       },
                     ),
@@ -99,10 +98,9 @@ class HomeScreen extends ConsumerWidget {
                     child: GestureDetector(
                       child: Button(buttonName: L10n.of(context)!.continueGame),
                       onTap: () {
-                        SoundPlayer.playUI(
-                            "assets/sound/UISound/pushButton.mp3");
+                        SoundPlayer.playUI("assets/sound/UISound/next.mp3");
                         print("pushed button 2");
-                        _slideShowController.stop();
+                        // _slideShowController.stop();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -118,9 +116,10 @@ class HomeScreen extends ConsumerWidget {
                     child: GestureDetector(
                       child: Button(buttonName: L10n.of(context)!.settings),
                       onTap: () {
-                        SoundPlayer.playUI("assets/sound/UISound/next.mp3");
+                        SoundPlayer.playUI(
+                            "assets/sound/UISound/pushButton.mp3");
                         print("pushed button 3");
-                        _slideShowController.stop();
+                        // _slideShowController.stop();
                         Navigator.push(
                           context,
                           PageRouteBuilder(
@@ -139,9 +138,22 @@ class HomeScreen extends ConsumerWidget {
                     child: GestureDetector(
                       child: Button(buttonName: L10n.of(context)!.gallery),
                       onTap: () {
-                        /// call methods when button pushed 4.
-                        /// print("pushed button 4"); delete.
                         print("pushed button 4");
+                        // _slideShowController.stop();
+                        SoundPlayer.playUI("assets/sound/UISound/next.mp3");
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) =>
+                                const SelectActionScreen(),
+                            transitionDuration:
+                                const Duration(milliseconds: 1000),
+                            transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) =>
+                                buildFadeTransition(context, animation,
+                                    secondaryAnimation, child),
+                          ),
+                        );
                       },
                     ),
                   ),

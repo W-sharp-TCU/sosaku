@@ -137,7 +137,9 @@ class MenuUI extends ConsumerWidget {
                           ),
                           const Spacer(),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              menuScreenController.goTitle();
+                            },
                             child: Container(
                               width: GetScreenSize.screenWidth() * 0.3,
                               height: GetScreenSize.screenHeight() * 0.1,

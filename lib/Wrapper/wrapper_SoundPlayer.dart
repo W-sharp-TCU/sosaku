@@ -137,7 +137,8 @@ class SoundPlayer {
   /// @param filePath : Specify audio file path you want to play.
   static void playUI(String filePath) async {
     _instanceExistenceCheck();
-    AudioPlayer player = await _instance!._uiCache.play(filePath);
+    AudioPlayer player =
+        await _instance!._uiCache.play(filePath, volume: uiVolume);
     _uiController = player;
     player.onPlayerStateChanged.listen((event) {
       _playersState[UI] = event;
@@ -202,15 +203,17 @@ class SoundPlayer {
       await stopSEAll(fadeOut: fadeOut);
     }
     List<AudioPlayer> players = [];
-    double volume = seVolume;
+    double startVolume = seVolume;
     if (fadeIn) {
-      volume = 0.0;
+      startVolume = 0.0;
     }
     for (String element in filePaths) {
       if (loop) {
-        players.add(await _instance!._seCache.loop(element, volume: volume));
+        players
+            .add(await _instance!._seCache.loop(element, volume: startVolume));
       } else {
-        players.add(await _instance!._seCache.play(element, volume: volume));
+        players
+            .add(await _instance!._seCache.play(element, volume: startVolume));
       }
       if (fadeIn) {
         _instance!._fadeIn(players.last, SoundPlayer.SE);
@@ -238,7 +241,7 @@ class SoundPlayer {
     }
     List<AudioPlayer> players = [];
     for (String element in filePaths) {
-      players.add(await _instance!._cvCache.play(element));
+      players.add(await _instance!._cvCache.play(element, volume: cvVolume));
     }
     _cvControllers = players;
     players.first.onPlayerStateChanged.listen((event) {
