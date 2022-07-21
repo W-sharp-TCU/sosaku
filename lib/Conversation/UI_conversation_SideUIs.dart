@@ -17,12 +17,11 @@ class SideUIs extends ConsumerWidget {
       MediaQuery.of(context).size.height,
       MediaQuery.of(context).size.width,
     );
-    AutoDisposeChangeNotifierProvider<AnimationProvider> _button1 =
-        animationController.createProvider('button1');
-    animationController.addNewState(
-        'button1', 'width', GetScreenSize.screenWidth() * 0.05);
-    animationController.addNewState(
-        'button1', 'height', GetScreenSize.screenWidth() * 0.05);
+
+    final _button1 = animationController.createProvider('button1', {
+      'width': GetScreenSize.screenWidth() * 0.05,
+      'height': GetScreenSize.screenWidth() * 0.05
+    });
 
     return SizedBox(
       width: GetScreenSize.screenWidth() * 0.1,
@@ -34,7 +33,7 @@ class SideUIs extends ConsumerWidget {
           ///menu
           GestureDetector(
             onTap: () {
-              // conversationScreenController.openMenu();
+              conversationScreenController.openMenu();
               animationController.animate('button1', 'width', [
                 Linear(0, 500, GetScreenSize.screenWidth() * 0.05,
                     GetScreenSize.screenWidth() * 0.07),
@@ -72,6 +71,8 @@ class SideUIs extends ConsumerWidget {
           GestureDetector(
             onTap: () {
               conversationScreenController.changeHideUi();
+              animationController.stopAnimation('button1', 'width');
+              animationController.stopAnimation('button1', 'height');
             },
             child: Container(
               width: GetScreenSize.screenWidth() * 0.05,
