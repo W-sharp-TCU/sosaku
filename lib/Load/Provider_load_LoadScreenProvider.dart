@@ -5,10 +5,12 @@ class LoadScreenProvider extends ChangeNotifier {
   // final _mLoadScreenProvider = this;
   List<String> _fileImagePaths =
       List.generate(20, (i) => "drawable/Load/default_file_image.png");
+  int _selectFileNumber = 0;
 
   String get mBGImagePath => _mBGImagePath;
   List get fileImagePaths => _fileImagePaths;
   // var get mLoadScreenProvider => _mLoadScreenProvider;
+  int get selectFileNumber => _selectFileNumber;
 
   ///Set the path of background image for load screen
   ///
@@ -32,4 +34,10 @@ class LoadScreenProvider extends ChangeNotifier {
   void start(BuildContext context) {}
 
   void stop() {}
+
+  void setSelectFileNumber(int i){
+    _selectFileNumber = i;
+    print(_selectFileNumber);
+    notifyListeners();
+  }
 }

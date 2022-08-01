@@ -1,6 +1,7 @@
 ///package
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:sosaku/Load/UI_load_LoadScreen.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -22,6 +23,8 @@ class SelectLoadFile extends ConsumerWidget{
     return GestureDetector(
       onTap:(){
         print("you tapped File$fileNumber");
+        ref.read(loadScreenProvider).setSelectFileNumber(fileNumber);
+        ref.read(loadUIProvider).changeFlagSaveMenu();
       },
       child: Container(
         width: GetScreenSize.screenWidth() * 0.7,

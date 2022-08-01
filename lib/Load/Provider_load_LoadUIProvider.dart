@@ -12,7 +12,7 @@ class LoadUIProvider extends ChangeNotifier {
   }
 
   void changeFlagSaveMenu(){
-    _popFlagSaveMenu != _popFlagSaveMenu;
+    _popFlagSaveMenu = !_popFlagSaveMenu;
     notifyListeners();
   }
 }
