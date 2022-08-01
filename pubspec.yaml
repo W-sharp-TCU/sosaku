@@ -35,7 +35,7 @@ dependencies:
   intl: ^0.17.0           # L18n support
   shared_preferences:     # local app storage access
   path_provider:          # search location apps can access
-  audioplayers: ^0.20.1          # play sounds
+  audioplayers:           # play sounds
   universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
   package_info_plus:      # for checking running app version
@@ -57,7 +57,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.4
   icons_launcher:
-  flutter_native_splash: ^2.1.2+1
+  flutter_native_splash:
 
 
 # For information on the generic Dart part of this file, see the
@@ -91,9 +91,9 @@ flutter:
     - assets/drawable/Splash/
     - assets/drawable/Title/
     - assets/sound/BGM/
-    - assets/sound/CharacterVoice/
-    - assets/sound/SE/
-    - assets/sound/UISound/
+    - assets/sound/CV/
+    - assets/sound/AS/
+    - assets/sound/UI/
     - assets/text/fonts/
     - assets/text/ScenarioData/
     - assets/text/ScenarioData/ChapterTest/
@@ -130,8 +130,8 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # native app icon support
-# Run "flutter pub run icons_launcher:create" to generate native icons when descriptions
-# mentioned below is changed.
+# Run "flutter pub run icons_launcher:create" or "flutter pub run icons_launcher:main" to generate
+# native icons when descriptions mentioned below is changed.
 flutter_icons:
   android: true
   ios: true

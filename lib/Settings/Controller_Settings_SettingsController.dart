@@ -15,22 +15,22 @@ class SettingsController {
 
   Future<double> getVoiceVolumeValue() async {
     double _voiceVolumeValue = await SharedPref.getDouble('voiceVolume', 5.0);
-    SoundPlayer.cvVolume = _voiceVolumeValue / 10;
+    SoundPlayer().cvVolume = _voiceVolumeValue / 10;
     CvVolume = _voiceVolumeValue;
     return _voiceVolumeValue;
   }
 
   Future<double> getBgmVolumeValue() async {
     double _bgmVolumeValue = await SharedPref.getDouble('bgmVolume', 5.0);
-    SoundPlayer.bgmVolume = _bgmVolumeValue / 10;
-    SoundPlayer.seVolume = _bgmVolumeValue / 10;
+    SoundPlayer().bgmVolume = _bgmVolumeValue / 10;
+    SoundPlayer().asVolume = _bgmVolumeValue / 10;
     BgmVolume = _bgmVolumeValue;
     return _bgmVolumeValue;
   }
 
   Future<double> getUiVolumeValue() async {
     double _uiVolumeValue = await SharedPref.getDouble('seVolume', 5.0);
-    SoundPlayer.uiVolume = _uiVolumeValue / 10;
+    SoundPlayer().uiVolume = _uiVolumeValue / 10;
     UiVolume = _uiVolumeValue;
     return _uiVolumeValue;
   }
@@ -42,20 +42,20 @@ class SettingsController {
 
   void setVoiceVolumeValue(double value) {
     SharedPref.setDouble('voiceVolume', value);
-    SoundPlayer.cvVolume = value / 10;
+    SoundPlayer().cvVolume = value / 10;
     CvVolume = value;
   }
 
   void setBgmVolumeValue(double value) {
     SharedPref.setDouble('bgmVolume', value);
-    SoundPlayer.bgmVolume = value / 10;
-    SoundPlayer.seVolume = value / 10;
+    SoundPlayer().bgmVolume = value / 10;
+    SoundPlayer().asVolume = value / 10;
     BgmVolume = value;
   }
 
   void setUiVolumeValue(double value) {
     SharedPref.setDouble('seVolume', value);
-    SoundPlayer.uiVolume = value / 10;
+    SoundPlayer().uiVolume = value / 10;
     UiVolume = value;
   }
 }

@@ -6,7 +6,7 @@ class CommonLifecycleCallback implements LifecycleCallback {
   /// Called when the app is put in foreground from background.
   @override
   void onDetached() {
-    SoundPlayer.stopALL();
+    SoundPlayer().stopALL();
   }
 
   /// Called when the app is not controllable.
@@ -20,12 +20,12 @@ class CommonLifecycleCallback implements LifecycleCallback {
   /// Called when the app is put in background and terminated.
   @override
   void onPaused() {
-    SoundPlayer.pauseALL();
+    SoundPlayer().pauseALL();
   }
 
   /// Called when the app is terminated.
   @override
   void onResumed() {
-    SoundPlayer.resumeALL();
+    SoundPlayer().resumeALL();
   }
 }

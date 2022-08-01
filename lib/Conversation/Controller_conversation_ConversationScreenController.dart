@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:audioplayers/audioplayers_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Settings/Provider_Settings_SettingsProvider.dart';
-import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
@@ -58,7 +55,7 @@ class ConversationScreenController {
   /// List of voice paths.
   List<String> _voicePaths = [];
 
-  /// List of SE.
+  /// List of AS.
   List<String> _sePaths = [];
 
   /// List of options.
@@ -154,11 +151,12 @@ class ConversationScreenController {
       _nowLength = 0;
       _nowText = '';
       _conversationLogs = [];
-
-      SoundPlayer.loadAll(filePaths: _bgmPaths, audioType: SoundPlayer.BGM);
-      SoundPlayer.loadAll(filePaths: _voicePaths, audioType: SoundPlayer.CV);
       await loadJsonAsset(
           'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
+      SoundPlayer()
+          .precacheSounds(filePaths: _bgmPaths, audioType: SoundPlayer.bgm);
+      SoundPlayer()
+          .precacheSounds(filePaths: _voicePaths, audioType: SoundPlayer.cv);
       setSettings(textSpeed: await settingsController.getTextSpeedValue());
       _animationLoop();
       _refreshScreen();
@@ -366,7 +364,7 @@ class ConversationScreenController {
       if (_conversationLogProvider!.isPlaying.contains(true)) {
         // FIXED : CV could not be stopped.
         // When the x button is pressed, stop audio if it was playing in the conversation log.
-        SoundPlayer.stopCVAll();
+        SoundPlayer().stopCVAll();
       }
       changeHideUi();
       _conversationImageProvider?.changeLogDisplay();
@@ -385,8 +383,8 @@ class ConversationScreenController {
         List<bool>.filled(_conversationLogProvider!.codes.length, false);
     _logIsPlaying[numOfLog] = true;
     _conversationLogProvider?.setIsPlaying(_logIsPlaying);
-    SoundPlayer.playCV(
-        [_voicePaths[_conversationLogProvider!.codes[numOfLog]]]);
+    SoundPlayer()
+        .playCV([_voicePaths[_conversationLogProvider!.codes[numOfLog]]]);
   }
 
   /// Thread loop
@@ -411,7 +409,7 @@ class ConversationScreenController {
     if (_conversationImageProvider!.isLog) {
       // processing on the log screen
       if (_conversationLogProvider!.isPlaying.contains(true) &&
-          SoundPlayer.cvState == PlayerState.STOPPED) {
+          SoundPlayer().cvState == PlayerState.stopped) {
         _conversationLogProvider?.setIsPlaying(
             List<bool>.filled(_conversationLogProvider!.codes.length, false));
       }
@@ -423,6 +421,9 @@ class ConversationScreenController {
         _nowLength++;
         _nowText = _texts[_nowCode].substring(0, _nowLength);
         _conversationTextProvider?.setConversationText(_nowText);
+        if (_conversationImageProvider!.canNext) {
+          _conversationImageProvider!.setCanNext(false);
+        }
       } else if ((_types[_nowCode] == 2 || _types[_nowCode] == 3) &&
           !_conversationImageProvider!.dialogFlag) {
         _conversationImageProvider?.setOptionTexts(_options[_nowCode]);
@@ -433,6 +434,8 @@ class ConversationScreenController {
           !_conversationImageProvider!.isHideUi) {
         //TODO : Rewrite the condition as when voice playback ends.
         goNextScene();
+      } else if (!_conversationImageProvider!.canNext) {
+        _conversationImageProvider!.setCanNext(true);
       }
     }
   }
@@ -500,21 +503,21 @@ class ConversationScreenController {
   void _changeBgm() async {
     if (_bgmPaths[_nowCode].isNotEmpty) {
       // await Future.delayed(Duration(milliseconds: 10));
-      SoundPlayer.playBGM(_bgmPaths[_nowCode]);
+      SoundPlayer().playBGM(_bgmPaths[_nowCode]);
     }
   }
 
   /// Change voice.
   void _changeVoice() {
     if (_voicePaths[_nowCode].isNotEmpty) {
-      SoundPlayer.playCV([_voicePaths[_nowCode]]);
+      SoundPlayer().playCV([_voicePaths[_nowCode]]);
     }
   }
 
   /// Change se.
   void _changeSe() {
     if (_sePaths[_nowCode].isNotEmpty) {
-      SoundPlayer.playSE([_sePaths[_nowCode]]);
+      SoundPlayer().playAS([_sePaths[_nowCode]]);
     }
   }
 }

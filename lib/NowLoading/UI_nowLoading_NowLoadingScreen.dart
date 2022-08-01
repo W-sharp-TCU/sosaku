@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/NowLoading/Manager_GameManager.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
+import '../Wrapper/wrapper_TransitionBuilders.dart';
+
+// ignore: must_be_immutable
 class NowLoadingScreen extends ConsumerWidget {
   /// NowLoading Screen will show in [_minDuration] milliseconds at least.
   static const int _minDuration = 3000; // [ms]
 
-  bool _firstBuild = true;
-  late final Function _process;
-  late final ConsumerWidget _goto;
+  bool _isFirstBuild = true;
+  late final Function? process;
+  late final Widget? goto;
 
   /// Show NowLoading Screen while processing.
   ///
@@ -17,22 +21,14 @@ class NowLoadingScreen extends ConsumerWidget {
   /// @param process : Specify processes you want to do while Now Loading Screen is appeared.
   ///                   ex) () async { await precacheImage(AssetImage("FILENAME"), context) }
   /// @param goto : Specify [Widget] you want to show after load processes finish.
-  NowLoadingScreen(
-      {Key? key, required Function process, required ConsumerWidget goto})
-      : super(key: key) {
-    _process = process;
-    _goto = goto;
-  }
+  NowLoadingScreen({Key? key, this.process, this.goto}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /***** execute load process area *****/
     /*           DO NOT ERASE!           */
-    if (_firstBuild) {
-      _loadProcess(_process).then((value) => Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => _goto)));
-    }
-    _firstBuild = false;
+    if (_isFirstBuild) _loadProcess(context);
+    _isFirstBuild = false;
     /*************************************/
     // TODO: implement build
     return Scaffold(
@@ -61,12 +57,35 @@ class NowLoadingScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _loadProcess(Function process) async {
+  void _loadProcess(BuildContext context) async {
+    Widget nextScreen;
     var startTime = DateTime.now().millisecondsSinceEpoch;
-    await process();
+    if (process != null) {
+      await process!();
+    } else {
+      print("[info] NowLoadingScreen._loadProcess(): "
+          "process == null.");
+    }
+    if (goto == null) {
+      print("||||| goto ==> GameManager |||||");
+      GameManager gameManager = GameManager();
+      nextScreen = await gameManager.processing(context);
+    } else {
+      print("||||| goto ==> $goto |||||");
+      nextScreen = goto!;
+    }
     var diff = ((DateTime.now().millisecondsSinceEpoch) - (startTime));
     if (diff < _minDuration) {
       await Future.delayed(Duration(milliseconds: (_minDuration - diff)));
     }
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+          pageBuilder: (_, __, ___) => nextScreen,
+          transitionDuration: const Duration(milliseconds: 500),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              buildFadeTransition(
+                  context, animation, secondaryAnimation, child)),
+    );
   }
 }

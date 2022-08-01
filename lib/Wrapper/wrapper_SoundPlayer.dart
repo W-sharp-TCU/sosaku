@@ -1,385 +1,429 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:universal_platform/universal_platform.dart';
 
-/// WARNING: Playing state is not implemented.
+// todo: configure AudioContext
+/// **Play UI sounds, Background Musics, Ambient Sounds & Character's voices.**
 ///
-/// Play UI sounds, background musics, sound effects & character voices.
-/// Depended package: audio_players
-/// Features
+/// This class is Singleton.
+///
+/// Depended package: audio_players version >= 1.0
+///
+/// ## Features
 ///   1. Playing, stopping, pausing, resuming sounds.
 ///   2. fade-in & fade-out effect
-///   3. Volume config (UI, BGM, SE, CV)
-///   4. playing state // todo: add state support on web
+///   3. Configure each volume (UI, BGM, AS, CV)
+///   4. playing state
 class SoundPlayer {
-  /* interface */
-  static const int UI = 0; // UI audio
-  static const int BGM = 1; // Back Ground Music audio
-  static const int SE = 2; // Sound Effect audio
-  static const int CV = 3; // Character Voice audio
-
-  /* config */
+  /* Configurations */
   /// Fade-in or fade-out effect takes [_fadeDuration] milli seconds.
   /// So, fade transition (fade-out then fade-in) takes [_fadeDuration]*2 milli seconds.
   static const int _fadeDuration = 1700; // [ms]
   static const int _fadeStep = 17; // process will execute [_fadeStep] times.
-  // recommend configure : _fadeDuration / _fadeStep > 100 [ms/step]
+  // recommend configuration : _fadeDuration / _fadeStep > 100 [ms/step]
 
-  /* static variances */
-  static SoundPlayer? _instance; // reference to the instance of this class.
-  static List<PlayerState> _playersState = [
-    PlayerState.STOPPED,
-    PlayerState.STOPPED,
-    PlayerState.STOPPED,
-    PlayerState.STOPPED
-  ];
-  static AudioPlayer? _uiController;
-  static AudioPlayer? _bgmController;
-  static List<AudioPlayer> _seControllers = [];
-  static List<AudioPlayer> _cvControllers = [];
-  static List<double> _volumes = [1.0, 1.0, 1.0, 1.0]; // 0.0 <= _volumes <= 1.0
+  /* Interfaces */
+  /// User Interface audio
+  static const int ui = 0;
 
-  /* instance variances */
-  AudioCache _uiCache = AudioCache(
-      prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-  AudioCache _bgmCache = AudioCache(
-      prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.MEDIA_PLAYER));
-  AudioCache _seCache = AudioCache(
-      prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-  AudioCache _cvCache = AudioCache(
-      prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
+  /// Back Ground Music audio
+  static const int bgm = 1;
 
-  /// Make instance of this class.
-  /// This function must be called first.
-  static void init() => _instance ??= SoundPlayer._makeInstance();
+  /// Ambient Sound audio
+  static const int as = 2;
 
-  /// Dispose instance of this class.
-  static void dispose() => _instance = null;
+  /// Character's Voice audio
+  static const int cv = 3;
 
-  /// Load audio files to [AudioCache] class.
+  /* Private Fields */
+  static final SoundPlayer _singleton = SoundPlayer._internalConstructor();
+
+  Map<String, _PlayerTuple> _uiCaches = {};
+  Map<String, _PlayerTuple> _bgmCaches = {};
+  Map<String, _PlayerTuple> _asCaches = {};
+  Map<String, _PlayerTuple> _cvCaches = {};
+
+  List<double> _volumes = List.filled(4, 1.0); // 0.0 <= _volumes <= 1.0
+
+  /* Factory constructor */
+  /// This class is SingleTon.
+  /// So, You need to get the instance of this class before you call below methods.
   ///
-  /// @param filePaths : Specify list of audio file path you want to load.
-  /// @param audioType : Specify any one of below options depends on files you load.
-  ///        Option : AudioMixer.UI, AudioMixer.BGM, AudioMixer.SE, AudioMixer.CV
-  static void loadAll(
-      {required List<String> filePaths, required int audioType}) {
-    _instanceExistenceCheck();
+  /// ### Example
+  /// ```dart
+  /// SoundPlayer soundPlayer = SoundPlayer();
+  /// soundPlayer.precacheSounds([foo.mp3], SoundPlayer.ui);
+  /// ```
+  /// or
+  /// ```dart
+  /// SoundPlayer().precacheSounds([foo.mp3], SoundPlayer.ui);
+  /// ```
+  factory SoundPlayer() => _singleton; // Always return same instance
+
+  /* Load function */
+  /// Load audio files to AudioPlayer instances.
+  ///
+  /// @param [filePaths] : Specify list of audio file path you want to load.
+  ///
+  /// @param [audioType] : Specify any one of below options depends on files you load.
+  ///        Option : SoundPlayer.ui, SoundPlayer.bgm, SoundPlayer.as, SoundPlayer.cv
+  Future<void> precacheSounds(
+      {required List<String> filePaths, required int audioType}) async {
+    Map<String, _PlayerTuple> caches;
+    PlayerMode playerMode = PlayerMode.mediaPlayer;
+    double volume;
     switch (audioType) {
-      case UI:
-        clearUIAll();
-        _instance!._uiCache = AudioCache(
-            prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-        _instance!._uiCache.loadAll(filePaths);
+      case ui:
+        caches = _uiCaches;
+        volume = uiVolume;
+        playerMode = PlayerMode.lowLatency;
         break;
-      case BGM:
-        clearBGMAll();
-        _instance!._bgmCache = AudioCache(
-            prefix: '',
-            fixedPlayer: AudioPlayer(mode: PlayerMode.MEDIA_PLAYER));
-        _instance!._bgmCache.loadAll(filePaths);
+      case bgm:
+        caches = _bgmCaches;
+        volume = bgmVolume;
         break;
-      case SE:
-        clearSEAll();
-        _instance!._seCache = AudioCache(
-            prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-        _instance!._seCache.loadAll(filePaths);
+      case as:
+        caches = _asCaches;
+        volume = asVolume;
         break;
-      case CV:
-        clearCVAll();
-        _instance!._cvCache = AudioCache(
-            prefix: '', fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY));
-        _instance!._cvCache.loadAll(filePaths);
+      case cv:
+        caches = _cvCaches;
+        volume = cvVolume;
         break;
       default:
-        throw AssertionError("AudioMixer: unexpected audioType error\n"
-            "Specify 'UI', 'BGM', 'SE' or 'CV' to audioType.");
+        throw AssertionError("SoundPlayer: unexpected audioType error\n"
+            "Specify 'ui', 'bgm', 'as' or 'cv' to audioType.");
+    }
+    print("SoundPlayer.precacheSounds(): [list content original] $filePaths");
+    await _deleteUnnecessaryCaches(filePaths, caches);
+    print("SoundPlayer.precacheSounds(): [list content deleted] $filePaths");
+    for (String element in filePaths) {
+      AudioPlayer newPlayer = AudioPlayer();
+      newPlayer.setPlayerMode(playerMode);
+      newPlayer.setReleaseMode(ReleaseMode.stop);
+      newPlayer.setVolume(volume);
+      newPlayer.setSourceAsset(element.replaceAll('assets/', ''));
+      caches[element] = _PlayerTuple(element, newPlayer, newPlayer.state);
+      newPlayer.onPlayerStateChanged.listen((event) {
+        caches[element]?.state = event;
+        print(
+            "SoundPlayer: Player's state was changed to $event.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
+      });
+      newPlayer.onPlayerComplete.listen((event) {
+        caches[element]?.state = PlayerState.completed;
+        print(
+            "SoundPlayer: Player's state was changed to ${PlayerState.completed}.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
+      });
     }
   }
 
-  /* clear functions*/
-  /// Release all UI audio caches.
-  static Future<void> clearUIAll() async {
-    _instanceExistenceCheck();
-    await _instance!._uiCache.clearAll();
-  }
-
-  /// Release all BGM caches.
-  static Future<void> clearBGMAll() async {
-    _instanceExistenceCheck();
-    await _instance!._bgmCache.clearAll();
-  }
-
-  /// Release all SE caches.
-  static Future<void> clearSEAll() async {
-    _instanceExistenceCheck();
-    await _instance!._bgmCache.clearAll();
-  }
-
-  /// Release all CV caches.
-  static Future<void> clearCVAll() async {
-    _instanceExistenceCheck();
-    await _instance!._seCache.clearAll();
-  }
-
-  /// Release all UI audio, BGM, SE, CV caches.
-  static void clearAll() {
-    clearUIAll();
-    clearBGMAll();
-    clearSEAll();
-    clearCVAll();
-  }
-
-  /* play functions */
-  /// Play UI audio file.
-  /// This function must be called after the audio file you want to play is
-  /// loaded as [SoundPlayer.UI] type.
-  ///
-  /// @param filePath : Specify audio file path you want to play.
-  static void playUI(String filePath) async {
-    _instanceExistenceCheck();
-    AudioPlayer player =
-        await _instance!._uiCache.play(filePath, volume: uiVolume);
-    _uiController = player;
-    player.onPlayerStateChanged.listen((event) {
-      _playersState[UI] = event;
-      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        _uiController = null;
-      }
+  /* Release functions*/
+  /// Release all User Interface audio caches.
+  Future<void> releaseUICaches() async {
+    _uiCaches.forEach((key, value) async {
+      await value.player.dispose();
     });
-    _playersState[UI] = _uiController!.state;
+    _uiCaches = {};
   }
 
-  /// Play BGM audio file.
+  /// Release all Back Ground Music audio caches.
+  Future<void> releaseBGMCaches() async {
+    _bgmCaches.forEach((key, value) async {
+      await value.player.dispose();
+    });
+    _bgmCaches = {};
+  }
+
+  /// Release all Ambient Sound audio caches.
+  Future<void> releaseASCaches() async {
+    _asCaches.forEach((key, value) async {
+      await value.player.dispose();
+    });
+    _asCaches = {};
+  }
+
+  /// Release all Character's Voice audio caches.
+  Future<void> releaseCVCaches() async {
+    _cvCaches.forEach((key, value) async {
+      await value.player.dispose();
+    });
+    _cvCaches = {};
+  }
+
+  /// Release all User Interface, Back Ground Music,
+  /// Ambient Sound & Character's Voice audio caches.
+  Future<void> clearAllCaches() async {
+    await releaseUICaches();
+    await releaseBGMCaches();
+    await releaseASCaches();
+    await releaseCVCaches();
+  }
+
+  /* Play functions */
+  /// Play User Interface audio file.
   /// This function must be called after the audio file you want to play is
-  /// loaded as [SoundPlayer.BGM] type.
+  /// loaded as [SoundPlayer.ui] type.
   ///
-  /// @param filePath : Specify audio file path you want to play.
-  /// @param loop : if "true", BGM starts looping until you call stopBGM().
-  /// @param fadeOut : if "true", BGM playing now will be applied fade-out
-  ///                  effect and then stop before new audio file start playing.
-  /// @param fadeIn : if "true", new audio file start playing with fade-in effect.
-  static void playBGM(String filePath,
-      {bool loop = true, bool fadeOut = true, bool fadeIn = false}) async {
-    AudioPlayer player;
-    _instanceExistenceCheck();
-    if (_bgmController != null) {
-      await stopBGM(fadeOut: fadeOut);
-    }
-    double startVolume = bgmVolume;
-    if (fadeIn) {
-      startVolume = 0.0;
-    }
-    if (loop) {
-      player = await _instance!._bgmCache.loop(filePath, volume: startVolume);
+  /// @param [filePath] : Specify audio file path you want to play.
+  void playUI(String filePath) async {
+    await stopUI(fadeOut: false);
+    if (!_uiCaches.containsKey(filePath)) {
+      throw AssertionError("SoundPlayer.playUI(): $filePath is not cached.");
     } else {
-      player = await _instance!._bgmCache.play(filePath, volume: startVolume);
+      _uiCaches[filePath]?.player.seek(const Duration(microseconds: 0)); // cue
+      _uiCaches[filePath]?.player.resume(); // play from start.
     }
-    _bgmController = player;
-    if (fadeIn) {
-      _instance!._fadeIn(player, SoundPlayer.BGM);
-    }
-    player.onPlayerStateChanged.listen((event) {
-      _playersState[BGM] = event;
-      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        _bgmController = null;
-      }
-    });
-    _playersState[BGM] = _bgmController!.state;
   }
 
-  /// Play SE audio file.
+  /// Play Back Ground Music audio file.
   /// This function must be called after the audio file you want to play is
-  /// loaded as [SoundPlayer.SE] type.
+  /// loaded as [SoundPlayer.bgm] type.
   ///
-  /// @param filePaths : Specify the list of audio file paths you want to play.
-  /// @param loop : if "true", SE starts looping until you call stopSE().
-  /// @param fadeOut : if "true", SE playing now will be applied fade-out
-  ///                  effect and then stop before new audio file start playing.
-  /// @param fadeIn : if "true", new audio file start playing with fade-in effect.
-  static void playSE(List<String> filePaths,
-      {bool loop = false, bool fadeOut = false, bool fadeIn = true}) async {
-    _instanceExistenceCheck();
-    if (_seControllers.isNotEmpty) {
-      await stopSEAll(fadeOut: fadeOut);
+  /// @param [filePath] : Specify audio file path you want to play.
+  ///
+  /// @param [loop] : if "true", specified Back Ground Music starts looping until
+  ///    you call stopBGM().
+  ///
+  /// @param [fadeOut] : if "true", Back Ground Music playing now will be applied
+  ///    fade-out effect and then stop before new audio file start playing.
+  ///
+  /// @param [fadeIn] : if "true", new audio file start playing with fade-in effect.
+  void playBGM(String filePath,
+      {bool loop = true, bool fadeOut = true, bool fadeIn = false}) async {
+    final double startVolume;
+    final ReleaseMode mode;
+    await stopBGM(fadeOut: fadeOut);
+    if (loop) {
+      mode = ReleaseMode.loop;
+    } else {
+      mode = ReleaseMode.stop;
     }
-    List<AudioPlayer> players = [];
-    double startVolume = seVolume;
     if (fadeIn) {
-      startVolume = 0.0;
+      startVolume = 0;
+    } else {
+      startVolume = bgmVolume;
     }
-    for (String element in filePaths) {
-      if (loop) {
-        players
-            .add(await _instance!._seCache.loop(element, volume: startVolume));
-      } else {
-        players
-            .add(await _instance!._seCache.play(element, volume: startVolume));
-      }
+    if (!_bgmCaches.containsKey(filePath)) {
+      throw AssertionError("SoundPlayer.playBGM(): $filePath is not cached.");
+    } else {
+      _bgmCaches[filePath]?.player.seek(const Duration(microseconds: 0)); // cue
+      _bgmCaches[filePath]?.player.setReleaseMode(mode);
+      _bgmCaches[filePath]?.player.setVolume(startVolume);
+      _bgmCaches[filePath]?.player.resume(); // play from start.
       if (fadeIn) {
-        _instance!._fadeIn(players.last, SoundPlayer.SE);
+        _fadeIn(_bgmCaches[filePath]!.player, bgm);
       }
     }
-    _seControllers = players;
-    players.first.onPlayerStateChanged.listen((event) {
-      _playersState[SE] = event;
-      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        _seControllers.clear();
-      }
-    });
-    _playersState[SE] = players[0].state;
   }
 
-  /// Play CV audio file.
-  /// This function must be called after the audio file you want to play is
-  /// loaded as [SoundPlayer.CV] type.
+  /// Play Ambient Sound audio files.
+  /// This function must be called after the audio files you want to play are
+  /// loaded as [SoundPlayer.as] type.
   ///
-  /// @param filePaths : Specify the list of  audio file paths you want to play.
-  static void playCV(List<String> filePaths) async {
-    _instanceExistenceCheck();
-    if (_cvControllers.isNotEmpty) {
-      stopCVAll(fadeOut: false);
+  /// @param [filePaths] : Specify the list of audio file paths you want to play.
+  ///
+  /// @param [loop] : if "true", specified Ambient Sound starts looping until
+  ///    you call stopASAll().
+  ///
+  /// @param [fadeOut] : if "true", Ambient Sound playing now will be applied
+  ///    fade-out effect and then stop before new audio file start playing.
+  ///
+  /// @param fadeIn : if "true", new audio file start playing with fade-in effect.
+  void playAS(List<String> filePaths,
+      {bool loop = false, bool fadeOut = false, bool fadeIn = true}) async {
+    final double startVolume;
+    final ReleaseMode mode;
+    await stopASAll(fadeOut: fadeOut);
+    if (loop) {
+      mode = ReleaseMode.loop;
+    } else {
+      mode = ReleaseMode.stop;
     }
-    List<AudioPlayer> players = [];
-    for (String element in filePaths) {
-      players.add(await _instance!._cvCache.play(element, volume: cvVolume));
+    if (fadeIn) {
+      startVolume = 0;
+    } else {
+      startVolume = asVolume;
     }
-    _cvControllers = players;
-    players.first.onPlayerStateChanged.listen((event) {
-      _playersState[CV] = event;
-      if (event == PlayerState.COMPLETED || event == PlayerState.STOPPED) {
-        _cvControllers.clear();
+    for (String e in filePaths) {
+      if (!_asCaches.containsKey(e)) {
+        throw AssertionError("SoundPlayer.playAS(): $e is not cached.");
+      } else {
+        _asCaches[e]?.player.seek(const Duration(microseconds: 0)); // cue
+        _asCaches[e]?.player.setReleaseMode(mode);
+        _asCaches[e]?.player.setVolume(startVolume);
+        _asCaches[e]?.player.resume(); // play from start.
+        if (fadeIn) {
+          _fadeIn(_asCaches[e]!.player, as);
+        }
       }
+    }
+  }
+
+  /// Play Character's Voice audio files.
+  /// This function must be called after the audio files you want to play are
+  /// loaded as [SoundPlayer.cv] type.
+  ///
+  /// @param [filePaths] : Specify the list of audio file paths you want to play.
+  ///
+  /// @param [fadeOut] : if "true", the Character's Voice audio playing now will be
+  ///    applied fade-out effect and then stop before new audio file start playing.
+  void playCV(List<String> filePaths, {bool fadeOut = true}) async {
+    await stopCVAll(fadeOut: fadeOut);
+    for (String e in filePaths) {
+      if (!_cvCaches.containsKey(e)) {
+        throw AssertionError("SoundPlayer.playCV(): $e is not cached.");
+      } else {
+        _cvCaches[e]?.player.seek(const Duration(microseconds: 0)); // cue
+        _cvCaches[e]?.player.resume(); // play from start.
+      }
+    }
+  }
+
+  /* Pause functions */
+  /// Pause Back Ground Music playing now.
+  Future<void> pauseBGM() async {
+    _bgmCaches.forEach((key, value) async {
+      await value.player.pause();
     });
-    _playersState[CV] = players.first.state;
-    /** provisional */
-    if (UniversalPlatform.isWeb) {
-      await Future.delayed(const Duration(seconds: 17));
-      _playersState[CV] = PlayerState.COMPLETED;
-    }
   }
 
-  /* pause functions */
-  /// Pause BGM.
-  static Future<void> pauseBGM() async {
-    await _bgmController?.pause();
+  /// Pause Ambient Sounds playing now.
+  Future<void> pauseAS() async {
+    _asCaches.forEach((key, value) async {
+      await value.player.pause();
+    });
   }
 
-  /// Pause SE.
-  static Future<void> pauseSE() async {
-    for (AudioPlayer element in _seControllers) {
-      await element.pause();
-    }
+  /// Pause Character's Voice audios playing now.
+  Future<void> pauseCV() async {
+    _cvCaches.forEach((key, value) async {
+      await value.player.pause();
+    });
   }
 
-  /// Pause CV.
-  static Future<void> pauseCV() async {
-    for (AudioPlayer element in _cvControllers) {
-      await element.pause();
-    }
-  }
-
-  /// Pause BGM, SE & CV.
-  static void pauseALL() {
+  /// Pause Back Ground Music, Ambient Sounds & Character's Voice audios playing now.
+  void pauseALL() {
     pauseBGM();
-    pauseSE();
+    pauseAS();
     pauseCV();
   }
 
-  /* resume functions */
-  /// Resume BGM paused.
-  static Future<void> resumeBGM() async {
-    await _bgmController?.resume();
+  /* Resume functions */
+  /// Resume Back Ground Music paused.
+  Future<void> resumeBGM() async {
+    _bgmCaches.forEach((key, value) {
+      if (value.state == PlayerState.paused) {
+        value.player.resume();
+      }
+    });
   }
 
-  /// Resume SE paused.
-  static Future<void> resumeSE() async {
-    for (AudioPlayer element in _seControllers) {
-      await element.resume();
-    }
+  /// Resume Ambient Sounds paused.
+  Future<void> resumeAS() async {
+    _asCaches.forEach((key, value) {
+      if (value.state == PlayerState.paused) {
+        value.player.resume();
+      }
+    });
   }
 
-  /// Resume CV paused.
-  static Future<void> resumeCV() async {
-    for (AudioPlayer element in _cvControllers) {
-      await element.resume();
-    }
+  /// Resume Character's Voice audios paused.
+  Future<void> resumeCV() async {
+    _cvCaches.forEach((key, value) {
+      if (value.state == PlayerState.paused) {
+        value.player.resume();
+      }
+    });
   }
 
-  /// Resume BGM, SE & CV paused.
-  static void resumeALL() async {
+  /// Resume Back Ground Music, Ambient Sounds & Character's Voice audios paused.
+  void resumeALL() async {
     resumeBGM();
-    resumeSE();
+    resumeAS();
     resumeCV();
   }
 
-  /* stop functions */
-  /// Stop UI audio playing now.
-  static Future<void> stopUI({bool fadeOut = true}) async {
-    _instanceExistenceCheck();
-    if (_uiController != null) {
-      if (fadeOut) {
-        await _instance!._fadeOut(_uiController!, SoundPlayer.UI);
+  /* Stop functions */
+  /// Stop User Interface audio playing now.
+  Future<void> stopUI({bool fadeOut = true}) async {
+    await Future.forEach(_uiCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _uiCaches[key]!;
+      if (playerTuple.state == PlayerState.playing) {
+        if (fadeOut) {
+          await _fadeOut(playerTuple.player, ui);
+        }
+        await playerTuple.player.stop();
       }
-      await _uiController?.stop();
-      _uiController = null;
-    }
+    });
   }
 
-  /// Stop BGM playing now.
-  static Future<void> stopBGM({bool fadeOut = true}) async {
-    _instanceExistenceCheck();
-    if (_bgmController != null) {
-      if (fadeOut) {
-        await _instance!._fadeOut(_bgmController!, SoundPlayer.BGM);
+  /// Stop Back Ground Music playing now.
+  Future<void> stopBGM({bool fadeOut = true}) async {
+    await Future.forEach(_bgmCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _bgmCaches[key]!;
+      if (playerTuple.state == PlayerState.playing) {
+        if (fadeOut) {
+          await _fadeOut(playerTuple.player, bgm);
+        }
+        await playerTuple.player.stop();
       }
-      await _bgmController?.stop();
-      _bgmController = null;
-    }
+    });
   }
 
-  /// Stop all SE playing now.
-  static Future<void> stopSEAll({bool fadeOut = true}) async {
-    _instanceExistenceCheck();
-    for (AudioPlayer element in _seControllers) {
+  /// Stop all Ambient Sounds playing now.
+  Future<void> stopASAll({bool fadeOut = true}) async {
+    await Future.forEach(_asCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _asCaches[key]!;
       if (fadeOut) {
-        await _instance!._fadeOut(element, SoundPlayer.SE);
+        await _fadeOut(playerTuple.player, as);
       }
-      await element.stop();
-    }
-    _seControllers.clear();
+      await playerTuple.player.stop();
+    });
   }
 
-  /// Stop all CV playing now.
-  static Future<void> stopCVAll({bool fadeOut = false}) async {
-    _instanceExistenceCheck();
-    for (AudioPlayer element in _cvControllers) {
+  /// Stop all Character's Voice audios playing now.
+  Future<void> stopCVAll({bool fadeOut = false}) async {
+    await Future.forEach(_cvCaches.keys, (key) async {
+      _PlayerTuple playerTuple = _cvCaches[key]!;
       if (fadeOut) {
-        await _instance!._fadeOut(element, SoundPlayer.CV);
+        await _fadeOut(playerTuple.player, cv);
       }
-      await element.stop();
-    }
-    _cvControllers.clear();
+      await playerTuple.player.stop();
+    });
   }
 
-  /// Stop all BGM, SE, CV playing now.
-  static void stopSound() async {
+  /// Stop all Back Ground Music, Ambient Sounds & Character's Voice audios
+  /// playing now. (User Interface audio will not be stopped.)
+  void stopSound() async {
     stopBGM();
-    stopSEAll();
+    stopASAll();
     stopCVAll();
   }
 
-  /// Stop all UI audio, BGM, SE, CV playing now.
-  static void stopALL() async {
+  /// Stop all User Interface audio, Back Ground Music, Ambient Sounds &
+  /// Character's Voice audios playing now.
+  void stopALL() async {
     stopUI();
     stopBGM();
-    stopSEAll();
+    stopASAll();
     stopCVAll();
   }
 
-  /* private functions */
+  /* Private functions */
+  Future<void> _deleteUnnecessaryCaches(
+      List<String> necessaryFiles, Map<String, _PlayerTuple> caches) async {
+    for (String e in caches.keys) {
+      if (!necessaryFiles.contains(e)) {
+        await caches[e]?.player.release();
+        caches.remove(e);
+      } else {
+        necessaryFiles.remove(e);
+      }
+    }
+  }
+
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
     double volume = _volumes[audioType];
-    while (volume > 0) {
+    while (volume >= 0) {
       volume = volume - (_volumes[audioType] / _fadeStep);
       if (volume <= 0) {
         volume = 0;
@@ -393,7 +437,7 @@ class SoundPlayer {
   Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
     double goal = _volumes[audioType];
     double volume = 0;
-    while (volume < goal) {
+    while (volume <= goal) {
       volume = volume + (goal / _fadeStep);
       if (volume >= goal) {
         volume = goal;
@@ -404,77 +448,175 @@ class SoundPlayer {
     }
   }
 
-  static void _instanceExistenceCheck() {
-    if (_instance == null) {
-      throw AssertionError("AudioMixer: Instance does not exist.\n"
-          "Call AudioMixer.getInstance() first to make instance.");
+  /* Getters & Setters */
+  double get uiVolume => _volumes[ui];
+  double get bgmVolume => _volumes[bgm];
+  double get asVolume => _volumes[as];
+  double get cvVolume => _volumes[cv];
+
+  set uiVolume(double value) {
+    if (value > 1.0) {
+      _volumes[ui] = 1.0;
+    } else if (value < 0) {
+      _volumes[ui] = 0.0;
+    } else {
+      _volumes[ui] = value;
     }
+    _uiCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[ui]);
+    });
   }
 
-  /* getters & setters */
-  static double get uiVolume => _volumes[UI];
-  static double get bgmVolume => _volumes[BGM];
-  static double get seVolume => _volumes[SE];
-  static double get cvVolume => _volumes[CV];
-
-  static set uiVolume(double value) {
+  set bgmVolume(double value) {
     if (value > 1.0) {
-      _volumes[UI] = 1.0;
+      _volumes[bgm] = 1.0;
     } else if (value < 0) {
-      _volumes[UI] = 0.0;
+      _volumes[bgm] = 0.0;
     } else {
-      _volumes[UI] = value;
+      _volumes[bgm] = value;
     }
-    _uiController?.setVolume(_volumes[UI]);
+    _uiCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[ui]);
+    });
   }
 
-  static set bgmVolume(double value) {
+  set asVolume(double value) {
     if (value > 1.0) {
-      _volumes[BGM] = 1.0;
+      _volumes[as] = 1.0;
     } else if (value < 0) {
-      _volumes[BGM] = 0.0;
+      _volumes[as] = 0.0;
     } else {
-      _volumes[BGM] = value;
+      _volumes[as] = value;
     }
-    _bgmController?.setVolume(_volumes[BGM]);
+    _uiCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[ui]);
+    });
   }
 
-  static set seVolume(double value) {
+  set cvVolume(double value) {
     if (value > 1.0) {
-      _volumes[SE] = 1.0;
+      _volumes[cv] = 1.0;
     } else if (value < 0) {
-      _volumes[SE] = 0.0;
+      _volumes[cv] = 0.0;
     } else {
-      _volumes[SE] = value;
+      _volumes[cv] = value;
     }
-    if (_cvControllers.isNotEmpty) {
-      for (AudioPlayer element in _cvControllers) {
-        element.setVolume(_volumes[SE]);
+    _uiCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[ui]);
+    });
+  }
+
+  PlayerState get uiState {
+    if (_uiCaches.isEmpty) {
+      return PlayerState.stopped;
+    } else {
+      List<PlayerState> states = [];
+      _uiCaches.forEach((key, value) {
+        states.add(value.state);
+      });
+      if (states.contains(PlayerState.playing)) {
+        return PlayerState.playing;
+      } else if (states.contains(PlayerState.paused)) {
+        return PlayerState.paused;
+      } else if (states.contains(PlayerState.completed)) {
+        return PlayerState.completed;
+      } else {
+        return PlayerState.stopped;
       }
     }
   }
 
-  static set cvVolume(double value) {
-    if (value > 1.0) {
-      _volumes[CV] = 1.0;
-    } else if (value < 0) {
-      _volumes[CV] = 0.0;
+  PlayerState get bgmState {
+    if (_bgmCaches.isEmpty) {
+      return PlayerState.stopped;
     } else {
-      _volumes[CV] = value;
-    }
-    if (_cvControllers.isNotEmpty) {
-      for (AudioPlayer element in _cvControllers) {
-        element.setVolume(_volumes[CV]);
+      List<PlayerState> states = [];
+      _bgmCaches.forEach((key, value) {
+        states.add(value.state);
+      });
+      if (states.contains(PlayerState.playing)) {
+        return PlayerState.playing;
+      } else if (states.contains(PlayerState.paused)) {
+        return PlayerState.paused;
+      } else if (states.contains(PlayerState.completed)) {
+        return PlayerState.completed;
+      } else {
+        return PlayerState.stopped;
       }
     }
   }
 
-  static PlayerState get uiState => _playersState[UI];
-  static PlayerState get bgmState => _playersState[BGM];
-  static PlayerState get seState => _playersState[SE];
-  static PlayerState get cvState => _playersState[CV];
+  PlayerState get asState {
+    if (_asCaches.isEmpty) {
+      return PlayerState.stopped;
+    } else {
+      List<PlayerState> states = [];
+      _asCaches.forEach((key, value) {
+        states.add(value.state);
+      });
+      if (states.contains(PlayerState.playing)) {
+        return PlayerState.playing;
+      } else if (states.contains(PlayerState.paused)) {
+        return PlayerState.paused;
+      } else if (states.contains(PlayerState.completed)) {
+        return PlayerState.completed;
+      } else {
+        return PlayerState.stopped;
+      }
+    }
+  }
 
-  /// private named constructor.
+  PlayerState get cvState {
+    if (_cvCaches.isEmpty) {
+      return PlayerState.stopped;
+    } else {
+      List<PlayerState> states = [];
+      _cvCaches.forEach((key, value) {
+        states.add(value.state);
+      });
+      if (states.contains(PlayerState.playing)) {
+        return PlayerState.playing;
+      } else if (states.contains(PlayerState.paused)) {
+        return PlayerState.paused;
+      } else if (states.contains(PlayerState.completed)) {
+        return PlayerState.completed;
+      } else {
+        return PlayerState.stopped;
+      }
+    }
+  }
+
+  /// Private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
-  SoundPlayer._makeInstance();
+  SoundPlayer._internalConstructor() {
+    /*// Configure audio context
+    AudioContextAndroid androidConfig = AudioContextAndroid(
+        isSpeakerphoneOn: false,
+        stayAwake: false,
+        contentType: AndroidContentType.speech,
+        usageType: AndroidUsageType.game,
+        audioFocus: AndroidAudioFocus.none);
+    AudioContextIOS iosConfig = AudioContextIOS(
+      defaultToSpeaker: false,
+      category: AVAudioSessionCategory.playback,
+      options: [
+        AVAudioSessionOptions.allowAirPlay,
+        AVAudioSessionOptions.allowBluetooth,
+      ],
+    );
+    AudioPlayer.global.setGlobalAudioContext(
+        AudioContext(android: androidConfig, iOS: iosConfig));
+
+    // Configure log level
+    AudioPlayer.global
+        .changeLogLevel(LogLevel.error); // todo: delete when release*/
+  }
+}
+
+/// Internal data structure
+class _PlayerTuple {
+  String sourceName;
+  AudioPlayer player;
+  PlayerState state;
+  _PlayerTuple(this.sourceName, this.player, this.state);
 }

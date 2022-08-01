@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
-import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
+import 'package:sosaku/Home/UI_home_HomeScreen.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
 import 'Settings/Controller_Settings_SettingsController.dart';
-import 'Wrapper/wrapper_SoundPlayer.dart';
 import 'l10n/l10n.dart';
 
 late PackageInfo packageInfo;
@@ -23,7 +21,6 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.immersive); // hide Android status bar & navigation bar.
   packageInfo = await PackageInfo.fromPlatform();
-  SoundPlayer.init();
   SettingsController settingsController = SettingsController();
   await settingsController.getBgmVolumeValue();
   await settingsController.getUiVolumeValue();
@@ -44,7 +41,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "SourceHanSansJP"),
       scrollBehavior:
           CustomScrollBehavior(), // support dragging mouse to scroll on the web.
-      home: const SplashScreen(),
+      home: HomeScreen(), // todo: リリース前には SplashScreen() に書き換える
     );
   }
 }

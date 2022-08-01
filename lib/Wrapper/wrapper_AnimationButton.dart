@@ -1,5 +1,6 @@
 ///package
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,15 +11,18 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 
 Map<String, AutoDisposeChangeNotifierProvider<AnimationButtonProvider>> _abp =
     {};
+Map<String, AnimationButtonProvider> _providers = {};
 AnimationButtonController abc = AnimationButtonController();
 
 class _DefaultValues {
   static const String id = "buttonDefault";
-  static const double? width = 1;
-  static const double? height = 1;
+  static const double width = 1;
+  static const double height = 1;
   static const double margin = 0;
-  static const double marginVertical = 0;
-  static const double marginHorizontal = 0;
+  static const double marginLeft = 0;
+  static const double marginTop = 0;
+  static const double marginRight = 0;
+  static const double marginBottom = 0;
   static const String? text = null;
   static const TextStyle textStyle = TextStyle(fontSize: 10);
   static const String? image = null;
@@ -38,41 +42,47 @@ class AnimationButton extends ConsumerWidget {
   AnimationButton(
       {Key? key,
       required String id,
-      double? width = _DefaultValues.width,
-      double? height = _DefaultValues.height,
-      double? margin = _DefaultValues.margin,
+      double width = _DefaultValues.width,
+      double height = _DefaultValues.height,
+      double marginLeft = _DefaultValues.marginLeft,
+      double marginTop = _DefaultValues.marginTop,
+      double marginRight = _DefaultValues.marginRight,
+      double marginBottom = _DefaultValues.marginBottom,
       String? text = _DefaultValues.text,
-      TextStyle? textStyle = _DefaultValues.textStyle,
+      TextStyle textStyle = _DefaultValues.textStyle,
       String? image = _DefaultValues.image,
-      Color? color = _DefaultValues.color,
-      double? opacity = _DefaultValues.opacity,
-      double? ratio = _DefaultValues.ratio,
-      int? duration = _DefaultValues.duration,
+      Color color = _DefaultValues.color,
+      double opacity = _DefaultValues.opacity,
       void Function()? onTap = _DefaultValues.onTap,
       void Function()? onTapDown = _DefaultValues.onTapDown,
       void Function()? onTapUp = _DefaultValues.onTapUp,
       void Function()? onTapCancel = _DefaultValues.onTapCancel,
       Widget? child = _DefaultValues.child})
       : super(key: key) {
+    print(key);
     _id = id;
-    abc.setControllerState(
-        id: id,
-        width: width,
-        height: height,
-        margin: margin,
-        text: text,
-        textStyle: textStyle,
-        image: image,
-        color: color,
-        opacity: opacity,
-        ratio: ratio,
-        duration: duration,
-        onTap: onTap,
-        onTapDown: onTapDown,
-        onTapUp: onTapUp,
-        onTapCancel: onTapCancel,
-        child: child);
-    abc.updateProvider(_id);
+    if (!_abp.containsKey(_id)) {
+      _providers[_id] = AnimationButtonProvider(_id);
+      _abp[_id] = ChangeNotifierProvider.autoDispose((ref) => _providers[_id]!);
+    }
+
+    /// Save arguments to provider.
+    _providers[_id]?.setStateDouble('width', width);
+    _providers[_id]?.setStateDouble('height', height);
+    _providers[_id]?.setStateDouble('marginLeft', marginLeft);
+    _providers[_id]?.setStateDouble('marginTop', marginTop);
+    _providers[_id]?.setStateDouble('marginRight', marginRight);
+    _providers[_id]?.setStateDouble('marginBottom', marginBottom);
+    _providers[_id]?.setStateDouble('opacity', opacity);
+    _providers[_id]?.setText(text);
+    _providers[_id]?.setTextStyle(textStyle);
+    _providers[_id]?.setImage(image);
+    _providers[_id]?.setColor(color);
+    _providers[_id]?.setOnTap(onTap);
+    _providers[_id]?.setOnTapDown(onTapDown);
+    _providers[_id]?.setOnTapUp(onTapUp);
+    _providers[_id]?.setOnTapCancel(onTapCancel);
+    _providers[_id]?.setChild(child);
   }
 
   @override
@@ -80,57 +90,37 @@ class AnimationButton extends ConsumerWidget {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
-    if (!_abp.containsKey(_id)) {
-      _abp[_id] = ChangeNotifierProvider.autoDispose(
-          (ref) => AnimationButtonProvider(_id));
-      abc.setProvider(_id, ref.watch(_abp[_id]!));
-    }
-
     return SizedBox(
-        width: ref.watch(_abp[_id]!).width,
-        height: ref.watch(_abp[_id]!).height,
-        child: AnimationWidget(
+        width: ref.watch(_abp[_id]!).stateDouble['width'],
+        height: ref.watch(_abp[_id]!).stateDouble['height'],
+        child: GestureDetector(
           onTap: () {
             // If onTap is null, animate zoomInOut.
-            (ref.watch(_abp[_id]!).onTap ??
-                    () {
-                      abc.startZoomInOut(_id);
-                    })
-                .call();
+            ref.watch(_abp[_id]!).onTap?.call();
           },
           onTapDown: (detail) {
             // If onTapDown is null, animate zoomIn.
-            (ref.watch(_abp[_id]!).onTapDown ??
-                    () {
-                      abc.startZoomIn(_id);
-                    })
-                .call();
+            ref.watch(_abp[_id]!).onTapDown?.call();
           },
           onTapUp: (detail) {
             // If onTapUp is null, animate zoomOut.
-            (ref.watch(_abp[_id]!).onTapUp ??
-                    () {
-                      abc.startZoomOut(_id);
-                    })
-                .call();
+            ref.watch(_abp[_id]!).onTapUp?.call();
           },
           onTapCancel: () {
             // If onTapCancel is null, animate zoomOut.
-            (ref.watch(_abp[_id]!).onTapCancel ??
-                    () {
-                      abc.startZoomOut(_id);
-                    })
-                .call();
+            ref.watch(_abp[_id]!).onTapCancel?.call();
           },
           child: Container(
               // alignment: Alignment(0, 0),
-              margin: EdgeInsets.symmetric(
-                  vertical: ref.watch(_abp[_id]!).marginVertical,
-                  horizontal: ref.watch(_abp[_id]!).marginHorizontal),
+              margin: EdgeInsets.only(
+                  left: ref.watch(_abp[_id]!).stateDouble['marginLeft']!,
+                  top: ref.watch(_abp[_id]!).stateDouble['marginTop']!,
+                  right: ref.watch(_abp[_id]!).stateDouble['marginRight']!,
+                  bottom: ref.watch(_abp[_id]!).stateDouble['marginBottom']!),
               color: ref
                   .watch(_abp[_id]!)
                   .color
-                  .withOpacity(ref.watch(_abp[_id]!).opacity),
+                  .withOpacity(ref.watch(_abp[_id]!).stateDouble['opacity']!),
               child: Stack(
                 children: [
                   /// Image
@@ -162,31 +152,44 @@ class AnimationButton extends ConsumerWidget {
 }
 
 class AnimationButtonProvider extends ChangeNotifier {
-  String _id = _DefaultValues.id;
-  double _width = _DefaultValues.width ?? 1;
-  double _height = _DefaultValues.height ?? 1;
-  double _marginVertical = _DefaultValues.marginVertical;
-  double _marginHorizontal = _DefaultValues.marginHorizontal;
+  late String _id;
   String? _text = _DefaultValues.text;
   TextStyle _textStyle = _DefaultValues.textStyle;
   String? _image = _DefaultValues.image;
   Color _color = _DefaultValues.color;
-  double _opacity = _DefaultValues.opacity;
   void Function()? _onTap = _DefaultValues.onTap;
   void Function()? _onTapDown = _DefaultValues.onTapDown;
   void Function()? _onTapUp = _DefaultValues.onTapUp;
   void Function()? _onTapCancel = _DefaultValues.onTapCancel;
   Widget? _child = _DefaultValues.child;
 
-  double get width => _width;
-  double get height => _height;
-  double get marginVertical => _marginVertical;
-  double get marginHorizontal => _marginHorizontal;
+  /// Double type value to be animated.
+  ///
+  /// width, height, marginLeft, marginTop, marginRight, marginBottom, opacity...
+  Map<String, double> _stateDouble = {
+    'width': _DefaultValues.width,
+    'height': _DefaultValues.height,
+    'marginLeft': _DefaultValues.marginLeft,
+    'marginTop': _DefaultValues.marginTop,
+    'marginRight': _DefaultValues.marginRight,
+    'marginBottom': _DefaultValues.marginBottom,
+    'opacity': _DefaultValues.opacity,
+  };
+  Map<String, bool> _nowStateAnimation = {
+    'width': false,
+    'height': false,
+    'marginLeft': false,
+    'marginTop': false,
+    'marginRight': false,
+    'marginBottom': false,
+    'opacity': false,
+  };
+
+  Map<String, double> get stateDouble => _stateDouble;
   String? get text => _text;
   TextStyle? get textStyle => _textStyle;
   String? get image => _image;
   Color get color => _color;
-  double get opacity => _opacity;
   void Function()? get onTap => _onTap;
   void Function()? get onTapDown => _onTapDown;
   void Function()? get onTapUp => _onTapUp;
@@ -201,25 +204,11 @@ class AnimationButtonProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setWidth(double? width) {
-    _width = width ?? _width;
-  }
-
-  void setHeight(double? height) {
-    _height = height ?? _height;
-  }
-
-  void setMarginVertical(double? marginVertical) {
-    _marginVertical = (marginVertical ?? _marginVertical).ceilToDouble();
-    if (_marginVertical.isNegative) {
-      _marginVertical = 0;
-    }
-  }
-
-  void setMarginHorizontal(double? marginHorizontal) {
-    _marginHorizontal = (marginHorizontal ?? _marginHorizontal).ceilToDouble();
-    if (_marginHorizontal.isNegative) {
-      _marginHorizontal = 0;
+  void setStateDouble(String key, double? value) {
+    if (value != null) {
+      _stateDouble[key] = value;
+    } else {
+      throw FormatException('State value can not be null');
     }
   }
 
@@ -238,10 +227,6 @@ class AnimationButtonProvider extends ChangeNotifier {
 
   void setColor(Color? color) {
     _color = color ?? _color;
-  }
-
-  void setOpacity(double? opacity) {
-    _opacity = opacity ?? _opacity;
   }
 
   void setOnTap(void Function()? onTap) {
@@ -276,203 +261,17 @@ class AnimationButtonController {
   static const int _animationInterval = 16;
   final Map<String, bool> _isAnimation = {};
   final Map<String, AnimationButtonProvider> _providers = {};
-  final Map<String, double?> _widths = {};
-  final Map<String, double?> _heights = {};
-  final Map<String, double?> _margins = {};
-  final Map<String, String?> _texts = {};
-  final Map<String, TextStyle?> _textStyles = {};
-  final Map<String, String?> _images = {};
-  final Map<String, Color?> _colors = {};
-  final Map<String, double?> _opacities = {};
-  final Map<String, double?> _ratios = {};
-  final Map<String, int?> _durations = {};
-  final Map<String, void Function()?> _onTaps = {};
-  final Map<String, void Function()?> _onTapDowns = {};
-  final Map<String, void Function()?> _onTapUps = {};
-  final Map<String, void Function()?> _onTapCancels = {};
-  final Map<String, Widget?> _children = {};
-
   final Map<String, double> _nowMarginRatios = {};
   final Map<String, void Function(String)?> _nowAnimations = {};
 
-  void _startAnimation(String id) {
-    /// TODO : For debug.
-    Stopwatch s = Stopwatch();
-    void _animationDraw(Timer? timer) {
-      if (_isAnimation[id] == false) {
-        /// TODO : For debug.
-        s.stop();
-        print('Animation run time : ${s.elapsedMilliseconds.toString()}');
-        s.reset();
-        timer?.cancel();
-      } else {
-        _nowAnimations[id]?.call(id);
-      }
-    }
-
-    if (_isAnimation[id] == false) {
-      _isAnimation[id] = true;
-      _animationDraw(null);
-      Timer.periodic(
-          const Duration(milliseconds: _animationInterval), _animationDraw);
-
-      /// TODO : For Debug
-      s.start();
-    }
-  }
-
-  void setControllerState(
+  Future<void> animation(
       {required String id,
-      required double? width,
-      required double? height,
-      required double? margin,
-      required String? text,
-      required TextStyle? textStyle,
-      required String? image,
-      required Color? color,
-      required double? opacity,
-      required double? ratio,
-      required int? duration,
-      required void Function()? onTap,
-      required void Function()? onTapDown,
-      required void Function()? onTapUp,
-      required void Function()? onTapCancel,
-      required Widget? child}) {
-    _isAnimation[id] ??= false;
-    _nowAnimations[id] ??= null;
-    _widths[id] = width;
-    _heights[id] = height;
-    _margins[id] = margin;
-    _texts[id] = text;
-    _textStyles[id] = textStyle;
-    _images[id] = image;
-    _colors[id] = color;
-    _opacities[id] = opacity;
-    _ratios[id] = ratio;
-    _durations[id] = duration;
-    _onTaps[id] = onTap;
-    _onTapDowns[id] = onTapDown;
-    _onTapUps[id] = onTapUp;
-    _onTapCancels[id] = onTapCancel;
-    _children[id] = child;
-
-    if (_isAnimation[id]! == false) {
-      _nowMarginRatios[id] = (_ratios[id]! - 1) / (2 * _ratios[id]!);
-    }
-  }
-
-  void setProvider(
-    String id,
-    AnimationButtonProvider provider,
-  ) {
-    _providers[id] = provider;
-    updateProvider(id);
-  }
-
-  void updateProvider(String id) {
-    // TODO : Change from delay to build callbacks.
-    void _updateProvider(Timer? timer) {
-      _providers[id]?.setWidth(_widths[id]);
-      _providers[id]?.setHeight(_heights[id]);
-      _providers[id]?.setMarginVertical(_margins[id]! +
-          (_heights[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setMarginHorizontal(_margins[id]! +
-          (_widths[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setText(_texts[id]);
-      _providers[id]?.setTextStyle(TextStyle(
-          fontSize:
-              _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
-      _providers[id]?.setImage(_images[id]);
-      _providers[id]?.setColor(_colors[id]);
-      _providers[id]?.setOpacity(_opacities[id]);
-      _providers[id]?.setOnTap(_onTaps[id]);
-      _providers[id]?.setOnTapDown(_onTapDowns[id]);
-      _providers[id]?.setOnTapUp(_onTapUps[id]);
-      _providers[id]?.setOnTapCancel(_onTapCancels[id]);
-      _providers[id]?.setChild(_children[id]);
-      _providers[id]?.changeNotification();
-      timer?.cancel();
-    }
-
-    Timer.periodic(const Duration(milliseconds: 8), _updateProvider);
-    // await Future.delayed(const Duration(microseconds: 8));
-  }
-
-  void startZoomIn(String id) {
-    _nowAnimations[id] = _zoomIn;
-    _startAnimation(id);
-  }
-
-  void startZoomOut(String id) {
-    _nowAnimations[id] = _zoomOut;
-    _startAnimation(id);
-  }
-
-  void startZoomInOut(String id) {
-    _nowAnimations[id] = _zoomInOut;
-    _startAnimation(id);
-  }
-
-  void _zoomIn(String id) {
-    if (_nowMarginRatios[id]! > 0 && _durations[id]! > 0) {
-      _nowMarginRatios[id] = _nowMarginRatios[id]! -
-          ((_ratios[id]! - 1) / (2 * _ratios[id]!)) /
-              (_durations[id]! / _animationInterval).ceil();
-      _providers[id]?.setMarginVertical(_margins[id]! +
-          (_heights[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setMarginHorizontal(_margins[id]! +
-          (_widths[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setTextStyle(TextStyle(
-          fontSize:
-              _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
-
-      _providers[id]?.changeNotification();
-    } else {
-      _isAnimation[id] = false;
-    }
-  }
-
-  void _zoomOut(String id) {
-    if (_nowMarginRatios[id]! < (_ratios[id]! - 1) / (2 * _ratios[id]!) &&
-        _durations[id]! > 0) {
-      _nowMarginRatios[id] = _nowMarginRatios[id]! +
-          ((_ratios[id]! - 1) / (2 * _ratios[id]!)) /
-              (_durations[id]! / _animationInterval).ceil();
-      _providers[id]?.setMarginVertical(_margins[id]! +
-          (_heights[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setMarginHorizontal(_margins[id]! +
-          (_widths[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setTextStyle(TextStyle(
-          fontSize:
-              _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
-      _providers[id]?.changeNotification();
-    } else {
-      _isAnimation[id] = false;
-    }
-  }
-
-  void _zoomInOut(String id) {
-    if (_nowMarginRatios[id]! > 0 && _durations[id]! > 0) {
-      _nowMarginRatios[id] = _nowMarginRatios[id]! -
-          ((_ratios[id]! - 1) / (2 * _ratios[id]!)) /
-              (_durations[id]! / _animationInterval).ceil();
-      _providers[id]?.setMarginVertical(_margins[id]! +
-          (_heights[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setMarginHorizontal(_margins[id]! +
-          (_widths[id]! - _margins[id]! * 2) * _nowMarginRatios[id]!);
-      _providers[id]?.setTextStyle(TextStyle(
-          fontSize:
-              _textStyles[id]!.fontSize! * (1 - 2 * _nowMarginRatios[id]!)));
-      _providers[id]?.changeNotification();
-    } else {
-      _nowAnimations[id] = _zoomOut;
-    }
-  }
-
-  void _zoomOutIn(String id) {
-    if (!(_nowMarginRatios[id]! > 0 && _durations[id]! > 0)) {
-      _nowAnimations[id] = _zoomOut;
-    }
+      required String state,
+      required double begin,
+      required double end,
+      required int duration}) async {
+    if (_providers.containsKey(id) &&
+        _providers[id]!.stateDouble.containsKey(state)) {}
   }
 
   void providerDispose(String id) {
@@ -480,3 +279,47 @@ class AnimationButtonController {
     _isAnimation[id] = false;
   }
 }
+
+// abstract class Animation {
+//   int _timeBegin;
+//   int _timeEnd;
+//
+//   int get timeBegin => _timeBegin;
+//   int get timeEnd => _timeEnd;
+//
+//   Animation(this._timeBegin, this._timeEnd);
+//   double? getValue(int time) {
+//     if (_timeBegin <= time && time < _timeEnd) {
+//       return func(time);
+//     } else {
+//       return null;
+//     }
+//   }
+//
+//   double func(int time);
+// }
+//
+// class Linear extends Animation {
+//   double _begin;
+//   double _end;
+//
+//   Linear(int _timeBegin, int _timeEnd, this._begin, this._end)
+//       : super(_timeBegin, _timeEnd);
+//
+//   double func(int time) {
+//     return _begin +
+//         (_end - _begin) * ((time - _timeBegin) / (_timeEnd - _timeBegin));
+//   }
+// }
+//
+// class Wave extends Animation {
+//   double a;
+//   double t;
+//
+//   Wave(int _timeBegin, int _timeEnd, this.a, this.t)
+//       : super(_timeBegin, _timeEnd);
+//
+//   double func(int time) {
+//     return a * sin((t / 500) * pi * time);
+//   }
+// }

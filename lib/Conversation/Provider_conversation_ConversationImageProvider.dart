@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
+
+import '../Wrapper/wrapper_AnimationWidget.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
   String _mBGImagePath = "drawable/Conversation/black_screen.png";
@@ -11,6 +14,7 @@ class ConversationImageProvider extends ChangeNotifier {
   bool _isLog = false;
   bool _isHideUi = false;
   bool _isDim = false;
+  bool _canNext = false;
 
   String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
@@ -22,6 +26,7 @@ class ConversationImageProvider extends ChangeNotifier {
   bool get isLog => _isLog;
   bool get isHideUi => _isHideUi;
   bool get isDim => _isDim;
+  bool get canNext => _canNext;
 
   /// Set character image.
   /// This function is for Controller.
@@ -97,5 +102,15 @@ class ConversationImageProvider extends ChangeNotifier {
   void setDim(bool isDim) {
     _isDim = isDim;
     notifyListeners();
+  }
+
+  void setCanNext(bool canNext) {
+    _canNext = canNext;
+    notifyListeners();
+    animationController.animate('conversationScreen', 'sankaku', [
+      Wave(0, 10000000, GetScreenSize.screenWidth() * 0.02,
+          GetScreenSize.screenWidth() * 0.04, 1),
+      // Linear(0, 5000, 0, 1000)
+    ]);
   }
 }

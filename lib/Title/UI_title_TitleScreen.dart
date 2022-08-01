@@ -14,7 +14,7 @@ final titleScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => TitleScreenProvider());
 
 class TitleScreen extends ConsumerWidget {
-  late final SlideShowController _slideShowController;
+  // late final SlideShowController _slideShowController;
   static const _backgroundImages = [
     "assets/drawable/Title/Ocean.jpg",
     "assets/drawable/Title/Lion.jpg",
@@ -23,12 +23,12 @@ class TitleScreen extends ConsumerWidget {
 
   TitleScreen({Key? key, SlideShowController? slideShowController})
       : super(key: key) {
-    if (slideShowController == null) {
+    /* if (slideShowController == null) {
       _slideShowController = SlideShowController(_backgroundImages);
     } else {
       _slideShowController = slideShowController;
-    }
-    SoundPlayer.playBGM("assets/sound/BGM/Full-bloomer.mp3",
+    }*/
+    SoundPlayer().playBGM("assets/sound/BGM/Full-bloomer.mp3",
         loop: true, fadeOut: true);
   }
 
@@ -36,7 +36,7 @@ class TitleScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    _slideShowController.start(ref.read(titleScreenProvider));
+    // _slideShowController.start(ref.read(titleScreenProvider));
 
     return ProviderScope(
       child: Scaffold(
@@ -49,8 +49,8 @@ class TitleScreen extends ConsumerWidget {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  _slideShowController.stop();
-                  SoundPlayer.playUI("assets/sound/UISound/next.mp3");
+                  // _slideShowController.stop();
+                  SoundPlayer().playUI("assets/sound/UI/next.mp3");
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
@@ -95,13 +95,13 @@ class TitleScreen extends ConsumerWidget {
   }
 
   static Future<void> prepare(BuildContext context) async {
-    SoundPlayer.loadAll(filePaths: [
-      "assets/sound/UISound/pushButton.mp3",
-      "assets/sound/UISound/next.mp3"
-    ], audioType: SoundPlayer.UI);
-    SoundPlayer.loadAll(
+    SoundPlayer().precacheSounds(filePaths: [
+      "assets/sound/UI/pushButton.mp3",
+      "assets/sound/UI/next.mp3"
+    ], audioType: SoundPlayer.ui);
+    SoundPlayer().precacheSounds(
         filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
-        audioType: SoundPlayer.BGM);
+        audioType: SoundPlayer.bgm);
     for (var e in _backgroundImages) {
       await precacheImage(AssetImage(e), context);
     }

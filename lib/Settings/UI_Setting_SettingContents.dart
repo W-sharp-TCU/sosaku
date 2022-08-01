@@ -193,7 +193,7 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.1,
                           child: Center(
                             child: Text(
-                              "SE",
+                              "AS",
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
                               ),
