@@ -37,7 +37,7 @@ class LoadScreenProvider extends ChangeNotifier {
 
   void setSelectFileNumber(int i){
     _selectFileNumber = i;
-    print(_selectFileNumber);
+    print(_selectFileNumber); ///debug
     notifyListeners();
   }
 }

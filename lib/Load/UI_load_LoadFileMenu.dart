@@ -47,7 +47,7 @@ class LoadFileMenu extends ConsumerWidget{
             width: GetScreenSize.screenWidth() * 0.9,
             height: GetScreenSize.screenHeight() * 0.9,
             decoration:const BoxDecoration(
-              color: Colors.transparent,
+              color: Colors.grey,
             ),
             child: Stack(
               children: [
@@ -122,6 +122,32 @@ class LoadFileMenu extends ConsumerWidget{
                         )
 
                     )
+                ),
+
+                Align(
+                  alignment: const Alignment(0.95, -1),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+
+                        for(var i = 0; i < 6; i++)
+                        GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: Container(
+                            width: GetScreenSize.screenWidth() * 0.5,
+                            height: GetScreenSize.screenHeight() * 0.2,
+                            margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                            decoration: const BoxDecoration(
+                              color: Colors.lightBlue,
+                            ),
+                          )
+                        ),
+                      ],
+                    ),
+                  )
                 )
               ],
             )
