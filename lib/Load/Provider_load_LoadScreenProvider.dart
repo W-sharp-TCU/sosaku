@@ -5,7 +5,7 @@ class LoadScreenProvider extends ChangeNotifier {
   // final _mLoadScreenProvider = this;
   List<String> _fileImagePaths =
       List.generate(20, (i) => "drawable/Load/default_file_image.png");
-  int _selectFileNumber = 0;
+  static int _selectFileNumber = 0;
 
   String get mBGImagePath => _mBGImagePath;
   List get fileImagePaths => _fileImagePaths;

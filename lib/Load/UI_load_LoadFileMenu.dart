@@ -25,37 +25,106 @@ class LoadFileMenu extends ConsumerWidget{
             ref.read(loadUIProvider).changeFlagSaveMenu();
             print(ref.watch(loadScreenProvider).selectFileNumber);
           },
-          child: Container(
-            width: GetScreenSize.screenWidth(),
-            height: GetScreenSize.screenHeight(),
-            color: Colors.transparent,
-          ),
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: GetScreenSize.screenHeight() * 0.01,
+                  sigmaY: GetScreenSize.screenHeight() * 0.01,
+                ),
+                child: Container(
+                  width: GetScreenSize.screenWidth(),
+                  height: GetScreenSize.screenHeight(),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ),
+              ),
+            ),
         ),
 
         Center(
-          child: ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: GetScreenSize.screenHeight() * 0.01,
-                sigmaY: GetScreenSize.screenHeight() * 0.01,
-              ),
-              child: Container(
-                width: GetScreenSize.screenWidth() * 0.9,
-                height: GetScreenSize.screenHeight() * 0.9,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border.all(
+          child: Container(
+            width: GetScreenSize.screenWidth() * 0.9,
+            height: GetScreenSize.screenHeight() * 0.9,
+            decoration:const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: const Alignment(-0.95, -0.95),
+                  child: Container(
+                    width: GetScreenSize.screenWidth() * 0.3,
+                    height: GetScreenSize.screenHeight() * 0.3,
                     color: Colors.white,
-                    width: GetScreenSize.screenWidth() * 0.003,
                   ),
                 ),
-                child: Stack(
-                  children: [
 
-                  ],
+                Align(
+                    alignment: const Alignment(-0.95, 0.3),
+                    child: Container(
+                        width: GetScreenSize.screenWidth() * 0.3,
+                        height: GetScreenSize.screenHeight() * 0.35,
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "ファイル" + ref.watch(loadScreenProvider).
+                              selectFileNumber.toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.05,
+                              ),
+                            ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "chap3-1",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.04,
+                                    color: Colors.lightBlue,
+                                  ),
+                                ),
+
+                                Text(
+                                  "2022/5/30 20:00",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.045,
+                                    color: Colors.lightBlue,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const Spacer(),
+
+                            Text(
+                              "~comments~",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+
+                            Text(
+                              "昔々あるところにおじいさんとおばあさんが住んでおりました。野山に"
+                                  "混じりて",
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: GetScreenSize.screenHeight() * 0.045,
+                                  color: Colors.lightGreen
+                              ),
+                            ),
+
+                            const Spacer(),
+                          ],
+                        )
+
+                    )
                 )
-              ),
-            ),
+              ],
+            )
           ),
         ),
       ],
