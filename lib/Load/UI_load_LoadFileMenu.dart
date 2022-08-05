@@ -61,10 +61,10 @@ class LoadFileMenu extends ConsumerWidget{
                 ),
 
                 Align(
-                    alignment: const Alignment(-0.95, 0.3),
+                    alignment: const Alignment(-0.95, 0.88),
                     child: Container(
                         width: GetScreenSize.screenWidth() * 0.3,
-                        height: GetScreenSize.screenHeight() * 0.35,
+                        height: GetScreenSize.screenHeight() * 0.55,
                         color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +73,7 @@ class LoadFileMenu extends ConsumerWidget{
                               "ファイル" + ref.watch(loadScreenProvider).
                               selectFileNumber.toString(),
                               style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.05,
+                                fontSize: GetScreenSize.screenHeight() * 0.07,
                               ),
                             ),
 
@@ -83,19 +83,21 @@ class LoadFileMenu extends ConsumerWidget{
                                 Text(
                                   "chap3-1",
                                   style: TextStyle(
-                                    fontSize: GetScreenSize.screenHeight() * 0.04,
+                                    fontSize: GetScreenSize.screenHeight() * 0.05,
                                     color: Colors.lightBlue,
                                   ),
                                 ),
 
-                                Text(
-                                  "2022/5/30 20:00",
-                                  style: TextStyle(
-                                    fontSize: GetScreenSize.screenHeight() * 0.045,
-                                    color: Colors.lightBlue,
-                                  ),
-                                ),
+
                               ],
+                            ),
+
+                            Text(
+                              "2022/5/30 20:00",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.05,
+                                color: Colors.lightBlue,
+                              ),
                             ),
 
                             const Spacer(),
@@ -110,7 +112,7 @@ class LoadFileMenu extends ConsumerWidget{
                             Text(
                               "昔々あるところにおじいさんとおばあさんが住んでおりました。野山に"
                                   "混じりて",
-                              maxLines: 2,
+                              maxLines: 3,
                               style: TextStyle(
                                   fontSize: GetScreenSize.screenHeight() * 0.045,
                                   color: Colors.lightGreen
