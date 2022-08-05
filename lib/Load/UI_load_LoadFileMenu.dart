@@ -131,7 +131,7 @@ class LoadFileMenu extends ConsumerWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
 
-                        for(var i = 0; i < 6; i++)
+                        ///save
                         GestureDetector(
                           onTap: (){
 
@@ -143,8 +143,128 @@ class LoadFileMenu extends ConsumerWidget{
                             decoration: const BoxDecoration(
                               color: Colors.lightBlue,
                             ),
+                            child: Center(
+                              child: Text(
+                                "save",
+                                style: TextStyle(
+                                  fontSize: GetScreenSize.screenHeight() * 0.1,
+                                ),
+                              ),
+                            ),
                           )
                         ),
+
+                        GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Container(
+                              width: GetScreenSize.screenWidth() * 0.5,
+                              height: GetScreenSize.screenHeight() * 0.2,
+                              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "load",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.1,
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+
+                        GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Container(
+                              width: GetScreenSize.screenWidth() * 0.5,
+                              height: GetScreenSize.screenHeight() * 0.2,
+                              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "copy",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.1,
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+
+                        GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Container(
+                              width: GetScreenSize.screenWidth() * 0.5,
+                              height: GetScreenSize.screenHeight() * 0.2,
+                              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "delete",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.1,
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+
+                        GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Container(
+                              width: GetScreenSize.screenWidth() * 0.5,
+                              height: GetScreenSize.screenHeight() * 0.2,
+                              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "import",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.1,
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+
+                        GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Container(
+                              width: GetScreenSize.screenWidth() * 0.5,
+                              height: GetScreenSize.screenHeight() * 0.2,
+                              margin: EdgeInsets.all(GetScreenSize.screenHeight() * 0.03),
+                              decoration: const BoxDecoration(
+                                color: Colors.lightBlue,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "export",
+                                  style: TextStyle(
+                                    fontSize: GetScreenSize.screenHeight() * 0.1,
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+
+
                       ],
                     ),
                   )
