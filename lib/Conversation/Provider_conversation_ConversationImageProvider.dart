@@ -4,8 +4,8 @@ import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
-  String _mBGImagePath = "drawable/Conversation/black_screen.png";
-  String _characterImagePath = "drawable/Conversation/no_character.png";
+  String _mBGImagePath = "assets/drawable/Conversation/black_screen.png";
+  String _characterImagePath = "assets/drawable/Conversation/no_character.png";
   String _characterName = "";
   List<String> _optionTexts = [];
   bool _isAuto = false;

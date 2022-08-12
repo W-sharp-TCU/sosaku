@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../main.dart';
+
 // todo: configure AudioContext
 /// **Play UI sounds, Background Musics, Ambient Sounds & Character's voices.**
 ///
@@ -93,9 +95,9 @@ class SoundPlayer {
         throw AssertionError("SoundPlayer: unexpected audioType error\n"
             "Specify 'ui', 'bgm', 'as' or 'cv' to audioType.");
     }
-    print("SoundPlayer.precacheSounds(): [list content original] $filePaths");
+    logger.fine("precached $audioType file(s) : $filePaths");
     await _deleteUnnecessaryCaches(filePaths, caches);
-    print("SoundPlayer.precacheSounds(): [list content deleted] $filePaths");
+    logger.finer("actual precached $audioType file(s) : $filePaths");
     for (String element in filePaths) {
       AudioPlayer newPlayer = AudioPlayer();
       newPlayer.setPlayerMode(playerMode);
@@ -105,12 +107,12 @@ class SoundPlayer {
       caches[element] = _PlayerTuple(element, newPlayer, newPlayer.state);
       newPlayer.onPlayerStateChanged.listen((event) {
         caches[element]?.state = event;
-        print(
-            "SoundPlayer: Player's state was changed to $event.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
+        logger.fine(
+            "Player's state was changed to $event.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
       });
       newPlayer.onPlayerComplete.listen((event) {
         caches[element]?.state = PlayerState.completed;
-        print(
+        logger.fine(
             "SoundPlayer: Player's state was changed to ${PlayerState.completed}.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
       });
     }

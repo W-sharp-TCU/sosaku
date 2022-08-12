@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:sosaku/main.dart';
 
 /// StatefulWidget witch manage app lifecycle
 /// === Usage ===
@@ -43,7 +44,7 @@ class _LifecycleManagerState extends State<LifecycleManager>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state = $state');
+    logger.finer('Current state : $state');
     switch (state) {
       case AppLifecycleState.resumed:
         widget.callback.onResumed();
