@@ -12,7 +12,7 @@ import '../Conversation/UI_conversation_ConversationScreen.dart';
 ///
 /// ## Information
 /// This class is still incomplete.
-/// For debug or test this class, you can change the value of parameter named [_toggle].
+/// For debug or testing this class, you can change the value of parameter named [_toggle].
 ///
 /// ### Interfaces
 /// [finished], [started]
@@ -196,8 +196,8 @@ class GameManager {
         if (e.containsKey('BGM')) {
           bgmPaths.add(e['BGM'].cast<String>());
         }
-        if (e.containsKey('AS')) {
-          sePaths.add(e['AS'].cast<String>());
+        if (e.containsKey('SE')) {
+          sePaths.add(e['SE'].cast<String>());
         }
         if (e.containsKey('Voice')) {
           cvPaths.add(e['Voice'].cast<String>());
@@ -234,17 +234,17 @@ class GameManager {
     // pre-cache sound sources
     if (bgmPaths.isNotEmpty) {
       bgmPaths = bgmPaths.toSet().toList();
-      SoundPlayer()
+      await SoundPlayer()
           .precacheSounds(filePaths: bgmPaths, audioType: SoundPlayer.bgm);
     }
     if (cvPaths.isNotEmpty) {
       cvPaths = cvPaths.toSet().toList();
-      SoundPlayer()
+      await SoundPlayer()
           .precacheSounds(filePaths: cvPaths, audioType: SoundPlayer.cv);
     }
     if (sePaths.isNotEmpty) {
       sePaths = sePaths.toSet().toList();
-      SoundPlayer()
+      await SoundPlayer()
           .precacheSounds(filePaths: sePaths, audioType: SoundPlayer.as);
     }
     // pre-cache image sources
