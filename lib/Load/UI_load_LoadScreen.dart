@@ -40,14 +40,11 @@ class LoadScreen extends ConsumerWidget {
                 height: GetScreenSize.screenHeight(),
                 width: GetScreenSize.screenWidth(),
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/drawable/load/background.png"),
-                  )
-                ),
-
+                    image: DecorationImage(
+                  image: AssetImage("assets/drawable/Load/background.png"),
+                )),
                 child: Stack(
                   children: [
-
                     SizedBox(
                       height: GetScreenSize.screenHeight(),
                       width: GetScreenSize.screenWidth(),
@@ -55,8 +52,7 @@ class LoadScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            for(var i = 0; i < 10; i++)
-                              SelectLoadFile(i)
+                            for (var i = 0; i < 10; i++) SelectLoadFile(i)
                           ],
                         ),
                       ),
@@ -81,8 +77,7 @@ class LoadScreen extends ConsumerWidget {
                               color: Colors.white,
                               child: const Center(
                                 child: Text("back"),
-                              )
-                          ),
+                              )),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -106,14 +101,11 @@ class LoadScreen extends ConsumerWidget {
                         alignment: Alignment(0, 0),
                         child: DialogScreen(),
                       ),
-
-                    if(ref.watch(loadUIProvider).popFlagSaveMenu)
+                    if (ref.watch(loadUIProvider).popFlagSaveMenu)
                       const Align(
                         alignment: Alignment(0, 0),
                         child: LoadFileMenu(),
                       )
-
-
                   ],
                 ),
               ),

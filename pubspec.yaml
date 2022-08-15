@@ -29,16 +29,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod:
-  flutter_localizations:  # L18n support
+  flutter_riverpod:       # ChangeNotifier
+  flutter_localizations:  # L10n support
     sdk: flutter
-  intl: ^0.17.0           # L18n support
+  intl: ^0.17.0           # L10n support
   shared_preferences:     # local app storage access
   path_provider:          # search location apps can access
   audioplayers:           # play sounds
   universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
   package_info_plus:      # for checking running app version
+  simple_logger:          # logging with a simple way
+  # Usage: visit https://medium.com/flutter-jp/logger-ec25d8dd179a
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -146,6 +148,8 @@ flutter_icons:
 # native splash screen support
 # Run "flutter pub run flutter_native_splash:create" to generate splash screen when descriptions
 # mentioned below is changed.
+# Splash screen is displaced by SplashScreen class.
+# Current configuration : show white screen simply.
 flutter_native_splash:
   color: "#FFFFFF"
   #image: assets/drawable/Splash/Wsharp.png
