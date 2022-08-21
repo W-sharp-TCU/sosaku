@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
@@ -25,7 +27,8 @@ final conversationLogProvider =
 final ConversationScreenController conversationScreenController =
     ConversationScreenController();
 
-class ConversationScreen extends ConsumerWidget {
+class ConversationScreen extends HookConsumerWidget
+    implements GameScreenInterface {
   const ConversationScreen({Key? key}) : super(key: key);
 
   @override
@@ -162,5 +165,10 @@ class ConversationScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) async {
+    // do nothing.
   }
 }

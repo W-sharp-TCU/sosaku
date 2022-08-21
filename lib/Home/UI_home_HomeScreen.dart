@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
@@ -24,27 +26,14 @@ import '../Load/UI_load_LoadScreen.dart';
 final homeScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => HomeScreenProvider());
 
-class HomeScreen extends ConsumerWidget {
-  // late final SlideShowController _slideShowController;
-
-  HomeScreen({Key? key, SlideShowController? slideShowController})
-      : super(key: key) {
-    /*if (slideShowController == null) {
-      _slideShowController = SlideShowController([
-        "assets/drawable/Title/Ocean.jpg",
-        "assets/drawable/Title/Lion.jpg",
-        "assets/drawable/Title/default.jpg"
-      ]);
-    } else {
-      _slideShowController = slideShowController;
-    }*/
-  }
+class HomeScreen extends HookConsumerWidget implements GameScreenInterface {
+  const HomeScreen({Key? key, SlideShowController? slideShowController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    // _slideShowController.start(ref.read(homeScreenProvider));
 
     return Scaffold(
       body: LifecycleManager(
@@ -178,5 +167,10 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) async {
+    // do nothing.
   }
 }

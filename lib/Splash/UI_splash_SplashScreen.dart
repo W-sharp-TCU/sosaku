@@ -17,7 +17,6 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _animation;
 
   static const String _imagePath = "assets/drawable/Splash/Wsharp.png";
-  static bool _isFirst = true;
 
   @override
   void initState() {
@@ -30,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen>
       end: 1.0,
     ).animate(_controller);
     super.initState();
+    _jumpTimer(context);
   }
 
   @override
@@ -42,10 +42,6 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    if (_isFirst) {
-      _jumpTimer(context);
-      _isFirst = false;
-    }
     _controller.forward();
     return Scaffold(
       body: Container(
@@ -69,11 +65,11 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _jumpTimer(BuildContext context) async {
-    await AttentionScreen.prepare(context);
+    final AttentionScreen attentionScreen = AttentionScreen();
+    await attentionScreen.preLoad(context);
     await Future.delayed(const Duration(milliseconds: 5000));
     Navigator.of(context).pushReplacement(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          AttentionScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) => attentionScreen,
       transitionDuration: const Duration(milliseconds: 1500),
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           buildFlashTransition(

@@ -2,7 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Load/UI_load_LoadFileMenu.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
@@ -19,7 +21,7 @@ final loadUIProvider =
 final loadScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => LoadScreenProvider());
 
-class LoadScreen extends ConsumerWidget {
+class LoadScreen extends HookConsumerWidget implements GameScreenInterface {
   const LoadScreen({Key? key}) : super(key: key);
 
   @override
@@ -114,6 +116,11 @@ class LoadScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) async {
+    // TODO: implement pre load
   }
 }
 

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
@@ -13,7 +17,7 @@ import '../Home/UI_home_HomeScreen.dart';
 final titleScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => TitleScreenProvider());
 
-class TitleScreen extends ConsumerWidget {
+class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
   // late final SlideShowController _slideShowController;
   static const _backgroundImages = [
     "assets/drawable/Title/Ocean.jpg",
@@ -21,19 +25,23 @@ class TitleScreen extends ConsumerWidget {
     "assets/drawable/Title/default.jpg"
   ];
 
-  TitleScreen({Key? key, SlideShowController? slideShowController})
-      : super(key: key) {
-    /* if (slideShowController == null) {
-      _slideShowController = SlideShowController(_backgroundImages);
-    } else {
-      _slideShowController = slideShowController;
-    }*/
-    SoundPlayer().playBGM("assets/sound/BGM/Full-bloomer.mp3",
-        loop: true, fadeOut: true);
-  }
+  static const List<String> _uiAudioPaths = [
+    "assets/sound/UI/pushButton.mp3",
+    "assets/sound/UI/next.mp3"
+  ];
+  static const List<String> _bgmPaths = ["assets/sound/BGM/Full-bloomer.mp3"];
+
+  const TitleScreen({Key? key, SlideShowController? slideShowController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // called once
+    useEffect(() {
+      SoundPlayer().playBGM(_bgmPaths[0]);
+      return null;
+    });
+
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     // _slideShowController.start(ref.read(titleScreenProvider));
@@ -94,14 +102,12 @@ class TitleScreen extends ConsumerWidget {
     );
   }
 
-  static Future<void> prepare(BuildContext context) async {
-    SoundPlayer().precacheSounds(filePaths: [
-      "assets/sound/UI/pushButton.mp3",
-      "assets/sound/UI/next.mp3"
-    ], audioType: SoundPlayer.ui);
-    SoundPlayer().precacheSounds(
-        filePaths: ["assets/sound/BGM/Full-bloomer.mp3"],
-        audioType: SoundPlayer.bgm);
+  @override
+  Future<void> prepare(BuildContext context) async {
+    await SoundPlayer()
+        .precacheSounds(filePaths: _uiAudioPaths, audioType: SoundPlayer.ui);
+    await SoundPlayer()
+        .precacheSounds(filePaths: _bgmPaths, audioType: SoundPlayer.bgm);
     for (var e in _backgroundImages) {
       await precacheImage(AssetImage(e), context);
     }

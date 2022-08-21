@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
@@ -79,7 +80,7 @@ class GameManager {
   ///
   /// App's screen will transition to new page determined by this class automatically
   /// some milliseconds after this function is executed.
-  Future<Widget> processing(BuildContext context) async {
+  Future<GameScreenInterface> processing(BuildContext context) async {
     _clear();
     Type nextScreen = _determineNextScreen();
     await _prepareForNextScreen(context, nextScreen);
@@ -133,17 +134,18 @@ class GameManager {
     _lastScreenDetails = null;
   }
 
-  Widget _getNextScreenObject(BuildContext context, Type screenType) {
+  GameScreenInterface _getNextScreenObject(
+      BuildContext context, Type screenType) {
     if (screenType == ConversationScreen) {
       return const ConversationScreen();
     } else if (screenType == SelectActionScreen) {
-      return const SelectActionScreen();
+      return const TitleScreen(); // todo: change SelectActionScreen();
     } else {
       print(
           "[WARNING] GameManager._getNextScreenObject(): screenType is invalid."
           "Return to TitleScreen().");
     }
-    return TitleScreen();
+    return const TitleScreen();
   }
 
   Future<Map<String, dynamic>> _loadJson(String filePath) async {
