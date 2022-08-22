@@ -1,15 +1,32 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
+import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
+import '../Wrapper/wrapper_AnimationWidget.dart';
 
-class SelectActionScreen extends StatelessWidget {
+final selectActionScreenProvider =
+    ChangeNotifierProvider.autoDispose((ref) => SelectActionScreenProvider());
+
+final SelectActionScreenController selectActionScreenController =
+    SelectActionScreenController();
+
+class SelectActionScreen extends ConsumerWidget {
   const SelectActionScreen({Key? key}) : super(key: key);
-  static String _screenImagePath = "./assets/drawable/Conversation/004_corridorBB.png";
-  static String _characterImagePath = "./assets/drawable/CharacterImage/Ayana/normal.png";
+  static String _screenImagePath =
+      "./assets/drawable/Conversation/004_corridorBB.png";
+  static String _characterImagePath =
+      "./assets/drawable/CharacterImage/Ayana/normal.png";
   static String _buttonImagePath = "";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    SelectActionScreenProvider sasp = ref.watch(selectActionScreenProvider);
+    selectActionScreenController.start(sasp, context);
+    final animationProvider = animationController.createProvider('statusUp',
+        {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0});
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -57,8 +74,8 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
+                    onTap: () {
+                      selectActionScreenController.selectWork();
                     },
                   ),
                 ),
@@ -83,8 +100,8 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
+                    onTap: () {
+                      selectActionScreenController.selectNonono();
                     },
                   ),
                 ),
@@ -109,8 +126,8 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
+                    onTap: () {
+                      selectActionScreenController.selectAyana();
                     },
                   ),
                 ),
@@ -135,9 +152,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
                 Align(
@@ -161,8 +176,8 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
+                    onTap: () {
+                      selectActionScreenController.selectWriting();
                     },
                   ),
                 ),
@@ -187,11 +202,74 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
+                if (ref.watch(selectActionScreenProvider).isStatusUp)
+                  Align(
+                    alignment: const Alignment(1, 1),
+                    child: Container(
+                        margin: EdgeInsets.only(
+                          bottom: ref
+                              .watch(animationProvider)
+                              .stateDouble['arrow']!,
+                          right: GetScreenSize.screenWidth() * 0.0,
+                        ),
+                        width: GetScreenSize.screenWidth() * 0.2,
+                        height: GetScreenSize.screenWidth() * 0.06,
+                        child: Opacity(
+                            opacity: ref
+                                    .watch(animationProvider)
+                                    .stateDouble['opacity'] ??
+                                1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                BorderedText(
+                                  strokeWidth:
+                                      GetScreenSize.screenHeight() * 0.01,
+                                  strokeColor: Colors.purple,
+                                  child: Text(
+                                    ref
+                                        .watch(selectActionScreenProvider)
+                                        .statusUpName,
+                                    style: TextStyle(
+                                      fontSize:
+                                          GetScreenSize.screenWidth() * 0.04,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                if (ref
+                                        .watch(selectActionScreenProvider)
+                                        .statusUpValue >
+                                    0)
+                                  Icon(
+                                    Icons.arrow_upward,
+                                    color: Colors.orange,
+                                    size: GetScreenSize.screenWidth() * 0.04,
+                                  ),
+                                if (ref
+                                        .watch(selectActionScreenProvider)
+                                        .statusUpValue <
+                                    0)
+                                  Icon(
+                                    Icons.arrow_downward,
+                                    color: Colors.blue,
+                                    size: GetScreenSize.screenWidth() * 0.04,
+                                  )
+                              ],
+                            ))
+                        // child: Text(
+                        //   '⇧',
+                        //   style: TextStyle(
+                        //     fontSize: GetScreenSize.screenWidth() * 0.03,
+                        //     color: Colors.orange,
+                        //   ),
+                        // )
+                        ),
+                  )
               ],
             ),
           ),

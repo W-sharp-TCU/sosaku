@@ -15,9 +15,11 @@ class AnimationProvider extends ChangeNotifier {
   final Map<String, void Function()?> _animations = {};
   final Map<String, Stopwatch> _stopwatches = {};
   Map<String, double> get stateDouble => _stateDouble;
+  bool _isAnimation = false;
   AnimationProvider(String id) {
     _id = id;
   }
+
   void addNewState(String stateName, double initialValue) {
     if (!_stateDouble.containsKey(stateName)) {
       _stateDouble[stateName] = initialValue;
@@ -39,12 +41,13 @@ class AnimationProvider extends ChangeNotifier {
   }
 
   void loop() async {
-    bool isAnimation = true;
-    while (isAnimation) {
-      isAnimation = false;
+    _isAnimation = true;
+    while (_isAnimation) {
+      print('loop');
+      _isAnimation = false;
       for (void Function()? animation in _animations.values) {
         if (animation != null) {
-          isAnimation = true;
+          _isAnimation = true;
           break;
         }
       }
@@ -58,6 +61,8 @@ class AnimationProvider extends ChangeNotifier {
 
   @override
   void dispose() {
+    print('dispose$_id');
+    _isAnimation = false;
     _animationProviders.remove(_id);
     _animationADProviders.remove(_id);
     super.dispose();
@@ -70,6 +75,7 @@ class AnimationProvider extends ChangeNotifier {
 class AnimationWidgetController {
   AutoDisposeChangeNotifierProvider<AnimationProvider> createProvider(
       String providerId, Map<String, double> states) {
+    print('createprovider');
     if (!_animationProviders.containsKey(providerId)) {
       _animationProviders[providerId] = AnimationProvider(providerId);
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
@@ -87,9 +93,14 @@ class AnimationWidgetController {
   //   _animationProviders[widgetId]?.addNewState(stateName, initialValue);
   // }
 
-  void animate(String widgetId, String stateId, List<Animation> animations) {
+  void animate(
+      String widgetId, String stateId, List<Animation> animations) async {
+    print('animate');
+    await Future.delayed(const Duration(milliseconds: 16));
+    print(_animationProviders);
     if (_animationProviders.containsKey(widgetId) &&
         _animationProviders[widgetId]!._stateDouble.containsKey(stateId)) {
+      print('animate if true');
       int duration = 0;
       _animationProviders[widgetId]?._stopwatches[stateId]?.reset();
       _animationProviders[widgetId]?._stopwatches[stateId]?.start();
@@ -120,6 +131,7 @@ class AnimationWidgetController {
 
       _animationProviders[widgetId]?._animations[stateId] = animation;
       _animationProviders[widgetId]?.loop();
+      print('startloop');
     }
   }
 
