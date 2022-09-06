@@ -21,7 +21,7 @@ class LifecycleManager extends StatefulWidget {
   final LifecycleCallback callback;
 
   const LifecycleManager(
-      {Key? key, required this.child, required this.callback})
+      {Key? key, required this.callback, required this.child})
       : super(key: key);
 
   @override
@@ -71,6 +71,8 @@ class _LifecycleManagerState extends State<LifecycleManager>
 
 /// callback interface
 abstract class LifecycleCallback {
+  const LifecycleCallback();
+
   /// Called when the app is put in foreground from background.
   void onResumed();
 

@@ -29,7 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod:       # ChangeNotifier
+  hooks_riverpod:         # ChangeNotifier & HookConsumerWidget
+  flutter_hooks:          # useEffect function
   flutter_localizations:  # L10n support
     sdk: flutter
   intl: ^0.17.0           # L10n support

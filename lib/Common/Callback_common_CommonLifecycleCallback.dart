@@ -1,8 +1,10 @@
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
-import 'Wrapper/wrapper_SoundPlayer.dart';
+import '../Wrapper/wrapper_SoundPlayer.dart';
 
 /// Processes used in all screens called when the app's lifecycle is changed.
-class CommonLifecycleCallback implements LifecycleCallback {
+class CommonLifecycleCallback extends LifecycleCallback {
+  const CommonLifecycleCallback();
+
   /// Called when the app is put in foreground from background.
   @override
   void onDetached() {
