@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
+import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
-import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
@@ -48,53 +48,48 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
 
     return ProviderScope(
       child: Scaffold(
-        body: LifecycleManager(
-          callback: CommonLifecycleCallback(),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.black,
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  // _slideShowController.stop();
-                  SoundPlayer().playUI("assets/sound/UI/next.mp3");
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => HomeScreen(),
-                        transitionDuration: const Duration(milliseconds: 500),
-                        transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) =>
-                            buildFadeTransition(
-                                context, animation, secondaryAnimation, child)),
-                  );
-                },
-                child: Container(
-                    height: GetScreenSize.screenHeight(),
-                    width: GetScreenSize.screenWidth(),
-                    color: Colors.black,
-                    child: Stack(
-                      children: [
-                        Image(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                              ref.watch(titleScreenProvider).mBGImagePath),
-                        ),
-                        Align(
-                          alignment: const Alignment(0, 0.8),
-                          child: Text(
-                            L10n.of(context)!.tapToStart,
-                            style: TextStyle(
-                              fontSize: GetScreenSize.screenHeight() * 0.1,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+        body: GameScreenBase(
+          lifecycleCallback: const CommonLifecycleCallback(),
+          child: Center(
+            child: GestureDetector(
+              onTap: () {
+                // _slideShowController.stop();
+                SoundPlayer().playUI("assets/sound/UI/next.mp3");
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => const HomeScreen(),
+                      transitionDuration: const Duration(milliseconds: 500),
+                      transitionsBuilder: (context, animation,
+                              secondaryAnimation, child) =>
+                          buildFadeTransition(
+                              context, animation, secondaryAnimation, child)),
+                );
+              },
+              child: Container(
+                  height: GetScreenSize.screenHeight(),
+                  width: GetScreenSize.screenWidth(),
+                  color: Colors.black,
+                  child: Stack(
+                    children: [
+                      Image(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                            ref.watch(titleScreenProvider).mBGImagePath),
+                      ),
+                      Align(
+                        alignment: const Alignment(0, 0.8),
+                        child: Text(
+                          L10n.of(context)!.tapToStart,
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.1,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    )),
-              ),
+                      ),
+                    ],
+                  )),
             ),
           ),
         ),

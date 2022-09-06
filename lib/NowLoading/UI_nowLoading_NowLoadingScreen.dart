@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
+import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/NowLoading/Manager_GameManager.dart';
-import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 import '../Wrapper/wrapper_TransitionBuilders.dart';
 
@@ -35,23 +35,18 @@ class NowLoadingScreen extends ConsumerWidget {
     /*************************************/
     // TODO: implement build
     return Scaffold(
-      body: LifecycleManager(
-        callback: CommonLifecycleCallback(),
+      body: GameScreenBase(
+        lifecycleCallback: const CommonLifecycleCallback(),
         child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.black,
-          child: Container(
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(
-                        "assets/drawable/NowLoading/LoadingAnimation.gif"))),
-            child: const Center(
-              child: Text(
-                "Now Loading...",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                      "assets/drawable/NowLoading/LoadingAnimation.gif"))),
+          child: const Center(
+            child: Text(
+              "Now Loading...",
+              style: TextStyle(
+                color: Colors.white,
               ),
             ),
           ),

@@ -13,15 +13,15 @@ late PackageInfo packageInfo;
 SimpleLogger logger = SimpleLogger();
 
 Future<void> main() async {
-  // restrict device screen orientation
+  // Restrict device's screen orientation.
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
   SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.immersive); // hide Android status bar & navigation bar.
-  packageInfo = await PackageInfo.fromPlatform();
+      SystemUiMode.immersive); // Hide Status Bar & Navigation Bar.
+  packageInfo = await PackageInfo.fromPlatform(); // Get App info (e.g. version)
   SettingsController settingsController = SettingsController();
   await settingsController.getBgmVolumeValue();
   await settingsController.getUiVolumeValue();

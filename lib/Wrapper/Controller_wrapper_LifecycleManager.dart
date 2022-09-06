@@ -71,6 +71,8 @@ class _LifecycleManagerState extends State<LifecycleManager>
 
 /// callback interface
 abstract class LifecycleCallback {
+  const LifecycleCallback();
+
   /// Called when the app is put in foreground from background.
   void onResumed();
 

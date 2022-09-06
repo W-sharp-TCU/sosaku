@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
-// ignore: must_be_immutable
 class GameScreenBase extends ConsumerWidget {
-  Widget child;
-  LifecycleCallback lifecycleCallback;
-  GameScreenBase(
-      {required this.lifecycleCallback, required this.child, Key? key})
+  final Widget child;
+  final LifecycleCallback lifecycleCallback;
+  const GameScreenBase(
+      {this.lifecycleCallback = const CommonLifecycleCallback(),
+      required this.child,
+      Key? key})
       : super(key: key);
 
   @override
