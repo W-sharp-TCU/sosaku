@@ -1,11 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
 import '../Conversation/UI_conversation_ConversationScreen.dart';
+import '../main.dart';
+
+enum StatusType {
+  started,
+  finished,
+}
 
 /// **Determine which screen will be show.**
 /// This class provides single-ton instance.
@@ -54,6 +61,11 @@ class GameManager {
   // 1. ロールバックする -> もう一度同じ画面を見せるのは良くない
   // 2. onPausedで次の画面決定まで頑張る -> 次回のNow Loadingで高速化できる
   //    -> ロード画面ではどう表示する? -> 次の画面・No image でもあり?
+  //
+  // flutter + hooks で初期化(init())を使用する
+  // static prepare() ==> prepare() に変更
+  // Widgetクラスのコンストラクタは変更禁止にした
+  // GameScreenInterfaceを作成する (prepare())
 
   /// Debug Parameter
   ///
@@ -69,7 +81,7 @@ class GameManager {
       GameManager._internalConstructor();
 
   Type? _lastScreenType;
-  int? _lastScreenStatus;
+  StatusType? _lastScreenStatus;
   Map<String, int>? _lastScreenDetails;
 
   /// get single-ton
@@ -95,12 +107,12 @@ class GameManager {
   /// Notes
   /// -----
   /// if ConversationScreen: <br>
-  void notify(Type from, int status, Map<String, int>? details) {
+  void notify(Type from, StatusType status, Map<String, int>? details) {
     _lastScreenType = from;
     _lastScreenStatus = status;
     _lastScreenDetails = details;
-    print("|||||\nGameManager.notify(): _lastScreenType: $_lastScreenType, "
-        "_lastScreenStatus: $_lastScreenStatus, _lastScreenDetails:\n\t$_lastScreenDetails \n|||||");
+    logger.shout("_lastScreenType: $_lastScreenType, "
+        "_lastScreenStatus: $_lastScreenStatus, _lastScreenDetails:\n\t$_lastScreenDetails \n");
   }
 
   /// determine next screen
@@ -123,7 +135,7 @@ class GameManager {
     // } else {
     //   throw "Unexpected class notification @GameManager";
     // }
-    print("GameManager._determineNextScreen(): nextScreen Type is $nextScreen");
+    logger.shout("The nextScreen type is $nextScreen");
     return nextScreen;
   }
 
@@ -139,9 +151,8 @@ class GameManager {
     } else if (screenType == SelectActionScreen) {
       return const SelectActionScreen();
     } else {
-      print(
-          "[WARNING] GameManager._getNextScreenObject(): screenType is invalid."
-          "Return to TitleScreen().");
+      logger.severe(
+          "[ERROR] The screenType is invalid. Return to TitleScreen().");
     }
     return TitleScreen();
   }
@@ -156,23 +167,23 @@ class GameManager {
 
   Future<void> _prepareForNextScreen(
       BuildContext context, Type nextScreenType) async {
-    List<String> bgImagePaths = List.empty(growable: true);
-    List<String> characterImagePaths = List.empty(growable: true);
-    List<String> bgmPaths = List.empty(growable: true);
-    List<String> cvPaths = List.empty(growable: true);
-    List<String> sePaths = List.empty(growable: true);
+    List<String> bgImagePaths = [];
+    List<String> characterImagePaths = [];
+    List<String> bgmPaths = [];
+    List<String> cvPaths = [];
+    List<String> sePaths = [];
     if (nextScreenType is ConversationScreen) {
       // load json files of scenario data.
       Map jsonMap =
           await _loadJson("assets/text/ScenarioData/ChapterTest/event1.json");
-      print("GameManager._prepareForNextScreen(): event1.json loaded.");
-      List<int> types = List.empty(growable: true);
-      List<String> cNames = List.empty(growable: true);
-      List<String> texts = List.empty(growable: true);
-      List<List<int>> gotos = List.empty(growable: true);
-      List<List<String>> options = List.empty(growable: true);
-      // List<List<int>> statusTypes = List.empty(growable: true);
-      // List<List<int>> statusValues = List.empty(growable: true);
+      logger.shout("GameManager._prepareForNextScreen(): event1.json loaded.");
+      List<int> types = [];
+      List<String> cNames = [];
+      List<String> texts = [];
+      List<List<int>> gotos = [];
+      List<List<String>> options = [];
+      // List<List<int>> statusTypes = [];
+      // List<List<int>> statusValues = [];
       for (Map e in jsonMap['context']) {
         if (e.containsKey('type')) {
           types.add(e['type'].cast<int>());
@@ -225,7 +236,7 @@ class GameManager {
       conversationScreenController.setSePaths(sePaths);
       conversationScreenController.setOptions(options);
       conversationScreenController.setGotoNumbers(gotos);
-      print(
+      logger.shout(
           "GameManager._prepareForNextScreen(): Set data to conversationScreenController.");
     } else if (nextScreenType is SelectActionScreen) {
       // todo: SelectActionScreenで使うassetsを列挙する
@@ -256,7 +267,8 @@ class GameManager {
     for (var e in characterImagePaths) {
       await precacheImage(AssetImage(e), context);
     }
-    print("GameManager._prepareForNextScreen(): Finished pre-caching assets.");
+    logger.shout(
+        "GameManager._prepareForNextScreen(): Finished pre-caching assets.");
   }
 
   /*void _getEventCode() {
