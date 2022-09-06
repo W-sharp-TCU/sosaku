@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/NowLoading/Manager_GameManager.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
