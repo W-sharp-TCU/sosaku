@@ -217,16 +217,17 @@ class GameManager {
           statusValues.add(e['statusvalue'].cast<List<int>>());
         }*/
       }
-      conversationScreenController.setTypes(types);
-      conversationScreenController.setBackgroundImagePaths(bgImagePaths);
-      conversationScreenController.setCharacterImagePaths(characterImagePaths);
-      conversationScreenController.setCharacterNames(cNames);
-      conversationScreenController.setTexts(texts);
-      conversationScreenController.setBgmPaths(bgmPaths);
-      conversationScreenController.setVoicePaths(cvPaths);
-      conversationScreenController.setSePaths(sePaths);
-      conversationScreenController.setOptions(options);
-      conversationScreenController.setGotoNumbers(gotos);
+      // FIXME : CSVに変更したので削除
+      // conversationScreenController.setTypes(types);
+      // conversationScreenController.setBackgroundImagePaths(bgImagePaths);
+      // conversationScreenController.setCharacterImagePaths(characterImagePaths);
+      // conversationScreenController.setCharacterNames(cNames);
+      // conversationScreenController.setTexts(texts);
+      // conversationScreenController.setBgmPaths(bgmPaths);
+      // conversationScreenController.setVoicePaths(cvPaths);
+      // conversationScreenController.setSePaths(sePaths);
+      // conversationScreenController.setOptions(options);
+      // conversationScreenController.setGotoNumbers(gotos);
       print(
           "GameManager._prepareForNextScreen(): Set data to conversationScreenController.");
     } else if (nextScreenType is SelectActionScreen) {

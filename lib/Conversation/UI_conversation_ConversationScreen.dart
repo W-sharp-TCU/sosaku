@@ -12,11 +12,13 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Controller_conversation_ConversationScreenController.dart';
 import 'Provider_conversation_ConversationImageProvider.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
+import 'UI_conversation_Selections.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
 import 'UI_conversation_MenuUI.dart';
 import 'UI_conversation_BelowUIs.dart';
 import 'UI_conversation_SideUIs.dart';
+import 'UI_conversation_Triangle.dart';
 
 final conversationImageProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationImageProvider());
@@ -89,7 +91,7 @@ class ConversationScreen extends HookConsumerWidget
             ///tap to next screen
             GestureDetector(
               onTap: () {
-                conversationScreenController.goNextScene();
+                conversationScreenController.tapScreen();
               },
               child: Container(
                 width: GetScreenSize.screenWidth(),
@@ -99,11 +101,12 @@ class ConversationScreen extends HookConsumerWidget
             ),
 
             ///3 choices dialog
-            if (ref.watch(conversationImageProvider).dialogFlag &&
+            if (ref.watch(conversationImageProvider).isSelection &&
                 !ref.watch(conversationImageProvider).isHideUi)
               const Align(
                 alignment: Alignment(0, 0),
-                child: ThreeDialog(),
+                // child: ThreeDialog(),
+                child: Selections(),
               ),
 
             ///Log screen
@@ -128,25 +131,10 @@ class ConversationScreen extends HookConsumerWidget
                 child: SideUIs(),
               ),
 
-            if (ref.watch(conversationImageProvider).canNext)
-              Align(
-                alignment: const Alignment(1, 1),
-                child: Container(
-                    margin: EdgeInsets.only(
-                      bottom:
-                          ref.watch(animationProvider).stateDouble['sankaku']!,
-                      right: GetScreenSize.screenWidth() * 0.05,
-                    ),
-                    width: GetScreenSize.screenWidth() * 0.04,
-                    height: GetScreenSize.screenWidth() * 0.04,
-                    child: Text(
-                      '▼',
-                      style: TextStyle(
-                        fontSize: GetScreenSize.screenWidth() * 0.03,
-                        color: Colors.white,
-                      ),
-                    )),
-              )
+            /// triangle Animation
+            if (ref.watch(conversationImageProvider).canNext &&
+                !ref.watch(conversationImageProvider).isHideUi)
+              const Triangle(),
           ],
         ),
       ),

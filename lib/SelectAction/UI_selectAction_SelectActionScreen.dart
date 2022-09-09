@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
-
-class SelectActionScreen extends StatelessWidget {
+class SelectActionScreen extends HookConsumerWidget
+    implements GameScreenInterface {
   const SelectActionScreen({Key? key}) : super(key: key);
-  static String _screenImagePath = "./assets/drawable/Conversation/004_corridorBB.png";
-  static String _characterImagePath = "./assets/drawable/CharacterImage/Ayana/normal.png";
+  static String _screenImagePath =
+      "./assets/drawable/Conversation/004_corridorBB.png";
+  static String _characterImagePath =
+      "./assets/drawable/CharacterImage/Ayana/normal.png";
   static String _buttonImagePath = "";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -57,9 +61,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
                 Align(
@@ -83,9 +85,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
                 Align(
@@ -109,9 +109,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
                 Align(
@@ -135,9 +133,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
                 Align(
@@ -161,9 +157,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
                 Align(
@@ -187,9 +181,7 @@ class SelectActionScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    onTap: (){
-
-                    },
+                    onTap: () {},
                   ),
                 ),
               ],
@@ -200,9 +192,12 @@ class SelectActionScreen extends StatelessWidget {
     );
   }
 
-  /// pre cache image on attention screen.
-  static Future<void> prepare(BuildContext context) async {
+  @override
+  Future<void> prepare(BuildContext context) async {
     await precacheImage(AssetImage(_screenImagePath), context);
     await precacheImage(AssetImage(_characterImagePath), context);
   }
+
+  /// pre cache image on attention screen.
+
 }
