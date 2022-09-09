@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
+import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
@@ -117,10 +118,10 @@ class GameManager {
   /// @return 0:Conversation, 1:SelectAction
   int _times = 0; // [_toggle]用
   Type _determineNextScreen() {
-    Type nextScreen = ConversationScreen;
+    GameScreenInterface nextScreen = const ConversationScreen();
     if (_toggle) {
       if (_times % 2 == 1) {
-        nextScreen = SelectActionScreen;
+        nextScreen = SelectActionScreen();
       }
       _times++;
     }
