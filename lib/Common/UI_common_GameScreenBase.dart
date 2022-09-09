@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import 'package:sosaku/Wrapper/wrapper_TapEffectScreen.dart';
 
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
@@ -26,11 +27,12 @@ class GameScreenBase extends ConsumerWidget {
         color: Colors.black,
         child: Center(
           child: Container(
-            height: GetScreenSize.screenHeight(),
-            width: GetScreenSize.screenWidth(),
-            color: Colors.black,
-            child: child,
-          ),
+              height: GetScreenSize.screenHeight(),
+              width: GetScreenSize.screenWidth(),
+              color: Colors.black,
+              child: TapEffectScreen(
+                child: child,
+              )),
         ),
       ),
     );

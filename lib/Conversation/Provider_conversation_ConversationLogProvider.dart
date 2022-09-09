@@ -5,12 +5,14 @@ class ConversationLogProvider extends ChangeNotifier {
   List<String> _names = [];
   List<String> _iconPaths = [];
   List<String> _texts = [];
+  List<String?> _voicePaths = [];
   List<bool> _isPlaying = [];
 
   List<int> get codes => _codes;
   List<String> get names => _names;
   List<String> get iconPaths => _iconPaths;
   List<String> get texts => _texts;
+  List<String?> get voicePaths => _voicePaths;
   List<bool> get isPlaying => _isPlaying;
 
   /// Set the codes for log management.
@@ -46,6 +48,11 @@ class ConversationLogProvider extends ChangeNotifier {
   /// @param texts : The texts to be displayed in the log.
   void setTexts(List<String> texts) {
     _texts = texts;
+    notifyListeners();
+  }
+
+  void setVoicePaths(List<String?> voicePaths) {
+    _voicePaths = voicePaths;
     notifyListeners();
   }
 

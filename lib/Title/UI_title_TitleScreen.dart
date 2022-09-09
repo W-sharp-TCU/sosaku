@@ -20,9 +20,7 @@ final titleScreenProvider =
 class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
   // late final SlideShowController _slideShowController;
   static const _backgroundImages = [
-    "assets/drawable/Title/Ocean.jpg",
-    "assets/drawable/Title/Lion.jpg",
-    "assets/drawable/Title/default.jpg"
+    "assets/drawable/Title/wsharp_banner_expanded.png"
   ];
 
   static const List<String> _uiAudioPaths = [

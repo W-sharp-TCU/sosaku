@@ -2,14 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
 import '../Wrapper/wrapper_AnimationWidget.dart';
+import 'Animation_conversation_ConversationAnimation.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
-  String _mBGImagePath = "assets/drawable/Conversation/black_screen.png";
-  String _characterImagePath = "assets/drawable/Conversation/no_character.png";
-  String _characterName = "";
-  List<String> _optionTexts = [];
+  String _mBGImagePath = 'drawable/Conversation/black_screen.png';
+  String _characterImagePath = 'drawable/Conversation/no_character.png';
+  String? _voicePath;
+  String _characterName = '';
+
+  /// {text, goto}
+  List<Map> _selections = [];
   bool _isAuto = false;
-  bool _dialogFlag = false;
+  bool _isSelection = false;
   bool _isMenu = false;
   bool _isLog = false;
   bool _isHideUi = false;
@@ -18,10 +22,11 @@ class ConversationImageProvider extends ChangeNotifier {
 
   String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
+  String? get voicePath => _voicePath;
   String get characterName => _characterName;
-  List<String> get optionTexts => _optionTexts;
+  List<Map> get selections => _selections;
   bool get isAuto => _isAuto;
-  bool get dialogFlag => _dialogFlag;
+  bool get isSelection => _isSelection;
   bool get isMenu => _isMenu;
   bool get isLog => _isLog;
   bool get isHideUi => _isHideUi;
@@ -42,6 +47,12 @@ class ConversationImageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Set character voice.
+  /// This function is for Controller.
+  void setVoicePath(String? path) {
+    _voicePath = path;
+  }
+
   /// Set character image.
   /// This function is for Controller.
   void setCharacterName(String characterName) {
@@ -53,47 +64,56 @@ class ConversationImageProvider extends ChangeNotifier {
   /// This function is for Controller.
   ///
   /// @param optionTexts : list of text to be displayed in the options.
-  void setOptionTexts(List<String> optionTexts) {
-    _optionTexts = optionTexts;
+  void setSelections(List<Map> selections) {
+    _selections = selections;
+    notifyListeners();
+  }
+
+  void addSelections(Map selections) {
+    _selections.add(selections);
     notifyListeners();
   }
 
   /// Change auto play.
   /// This function is for Controller.
-  void changeAuto() {
-    _isAuto = !_isAuto;
+  void setIsAuto(bool isAuto) {
+    _isAuto = isAuto;
     notifyListeners();
   }
 
   /// Change the display of the option dialog.
   /// This function is for Controller.
-  void changeDialogFlag() {
-    _dialogFlag = !_dialogFlag;
-    _isDim = _dialogFlag || _isMenu || _isLog;
+  void setIsSelection(bool isSelection) {
+    _isSelection = isSelection;
+    _isDim = _isSelection || _isMenu || _isLog;
     notifyListeners();
   }
 
   /// Change the display of the menu dialog.
   /// This function is for Controller.
-  void changeMenuDisplay() {
-    _isMenu = !_isMenu;
-    _isDim = _dialogFlag || _isMenu || _isLog;
+  void setIsMenu(bool isMenu) {
+    _isMenu = isMenu;
+    _isDim = _isSelection || _isMenu || _isLog;
     notifyListeners();
   }
 
   /// Change the log screen display.
   /// This function is for Controller and UI.
-  void changeLogDisplay() {
-    _isLog = !_isLog;
-    _isDim = _dialogFlag || _isMenu || _isLog;
+  void setIsLog(bool isLog) {
+    _isLog = isLog;
+    _isDim = _isSelection || _isMenu || _isLog;
     notifyListeners();
   }
 
   /// Change the UI display.
   /// This function is for Controller and UI.
-  void changeHideUi() {
-    _isHideUi = !_isHideUi;
-    _isDim = (_dialogFlag && !_isHideUi) || _isMenu || _isLog;
+  void setIsHideUi(bool isHideUi) {
+    if (_isHideUi != isHideUi && isHideUi == false) {
+      ConversationAnimation.triangle();
+      ConversationAnimation.selection(selections.length);
+    }
+    _isHideUi = isHideUi;
+    _isDim = (_isSelection && !_isHideUi) || _isMenu || _isLog;
     notifyListeners();
   }
 
@@ -105,12 +125,10 @@ class ConversationImageProvider extends ChangeNotifier {
   }
 
   void setCanNext(bool canNext) {
+    if (_canNext != canNext && canNext == true) {
+      ConversationAnimation.triangle();
+    }
     _canNext = canNext;
     notifyListeners();
-    animationController.animate('conversationScreen', 'sankaku', [
-      Wave(0, 10000000, GetScreenSize.screenWidth() * 0.02,
-          GetScreenSize.screenWidth() * 0.04, 1),
-      // Linear(0, 5000, 0, 1000)
-    ]);
   }
 }
