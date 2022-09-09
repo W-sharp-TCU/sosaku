@@ -9,7 +9,7 @@ import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
-enum StatusType {
+enum ScreenStatus {
   started,
   finished,
 }
@@ -73,15 +73,11 @@ class GameManager {
   /// called alternately. If you specify "false", ConversationScreen will be called.
   static const bool _toggle = false;
 
-  /// class status type
-  static const int finished = 0;
-  static const int started = 1;
-
   static final GameManager _singletonInstance =
       GameManager._internalConstructor();
 
   Type? _lastScreenType;
-  StatusType? _lastScreenStatus;
+  ScreenStatus? _lastScreenStatus;
   Map<String, int>? _lastScreenDetails;
 
   /// get single-ton
@@ -107,9 +103,10 @@ class GameManager {
   /// Notes
   /// -----
   /// if ConversationScreen: <br>
-  void notify(Type from, StatusType status, Map<String, int>? details) {
+  void notify(
+      Type from, ScreenStatus currentScreenStatus, Map<String, int>? details) {
     _lastScreenType = from;
-    _lastScreenStatus = status;
+    _lastScreenStatus = currentScreenStatus;
     _lastScreenDetails = details;
     logger.shout("_lastScreenType: $_lastScreenType, "
         "_lastScreenStatus: $_lastScreenStatus, _lastScreenDetails:\n\t$_lastScreenDetails \n");
