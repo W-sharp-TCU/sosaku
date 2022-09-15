@@ -5,6 +5,7 @@ import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
+import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
@@ -56,7 +57,7 @@ class HomeScreen extends HookConsumerWidget implements GameScreenInterface {
                   Navigator.pushReplacement(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const ConversationScreen(),
+                      pageBuilder: (_, __, ___) => const NowLoadingScreen(),
                       transitionDuration: const Duration(milliseconds: 1000),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) =>

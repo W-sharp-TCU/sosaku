@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
@@ -10,20 +9,32 @@ import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
-enum ScreenStatus {
-  started,
-  finished,
+class ScreenInfo {
+  final Type screenType;
+  // For Conversation Screen
+  final int? lastChapter;
+  final int? lastSection;
+  // For Select Action Screen
+  final int? buttonNo;
+
+  factory ScreenInfo.fromSelectAction(int selectedButtonNo) =>
+      ScreenInfo._privateConstructor(SelectActionScreen,
+          buttonNo: selectedButtonNo);
+
+  factory ScreenInfo.fromConversation(
+          {required int lastChapter, required int lastSection}) =>
+      ScreenInfo._privateConstructor(ConversationScreen,
+          lastChapter: lastChapter, lastSection: lastSection);
+
+  ScreenInfo._privateConstructor(this.screenType,
+      {this.lastChapter, this.lastSection, this.buttonNo});
 }
 
 /// **Determine which screen will be show.**
 /// This class provides single-ton instance.
 ///
-/// ## Information
-/// This class is still incomplete.
-/// For debug or testing this class, you can change the value of parameter named [_toggle].
-///
-/// ### Interfaces
-/// [finished], [started]
+/// ### Related class
+/// [ScreenInfo]
 ///
 /// ### Global Fields
 /// None.
@@ -68,18 +79,10 @@ class GameManager {
   // Widgetクラスのコンストラクタは変更禁止にした
   // GameScreenInterfaceを作成する (prepare())
 
-  /// Debug Parameter
-  ///
-  /// If you specify "true", ConversationScreen and SelectActionScreen is
-  /// called alternately. If you specify "false", ConversationScreen will be called.
-  static const bool _toggle = false;
-
   static final GameManager _singletonInstance =
       GameManager._internalConstructor();
 
-  Type? _lastScreenType;
-  ScreenStatus? _lastScreenStatus;
-  Map<String, int>? _lastScreenDetails;
+  ScreenInfo? _lastScreenInfo = ScreenInfo.fromSelectAction(-1); // todo: 書き換える
 
   /// get single-ton
   factory GameManager() => _singletonInstance;
@@ -88,71 +91,42 @@ class GameManager {
   ///
   /// App's screen will transition to new page determined by this class automatically
   /// some milliseconds after this function is executed.
-  Future<Widget> processing(BuildContext context) async {
-    _clear();
-    Type nextScreen = _determineNextScreen();
+  Future<GameScreenInterface> processing(BuildContext context) async {
+    GameScreenInterface nextScreen = _determineNextScreen();
     await _prepareForNextScreen(context, nextScreen);
-    return _getNextScreenObject(context, nextScreen);
+    /* _lastScreenInfo = null; */ // todo: 戻す
+    return nextScreen;
   }
 
   /// notify current status to GameManager
   ///
-  /// @param from : Specify "this.runtimeType"
-  /// @param status : Specify constant provided by GameManager.
-  /// @param details : Don't have to specify this normally. <b>Read notes below.</b>
-  ///
-  /// Notes
-  /// -----
-  /// if ConversationScreen: <br>
-  void notify(
-      Type from, ScreenStatus currentScreenStatus, Map<String, int>? details) {
-    _lastScreenType = from;
-    _lastScreenStatus = currentScreenStatus;
-    _lastScreenDetails = details;
-    logger.shout("_lastScreenType: $_lastScreenType, "
-        "_lastScreenStatus: $_lastScreenStatus, _lastScreenDetails:\n\t$_lastScreenDetails \n");
+  /// @param [screenInfo] : Specify ScreenInfo instance created by
+  ///    factory constructor for the sake of each screen.
+  void notify(ScreenInfo screenInfo) {
+    _lastScreenInfo = screenInfo;
+    logger.fine("Notify from ${_lastScreenInfo!.screenType}.");
   }
 
-  /// determine next screen
-  ///
-  /// @return 0:Conversation, 1:SelectAction
-  int _times = 0; // [_toggle]用
-  Type _determineNextScreen() {
-    GameScreenInterface nextScreen = const ConversationScreen();
-    if (_toggle) {
-      if (_times % 2 == 1) {
-        nextScreen = SelectActionScreen();
+  GameScreenInterface _determineNextScreen() {
+    GameScreenInterface nextScreen;
+    print("call _determineNextScreen");
+    if (_lastScreenInfo == null) {
+      nextScreen = const TitleScreen(); // todo: 正しいのに書き換える
+    } else {
+      switch (_lastScreenInfo!.screenType) {
+        case SelectActionScreen:
+          nextScreen = const ConversationScreen();
+          break;
+        case ConversationScreen:
+          nextScreen = const SelectActionScreen();
+          break;
+        default:
+          nextScreen = const TitleScreen();
+          throw Error();
       }
-      _times++;
     }
-    // [temporary code] always go conversation screen
-    // if (_lastScreenType is ConversationScreenController) {
-    //   return 0;
-    // } else if (_lastScreenType is SelectAction) {
-    //   return 1;
-    // } else {
-    //   throw "Unexpected class notification @GameManager";
-    // }
     logger.shout("The nextScreen type is $nextScreen");
     return nextScreen;
-  }
-
-  void _clear() {
-    _lastScreenType = null;
-    _lastScreenStatus = null;
-    _lastScreenDetails = null;
-  }
-
-  Widget _getNextScreenObject(BuildContext context, Type screenType) {
-    if (screenType == ConversationScreen) {
-      return const ConversationScreen();
-    } else if (screenType == SelectActionScreen) {
-      return const SelectActionScreen();
-    } else {
-      logger.severe(
-          "[ERROR] The screenType is invalid. Return to TitleScreen().");
-    }
-    return TitleScreen();
   }
 
   Future<Map<String, dynamic>> _loadJson(String filePath) async {
@@ -164,79 +138,21 @@ class GameManager {
   }
 
   Future<void> _prepareForNextScreen(
-      BuildContext context, Type nextScreenType) async {
+      BuildContext context, GameScreenInterface nextScreen) async {
     List<String> bgImagePaths = [];
     List<String> characterImagePaths = [];
     List<String> bgmPaths = [];
     List<String> cvPaths = [];
     List<String> sePaths = [];
-    if (nextScreenType is ConversationScreen) {
+    if (nextScreen.runtimeType == ConversationScreen) {
+      // todo: implement process of preparing for ConversationScreen.
       // load json files of scenario data.
       Map jsonMap =
           await _loadJson("assets/text/ScenarioData/ChapterTest/event1.json");
       logger.shout("GameManager._prepareForNextScreen(): event1.json loaded.");
-      List<int> types = [];
-      List<String> cNames = [];
-      List<String> texts = [];
-      List<List<int>> gotos = [];
-      List<List<String>> options = [];
-      // List<List<int>> statusTypes = [];
-      // List<List<int>> statusValues = [];
-      for (Map e in jsonMap['context']) {
-        if (e.containsKey('type')) {
-          types.add(e['type'].cast<int>());
-        }
-        if (e.containsKey('name')) {
-          cNames.add(e['name'].cast<String>());
-        } else {
-          cNames.add("");
-        }
-        if (e.containsKey('text')) {
-          texts.add(e['text'].cast<String>());
-        } else {
-          texts.add("");
-        }
-        if (e.containsKey('BGImage')) {
-          bgImagePaths.add(e['BGImage'].cast<String>());
-        }
-        if (e.containsKey('CharacterImage')) {
-          characterImagePaths.add(e['CharacterImage'].cast<String>());
-        }
-        if (e.containsKey('BGM')) {
-          bgmPaths.add(e['BGM'].cast<String>());
-        }
-        if (e.containsKey('SE')) {
-          sePaths.add(e['SE'].cast<String>());
-        }
-        if (e.containsKey('Voice')) {
-          cvPaths.add(e['Voice'].cast<String>());
-        }
-        if (e.containsKey('goto')) {
-          gotos.add(e['goto'].cast<List<int>>());
-        }
-        if (e.containsKey('option')) {
-          options.add(e['option'].cast<List<String>>());
-        }
-        /*if (e.containsKey('status')) {
-          statusTypes.add(e['status'].cast<List<int>>());
-        }
-        if (e.containsKey('statusvalue')) {
-          statusValues.add(e['statusvalue'].cast<List<int>>());
-        }*/
-      }
-      conversationScreenController.setTypes(types);
-      conversationScreenController.setBackgroundImagePaths(bgImagePaths);
-      conversationScreenController.setCharacterImagePaths(characterImagePaths);
-      conversationScreenController.setCharacterNames(cNames);
-      conversationScreenController.setTexts(texts);
-      conversationScreenController.setBgmPaths(bgmPaths);
-      conversationScreenController.setVoicePaths(cvPaths);
-      conversationScreenController.setSePaths(sePaths);
-      conversationScreenController.setOptions(options);
-      conversationScreenController.setGotoNumbers(gotos);
-      logger.shout(
+      logger.finer(
           "GameManager._prepareForNextScreen(): Set data to conversationScreenController.");
-    } else if (nextScreenType is SelectActionScreen) {
+    } else if (nextScreen is SelectActionScreen) {
       // todo: SelectActionScreenで使うassetsを列挙する
     }
 
