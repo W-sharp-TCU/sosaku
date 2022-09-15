@@ -25,7 +25,7 @@ class TapEffectScreen extends ConsumerWidget {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     return GestureDetector(
-        onTapDown: (detail) {
+        onPanDown: (detail) {
           print(detail.localPosition);
           for (int i = 0; i < 10; i++) {
             ref.read(tapEffectScreenProvider).create(
