@@ -477,8 +477,8 @@ class SoundPlayer {
     } else {
       _volumes[bgm] = value;
     }
-    _uiCaches.forEach((key, value) {
-      value.player.setVolume(_volumes[ui]);
+    _bgmCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[bgm]);
     });
   }
 
@@ -490,8 +490,8 @@ class SoundPlayer {
     } else {
       _volumes[as] = value;
     }
-    _uiCaches.forEach((key, value) {
-      value.player.setVolume(_volumes[ui]);
+    _asCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[as]);
     });
   }
 
@@ -503,8 +503,8 @@ class SoundPlayer {
     } else {
       _volumes[cv] = value;
     }
-    _uiCaches.forEach((key, value) {
-      value.player.setVolume(_volumes[ui]);
+    _cvCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[cv]);
     });
   }
 
