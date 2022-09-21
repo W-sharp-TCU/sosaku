@@ -12,7 +12,7 @@ import 'package:sosaku/main.dart';
 ///   }
 /// }
 /// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/// class _screenState() implements LifecycleCallback {
+/// class _XXScreenLifecycleCallback() implements LifecycleCallback {
 ///   << Override functions >>
 /// }
 /// =============
@@ -73,14 +73,14 @@ class _LifecycleManagerState extends State<LifecycleManager>
 abstract class LifecycleCallback {
   const LifecycleCallback();
 
-  /// Called when the app is put in foreground from background.
-  void onResumed();
-
   /// Called when the app is put in background.
   void onPaused();
 
+  /// Called when the app is put in foreground from background.
+  void onResumed();
+
   /// Called when the app is not controllable.
-  /// ex) Time when user receive telephone calls
+  /// ex) Time when user receive telephone calls.
   /// ex) Time when user open notification center or control center.
   void onInactive();
 
