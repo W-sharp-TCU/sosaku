@@ -34,10 +34,13 @@ class SideUIs extends ConsumerWidget {
               },
               width: GetScreenSize.screenWidth() * 0.05,
               height: GetScreenSize.screenWidth() * 0.05,
+              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
               color: Colors.red.withOpacity(0.5),
               child: const FittedBox(
                 fit: BoxFit.contain,
-                child: Text("三"),
+                child: Image(
+                  image: AssetImage('assets/drawable/Conversation/sakura.png'),
+                ),
               )),
 
           ///UI appear
@@ -47,6 +50,7 @@ class SideUIs extends ConsumerWidget {
               },
               width: GetScreenSize.screenWidth() * 0.05,
               height: GetScreenSize.screenWidth() * 0.05,
+              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
               color: Colors.red.withOpacity(0.5),
               child: const FittedBox(
                 fit: BoxFit.contain,
@@ -62,6 +66,7 @@ class SideUIs extends ConsumerWidget {
               },
               width: GetScreenSize.screenWidth() * 0.1,
               height: GetScreenSize.screenHeight() * 0.05,
+              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
               color: Colors.red.withOpacity(0.5),
               child: const FittedBox(
                 fit: BoxFit.contain,
@@ -75,6 +80,7 @@ class SideUIs extends ConsumerWidget {
               },
               width: GetScreenSize.screenWidth() * 0.1,
               height: GetScreenSize.screenHeight() * 0.05,
+              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
               color: Colors.red.withOpacity(0.5),
               child: const FittedBox(
                 fit: BoxFit.contain,

@@ -95,22 +95,28 @@ class AnimationButton extends ConsumerWidget {
                   ]);
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal:
-                        (ref.watch(animationProvider).stateDouble['margin']! *
-                                _width *
-                                (_ratio - 1) /
-                                2)
-                            .abs(),
-                    vertical:
-                        (ref.watch(animationProvider).stateDouble['margin']! *
-                                _height *
-                                (_ratio - 1) /
-                                2)
-                            .abs(),
-                  ),
-                  color: _color,
-                  child: _child,
-                ))));
+                    // decoration: const BoxDecoration(
+                    //   image: DecorationImage(
+                    //     fit: BoxFit.fill,
+                    //     image: AssetImage(
+                    //         'assets/drawable/Conversation/button_sample.png'),
+                    //   ),
+                    // ),
+                    margin: EdgeInsets.symmetric(
+                      horizontal:
+                          (ref.watch(animationProvider).stateDouble['margin']! *
+                                  _width *
+                                  (_ratio - 1) /
+                                  2)
+                              .abs(),
+                      vertical:
+                          (ref.watch(animationProvider).stateDouble['margin']! *
+                                  _height *
+                                  (_ratio - 1) /
+                                  2)
+                              .abs(),
+                    ),
+                    color: _color,
+                    child: _child))));
   }
 }

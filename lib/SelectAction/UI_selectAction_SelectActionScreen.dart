@@ -7,6 +7,7 @@ import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProv
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
 import '../Common/Interface_common_GameScreenInterface.dart';
+import '../Common/UI_common_GameScreenBase.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
 
 final selectActionScreenProvider =
@@ -18,11 +19,11 @@ final SelectActionScreenController selectActionScreenController =
 class SelectActionScreen extends HookConsumerWidget
     implements GameScreenInterface {
   const SelectActionScreen({Key? key}) : super(key: key);
-  static String _screenImagePath =
+  static const String _screenImagePath =
       "./assets/drawable/Conversation/004_corridorBB.png";
-  static String _characterImagePath =
+  static const String _characterImagePath =
       "./assets/drawable/CharacterImage/Ayana/normal.png";
-  static String _buttonImagePath = "";
+  static const String _buttonImagePath = "";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,24 +32,25 @@ class SelectActionScreen extends HookConsumerWidget
     final animationProvider = animationController.createProvider('statusUp',
         {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0});
     return Scaffold(
-      body: Container(
+        body: GameScreenBase(
+      child: Container(
         width: double.infinity,
         height: double.infinity,
         color: Colors.black,
         child: Center(
-          child: Container(
+          child: SizedBox(
             width: GetScreenSize.screenWidth(),
             height: GetScreenSize.screenHeight(),
             child: Stack(
               children: <Widget>[
-                Image(
+                const Image(
                   fit: BoxFit.cover,
                   image: AssetImage(
                     _screenImagePath,
                   ),
                 ),
-                Align(
-                  alignment: const Alignment(0.7, 0),
+                const Align(
+                  alignment: Alignment(0.7, 0),
                   child: Image(
                     fit: BoxFit.cover,
                     image: AssetImage(
@@ -64,14 +66,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Image(
                             fit: BoxFit.cover,
                             image: AssetImage(
                               _buttonImagePath,
                             ),
                           ),
-                          const Center(
+                          Center(
                             child: Text("バイトに行く"),
                           ),
                         ],
@@ -90,14 +92,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Image(
                             fit: BoxFit.cover,
                             image: AssetImage(
                               _buttonImagePath,
                             ),
                           ),
-                          const Center(
+                          Center(
                             child: Text("のののと過ごす"),
                           ),
                         ],
@@ -278,7 +280,7 @@ class SelectActionScreen extends HookConsumerWidget
           ),
         ),
       ),
-    );
+    ));
   }
 
   @override
