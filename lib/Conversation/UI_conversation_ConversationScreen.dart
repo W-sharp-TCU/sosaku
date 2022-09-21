@@ -6,13 +6,14 @@ import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
+import 'package:sosaku/Conversation/UI_conversation_CharactersUI.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Controller_conversation_ConversationScreenController.dart';
 import 'Provider_conversation_ConversationImageProvider.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
-import 'UI_conversation_Selections.dart';
+import 'UI_conversation_SelectionsUI.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
 import 'UI_conversation_MenuUI.dart';
@@ -43,8 +44,8 @@ class ConversationScreen extends HookConsumerWidget
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
     conversationScreenController.start(cip, ctp, clp, context);
     final animationProvider =
-        animationController.createProvider('conversationScreen', {
-      'sankaku': 0,
+        animationController.createProvider('conversationCharacter', {
+      'height': 0,
     });
 
     return Scaffold(
@@ -64,19 +65,9 @@ class ConversationScreen extends HookConsumerWidget
             ),
 
             ///character
-            Align(
-              alignment: const Alignment(0, 1),
-              child: SizedBox(
-                height: GetScreenSize.screenHeight() * 1,
-                width: GetScreenSize.screenWidth() * 0.5,
-                child: Image(
-                  fit: BoxFit.fitHeight,
-                  image: AssetImage(
-                    ref.watch(conversationImageProvider).characterImagePath,
-                  ),
-                ),
-              ),
-            ),
+            const CharactersUI(),
+
+            // ),
 
             if (ref.watch(conversationImageProvider).isDim)
               Container(
@@ -106,7 +97,7 @@ class ConversationScreen extends HookConsumerWidget
               const Align(
                 alignment: Alignment(0, 0),
                 // child: ThreeDialog(),
-                child: Selections(),
+                child: SelectionsUI(),
               ),
 
             ///Log screen
@@ -127,7 +118,7 @@ class ConversationScreen extends HookConsumerWidget
             ///side Widgets
             if (!ref.watch(conversationImageProvider).isHideUi)
               const Align(
-                alignment: Alignment(1, 0),
+                alignment: Alignment(1, -1),
                 child: SideUIs(),
               ),
 

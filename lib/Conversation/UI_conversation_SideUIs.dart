@@ -19,20 +19,14 @@ class SideUIs extends ConsumerWidget {
       MediaQuery.of(context).size.width,
     );
 
-    final animationProvider = animationController.createProvider('button1', {
-      'width': GetScreenSize.screenWidth() * 0.05,
-      'height': GetScreenSize.screenWidth() * 0.05
-    });
-
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
       width: GetScreenSize.screenWidth() * 0.1,
-      height: GetScreenSize.screenHeight(),
+      height: GetScreenSize.screenHeight() * 0.7,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          /// いしかわ先生の元コード
-          ///menu
           ///menu
           AnimationButton(
               onTap: () {
@@ -49,7 +43,7 @@ class SideUIs extends ConsumerWidget {
           ///UI appear
           AnimationButton(
               onTap: () {
-                conversationScreenController.openMenu();
+                conversationScreenController.changeHideUi();
               },
               width: GetScreenSize.screenWidth() * 0.05,
               height: GetScreenSize.screenWidth() * 0.05,
@@ -64,7 +58,7 @@ class SideUIs extends ConsumerWidget {
           ///auto button
           AnimationButton(
               onTap: () {
-                conversationScreenController.openMenu();
+                conversationScreenController.changeAutoPlay();
               },
               width: GetScreenSize.screenWidth() * 0.1,
               height: GetScreenSize.screenHeight() * 0.05,
@@ -77,7 +71,7 @@ class SideUIs extends ConsumerWidget {
           ///Log button
           AnimationButton(
               onTap: () {
-                conversationScreenController.openMenu();
+                conversationScreenController.openLog();
               },
               width: GetScreenSize.screenWidth() * 0.1,
               height: GetScreenSize.screenHeight() * 0.05,
@@ -87,7 +81,8 @@ class SideUIs extends ConsumerWidget {
                 child: Text("LOG"),
               )),
 
-          const Spacer(),
+          /// いしかわ先生の元コード
+          ///menu
           // GestureDetector(
           //   onTap: () {
           //     conversationScreenController.openMenu();

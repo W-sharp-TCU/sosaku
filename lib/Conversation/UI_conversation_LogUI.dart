@@ -149,8 +149,15 @@ class LogUI extends ConsumerWidget {
                                                           top: GetScreenSize
                                                                   .screenHeight() *
                                                               0.01),
-                                                      child:
-                                                          const Text("Image"),
+                                                      child: Image(
+                                                        image: AssetImage(
+                                                          ref
+                                                              .watch(
+                                                                  conversationLogProvider)
+                                                              .iconPaths[_i]!,
+                                                        ),
+                                                        fit: BoxFit.contain,
+                                                      ),
                                                     ),
                                                     const Spacer(),
                                                     GestureDetector(

@@ -291,6 +291,7 @@ class ConversationScreenController {
       // TODO : ディレイ取り除く
       await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
+      ConversationAnimation.characterDefault();
     }
   }
 

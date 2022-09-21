@@ -37,7 +37,7 @@ class ConversationAnimation {
         'conversationCharacter',
         'height',
         [
-          Wave(0, 2000, 1, 1.1, 2000, -0.5)
+          Wave(0, 2000, 0, 0.01, 2000, -0.5)
           // Linear(0, 2000, 1, 2)
         ],
         -1);

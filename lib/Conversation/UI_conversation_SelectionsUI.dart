@@ -10,8 +10,8 @@ import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
-class Selections extends ConsumerWidget {
-  const Selections({Key? key}) : super(key: key);
+class SelectionsUI extends ConsumerWidget {
+  const SelectionsUI({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,32 +67,6 @@ class Selections extends ConsumerWidget {
                       ),
                     ),
                   )),
-              // GestureDetector(
-              //   onTap: () {
-              //     conversationScreenController.goSelectedScene(i);
-              //   },
-              //   child: Container(
-              //       width: GetScreenSize.screenWidth() * 0.6,
-              //       height: GetScreenSize.screenHeight() * 0.15,
-              //       margin: EdgeInsets.only(
-              //         top: GetScreenSize.screenHeight() * 0.1,
-              //       ),
-              //       color: Colors.white.withOpacity(ref
-              //           .watch(animationProvider)
-              //           .stateDouble['opacity' + i.toString()]!),
-              //       child: Center(
-              //         child: Text(
-              //           ref.watch(conversationImageProvider).selections[i]
-              //               ['text'],
-              //           style: TextStyle(
-              //             fontSize: GetScreenSize.screenHeight() * 0.04,
-              //             color: Colors.black.withOpacity(ref
-              //                 .watch(animationProvider)
-              //                 .stateDouble['opacity' + i.toString()]!),
-              //           ),
-              //         ),
-              //       )),
-              // ),
             )
         ],
       ),
