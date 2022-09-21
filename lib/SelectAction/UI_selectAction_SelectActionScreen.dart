@@ -1,10 +1,12 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
+import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
 
 final selectActionScreenProvider =
@@ -13,7 +15,8 @@ final selectActionScreenProvider =
 final SelectActionScreenController selectActionScreenController =
     SelectActionScreenController();
 
-class SelectActionScreen extends ConsumerWidget {
+class SelectActionScreen extends HookConsumerWidget
+    implements GameScreenInterface {
   const SelectActionScreen({Key? key}) : super(key: key);
   static String _screenImagePath =
       "./assets/drawable/Conversation/004_corridorBB.png";
@@ -278,8 +281,8 @@ class SelectActionScreen extends ConsumerWidget {
     );
   }
 
-  /// pre cache image on attention screen.
-  static Future<void> prepare(BuildContext context) async {
+  @override
+  Future<void> prepare(BuildContext context) async {
     await precacheImage(AssetImage(_screenImagePath), context);
     await precacheImage(AssetImage(_characterImagePath), context);
   }

@@ -154,7 +154,7 @@ class LogUI extends ConsumerWidget {
                                                           ref
                                                               .watch(
                                                                   conversationLogProvider)
-                                                              .iconPaths[_i]!,
+                                                              .iconPaths[_i],
                                                         ),
                                                         fit: BoxFit.contain,
                                                       ),
