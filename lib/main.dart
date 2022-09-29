@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
-import 'Settings/Controller_Settings_SettingsController.dart';
+import 'package:sosaku/Wrapper/wrapper_StringParser.dart';
 import 'l10n/l10n.dart';
 
 late PackageInfo packageInfo;
@@ -32,7 +31,9 @@ Future<void> main() async {
   /*logger.setLevel(Level.INFO,
       stackTraceLevel: Level.SEVERE,
       includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
-  runApp(const ProviderScope(child: MyApp()));
+  //runApp(const ProviderScope(child: MyApp()));
+  StringParser parser = StringParser.parseFormula("1+5*(4+2)");
+  parser.toPrefixNotation();
 }
 
 class MyApp extends StatelessWidget {
