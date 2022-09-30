@@ -44,6 +44,7 @@ class SelectionsUI extends ConsumerWidget {
                       .stateDouble['alignment' + i.toString()]!,
                   -1),
               child: AnimationButton(
+                  key: Key('selectionButton${i.toString()}'),
                   onTap: () {
                     conversationScreenController.goSelectedScene(i);
                   },
@@ -52,18 +53,17 @@ class SelectionsUI extends ConsumerWidget {
                   margin:
                       EdgeInsets.only(top: GetScreenSize.screenHeight() * 0.07),
                   ratio: 1.05,
-                  color: Colors.white.withOpacity(ref
+                  opacity: ref
                       .watch(animationProvider)
-                      .stateDouble['opacity' + i.toString()]!),
-                  child: Center(
-                    child: Text(
-                      ref.watch(conversationImageProvider).selections[i]
-                          ['text'],
-                      style: TextStyle(
-                        fontSize: GetScreenSize.screenHeight() * 0.04,
-                        color: Colors.black.withOpacity(ref
-                            .watch(animationProvider)
-                            .stateDouble['opacity' + i.toString()]!),
+                      .stateDouble['opacity${i.toString()}']!,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: GetScreenSize.screenHeight() * 0.03),
+                      child: Text(
+                        ref.watch(conversationImageProvider).selections[i]
+                            ['text'],
                       ),
                     ),
                   )),

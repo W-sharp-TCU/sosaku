@@ -43,10 +43,6 @@ class ConversationScreen extends HookConsumerWidget
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
     conversationScreenController.start(cip, ctp, clp, context);
-    final animationProvider =
-        animationController.createProvider('conversationCharacter', {
-      'height': 0,
-    });
 
     return Scaffold(
       body: GameScreenBase(
