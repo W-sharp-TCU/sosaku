@@ -33,7 +33,6 @@ Future<void> main() async {
       includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
   //runApp(const ProviderScope(child: MyApp()));
   StringParser parser = StringParser.parseFormula("14+5*(4+*3+5)+11");
-  parser.toPrefixNotation();
 }
 
 class MyApp extends StatelessWidget {
