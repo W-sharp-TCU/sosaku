@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
+import 'package:sosaku/Conversation/Provider_conversationConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Conversation/UI_conversation_CharactersUI.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
@@ -27,6 +28,8 @@ final conversationTextProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationTextProvider());
 final conversationLogProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationLogProvider());
+final conversationCharacterProvider = ChangeNotifierProvider.autoDispose(
+    (ref) => ConversationCharacterProvider());
 
 final ConversationScreenController conversationScreenController =
     ConversationScreenController();
@@ -42,7 +45,9 @@ class ConversationScreen extends HookConsumerWidget
     ConversationImageProvider cip = ref.watch(conversationImageProvider);
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
-    conversationScreenController.start(cip, ctp, clp, context);
+    ConversationCharacterProvider ccp =
+        ref.watch(conversationCharacterProvider);
+    conversationScreenController.start(cip, ctp, clp, ccp, context);
 
     return Scaffold(
       body: GameScreenBase(
