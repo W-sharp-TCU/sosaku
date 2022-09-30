@@ -1,3 +1,5 @@
+import 'package:sosaku/Tree.dart';
+
 enum _TextType { formula, general }
 
 class StringParser {
@@ -37,96 +39,43 @@ class StringParser {
 
   Tree<String>? makeSyntaxTree(String infixNotation) {
     Tree<String> tree = Tree<String>.root(val: '');
-    Tree<String> latest = tree; // note: 常に次に値を入れる参照先を持っている(val='')
+    Tree<String> cur = tree; // note: 常に次に値を入れる参照先を持っている(val='')
+    String operand = ''; // 被演算子1つの文字列
+    List<Tree<String>> topStack = []; // 演算子がトップのノードのスタック
     for (int i = 0; i < infixNotation.length; i++) {
       String c = infixNotation[i];
       // note: 最初は何もない
       if (operators.contains(c)) {
         // todo: cが演算子の時
+        // note: ノードのvalに入れて、Leftに今のoperand、右に空ノードを作ってnextをずらす
+        // todo: 演算子の優先順位を見て、適切な木を作る
+        cur.val = c;
+        cur.addLeft(operand);
+        operand = '';
+        cur = cur.addRight('');
       } else {
         switch (isBracket(c, brackets)) {
-          case 1:
+          case 0:
             // todo: 開きかっこの時
+            // note: 新しいノードの最上位演算子を軸に枝を作る
+            // note: 開いた時のノードを(right)を記録しておく
             break;
-          case 2:
+          case 1:
             // todo: 閉じかっこの時
+            // note: 閉じて、次に演算子が来たら記録しておいたところに挿入する
             break;
           default:
             // todo: 被演算子(数)の時
+            // note: operandに追加してきちんとした数にする
+            operand += c;
             break;
         }
       }
       tree.show();
     }
+    if (operand != '') {
+      cur.val = operand; // 最後まで残った被演算子を葉にする
+    }
     return tree;
   }
-}
-
-class Tree<T> {
-  T val;
-  Tree<T>? _prev;
-  Tree<T>? _left;
-  Tree<T>? _right;
-
-  factory Tree.root({required val}) => Tree._(val: val);
-  Tree._({required this.val, Tree<T>? prev}) {
-    _prev = prev;
-  }
-
-  Tree<T> addLeft(T val) {
-    if (_left == null) {
-      _left = Tree._(val: val, prev: this);
-    } else {
-      throw DuplicateException();
-    }
-    return _left!;
-  }
-
-  Tree<T>? delLeft() {
-    Tree<T>? ret = _left;
-    if (ret != null) {
-      ret._prev = null;
-    }
-    _left = null;
-    return ret;
-  }
-
-  Tree<T> addRight(T val) {
-    if (_left == null) {
-      _right = Tree._(val: val, prev: this);
-    } else {
-      throw DuplicateException();
-    }
-    return _right!;
-  }
-
-  Tree<T>? delRight() {
-    Tree<T>? ret = _right;
-    if (ret != null) {
-      ret._prev = null;
-    }
-    _right = null;
-    return ret;
-  }
-
-  void show() {
-    print("$val");
-    if (_left != null) {
-      print("<- left: ");
-      _left!.show();
-    }
-    if (_right != null) {
-      print("-> Right: ");
-    }
-  }
-
-  get prev => _prev;
-  get left => _left;
-  get right => _right;
-}
-
-class DuplicateException implements Exception {
-  @override
-  String toString() =>
-      'DuplicateException: The variant you are about to insert a value has already have a value.';
 }

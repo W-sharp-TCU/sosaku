@@ -32,7 +32,7 @@ Future<void> main() async {
       stackTraceLevel: Level.SEVERE,
       includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
   //runApp(const ProviderScope(child: MyApp()));
-  StringParser parser = StringParser.parseFormula("1+5*(4+2)");
+  StringParser parser = StringParser.parseFormula("14+5*(4+*3+5)+11");
   parser.toPrefixNotation();
 }
 
