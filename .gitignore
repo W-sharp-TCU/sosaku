@@ -51,3 +51,4 @@ app.*.map.json
 # Key files
 *.keystore
 *.jks
+key.properties
