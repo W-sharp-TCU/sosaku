@@ -22,7 +22,8 @@ class AnimationButton extends ConsumerWidget {
   EdgeInsets? _margin;
   late int _duration;
   late double _ratio;
-  Color? _color;
+  late double _opacity;
+  String? _image;
   Function? _onTap;
   Widget? _child;
 
@@ -33,7 +34,8 @@ class AnimationButton extends ConsumerWidget {
       EdgeInsets? margin,
       int duration = 150,
       double ratio = 1.1,
-      Color? color,
+      double opacity = 1,
+      String image = 'assets/drawable/Conversation/button_sample.png',
       Function? onTap,
       Widget? child})
       : super(key: key ?? UniqueKey()) {
@@ -42,7 +44,8 @@ class AnimationButton extends ConsumerWidget {
     _margin = margin;
     _duration = duration;
     _ratio = ratio;
-    _color = color;
+    _opacity = opacity;
+    _image = image;
     _onTap = onTap;
     _child = child;
   }
@@ -51,7 +54,8 @@ class AnimationButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
-    final animationProvider =
+    final AutoDisposeChangeNotifierProvider<AnimationProvider>
+        animationProvider =
         animationController.createProvider(key.toString(), {'margin': 1});
 
     return Container(
@@ -61,6 +65,7 @@ class AnimationButton extends ConsumerWidget {
             height: _height,
             child: GestureDetector(
                 onTap: () {
+                  /// zoomInOut
                   double m =
                       ref.watch(animationProvider).stateDouble['margin']!;
                   int d = (m * _duration / 3).round();
@@ -76,17 +81,17 @@ class AnimationButton extends ConsumerWidget {
                   });
                 },
                 onTapDown: (detail) {
+                  /// zoomIn
                   double m =
                       ref.watch(animationProvider).stateDouble['margin']!;
                   int d = (m * _duration / 3).round();
                   animationController.animate(key.toString(), 'margin', [
                     Linear(0, d, m, 0),
                   ]);
-                  print(m);
                 },
                 onTapUp: (detail) {},
                 onTapCancel: () {
-                  print('cancel');
+                  /// zoomOut
                   double m =
                       ref.watch(animationProvider).stateDouble['margin']!;
                   int d = (m * _duration).round();
@@ -95,13 +100,14 @@ class AnimationButton extends ConsumerWidget {
                   ]);
                 },
                 child: Container(
-                    // decoration: const BoxDecoration(
-                    //   image: DecorationImage(
-                    //     fit: BoxFit.fill,
-                    //     image: AssetImage(
-                    //         'assets/drawable/Conversation/button_sample.png'),
-                    //   ),
-                    // ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage(_image!),
+                        opacity: _opacity,
+                      ),
+                      // color: _color,
+                    ),
                     margin: EdgeInsets.symmetric(
                       horizontal:
                           (ref.watch(animationProvider).stateDouble['margin']! *
@@ -116,7 +122,29 @@ class AnimationButton extends ConsumerWidget {
                                   2)
                               .abs(),
                     ),
-                    color: _color,
                     child: _child))));
   }
 }
+
+// class ButtonSize {
+//   static double getWidth(Key key, {double? ratio, double? width}) {
+//     ratio = 1.1;
+//     width = GetScreenSize.screenWidth() * 1;
+//     return width! -
+//         width! *
+//             (ratio! - 1) *
+//             animationController
+//                 .getProvider(key.toString())!
+//                 .stateDouble['margin']!;
+//   }
+//
+//   static double getHeight(Key key, {double ratio = 1.1, double height = 1}) {
+//     height = height! * GetScreenSize.screenHeight();
+//     return height! -
+//         height! *
+//             (ratio! - 1) *
+//             animationController
+//                 .getProvider(key.toString())!
+//                 .stateDouble['margin']!;
+//   }
+// }

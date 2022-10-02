@@ -123,6 +123,11 @@ class AnimationWidgetController {
     return _animationProviders[providerId];
   }
 
+  AutoDisposeChangeNotifierProvider<AnimationProvider>? getAutoDisposeProvider(
+      String providerId) {
+    return _animationADProviders[providerId];
+  }
+
   /// Add a new states and their initial values to an already created provider.
   ///
   /// @param providerId : ID of the provider to which the state is to be added
@@ -157,7 +162,7 @@ class AnimationWidgetController {
     return (_animationProviders[providerId]?._animations[stateId] != null);
   }
 
-  /// アニメーションを開始します
+  /// Start animation.
   /// This function for controller.
   ///
   /// @param providerId : Provider id to manage multiple states together
