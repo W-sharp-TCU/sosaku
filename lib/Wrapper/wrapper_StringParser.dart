@@ -5,33 +5,43 @@ enum StringType { formula, general }
 class StringParser {
   // Configurations
   static const Map<String, String> brackets = {
+    // '<begin symbol>': '<end symbol>'
     '[': ']',
     '{': '}',
     '(': ')',
   };
-  static final Map<String, List> operators = {
+
+  static const Map<String, List> operators = {
     // '<symbol>': [<function>, <priority>]
     '+': [StringParser._add, 100],
     '-': [StringParser._sub, 100],
     '*': [StringParser._mul, 150],
     '/': [StringParser._div, 150],
-    '=': [StringParser._equal, 100],
+    '==': [StringParser._equal, 100],
+    '>>': [StringParser._greater, 100],
+    '<<': [StringParser._less, 100],
+    '>=': [StringParser._geq, 100],
+    '<=': [StringParser._leq, 100],
     '&&': [StringParser._and, 50],
     '||': [StringParser._or, 50],
   };
 
-  /// ********* User define functions ******************/
+  /// *********** Operating functions ***************************************/
   static double _add(double a, double b) => a + b;
   static double _sub(double a, double b) => a - b;
   static double _mul(double a, double b) => a * b;
   static double _div(double a, double b) => a / b;
 
   static bool _equal(double a, double b) => a == b;
+  static bool _greater(double a, double b) => a > b;
+  static bool _geq(double a, double b) => a >= b;
+  static bool _less(double a, double b) => a < b;
+  static bool _leq(double a, double b) => a <= b;
 
   static bool _and(bool a, bool b) => (a == true && b == true) ? true : false;
   static bool _or(bool a, bool b) => (a == false && b == false) ? false : true;
 
-  /// **************************************************/
+  /// *************************************************************************/
 
   StringType type;
   String target;
