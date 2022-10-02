@@ -9,6 +9,7 @@ import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
+import 'package:sosaku/main.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -86,6 +87,18 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
                           ),
                         ),
                       ),
+                      Align(
+                        alignment: const Alignment(-0.95, -0.95),
+                        child: Text(
+                          "Package: ${packageInfo.packageName},  "
+                          "Version: ${packageInfo.version},  "
+                          "Build: ${packageInfo.buildNumber}",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
                     ],
                   )),
             ),

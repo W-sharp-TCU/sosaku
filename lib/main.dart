@@ -6,7 +6,6 @@ import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
-import 'Settings/Controller_Settings_SettingsController.dart';
 import 'l10n/l10n.dart';
 
 late PackageInfo packageInfo;
