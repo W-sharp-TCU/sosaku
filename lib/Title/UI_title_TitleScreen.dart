@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -37,9 +39,9 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
   Widget build(BuildContext context, WidgetRef ref) {
     // called once
     useEffect(() {
-      SoundPlayer().playBGM(_bgmPaths[0]);
+      SoundPlayer().playBGM(_bgmPaths[0], delay: 2000);
       return null;
-    });
+    }, []);
 
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);

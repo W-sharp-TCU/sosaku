@@ -189,10 +189,16 @@ class SoundPlayer {
   ///    fade-out effect and then stop before new audio file start playing.
   ///
   /// @param [fadeIn] : if "true", new audio file start playing with fade-in effect.
+  ///
+  /// @param [delay] : Set millisecond if you want to play late. Default is 0 millisecond.
   void playBGM(String filePath,
-      {bool loop = true, bool fadeOut = true, bool fadeIn = false}) async {
+      {bool loop = true,
+      bool fadeOut = true,
+      bool fadeIn = false,
+      int delay = 0}) async {
     final double startVolume;
     final ReleaseMode mode;
+    await Future.delayed(Duration(milliseconds: delay));
     await stopBGM(fadeOut: fadeOut);
     if (loop) {
       mode = ReleaseMode.loop;

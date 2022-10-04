@@ -36,7 +36,7 @@ dependencies:
   intl: ^0.17.0           # L10n support
   shared_preferences:     # local app storage access
   path_provider:          # search location apps can access
-  audioplayers:           # play sounds
+  audioplayers: ^1.1.0    # play sounds
   universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
   package_info_plus:      # for checking running app version

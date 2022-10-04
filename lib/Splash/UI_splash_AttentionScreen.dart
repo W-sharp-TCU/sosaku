@@ -21,7 +21,7 @@ class AttentionScreen extends HookConsumerWidget {
     // called once
     useEffect(() {
       _preLoad(context, _nextScreen);
-    });
+    }, []);
 
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
