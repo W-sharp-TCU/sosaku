@@ -92,7 +92,9 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
                         child: Text(
                           "Package: ${packageInfo.packageName},  "
                           "Version: ${packageInfo.version},  "
-                          "Build: ${packageInfo.buildNumber}",
+                          "Build: ${packageInfo.buildNumber}\n"
+                          "Screen Height: ${GetScreenSize.screenHeight()}, "
+                          "Width: ${GetScreenSize.screenWidth()}",
                           style: TextStyle(
                             fontSize: GetScreenSize.screenHeight() * 0.04,
                             color: Colors.white,

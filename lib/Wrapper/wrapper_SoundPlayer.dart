@@ -425,7 +425,7 @@ class SoundPlayer {
 
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
     double volume = _volumes[audioType];
-    while (volume >= 0) {
+    while (volume > 0) {
       volume = volume - (_volumes[audioType] / _fadeStep);
       if (volume <= 0) {
         volume = 0;
@@ -439,7 +439,7 @@ class SoundPlayer {
   Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
     double goal = _volumes[audioType];
     double volume = 0;
-    while (volume <= goal) {
+    while (volume < goal) {
       volume = volume + (goal / _fadeStep);
       if (volume >= goal) {
         volume = goal;
@@ -594,10 +594,10 @@ class SoundPlayer {
     // Configure audio context
     AudioContextAndroid androidConfig = AudioContextAndroid(
         isSpeakerphoneOn: false,
-        stayAwake: false,
+        stayAwake: true,
         contentType: AndroidContentType.music,
         usageType: AndroidUsageType.game,
-        audioFocus: AndroidAudioFocus.values[3]);
+        audioFocus: AndroidAudioFocus.gainTransient);
     AudioContextIOS iosConfig = AudioContextIOS(
       defaultToSpeaker: true,
       category: AVAudioSessionCategory.soloAmbient,
@@ -611,7 +611,7 @@ class SoundPlayer {
 
     // Configure log level
     AudioPlayer.global
-        .changeLogLevel(LogLevel.error); // todo: delete when release*/
+        .changeLogLevel(LogLevel.info); // todo: delete when release*/
   }
 }
 
