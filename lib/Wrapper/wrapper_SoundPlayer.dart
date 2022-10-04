@@ -591,19 +591,19 @@ class SoundPlayer {
   /// Private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
   SoundPlayer._internalConstructor() {
-    /*// Configure audio context
+    // Configure audio context
     AudioContextAndroid androidConfig = AudioContextAndroid(
         isSpeakerphoneOn: false,
         stayAwake: false,
-        contentType: AndroidContentType.speech,
+        contentType: AndroidContentType.music,
         usageType: AndroidUsageType.game,
-        audioFocus: AndroidAudioFocus.none);
+        audioFocus: AndroidAudioFocus.values[3]);
     AudioContextIOS iosConfig = AudioContextIOS(
-      defaultToSpeaker: false,
-      category: AVAudioSessionCategory.playback,
+      defaultToSpeaker: true,
+      category: AVAudioSessionCategory.soloAmbient,
       options: [
         AVAudioSessionOptions.allowAirPlay,
-        AVAudioSessionOptions.allowBluetooth,
+        AVAudioSessionOptions.allowBluetoothA2DP
       ],
     );
     AudioPlayer.global.setGlobalAudioContext(
