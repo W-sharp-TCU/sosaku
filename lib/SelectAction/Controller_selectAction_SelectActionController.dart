@@ -1,15 +1,10 @@
-import 'dart:js_util';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
-import '../Home/UI_home_HomeScreen.dart';
-import '../Settings/UI_Setting_SettingScreen.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
-import '../Wrapper/wrapper_TransitionBuilders.dart';
 
 /// @Fields
 ///

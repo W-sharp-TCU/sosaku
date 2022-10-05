@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Conversation/Animation_conversation_ConversationAnimation.dart';
+import 'package:sosaku/Conversation/Provider_conversationConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Settings/Provider_Settings_SettingsProvider.dart';
@@ -20,6 +21,7 @@ class ConversationScreenController {
   ConversationImageProvider? _conversationImageProvider;
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
+  ConversationCharacterProvider? _conversationCharacterProvider;
   BuildContext? _context;
   Timer? _timer;
 
@@ -53,50 +55,49 @@ class ConversationScreenController {
   ///
   final List<List> _conversationData = [
     ['bgImage', 'assets/drawable/Conversation/002_classroomBB.png'],
-    [
-      'characterImage',
-      'assets/drawable/CharacterImage/Ayana/angry(eyeClosed).png'
-    ],
-    ['characterName', 'あやな'],
-    ['text', '早くしないと学食混んじゃうじゃない！'],
+    ['characterIn', 'あやな1'],
+    ['text', 'あやな', '早くしないと学食混んじゃうじゃない！'],
     [''],
-    ['text', 'それじゃあ、このパソコンの角で起こしてほしかったかしら？'],
-    [
-      'characterImage',
-      'assets/drawable/CharacterImage/Ayana/angry(eyeOpend).png'
-    ],
+    ['text', 'あやな', 'それじゃあ、このパソコンの角で起こしてほしかったかしら？'],
+    ['characterIn', 'あやな2'],
     [''],
-    ['text', '次の授業なんだっけ？'],
-    ['selection', '国語', '14'],
-    ['selection', '数学', '17'],
-    ['selection', '英語', '20'],
+    ['text', 'ののの', '次の授業なんだっけ？'],
+    ['selection', '国語', '13'],
+    ['selection', '数学', '16'],
+    ['selection', '英語', '19'],
     [''],
-    ['text', '次の授業は国語だよ'],
+    ['text', 'あやな', '次の授業は国語だよ'],
     [''],
-    ['goto', '23'],
-    ['text', '次の授業は数学だよ'],
+    ['goto', '22'],
+    ['text', 'あやな', '次の授業は数学だよ'],
     [''],
-    ['goto', '23'],
-    ['text', '次の授業は英語だよ'],
+    ['goto', '22'],
+    ['text', 'あやな', '次の授業は英語だよ'],
     [''],
-    ['goto', '23'],
+    ['goto', '22'],
+    ['characterIn', 'あやな3'],
     [
       'text',
+      'あやな',
+      '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
+    ],
+    [''],
+    ['characterIn', 'あやな4'],
+    [
+      'text',
+      'あやな',
       '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
     ],
     [''],
     [
       'text',
+      'あやな',
       '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
     ],
     [''],
     [
       'text',
-      '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-    ],
-    [''],
-    [
-      'text',
+      'あやな',
       '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
     ],
     [''],
@@ -116,18 +117,16 @@ class ConversationScreenController {
     } else {
       if (func == 'bgImage') {
         _bgImage(_conversationData[_nowCode][1]);
-      } else if (func == 'characterImage') {
-        _characterImage(_conversationData[_nowCode][1]);
+      } else if (func == 'characterIn') {
+        _characterIn(_conversationData[_nowCode][1]);
       } else if (func == 'bgm') {
         _bgm(_conversationData[_nowCode][1]);
       } else if (func == 'voice') {
         _voice(_conversationData[_nowCode][1]);
       } else if (func == 'se') {
         _se(_conversationData[_nowCode][1]);
-      } else if (func == 'characterName') {
-        _characterName(_conversationData[_nowCode][1]);
       } else if (func == 'text') {
-        _text(_conversationData[_nowCode][1]);
+        _text(_conversationData[_nowCode][1], _conversationData[_nowCode][2]);
       } else if (func == 'selection') {
         _selection(_conversationData[_nowCode][1],
             int.parse(_conversationData[_nowCode][2]));
@@ -148,8 +147,9 @@ class ConversationScreenController {
     _conversationImageProvider?.setBGImage(path);
   }
 
-  void _characterImage(String path) {
-    _conversationImageProvider?.setCharacterImage(path);
+  void _characterIn(String layerName) {
+    // _conversationImageProvider?.setCharacterImage(path);
+    _conversationCharacterProvider?.characterIn(layerName);
   }
 
   void _bgm(String path) {
@@ -164,11 +164,8 @@ class ConversationScreenController {
     SoundPlayer().playAS([path]);
   }
 
-  void _characterName(String name) {
+  void _text(String name, String text) async {
     _conversationImageProvider?.setCharacterName(name);
-  }
-
-  void _text(String text) async {
     _conversationImageProvider?.setCanNext(false);
     await animationController.animate('conversationTextAnimation', 'textLength',
         [Linear(0, text.length * _interval, 1, text.length.toDouble())]);
@@ -264,13 +261,16 @@ class ConversationScreenController {
       ConversationImageProvider cip,
       ConversationTextProvider ctp,
       ConversationLogProvider clp,
+      ConversationCharacterProvider ccp,
       BuildContext context) async {
     if (_conversationImageProvider == null ||
         _conversationTextProvider == null ||
-        _conversationLogProvider == null) {
+        _conversationLogProvider == null ||
+        _conversationCharacterProvider == null) {
       _conversationImageProvider = cip;
       _conversationTextProvider = ctp;
       _conversationLogProvider = clp;
+      _conversationCharacterProvider = ccp;
       _context = context;
 
       // init
@@ -302,6 +302,7 @@ class ConversationScreenController {
     _conversationImageProvider = null;
     _conversationTextProvider = null;
     _conversationLogProvider = null;
+    _conversationCharacterProvider = null;
   }
 
   ///
@@ -369,11 +370,12 @@ class ConversationScreenController {
     if (_conversationImageProvider != null &&
         _conversationTextProvider != null &&
         _conversationLogProvider != null &&
+        _conversationCharacterProvider != null &&
         _context != null) {
       await Navigator.pushReplacement(
         _context!,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => TitleScreen(),
+          pageBuilder: (_, __, ___) => const TitleScreen(),
         ),
       );
       stop();

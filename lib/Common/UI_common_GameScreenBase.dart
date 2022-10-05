@@ -9,8 +9,10 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 class GameScreenBase extends ConsumerWidget {
   final Widget child;
   final LifecycleCallback lifecycleCallback;
+  final bool opaque;
   const GameScreenBase(
       {this.lifecycleCallback = const CommonLifecycleCallback(),
+      this.opaque = true,
       required this.child,
       Key? key})
       : super(key: key);
@@ -24,12 +26,12 @@ class GameScreenBase extends ConsumerWidget {
       child: Container(
         height: double.infinity,
         width: double.infinity,
-        color: Colors.black,
+        color: opaque ? Colors.black : Colors.transparent,
         child: Center(
           child: Container(
               height: GetScreenSize.screenHeight(),
               width: GetScreenSize.screenWidth(),
-              color: Colors.black,
+              color: opaque ? Colors.black : Colors.transparent,
               child: TapEffectScreen(
                 child: child,
               )),

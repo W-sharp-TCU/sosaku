@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -9,6 +11,7 @@ import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
+import 'package:sosaku/main.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -36,9 +39,9 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
   Widget build(BuildContext context, WidgetRef ref) {
     // called once
     useEffect(() {
-      SoundPlayer().playBGM(_bgmPaths[0]);
+      SoundPlayer().playBGM(_bgmPaths[0], delay: 2000);
       return null;
-    });
+    }, []);
 
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
@@ -86,6 +89,20 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
                           ),
                         ),
                       ),
+                      Align(
+                        alignment: const Alignment(-0.95, -0.95),
+                        child: Text(
+                          "Package: ${packageInfo.packageName},  "
+                          "Version: ${packageInfo.version},  "
+                          "Build: ${packageInfo.buildNumber}\n"
+                          "Screen Height: ${GetScreenSize.screenHeight()}, "
+                          "Width: ${GetScreenSize.screenWidth()}",
+                          style: TextStyle(
+                            fontSize: GetScreenSize.screenHeight() * 0.04,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
                     ],
                   )),
             ),

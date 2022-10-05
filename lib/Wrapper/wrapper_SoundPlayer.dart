@@ -189,10 +189,16 @@ class SoundPlayer {
   ///    fade-out effect and then stop before new audio file start playing.
   ///
   /// @param [fadeIn] : if "true", new audio file start playing with fade-in effect.
+  ///
+  /// @param [delay] : Set millisecond if you want to play late. Default is 0 millisecond.
   void playBGM(String filePath,
-      {bool loop = true, bool fadeOut = true, bool fadeIn = false}) async {
+      {bool loop = true,
+      bool fadeOut = true,
+      bool fadeIn = false,
+      int delay = 0}) async {
     final double startVolume;
     final ReleaseMode mode;
+    await Future.delayed(Duration(milliseconds: delay));
     await stopBGM(fadeOut: fadeOut);
     if (loop) {
       mode = ReleaseMode.loop;
@@ -425,7 +431,7 @@ class SoundPlayer {
 
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
     double volume = _volumes[audioType];
-    while (volume >= 0) {
+    while (volume > 0) {
       volume = volume - (_volumes[audioType] / _fadeStep);
       if (volume <= 0) {
         volume = 0;
@@ -439,7 +445,7 @@ class SoundPlayer {
   Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
     double goal = _volumes[audioType];
     double volume = 0;
-    while (volume <= goal) {
+    while (volume < goal) {
       volume = volume + (goal / _fadeStep);
       if (volume >= goal) {
         volume = goal;
@@ -591,19 +597,19 @@ class SoundPlayer {
   /// Private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
   SoundPlayer._internalConstructor() {
-    /*// Configure audio context
+    // Configure audio context
     AudioContextAndroid androidConfig = AudioContextAndroid(
         isSpeakerphoneOn: false,
-        stayAwake: false,
-        contentType: AndroidContentType.speech,
+        stayAwake: true,
+        contentType: AndroidContentType.music,
         usageType: AndroidUsageType.game,
-        audioFocus: AndroidAudioFocus.none);
+        audioFocus: AndroidAudioFocus.gainTransient);
     AudioContextIOS iosConfig = AudioContextIOS(
-      defaultToSpeaker: false,
-      category: AVAudioSessionCategory.playback,
+      defaultToSpeaker: true,
+      category: AVAudioSessionCategory.soloAmbient,
       options: [
         AVAudioSessionOptions.allowAirPlay,
-        AVAudioSessionOptions.allowBluetooth,
+        AVAudioSessionOptions.allowBluetoothA2DP
       ],
     );
     AudioPlayer.global.setGlobalAudioContext(
@@ -611,7 +617,7 @@ class SoundPlayer {
 
     // Configure log level
     AudioPlayer.global
-        .changeLogLevel(LogLevel.error); // todo: delete when release*/
+        .changeLogLevel(LogLevel.info); // todo: delete when release*/
   }
 }
 

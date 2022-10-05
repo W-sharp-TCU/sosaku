@@ -29,29 +29,30 @@ class SideUIs extends ConsumerWidget {
         children: [
           ///menu
           AnimationButton(
+              key: const Key('menu'),
               onTap: () {
                 conversationScreenController.openMenu();
               },
-              width: GetScreenSize.screenWidth() * 0.05,
-              height: GetScreenSize.screenWidth() * 0.05,
-              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
-              color: Colors.red.withOpacity(0.5),
-              child: const FittedBox(
-                fit: BoxFit.contain,
-                child: Image(
-                  image: AssetImage('assets/drawable/Conversation/sakura.png'),
-                ),
-              )),
+              width: GetScreenSize.screenWidth() * 0.06,
+              height: GetScreenSize.screenWidth() * 0.06,
+              margin: EdgeInsets.only(
+                  left: GetScreenSize.screenWidth() * 0.01,
+                  top: GetScreenSize.screenWidth() * 0.01,
+                  right: GetScreenSize.screenWidth() * 0.01),
+              child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
 
           ///UI appear
           AnimationButton(
+              key: const Key('ui'),
               onTap: () {
                 conversationScreenController.changeHideUi();
               },
-              width: GetScreenSize.screenWidth() * 0.05,
-              height: GetScreenSize.screenWidth() * 0.05,
-              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
-              color: Colors.red.withOpacity(0.5),
+              width: GetScreenSize.screenWidth() * 0.06,
+              height: GetScreenSize.screenWidth() * 0.06,
+              margin: EdgeInsets.only(
+                  left: GetScreenSize.screenWidth() * 0.01,
+                  top: GetScreenSize.screenWidth() * 0.01,
+                  right: GetScreenSize.screenWidth() * 0.01),
               child: const FittedBox(
                 fit: BoxFit.contain,
                 child: Text("UI"),
@@ -61,13 +62,13 @@ class SideUIs extends ConsumerWidget {
 
           ///auto button
           AnimationButton(
+              key: const Key('auto'),
               onTap: () {
                 conversationScreenController.changeAutoPlay();
               },
               width: GetScreenSize.screenWidth() * 0.1,
               height: GetScreenSize.screenHeight() * 0.05,
               margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
-              color: Colors.red.withOpacity(0.5),
               child: const FittedBox(
                 fit: BoxFit.contain,
                 child: Text("Auto"),
@@ -75,20 +76,20 @@ class SideUIs extends ConsumerWidget {
 
           ///Log button
           AnimationButton(
+              key: const Key('log'),
               onTap: () {
                 conversationScreenController.openLog();
               },
               width: GetScreenSize.screenWidth() * 0.1,
               height: GetScreenSize.screenHeight() * 0.05,
               margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
-              color: Colors.red.withOpacity(0.5),
               child: const FittedBox(
                 fit: BoxFit.contain,
                 child: Text("LOG"),
               )),
 
           /// いしかわ先生の元コード
-          ///menu
+          // ///menu
           // GestureDetector(
           //   onTap: () {
           //     conversationScreenController.openMenu();
