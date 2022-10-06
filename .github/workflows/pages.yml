@@ -1,0 +1,66 @@
+# Workflow for deploying flutter for web content to GitHub Pages
+name: Sosaku for Web
+
+on:
+  # Only triggerd from Codemagic workflow
+  repository_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Repository
+        id: version
+        run: |
+          REPOSITORY=$(echo ${{ github.repository }} | sed -e "s#.*/##")
+          echo ::set-output name=repository::$REPOSITORY
+      - name: Install Flutter for Web
+        uses: subosito/flutter-action@v2
+        with:
+          # flutter-version: '3.3.4'
+          channel: 'stable'
+          cache: true
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter gen-l10n
+      - run: flutter pub run icons_launcher:create
+      - run: flutter pub run flutter_native_splash:create
+      # If you use default URL (do not use custom domain), --base-href option is required.
+      - run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} #--base-href /${{ steps.version.outputs.repository }}/
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload artifacts
+          path: './build/web'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+      # Notify Discord Channel
+      - name: Notify Discord
+        uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          username: GitHub Actions
+          nocontext: true
+          title: "deploy to GitHub Pages"
+          description: |
+            Click [here](https://w-sharp-tcu.github.io/sosaku/) to access!
