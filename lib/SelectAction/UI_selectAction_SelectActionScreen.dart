@@ -1,11 +1,11 @@
-import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-import '../Wrapper/wrapper_AnimationWidget.dart';
 
 final selectActionScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => SelectActionScreenProvider());
@@ -14,7 +14,125 @@ final SelectActionScreenController selectActionScreenController =
     SelectActionScreenController();
 
 class SelectActionScreen extends ConsumerWidget {
-  const SelectActionScreen({Key? key}) : super(key: key);
+    const SelectActionScreen({Key? key}) : super(key: key);
+
+    ///
+    /// new ui design
+    ///
+    @override
+    Widget build(BuildContext context, WidgetRef ref) {
+        GetScreenSize.setSize(
+        MediaQuery.of(context).size.height,
+        MediaQuery.of(context).size.width
+        );
+        /// List<Sting> actionList is list of selectable actions.
+        /// If other elements(ex. function of selected actions) are contained in this list, change List to Map or List<List> and ListBuilder code too.
+        List<String> actionList = ["test1", "test2"];
+        SelectActionScreenProvider sasp = ref.watch(selectActionScreenProvider);
+        selectActionScreenController.start(sasp, context);
+        /*
+        final animationProvider = animationController.createProvider('statusUp',
+            {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0}); 
+        */
+        return Scaffold(
+            body: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.white,
+                child: Center(
+                    child: SizedBox(
+                        width: GetScreenSize.screenWidth(),
+                        height: GetScreenSize.screenHeight(),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                                Expanded(
+                                    child: TableCalendar(
+                                        firstDay: DateTime.utc(2022, 9, 1), 
+                                        lastDay: DateTime.utc(2022, 9, 30),
+                                        focusedDay: DateTime.now(), 
+                                        shouldFillViewport: true,
+                                    ),
+                                ),
+                                SizedBox(
+                                    width: GetScreenSize.screenWidth() * 0.05,
+                                ),
+                                SizedBox(
+                                    width: GetScreenSize.screenWidth() * 0.45,
+                                    child: Column(
+                                        children: <Widget>[
+                                            SizedBox(
+                                                height: GetScreenSize.screenHeight() * 0.05,
+                                            ),
+                                            Expanded(
+                                                child: ListView.builder(
+                                                    itemCount: actionList.length,
+                                                    itemBuilder: (context, index) {
+                                                        return Card(
+                                                            elevation: 0,
+                                                            child: Row(
+                                                            children: <Widget>[
+                                                                RoundCheckBox(
+                                                                    onTap: (selected){
+                                                                        // call a function when selected.
+                                                
+                                                                    }
+                                                                ),
+                                                                Text(
+                                                                    actionList[index],
+                                                                    style: const TextStyle(
+                                                                        fontSize: 20,
+                                                                    ),
+                                                                ),
+                                                            ],),
+                                                        );
+                                                    },
+                                                ),
+                                            ),
+                                            SizedBox(
+                                                height: GetScreenSize.screenHeight() * 0.1,
+                                                child: Stack(
+                                                    children: <Widget>[
+                                                        // If image of button is created, enable under code to load image.  
+                                                        // Image(
+                                                        //     image: 
+                                                        // ),
+                                                        GestureDetector(
+                                                            child: const Center(
+                                                                child: Text(
+                                                                    "OK",
+                                                                    style: TextStyle(
+                                                                        fontSize: 15,
+                                                                    ),    
+                                                                ),
+                                                            ),    
+                                                            onTap: () {
+                                                                // call a function to do selected action.
+
+                                                            },                                        
+                                                        ),
+                                                    ],
+                                                ),
+                                            ),
+                                            SizedBox(
+                                                height: GetScreenSize.screenHeight() * 0.05,
+                                            ),
+                                        ],
+                                    ),    
+                                ),
+                            ],            
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+
+  ///
+  /// pre ui design
+  ///
+
+  /*
   static String _screenImagePath =
       "./assets/drawable/Conversation/004_corridorBB.png";
   static String _characterImagePath =
@@ -277,10 +395,23 @@ class SelectActionScreen extends ConsumerWidget {
       ),
     );
   }
+  */
 
   /// pre cache image on attention screen.
   static Future<void> prepare(BuildContext context) async {
+    ///
+    /// new ui design
+    ///
+    /*
+    await precacheImage(AssetImage(_buttonImagePath), context);
+    */
+
+    ///
+    /// pre ui design
+    ///
+    /*
     await precacheImage(AssetImage(_screenImagePath), context);
     await precacheImage(AssetImage(_characterImagePath), context);
+    */
   }
 }
