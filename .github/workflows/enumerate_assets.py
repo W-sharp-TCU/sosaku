@@ -2,11 +2,11 @@ import os
 
 
 def main():
-    for root, dir, files in os.walk(top='../../assets/'):
+    for root, dirs, files in os.walk(top='../../assets/'):
         for file in files:
-            filePath = os.path.join(root, file)
-            filePath = filePath.replace('../../', '')
-            print(f'filePath = {filePath}')
+            file_path = os.path.join(root, file)
+            file_path = file_path.replace('../../', '')
+            print(f'filePath = {file_path}')
 
 
 if __name__ == '__main__':
