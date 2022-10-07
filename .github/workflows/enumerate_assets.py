@@ -43,6 +43,7 @@ def main():
              'https://www.googleapis.com/auth/drive']
 
     # Get Credential JSON.
+    print(sys.argv[1])
     info = json.loads(sys.argv[1])
     credentials = Credentials.from_service_account_info(
         info=info, scopes=scope)

@@ -21,4 +21,4 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r .github/workflows/python_requirements.txt
       - name: Execute python script
-        run: python .github/workflows/enumerate_assets.py ${secrets.CREDENTIAL_JSON}
+        run: python .github/workflows/enumerate_assets.py ${{ secrets.CREDENTIAL_JSON }}
