@@ -63,7 +63,7 @@ def main():
 
     # [ Edit sheet cells ]
     # Clear cells
-    worksheet.batch_clear(f'A{EDIT_POSITION["start_cul"]}:Z1000')
+    worksheet.batch_clear([f'A{EDIT_POSITION["start_cul"]}:Z1000', 'my_range'])
 
     # # Write the edit start time.
     # worksheet.update_acell(EDIT_POSITION['last_modified'],
