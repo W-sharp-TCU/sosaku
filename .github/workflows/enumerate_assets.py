@@ -62,16 +62,19 @@ def main():
     worksheet = workbook.worksheet('assets')
 
     # [ Edit sheet cells ]
-    # Write the edit start time.
-    worksheet.update_acell(EDIT_POSITION['last_modified'],
-                           str(datetime.now(pytz.timezone('Asia/Tokyo'))))
+    # Clear cells
+    worksheet.batch_clear(f'A{EDIT_POSITION["start_cul"]}:Z1000')
 
-    # Enumerate path of asset files.
-    collect_file_path()
-
-    # Write file paths to Google Sheets.
-    write_sheet(worksheet, 'A', character_images)
-    write_sheet(worksheet, 'B', background_images)
+    # # Write the edit start time.
+    # worksheet.update_acell(EDIT_POSITION['last_modified'],
+    #                        str(datetime.now(pytz.timezone('Asia/Tokyo'))))
+    #
+    # # Enumerate path of asset files.
+    # collect_file_path()
+    #
+    # # Write file paths to Google Sheets.
+    # write_sheet(worksheet, 'A', character_images)
+    # write_sheet(worksheet, 'B', background_images)
 
 
 def collect_file_path():
@@ -101,7 +104,7 @@ def collect_file_path():
                 character_voices.append(file_path)
 
 
-def write_sheet(worksheet: gspread.Worksheet, row, value):
+def write_sheet(worksheet, row, value):
     """Write value list to worksheet row.
 
     Args:
