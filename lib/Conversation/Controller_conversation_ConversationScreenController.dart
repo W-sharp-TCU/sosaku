@@ -1,19 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:sosaku/Conversation/Animation_conversation_ConversationAnimation.dart';
 import 'package:sosaku/Conversation/Provider_conversationConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
-import 'package:sosaku/Settings/Provider_Settings_SettingsProvider.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
-import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:csv/csv.dart';
 
 class ConversationScreenController {
   int _interval = 40; // [ms]
@@ -25,17 +22,8 @@ class ConversationScreenController {
   BuildContext? _context;
   Timer? _timer;
 
-  /// Code number to display.
+  /// Code number of scenario data.
   int _nowCode = 0;
-
-  /// Length of teIs auto play?xt being displayed.
-  int _nowLength = 0;
-
-  /// Text being displayed.
-  String _nowText = '';
-
-  /// List of conversation logs.
-  List<int> _conversationLogs = [];
 
   /// bgImage
   /// characterImage
@@ -53,123 +41,291 @@ class ConversationScreenController {
   ///
   /// characterImage key path pos(-1)
   ///
-  final List<List> _conversationData = [
-    ['bgImage', 'assets/drawable/Conversation/002_classroomBB.png'],
-    ['characterIn', 'あやな1'],
-    ['text', 'あやな', '早くしないと学食混んじゃうじゃない！'],
-    [''],
-    ['text', 'あやな', 'それじゃあ、このパソコンの角で起こしてほしかったかしら？'],
-    ['characterIn', 'あやな2'],
-    [''],
-    ['text', 'ののの', '次の授業なんだっけ？'],
-    ['selection', '国語', '13'],
-    ['selection', '数学', '16'],
-    ['selection', '英語', '19'],
-    [''],
-    ['text', 'あやな', '次の授業は国語だよ'],
-    [''],
-    ['goto', '22'],
-    ['text', 'あやな', '次の授業は数学だよ'],
-    [''],
-    ['goto', '22'],
-    ['text', 'あやな', '次の授業は英語だよ'],
-    [''],
-    ['goto', '22'],
-    ['characterIn', 'あやな3'],
-    [
-      'text',
-      'あやな',
-      '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-    ],
-    [''],
-    ['characterIn', 'あやな4'],
-    [
-      'text',
-      'あやな',
-      '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-    ],
-    [''],
-    [
-      'text',
-      'あやな',
-      '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-    ],
-    [''],
-    [
-      'text',
-      'あやな',
-      '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-    ],
-    [''],
-    ['end']
-  ];
+  // final List<List<String>> _conversationData = [
+  //   ['bg', 'set', 'assets/drawable/Conversation/002_classroomBB.png'],
+  //   ['character', 'in', 'あやな1'],
+  //   ['text', '', 'あやな', '早くしないと学食混んじゃうじゃない！'],
+  //   ['', ''],
+  //   ['text', '', 'あやな', 'それじゃあ、このパソコンの角で起こしてほしかったかしら？'],
+  //   ['character', 'in', 'あやな2'],
+  //   ['', ''],
+  //   ['text', '', 'ののの', '次の授業なんだっけ？'],
+  //   ['selection', '', '国語', '13'],
+  //   ['selection', '', '数学', '16'],
+  //   ['selection', '', '英語', '19'],
+  //   ['', ''],
+  //   ['text', '', 'あやな', '次の授業は国語だよ'],
+  //   ['', ''],
+  //   ['goto', '', '22'],
+  //   ['text', '', 'あやな', '次の授業は数学だよ'],
+  //   ['', ''],
+  //   ['goto', '', '22'],
+  //   ['text', '', 'あやな', '次の授業は英語だよ'],
+  //   ['', ''],
+  //   ['goto', '', '22'],
+  //   ['character', 'in', 'あやな3'],
+  //   [
+  //     'text',
+  //     '',
+  //     'あやな',
+  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
+  //   ],
+  //   ['', ''],
+  //   ['character', 'in', 'あやな4'],
+  //   [
+  //     'text',
+  //     '',
+  //     'あやな',
+  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
+  //   ],
+  //   ['', ''],
+  //   [
+  //     'text',
+  //     '',
+  //     'あやな',
+  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
+  //   ],
+  //   ['', ''],
+  //   [
+  //     'text',
+  //     '',
+  //     'あやな',
+  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
+  //   ],
+  //   ['', ''],
+  //   ['end']
+  // ];
+  final List<List<String>> _eventData = [];
 
   void _goNextScene() {
-    String func = _conversationData[_nowCode][0];
-    if (func == 'end') {
-      endEvent();
-    } else if (func == '') {
-      _addLog();
-      _nowCode++;
-    } else if (func == 'goto') {
-      _goto(int.parse(_conversationData[_nowCode][1]) - 1);
-      _goNextScene();
-    } else {
-      if (func == 'bgImage') {
-        _bgImage(_conversationData[_nowCode][1]);
-      } else if (func == 'characterIn') {
-        _characterIn(_conversationData[_nowCode][1]);
-      } else if (func == 'bgm') {
-        _bgm(_conversationData[_nowCode][1]);
-      } else if (func == 'voice') {
-        _voice(_conversationData[_nowCode][1]);
-      } else if (func == 'se') {
-        _se(_conversationData[_nowCode][1]);
-      } else if (func == 'text') {
-        _text(_conversationData[_nowCode][1], _conversationData[_nowCode][2]);
-      } else if (func == 'selection') {
-        _selection(_conversationData[_nowCode][1],
-            int.parse(_conversationData[_nowCode][2]));
-      }
-      _nowCode++;
-      _goNextScene();
+    String op = _eventData[_nowCode][0];
+    String? func = _eventData[_nowCode][1];
+    List<String> arg = _eventData[_nowCode].sublist(2);
+    _nowCode++;
+    switch (op) {
+      case 'bg':
+        _bg(func, arg);
+        break;
+      case 'character':
+        _character(func, arg);
+        break;
+      case 'text':
+        _text(func, arg);
+        break;
+      case 'selection':
+        _selection(func, arg);
+        break;
+      case 'narration':
+        _text(func, arg);
+        break;
+      case 'bgm':
+        break;
+      case 'voice':
+        break;
+      case 'se':
+        break;
+      case '':
+        _conversationCharacterProvider?.update();
+        _addLog();
+        break;
+      case 'sleep':
+        _sleep(func, arg);
+        break;
+      case 'goto':
+        _goto(func, arg);
+        break;
+      case 'if':
+        break;
+      case 'end':
+        endEvent();
+        break;
+      case '//':
+        _goNextScene();
+        break;
+      default:
+        throw ('scenario data ${_nowCode - 1} : operator "$op" is not defined');
     }
+
+    // _nowCode++;
+    // _goNextScene();
   }
 
   void goSelectedScene(int selectionNum) {
-    _nowCode = _conversationImageProvider?.selections[selectionNum]['goto'] - 1;
+    _nowCode = _conversationImageProvider?.selections[selectionNum]['goto'];
     _conversationImageProvider?.setSelections([]);
     _conversationImageProvider?.setIsSelection(false);
     _goNextScene();
   }
 
-  void _bgImage(String path) {
-    _conversationImageProvider?.setBGImage(path);
+  void _bg(String func, List<String> arg) {
+    switch (func) {
+      case 'set':
+        String path = arg[0];
+        // TODO : pathの読み込みをできるようにする
+        path = 'assets/drawable/Conversation/002_classroomBB.png';
+        _conversationImageProvider?.setBGImage(path);
+        _goNextScene();
+        break;
+      case 'animation':
+        _goNextScene();
+        break;
+      default:
+        throw ('scenario data ${_nowCode - 1} : function "$func" is not defined');
+    }
   }
 
-  void _characterIn(String layerName) {
-    // _conversationImageProvider?.setCharacterImage(path);
-    _conversationCharacterProvider?.characterIn(layerName);
+  void _character(String func, List<String> arg) {
+    switch (func) {
+      case 'in':
+        String layerId = arg[0];
+        String animationIn = arg[1];
+        int countPosNull = 1; // 座標が指定されていないキャラクターの数(1は追加キャラ分)
+        for (LayerData layer in _conversationCharacterProvider!.layers.values) {
+          if (layer.position == null) {
+            countPosNull++;
+          }
+        }
+        // すでに配置されたキャラクターの新しい位置を設定
+        int i = 1;
+        for (LayerData layer in _conversationCharacterProvider!.layers.values) {
+          print('dst');
+          print(i / (countPosNull + 1));
+          if (layer.position == null) {
+            layer.animations.add(() {
+              _conversationCharacterProvider?.animationNum++;
+              animationController
+                  .animate('${layer.layerId}characterAnimation', 'positionX', [
+                Easing(0, 1000, layer.positionX, 1 / (countPosNull + 1))
+                    .inOutQuint(),
+              ]);
+              animationController.setCallback(
+                  '${layer.layerId}characterAnimation', 'positionX', () {
+                layer.positionX = i / (countPosNull + 1);
+                _conversationCharacterProvider?.animationNum--;
+              });
+            });
+            i++;
+          }
+        }
+        // 新しいキャラクターを登場させる
+        print('create new character');
+        _conversationCharacterProvider!.layers[layerId] =
+            LayerData(layerId, i / (countPosNull + 1));
+        print(_conversationCharacterProvider!.layers);
+        _conversationCharacterProvider!.layers[layerId]?.animations.add(() {
+          _conversationCharacterProvider?.animationNum++;
+          animationController.animate('${layerId}characterAnimation', 'opacity',
+              [Linear(0, 1000, 0, 1)]);
+          animationController
+              .setCallback('${layerId}characterAnimation', 'opacity', () {
+            _conversationCharacterProvider?.animationNum--;
+          });
+        });
+        _goNextScene();
+        break;
+      case 'expression':
+        String layerId = arg[0];
+        String face = arg[1];
+        _conversationCharacterProvider!.layers[layerId]!.face = face;
+        _goNextScene();
+        break;
+      case 'mouth':
+        String layerId = arg[0];
+        String mouth = arg[1];
+        _conversationCharacterProvider!.layers[layerId]!.mouth = mouth;
+        _goNextScene();
+        break;
+      case 'eye':
+        String layerId = arg[0];
+        String eye = arg[1];
+        _conversationCharacterProvider!.layers[layerId]!.eye = eye;
+        _goNextScene();
+        break;
+      case 'position':
+        _goNextScene();
+        break;
+      case 'animation':
+        String layerId = arg[0];
+        String animation = arg[1];
+        _conversationCharacterProvider!.layers[layerId]!.animations.add(() {
+          _conversationCharacterProvider?.animationNum++;
+          animationController
+              .animate('${layerId}characterAnimation', 'positionX', [
+            Pause(0, 1000),
+            Wave(
+                1000,
+                1500,
+                _conversationCharacterProvider!.layers[layerId]!.positionX! -
+                    0.005,
+                _conversationCharacterProvider!.layers[layerId]!.positionX! +
+                    0.005,
+                100,
+                1 / 2)
+          ]);
+          animationController
+              .setCallback('${layerId}characterAnimation', 'positionX', () {
+            _conversationCharacterProvider?.animationNum--;
+          });
+        });
+        _goNextScene();
+        break;
+      case 'out':
+        String layerId = arg[0];
+        String animationIn = arg[1];
+        int countPosNull = 1; // 座標が指定されていないキャラクターの数(1は追加キャラ分)
+        for (LayerData layer in _conversationCharacterProvider!.layers.values) {
+          if (layer.position == null) {
+            countPosNull++;
+          }
+        }
+        // すでに配置されたキャラクターの新しい位置を設定
+        int i = 1;
+        for (LayerData layer in _conversationCharacterProvider!.layers.values) {
+          if (layer.position == null) {
+            layer.animations.add(() {
+              _conversationCharacterProvider?.animationNum++;
+              animationController
+                  .animate('${layer.layerId}characterAnimation', 'positionX', [
+                Easing(0, 1000, layer.positionX, 1 / (countPosNull - 1))
+                    .inOutQuint(),
+              ]);
+              animationController.setCallback(
+                  '${layer.layerId}characterAnimation', 'positionX', () {
+                layer.positionX = i / (countPosNull - 1);
+                _conversationCharacterProvider?.animationNum--;
+              });
+            });
+            i++;
+          }
+        }
+
+        // キャラクターを消す
+        print(_conversationCharacterProvider!.layers);
+        _conversationCharacterProvider!.layers[layerId]?.animations.add(() {
+          _conversationCharacterProvider?.animationNum++;
+          animationController.animate('${layerId}characterAnimation', 'opacity',
+              [Linear(0, 1000, 1, 0)]);
+          animationController
+              .setCallback('${layerId}characterAnimation', 'opacity', () {
+            _conversationCharacterProvider!.layers.remove(layerId);
+            _conversationCharacterProvider?.animationNum--;
+          });
+        });
+        _goNextScene();
+        break;
+      default:
+        throw ('scenario data ${_nowCode - 1} : function "$func" is not defined');
+    }
   }
 
-  void _bgm(String path) {
-    SoundPlayer().playBGM(path);
-  }
-
-  void _voice(String path) {
-    SoundPlayer().playCV([path]);
-  }
-
-  void _se(String path) {
-    SoundPlayer().playAS([path]);
-  }
-
-  void _text(String name, String text) async {
+  void _text(String func, List<String> arg) async {
+    String name = arg[0];
+    String text = arg[1];
     _conversationImageProvider?.setCharacterName(name);
     _conversationImageProvider?.setCanNext(false);
     await animationController.animate('conversationTextAnimation', 'textLength',
         [Linear(0, text.length * _interval, 1, text.length.toDouble())]);
-    animationController.setCallback('conversationTextAnimation', {
+    animationController.setCallbacks('conversationTextAnimation', {
       'textLength': () async {
         _conversationImageProvider?.setCanNext(true);
         if (_conversationImageProvider!.isSelection) {
@@ -180,9 +336,12 @@ class ConversationScreenController {
       }
     });
     _conversationTextProvider?.setConversationText(text);
+    _goNextScene();
   }
 
-  void _selection(String text, int goto) {
+  void _selection(String func, List<String> arg) {
+    String text = arg[1];
+    int goto = int.parse(arg[2]);
     _conversationImageProvider?.addSelections({'text': text, 'goto': goto});
     animationController.setStates('selections', {
       'alignment' +
@@ -191,10 +350,36 @@ class ConversationScreenController {
           (_conversationImageProvider!.selections.length - 1).toString(): 0
     });
     _conversationImageProvider?.setIsSelection(true);
+    _goNextScene();
   }
 
-  void _goto(int goto) {
+  void _bgm(String path) {
+    SoundPlayer().playBGM(path);
+    _goNextScene();
+  }
+
+  void _voice(String path) {
+    SoundPlayer().playCV([path]);
+    _goNextScene();
+  }
+
+  void _se(String path) {
+    SoundPlayer().playAS([path]);
+    _goNextScene();
+  }
+
+  void _goto(String func, List<String> arg) {
+    int goto = int.parse(arg[2]);
     _nowCode = goto;
+    _goNextScene();
+  }
+
+  void _sleep(String func, List<String> arg) async {
+    int duration = (double.parse(arg[0]) * 1000).ceil();
+    _conversationImageProvider?.setIsSleep(true);
+    await Future.delayed(Duration(milliseconds: duration));
+    _conversationImageProvider?.setIsSleep(false);
+    _goNextScene();
   }
 
   void _addLog() {
@@ -275,21 +460,18 @@ class ConversationScreenController {
 
       // init
       _nowCode = 0;
-      _nowLength = 0;
-      _nowText = '';
-      _conversationLogs = [];
-      // await loadJsonAsset(
-      //     'assets/text/ScenarioData/ChapterTest/102.json'); // TODO : ここの引数変えればJSON読み込めます
-      // SoundPlayer()
-      //     .precacheSounds(filePaths: _bgmPaths, audioType: SoundPlayer.bgm);
-      // SoundPlayer()
-      //     .precacheSounds(filePaths: _voicePaths, audioType: SoundPlayer.cv);
-      // setSettings(textSpeed: await settingsController.getTextSpeedValue());
-      // _animationLoop();
-      // _refreshScreen();
-      print('start');
+
+      // load csv
+      String scenarioCsv = await rootBundle.loadString(
+          'assets/text/ScenarioData/ChapterTest/scenario_data_sample.csv');
+      List<List> scenarioList = const CsvToListConverter().convert(scenarioCsv);
+      scenarioList.removeAt(0);
+      for (List scenario in scenarioList) {
+        scenario.removeRange(0, 2);
+        _eventData.add(scenario.map((e) => e.toString()).toList());
+      }
       // TODO : ディレイ取り除く
-      await Future.delayed(const Duration(milliseconds: 100));
+      // await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
       ConversationAnimation.characterDefault();
     }
@@ -311,7 +493,8 @@ class ConversationScreenController {
     if (!_conversationImageProvider!.isHideUi &&
         !_conversationImageProvider!.isLog &&
         !_conversationImageProvider!.isMenu &&
-        !_conversationImageProvider!.isSelection) {
+        !_conversationImageProvider!.isSelection &&
+        !_conversationImageProvider!.isSleep) {
       if (animationController.isAnimation(
           'conversationTextAnimation', 'textLength')) {
         // animationController.stopAnimation(
@@ -323,10 +506,12 @@ class ConversationScreenController {
               _conversationTextProvider!.conversationText.length.toDouble()
         });
       } else {
-        SoundPlayer().stopCVAll();
-        SoundPlayer().stopASAll();
-        _conversationImageProvider!.setVoicePath(null);
-        _goNextScene();
+        if (!_conversationCharacterProvider!.isAnimation) {
+          SoundPlayer().stopCVAll();
+          SoundPlayer().stopASAll();
+          _conversationImageProvider!.setVoicePath(null);
+          _goNextScene();
+        }
       }
     } else {
       _conversationImageProvider?.setIsHideUi(false);
