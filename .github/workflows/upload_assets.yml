@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - create_StringParser
+      - feature/create_StringParser
 
 name: Upload assets file paths to Google Sheets
 
