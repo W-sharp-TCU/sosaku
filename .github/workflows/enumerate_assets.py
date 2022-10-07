@@ -87,11 +87,11 @@ def collect_file_path():
         ui_sounds:list[str] = []
         others:list[str] = []
     """
-    for root, dirs, files in os.walk(top='../../assets/'):
+    for root, dirs, files in os.walk(top='assets/'):
         # Add only files to list.
         for file in files:
             file_path = os.path.join(root, file)
-            file_path = file_path.replace('../../', '')
+            file_path = file_path.replace('../', '')
             file_path = file_path.replace('\\', '/')    # for Windows
             # Categorize assets files.
             if 'drawable/CharacterImage/' in file_path:
