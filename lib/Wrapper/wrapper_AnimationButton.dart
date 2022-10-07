@@ -74,7 +74,7 @@ class AnimationButton extends ConsumerWidget {
                     Linear(0, d, m, 0),
                     Easing(d, d + _duration, 0, 1).outElastic()
                   ]);
-                  animationController.setCallback(key.toString(), {
+                  animationController.setCallbacks(key.toString(), {
                     'margin': () {
                       _onTap?.call();
                     }

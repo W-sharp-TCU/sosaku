@@ -7,6 +7,8 @@ import 'package:sosaku/CustomScrollBehavior.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
 import 'l10n/l10n.dart';
+import 'nonweb_url_strategy.dart'
+    if (dart.library.html) 'web_url_strategy.dart';
 
 late PackageInfo packageInfo;
 SimpleLogger logger = SimpleLogger();
@@ -20,6 +22,7 @@ Future<void> main() async {
   ]);
   SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.immersive); // Hide Status Bar & Navigation Bar.
+  configureUrl();
   packageInfo = await PackageInfo.fromPlatform(); // Get App info (e.g. version)
   SettingsController settingsController = SettingsController();
   await settingsController.getBgmVolumeValue();

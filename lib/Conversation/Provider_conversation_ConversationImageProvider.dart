@@ -19,6 +19,7 @@ class ConversationImageProvider extends ChangeNotifier {
   bool _isHideUi = false;
   bool _isDim = false;
   bool _canNext = false;
+  bool _isSleep = false;
 
   String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
@@ -32,6 +33,7 @@ class ConversationImageProvider extends ChangeNotifier {
   bool get isHideUi => _isHideUi;
   bool get isDim => _isDim;
   bool get canNext => _canNext;
+  bool get isSleep => _isSleep;
 
   /// Set character image.
   /// This function is for Controller.
@@ -129,6 +131,11 @@ class ConversationImageProvider extends ChangeNotifier {
       ConversationAnimation.triangle();
     }
     _canNext = canNext;
+    notifyListeners();
+  }
+
+  void setIsSleep(bool isSleep) {
+    _isSleep = isSleep;
     notifyListeners();
   }
 }
