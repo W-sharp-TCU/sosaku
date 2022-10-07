@@ -8,6 +8,7 @@ import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvide
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
+import '../main.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:csv/csv.dart';
@@ -462,14 +463,22 @@ class ConversationScreenController {
       _nowCode = 0;
 
       // load csv
+      logger.fine('start load csv...');
       String scenarioCsv = await rootBundle.loadString(
           'assets/text/ScenarioData/ChapterTest/scenario_data_sample.csv');
+      logger.finer(scenarioCsv);
+      logger.fine('start convert csv to list...');
       List<List> scenarioList = const CsvToListConverter().convert(scenarioCsv);
+      logger.finer(scenarioList.toList());
+      logger.fine('start remove row 0');
       scenarioList.removeAt(0);
+      logger.finer(scenarioList.toString());
+      logger.fine('start remove column 0');
       for (List scenario in scenarioList) {
         scenario.removeRange(0, 2);
         _eventData.add(scenario.map((e) => e.toString()).toList());
       }
+      logger.finer(_eventData.toString());
       // TODO : ディレイ取り除く
       await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
