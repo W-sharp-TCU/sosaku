@@ -67,7 +67,7 @@ def main():
 
     # Write the edit start time.
     worksheet.update_cell(1, 1, '最終更新 : ')
-    worksheet.update_cell(str(datetime.now(pytz.timezone('Asia/Tokyo'))))
+    worksheet.update_cell(1, 2, str(datetime.now(pytz.timezone('Asia/Tokyo'))))
 
     # Enumerate path of asset files.
     collect_file_path([1, 2])
