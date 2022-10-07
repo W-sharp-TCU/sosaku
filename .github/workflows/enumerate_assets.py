@@ -2,17 +2,19 @@
 # Executed by GitHub Actions.                                   #
 #                                                               #
 # Google Cloud Service Account credential JSON value is saved   #
-#   on Repository secrets at GitHub named "CREDENTIAL_JSON".    #
+#   on environment variable named "CREDENTIAL_JSON".            #
+#                                                               #
+# Spread Sheet key of Google Sheets is saved on environment     #
+#   variable named "SPREADSHEET_KEY".                           #
 #                                                               #
 # Dependent libraries: oauth2client, gspread, pytz              #
 #                                                               #
-# CurrentDirectory: <Flutter project root>/.github/workflows/   #
+# CurrentDirectory: <Flutter project root>/                     #
 # Flutter Asset Directory: <Flutter project root>/assets/       #
 # ############################################################# #
 
 import os
 import json
-import sys
 
 from google.oauth2.service_account import Credentials
 import gspread
@@ -20,8 +22,6 @@ from datetime import datetime
 import pytz
 
 # Config
-SPREADSHEET_KEY = '1kuQcdED44HQxFJBBY7bTifFySZ62dBnSRRExMHGmbCs'
-
 EDIT_POSITION = {
     "last_modified": "B1",
     "start_cul": 3
@@ -43,38 +43,35 @@ def main():
              'https://www.googleapis.com/auth/drive']
 
     # Get Credential JSON.
-    print(sys.argv[1])
-    # info = json.loads(sys.argv[1])
-    # credentials = Credentials.from_service_account_info(
-    #     info=info, scopes=scope)
-    #
-    # # Login to Google API using OAuth2 credentials.
-    # gc = gspread.authorize(credentials)
-    #
-    # # Open Google Sheet.
-    # workbook = gc.open_by_key(SPREADSHEET_KEY)
-    #
-    # # [ Configure control target ]
-    # # Get sheets list.
-    # #worksheets = workbook.worksheets()
-    # # print(worksheets)
-    #
-    # # Open work sheet
-    # worksheet = workbook.worksheet('assets')
-    #
-    # # Save the edit start time.
-    # modify_time = str(datetime.now(pytz.timezone('Asia/Tokyo')))
-    #
-    # # [ Edit sheet cells ]
-    # # Write the edit start time.
-    # worksheet.update_acell(EDIT_POSITION['last_modified'], modify_time)
-    #
-    # # Enumerate path of asset files.
-    # collect_file_path()
-    #
-    # # Write file paths to Google Sheets.
-    # write_sheet(worksheet, 'A', character_images)
-    # write_sheet(worksheet, 'B', background_images)
+    info = json.loads(os.environ.get("CREDENTIAL_JSON"))
+    credentials = Credentials.from_service_account_info(
+        info=info, scopes=scope)
+
+    # Login to Google API using OAuth2 credentials.
+    gc = gspread.authorize(credentials)
+
+    # Open Google Sheet.
+    workbook = gc.open_by_key(os.environ.get("SPREADSHEET_KEY"))
+
+    # [ Configure control target ]
+    # Get sheets list.
+    # worksheets = workbook.worksheets()
+    # print(worksheets)
+
+    # Open work sheet
+    worksheet = workbook.worksheet('assets')
+
+    # [ Edit sheet cells ]
+    # Write the edit start time.
+    worksheet.update_acell(EDIT_POSITION['last_modified'],
+                           str(datetime.now(pytz.timezone('Asia/Tokyo'))))
+
+    # Enumerate path of asset files.
+    collect_file_path()
+
+    # Write file paths to Google Sheets.
+    write_sheet(worksheet, 'A', character_images)
+    write_sheet(worksheet, 'B', background_images)
 
 
 def collect_file_path():

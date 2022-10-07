@@ -20,5 +20,9 @@ jobs:
         run: python -V
       - name: Install dependencies
         run: python -m pip install -r .github/workflows/python_requirements.txt
-      - name: Execute python script
-        run: python .github/workflows/enumerate_assets.py ${{ secrets.CREDENTIAL_JSON }}
+      - name: Run python script
+        env:
+          # Set Repository secrets to environment variable
+          CREDENTIAL_JSON: ${{ secrets.CREDENTIAL_JSON }}
+          SPREADSHEET_KEY: ${{ secrets.SPREADSHEET_KEY }}
+        run: python .github/workflows/enumerate_assets.py
