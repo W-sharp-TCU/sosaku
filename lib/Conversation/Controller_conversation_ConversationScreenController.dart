@@ -468,7 +468,8 @@ class ConversationScreenController {
           'assets/text/ScenarioData/ChapterTest/scenario_data_sample.csv');
       logger.finer(scenarioCsv);
       logger.fine('start convert csv to list...');
-      List<List> scenarioList = const CsvToListConverter().convert(scenarioCsv);
+      List<List> scenarioList =
+          const CsvToListConverter(eol: '\n').convert(scenarioCsv);
       logger.finer(scenarioList.toList());
       logger.fine('start remove row 0');
       scenarioList.removeAt(0);
