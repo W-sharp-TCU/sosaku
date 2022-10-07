@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
-
-import '../Wrapper/wrapper_AnimationWidget.dart';
 import 'Animation_conversation_ConversationAnimation.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
-  String _mBGImagePath = 'drawable/Conversation/black_screen.png';
-  String _characterImagePath = 'drawable/Conversation/no_character.png';
+  String _mBGImagePath = 'assets/drawable/Conversation/black_screen.png';
+  String _characterImagePath = 'assets/drawable/Conversation/no_character.png';
   String? _voicePath;
   String _characterName = '';
 
