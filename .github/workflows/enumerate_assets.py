@@ -116,7 +116,7 @@ def write_sheet(worksheet: gspread.Worksheet, row, value):
     for cell in cells:
         cell.value = value[index]
         index = index + 1
-    worksheet.batch_update(cells)
+    worksheet.update_cells(cells)
 
 
 if __name__ == '__main__':
