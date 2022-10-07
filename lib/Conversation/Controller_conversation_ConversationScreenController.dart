@@ -122,6 +122,7 @@ class ConversationScreenController {
       case 'bgm':
         break;
       case 'voice':
+        _voice(func, arg);
         break;
       case 'se':
         break;
@@ -329,6 +330,9 @@ class ConversationScreenController {
     animationController.setCallbacks('conversationTextAnimation', {
       'textLength': () async {
         _conversationImageProvider?.setCanNext(true);
+        if (_conversationImageProvider!.selections.isNotEmpty) {
+          _conversationImageProvider?.setIsSelection(true);
+        }
         if (_conversationImageProvider!.isSelection) {
           await ConversationAnimation.selection(
               _conversationImageProvider!.selections.length);
@@ -350,7 +354,6 @@ class ConversationScreenController {
       'opacity' +
           (_conversationImageProvider!.selections.length - 1).toString(): 0
     });
-    _conversationImageProvider?.setIsSelection(true);
     _goNextScene();
   }
 
@@ -359,8 +362,11 @@ class ConversationScreenController {
     _goNextScene();
   }
 
-  void _voice(String path) {
-    SoundPlayer().playCV([path]);
+  void _voice(String func, List<String> arg) {
+    print('voice');
+    String voicePath = arg[1];
+    print(voicePath);
+    SoundPlayer().playCV([voicePath]);
     _goNextScene();
   }
 
@@ -418,8 +424,8 @@ class ConversationScreenController {
 
   void _autoPlay() {
     if (_conversationImageProvider!.isAuto &&
-        SoundPlayer().cvState == PlayerState.stopped &&
-        SoundPlayer().asState == PlayerState.stopped &&
+        SoundPlayer().cvState == PlayerState.completed &&
+        SoundPlayer().asState == PlayerState.completed &&
         !animationController.isAnimation(
             'conversationTextAnimation', 'textLength')) {
       tapScreen();
@@ -462,23 +468,32 @@ class ConversationScreenController {
       // init
       _nowCode = 0;
 
+      // TODO : べた書き
+      SoundPlayer().precacheSounds(
+          filePaths: ['assets/sound/CV/voice_sample_002.wav'],
+          audioType: SoundPlayer.cv);
+      SoundPlayer().precacheSounds(
+          filePaths: ['assets/sound/CV/voice_sample_002.wav'],
+          audioType: SoundPlayer.as);
+      SoundPlayer().precacheSounds(
+          filePaths: ['assets/sound/CV/voice_sample_002.wav'],
+          audioType: SoundPlayer.ui);
       // load csv
       logger.fine('start load csv...');
       String scenarioCsv = await rootBundle.loadString(
           'assets/text/ScenarioData/ChapterTest/scenario_data_sample.csv');
-      logger.finer(scenarioCsv);
-      logger.fine('start convert csv to list...');
+      // Windowsローカル環境の改行コードは\r\nに対して
+      // GitHubPagesの改行コードは\nだから
+      // CsvToListConverterのeolを\nに指定しないと動かない
       List<List> scenarioList =
           const CsvToListConverter(eol: '\n').convert(scenarioCsv);
       logger.finer(scenarioList.toList());
-      logger.fine('start remove row 0');
       scenarioList.removeAt(0);
-      logger.finer(scenarioList.toString());
-      logger.fine('start remove column 0');
       for (List scenario in scenarioList) {
         scenario.removeRange(0, 2);
         _eventData.add(scenario.map((e) => e.toString()).toList());
       }
+      logger.fine('finish load csv');
       logger.finer(_eventData.toString());
       // TODO : ディレイ取り除く
       await Future.delayed(const Duration(milliseconds: 100));
