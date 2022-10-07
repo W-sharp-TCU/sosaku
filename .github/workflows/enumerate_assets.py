@@ -44,37 +44,37 @@ def main():
 
     # Get Credential JSON.
     print(sys.argv[1])
-    info = json.loads(sys.argv[1])
-    credentials = Credentials.from_service_account_info(
-        info=info, scopes=scope)
-
-    # Login to Google API using OAuth2 credentials.
-    gc = gspread.authorize(credentials)
-
-    # Open Google Sheet.
-    workbook = gc.open_by_key(SPREADSHEET_KEY)
-
-    # [ Configure control target ]
-    # Get sheets list.
-    #worksheets = workbook.worksheets()
-    # print(worksheets)
-
-    # Open work sheet
-    worksheet = workbook.worksheet('assets')
-
-    # Save the edit start time.
-    modify_time = str(datetime.now(pytz.timezone('Asia/Tokyo')))
-
-    # [ Edit sheet cells ]
-    # Write the edit start time.
-    worksheet.update_acell(EDIT_POSITION['last_modified'], modify_time)
-
-    # Enumerate path of asset files.
-    collect_file_path()
-
-    # Write file paths to Google Sheets.
-    write_sheet(worksheet, 'A', character_images)
-    write_sheet(worksheet, 'B', background_images)
+    # info = json.loads(sys.argv[1])
+    # credentials = Credentials.from_service_account_info(
+    #     info=info, scopes=scope)
+    #
+    # # Login to Google API using OAuth2 credentials.
+    # gc = gspread.authorize(credentials)
+    #
+    # # Open Google Sheet.
+    # workbook = gc.open_by_key(SPREADSHEET_KEY)
+    #
+    # # [ Configure control target ]
+    # # Get sheets list.
+    # #worksheets = workbook.worksheets()
+    # # print(worksheets)
+    #
+    # # Open work sheet
+    # worksheet = workbook.worksheet('assets')
+    #
+    # # Save the edit start time.
+    # modify_time = str(datetime.now(pytz.timezone('Asia/Tokyo')))
+    #
+    # # [ Edit sheet cells ]
+    # # Write the edit start time.
+    # worksheet.update_acell(EDIT_POSITION['last_modified'], modify_time)
+    #
+    # # Enumerate path of asset files.
+    # collect_file_path()
+    #
+    # # Write file paths to Google Sheets.
+    # write_sheet(worksheet, 'A', character_images)
+    # write_sheet(worksheet, 'B', background_images)
 
 
 def collect_file_path():
