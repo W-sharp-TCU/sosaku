@@ -22,10 +22,8 @@ from datetime import datetime
 import pytz
 
 # Config
-EDIT_POSITION = {
-    "last_modified": "B1",
-    "start_cul": 3
-}
+SHEET_NAME = 'assets'
+START_COLUMN = 3
 CATEGORY = ['Character']
 
 character_images = []
@@ -59,11 +57,11 @@ def main():
     # print(worksheets)
 
     # Open work sheet
-    worksheet = workbook.worksheet('assets')
+    worksheet = workbook.worksheet(SHEET_NAME)
 
     # [ Edit sheet cells ]
     # Clear cells
-    worksheet.clear()
+    workbook.values_clear(f"'{SHEET_NAME}'!A{}:Z1000")
 
     # Write the edit start time.
     worksheet.update_cell(1, 1, '最終更新 : ')
@@ -115,7 +113,7 @@ def write_sheet(worksheet, row, value):
         row (str): Target row (e.g. 'B')
         value (list[str]): Value to be written
     """
-    start_cul = EDIT_POSITION['start_cul']
+    start_cul = START_COLUMN
     end_cul = start_cul - 1 + len(value)
     cells = worksheet.range(f'{row}{start_cul}:{row}{end_cul}')
     index = 0
