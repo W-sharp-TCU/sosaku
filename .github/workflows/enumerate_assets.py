@@ -26,7 +26,7 @@ EDIT_POSITION = {
     "last_modified": "B1",
     "start_cul": 3
 }
-
+CATEGORY = ['Character']
 
 character_images = []
 background_images = []
@@ -63,22 +63,25 @@ def main():
 
     # [ Edit sheet cells ]
     # Clear cells
-    worksheet.batch_clear([f'A{EDIT_POSITION["start_cul"]}:Z1000', 'my_range'])
+    worksheet.clear()
 
-    # # Write the edit start time.
-    # worksheet.update_acell(EDIT_POSITION['last_modified'],
-    #                        str(datetime.now(pytz.timezone('Asia/Tokyo'))))
-    #
-    # # Enumerate path of asset files.
-    # collect_file_path()
-    #
-    # # Write file paths to Google Sheets.
-    # write_sheet(worksheet, 'A', character_images)
-    # write_sheet(worksheet, 'B', background_images)
+    # Write the edit start time.
+    worksheet.update_cell(1, 1, '最終更新 : ')
+    worksheet.update_cell(str(datetime.now(pytz.timezone('Asia/Tokyo'))))
+
+    # Enumerate path of asset files.
+    collect_file_path([1, 2])
+
+    # Write file paths to Google Sheets.
+    write_sheet(worksheet, 'A', character_images)
+    write_sheet(worksheet, 'B', background_images)
 
 
-def collect_file_path():
+def collect_file_path(category):
     """Search path of asset files and append it to each list.
+
+    Args:
+        category (list[str]): List of category strings
 
     Prerequisite: Define following lists.
         character_images:list[str] = []
@@ -94,7 +97,7 @@ def collect_file_path():
         for file in files:
             file_path = os.path.join(root, file)
             file_path = file_path.replace('../', '')
-            file_path = file_path.replace('\\', '/')    # for Windows
+            file_path = file_path.replace('\\', '/')  # for Windows
             # Categorize assets files.
             if 'drawable/CharacterImage/' in file_path:
                 character_images.append(file_path)
