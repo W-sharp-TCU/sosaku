@@ -12,6 +12,8 @@
 
 import os
 import json
+import sys
+
 from google.oauth2.service_account import Credentials
 import gspread
 from datetime import datetime
@@ -41,8 +43,7 @@ def main():
              'https://www.googleapis.com/auth/drive']
 
     # Get Credential JSON.
-    with open(file=r"pc-api-8505460978326964825-563-160ce38739fc.json", mode='r', encoding='utf-8') as f:
-        info = json.loads(f.read())
+    info = json.loads(sys.argv[1])
     credentials = Credentials.from_service_account_info(
         info=info, scopes=scope)
 
