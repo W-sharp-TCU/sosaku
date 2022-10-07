@@ -255,9 +255,9 @@ class ConversationScreenController {
             Wave(
                 1000,
                 1500,
-                _conversationCharacterProvider!.layers[layerId]!.positionX! -
+                _conversationCharacterProvider!.layers[layerId]!.positionX -
                     0.005,
-                _conversationCharacterProvider!.layers[layerId]!.positionX! +
+                _conversationCharacterProvider!.layers[layerId]!.positionX +
                     0.005,
                 100,
                 1 / 2)
@@ -471,7 +471,7 @@ class ConversationScreenController {
         _eventData.add(scenario.map((e) => e.toString()).toList());
       }
       // TODO : ディレイ取り除く
-      // await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
       ConversationAnimation.characterDefault();
     }
