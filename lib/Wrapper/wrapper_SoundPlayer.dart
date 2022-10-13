@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 
 import '../main.dart';
 
@@ -612,8 +613,10 @@ class SoundPlayer {
         AVAudioSessionOptions.allowBluetoothA2DP
       ],
     );
-    AudioPlayer.global.setGlobalAudioContext(
-        AudioContext(android: androidConfig, iOS: iosConfig));
+    if (!kIsWeb) {
+      AudioPlayer.global.setGlobalAudioContext(
+          AudioContext(android: androidConfig, iOS: iosConfig));
+    }
 
     // Configure log level
     AudioPlayer.global

@@ -31,20 +31,16 @@ class AnimationProvider extends ChangeNotifier {
     }
   }
 
-  void setStateDouble(Map<String, double> states) {
-    for (String stateName in states.keys) {
-      if (_stateDouble.containsKey(stateName)) {
-        _stateDouble[stateName] = states[stateName] ?? 0;
-      }
+  void setStateDouble(String stateName, double state) {
+    if (_stateDouble.containsKey(stateName)) {
+      _stateDouble[stateName] = state ?? 0;
     }
     notifyListeners();
   }
 
-  void setAnimationCallbacks(Map<String, Function()?> callbacks) async {
-    for (String stateName in callbacks.keys) {
-      if (_callbacks.containsKey(stateName)) {
-        _callbacks[stateName] = callbacks[stateName];
-      }
+  void setAnimationCallback(String stateName, Function()? callback) async {
+    if (_callbacks.containsKey(stateName)) {
+      _callbacks[stateName] = callback;
     }
   }
 
@@ -147,15 +143,32 @@ class AnimationWidgetController {
     while (!_animationProviders.containsKey(providerId)) {
       await Future.delayed(const Duration(milliseconds: 1));
     }
-    _animationProviders[providerId]?.setStateDouble(states);
+    for (String stateId in states.keys) {
+      _animationProviders[providerId]
+          ?.setStateDouble(stateId, states[stateId]!);
+    }
+  }
+
+  void setState(String providerId, String stateId, double state) async {
+    while (!_animationProviders.containsKey(providerId)) {
+      await Future.delayed(const Duration(milliseconds: 1));
+    }
+    _animationProviders[providerId]?.setStateDouble(stateId, state);
   }
 
   /// Sets the callback to be called when the animation of each state ends.
   ///
   /// @param providerId : ID of the provider
   /// @param callbacks : Map of state names and their callback functions
-  void setCallback(String providerId, Map<String, Function()?> callbacks) {
-    _animationProviders[providerId]?.setAnimationCallbacks(callbacks);
+  void setCallbacks(String providerId, Map<String, Function()?> callbacks) {
+    for (String stateId in callbacks.keys) {
+      _animationProviders[providerId]
+          ?.setAnimationCallback(stateId, callbacks[stateId]);
+    }
+  }
+
+  void setCallback(String providerId, String stateId, Function()? callback) {
+    _animationProviders[providerId]?.setAnimationCallback(stateId, callback);
   }
 
   bool isAnimation(String providerId, String stateId) {
