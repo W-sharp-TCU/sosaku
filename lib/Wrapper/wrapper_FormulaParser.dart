@@ -1,6 +1,6 @@
 import 'package:sosaku/Tree.dart';
 
-class ExpressionParser {
+class FormulaParser {
   /// ****************************** Config ***********************************/
   static const Map<String, String> brackets = {
     // '<begin symbol>': '<end symbol>'
@@ -10,17 +10,17 @@ class ExpressionParser {
 
   static const Map<String, List> operators = {
     // '<symbol>': [<function>, <priority>]
-    '+': [ExpressionParser._add, 100],
-    '-': [ExpressionParser._sub, 100],
-    '*': [ExpressionParser._mul, 150],
-    '/': [ExpressionParser._div, 150],
-    '==': [ExpressionParser._equal, 100],
-    '>>': [ExpressionParser._greater, 100],
-    '<<': [ExpressionParser._less, 100],
-    '>=': [ExpressionParser._geq, 100],
-    '<=': [ExpressionParser._leq, 100],
-    '&&': [ExpressionParser._and, 50],
-    '||': [ExpressionParser._or, 50],
+    '+': [FormulaParser._add, 100],
+    '-': [FormulaParser._sub, 100],
+    '*': [FormulaParser._mul, 150],
+    '/': [FormulaParser._div, 150],
+    '==': [FormulaParser._equal, 100],
+    '>>': [FormulaParser._greater, 100],
+    '<<': [FormulaParser._less, 100],
+    '>=': [FormulaParser._geq, 100],
+    '<=': [FormulaParser._leq, 100],
+    '&&': [FormulaParser._and, 50],
+    '||': [FormulaParser._or, 50],
   };
 
   /// Operating functions
@@ -42,7 +42,7 @@ class ExpressionParser {
 
   String target;
 
-  ExpressionParser({this.target = "0"});
+  FormulaParser({this.target = "0"});
 
   bool isSatisfied() {
     return false;
