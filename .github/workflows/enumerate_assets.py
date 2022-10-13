@@ -39,7 +39,7 @@ CATEGORIES = {
 }
 EXCLUDE_FILES = [
 ]
-ONLY_FILES_WITH_EXTENSIONS = False
+ONLY_FILES_WITH_EXTENSIONS = True
 # ###############################################################
 
 
@@ -73,7 +73,8 @@ def main():
 
     # Write the edit start time.
     worksheet.update_cell(1, 1, '最終更新 : ')
-    worksheet.update_cell(1, 2, str(datetime.now(pytz.timezone('Asia/Tokyo'))))
+    cur_date = datetime.now(pytz.timezone('Asia/Tokyo'))
+    worksheet.update_cell(1, 2, cur_date.strftime('%Y年 %m月 %d日 %H:%M:%S'))
 
     # Enumerate path of asset files.
     cols = collect_file_path(CATEGORIES)
