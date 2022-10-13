@@ -22,7 +22,7 @@ from datetime import datetime
 import pytz
 
 # ########################## Config #############################
-SHEET_NAME = 'assets'
+SHEET_NAME = 'assets_list'
 # Define the pattern for categorize
 CATEGORIES = {
     #      "<Directory Path>":       '<Column Symbol>'
@@ -46,7 +46,7 @@ ONLY_FILES_WITH_EXTENSIONS = True   # Enumerate only files with extensions
 
 
 def main():
-    start_row = 3
+    start_row = 5
     # [ Authorize ]
     scope = ['https://www.googleapis.com/auth/spreadsheets',
              'https://www.googleapis.com/auth/drive']
@@ -74,7 +74,7 @@ def main():
     worksheet.update_cell(1, 1, "Now writing... Please wait.")
 
     # Write information source branch
-    worksheet.update_cell(1, 2, f"Info source branch : {os.environ.get('GITHUB_REF_NAME')}")
+    worksheet.update_cell(1, 2, f"情報取得元Gitブランチ : {os.environ.get('GITHUB_REF_NAME')}")
 
     # Enumerate path of asset files.
     cols = collect_file_path(CATEGORIES)
@@ -87,7 +87,7 @@ def main():
 
     # Write the end of editing time.
     cur_date = datetime.now(pytz.timezone('Asia/Tokyo'))
-    worksheet.update_cell(1, 1, f"最終更新 : {cur_date.strftime('%Y年 %m月 %d日 %H:%M:%S')}")
+    worksheet.update_cell(1, 1, f"最終更新 : {cur_date.strftime('%Y/%m/%d %H:%M:%S')}")
 
 
 def collect_file_path(category_list):
