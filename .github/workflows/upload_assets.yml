@@ -3,7 +3,7 @@ name: Enumerate asset file paths
 on:
   push:
     branches:
-      - feature/create_StringParser
+      - master
 
 jobs:
   build:
