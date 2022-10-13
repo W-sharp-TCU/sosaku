@@ -23,8 +23,7 @@ import pytz
 
 # ########################## Config #############################
 SHEET_NAME = 'assets'
-START_ROW = 3
-# Category list of enumerate
+# Define the key for categorize
 CATEGORIES = {
     #      "<Directory Path>":       '<Column Symbol>'
     "drawable/CharacterImage/Ayana/":       'A',
@@ -35,15 +34,19 @@ CATEGORIES = {
     "sound/AS":                             'F',
     "sound/BGM":                            'G',
     "sound/CV/":                            'H',
+    # If specify "<<OTHER>>", files that did not fit all conditions is written at specified column.
+    # "<<OTHER>>" must be specified at the end of the dictionary.
     "<<OTHER>>":                            'I'
 }
-EXCLUDE_FILES = [
+EXCLUDE_FILES = [   # Files to be excluded from search
+    "PlaceHolder"
 ]
-ONLY_FILES_WITH_EXTENSIONS = True
+ONLY_FILES_WITH_EXTENSIONS = True   # Enumerate only files with extensions
 # ###############################################################
 
 
 def main():
+    start_row = 3
     # [ Authorize ]
     scope = ['https://www.googleapis.com/auth/spreadsheets',
              'https://www.googleapis.com/auth/drive']
@@ -69,21 +72,24 @@ def main():
 
     # [ Edit sheet cells ]
     # Clear cells
-    workbook.values_clear(f"'{SHEET_NAME}'!A{START_ROW}:Z1000")
+    workbook.values_clear(f"'{SHEET_NAME}'!A{start_row}:Z1000")
 
-    # Write the edit start time.
-    worksheet.update_cell(1, 1, '最終更新 : ')
-    cur_date = datetime.now(pytz.timezone('Asia/Tokyo'))
-    worksheet.update_cell(1, 2, cur_date.strftime('%Y年 %m月 %d日 %H:%M:%S'))
+    # Write "Now writing..."
+    worksheet.update_cell(1, 2, "Now writing... Please wait.")
 
     # Enumerate path of asset files.
     cols = collect_file_path(CATEGORIES)
 
     # Write file paths to Google Sheets.
     for key in CATEGORIES:
-        worksheet.update_acell(f"{CATEGORIES[key]}{START_ROW}", key)  # write header
+        worksheet.update_acell(f"{CATEGORIES[key]}{start_row}", key)  # write header
     for key in cols:
-        write_sheet(worksheet, CATEGORIES[key], cols[key], start_row=START_ROW+1)   # write values
+        write_sheet(worksheet, CATEGORIES[key], cols[key], start_row=start_row+1)   # write values
+
+    # Write the end of editing time.
+    worksheet.update_cell(1, 1, '最終更新 : ')
+    cur_date = datetime.now(pytz.timezone('Asia/Tokyo'))
+    worksheet.update_cell(1, 2, cur_date.strftime('%Y年 %m月 %d日 %H:%M:%S'))
 
 
 def collect_file_path(category_list):
@@ -119,7 +125,7 @@ def collect_file_path(category_list):
     return cols
 
 
-def write_sheet(worksheet, col, value, start_row=START_ROW):
+def write_sheet(worksheet, col, value, start_row):
     """Write value list to worksheet row.
 
     Args:
