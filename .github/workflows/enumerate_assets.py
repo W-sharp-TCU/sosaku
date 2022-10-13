@@ -21,18 +21,23 @@ import gspread
 from datetime import datetime
 import pytz
 
-# Config
+# ########################## Config #############################
 SHEET_NAME = 'assets'
-START_COLUMN = 3
-CATEGORY = ['Character']
-
-character_images = []
-background_images = []
-atmosphere_sounds = []
-background_sounds = []
-character_voices = []
-ui_sounds = []
-others = []
+START_ROW = 3
+# Category list of enumerate
+CATEGORIES = {
+    #      "<Directory Path>":       '<Column Symbol>'
+    "drawable/CharacterImage/Ayana/":       'A',
+    "drawable/CharacterImage/Kawamoto/":    'B',
+    "drawable/CharacterImage/Nonono/":      'C',
+    "drawable/CharacterImage/Sakaki/":      'D',
+    "drawable/Conversation/":               'E',
+    "sound/AS":                             'F',
+    "sound/BGM":                            'G',
+    "sound/CV/":                            'H',
+    "<<OTHER>>":                            'I'
+}
+# ###############################################################
 
 
 def main():
@@ -61,35 +66,29 @@ def main():
 
     # [ Edit sheet cells ]
     # Clear cells
-    workbook.values_clear(f"'{SHEET_NAME}'!A{}:Z1000")
+    workbook.values_clear(f"'{SHEET_NAME}'!A{START_ROW}:Z1000")
 
     # Write the edit start time.
     worksheet.update_cell(1, 1, '最終更新 : ')
     worksheet.update_cell(1, 2, str(datetime.now(pytz.timezone('Asia/Tokyo'))))
 
     # Enumerate path of asset files.
-    collect_file_path([1, 2])
+    cols = collect_file_path(CATEGORIES)
 
     # Write file paths to Google Sheets.
-    write_sheet(worksheet, 'A', character_images)
-    write_sheet(worksheet, 'B', background_images)
+    for key in cols:
+        worksheet.update_acell(f"{CATEGORIES[key]}{START_ROW}", key)  # write header
+        write_sheet(worksheet, CATEGORIES[key], cols[key], start_row=START_ROW+1)   # write values
 
 
-def collect_file_path(category):
+def collect_file_path(category_list):
     """Search path of asset files and append it to each list.
 
     Args:
-        category (list[str]): List of category strings
-
-    Prerequisite: Define following lists.
-        character_images:list[str] = []
-        background_images:list[str] = []
-        atmosphere_sounds:list[str] = []
-        background_sounds:list[str] = []
-        character_voices:list[str] = []
-        ui_sounds:list[str] = []
-        others:list[str] = []
+        category_list (dict[str, str]) : List defining the correspondence
+        between the keys of the sort and the columns to be written.
     """
+    cols = {}
     for root, dirs, files in os.walk(top='assets/'):
         # Add only files to list.
         for file in files:
@@ -97,25 +96,31 @@ def collect_file_path(category):
             file_path = file_path.replace('../', '')
             file_path = file_path.replace('\\', '/')  # for Windows
             # Categorize assets files.
-            if 'drawable/CharacterImage/' in file_path:
-                character_images.append(file_path)
-            elif 'drawable/Conversation/' in file_path:
-                background_images.append(file_path)
-            elif 'sound/CV/' in file_path:
-                character_voices.append(file_path)
+            for key in category_list:
+                if key == "<<OTHER>>":
+                    if key not in cols:
+                        cols[key] = []
+                    cols[key].append(file_path)  # append to <<OTHER>> list.
+                    break
+                elif key in file_path:
+                    if key not in cols:
+                        cols[key] = []
+                    cols[key].append(file_path)  # append to each key's list.
+                    break
+    return cols
 
 
-def write_sheet(worksheet, row, value):
+def write_sheet(worksheet, col, value, start_row=START_ROW):
     """Write value list to worksheet row.
 
     Args:
         worksheet (gspread.Worksheet): Target worksheet
-        row (str): Target row (e.g. 'B')
-        value (list[str]): Value to be written
+        col (str): Target row (e.g. 'B')
+        value (list[str]): Value to be written on worksheet
+        start_row (int):
     """
-    start_cul = START_COLUMN
-    end_cul = start_cul - 1 + len(value)
-    cells = worksheet.range(f'{row}{start_cul}:{row}{end_cul}')
+    end_row = start_row - 1 + len(value)
+    cells = worksheet.range(f'{col}{start_row}:{col}{end_row}')
     index = 0
     for cell in cells:
         cell.value = value[index]

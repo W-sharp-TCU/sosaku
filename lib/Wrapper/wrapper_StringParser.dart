@@ -82,6 +82,7 @@ class StringParser {
         // todo: 開きかっこの時
         // note: 新しいノードの最上位演算子を軸に枝を作る
         // note: 開いた時のノードを(right)を記録しておく
+
         print("開きかっこ$c");
       } else if (brackets.containsValue(c)) {
         // todo: 閉じかっこの時
