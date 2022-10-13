@@ -38,7 +38,6 @@ CATEGORIES = {
     "<<OTHER>>":                            'I'
 }
 EXCLUDE_FILES = [
-    "PlaceHolder"
 ]
 ONLY_FILES_WITH_EXTENSIONS = False
 # ###############################################################
@@ -80,8 +79,9 @@ def main():
     cols = collect_file_path(CATEGORIES)
 
     # Write file paths to Google Sheets.
-    for key in cols:
+    for key in CATEGORIES:
         worksheet.update_acell(f"{CATEGORIES[key]}{START_ROW}", key)  # write header
+    for key in cols:
         write_sheet(worksheet, CATEGORIES[key], cols[key], start_row=START_ROW+1)   # write values
 
 
@@ -96,12 +96,9 @@ def collect_file_path(category_list):
     for root, dirs, files in os.walk(top='assets/'):
         # Add only files to list.
         for file in files:
-            print(f"{file=}")
             if ONLY_FILES_WITH_EXTENSIONS is True and '.' not in file:
-                print("No Extension")
                 continue
             if file in EXCLUDE_FILES:    # if it is one of the exclude files
-                print("Exclude File")
                 continue
             file_path = os.path.join(root, file)
             file_path = file_path.replace('../', '')
