@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
@@ -33,7 +34,7 @@ Future<void> main() async {
   /*logger.setLevel(Level.INFO,
       stackTraceLevel: Level.SEVERE,
       includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
-  //runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
