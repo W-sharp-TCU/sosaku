@@ -23,7 +23,7 @@ import pytz
 
 # ########################## Config #############################
 SHEET_NAME = 'assets'
-# Define the key for categorize
+# Define the pattern for categorize
 CATEGORIES = {
     #      "<Directory Path>":       '<Column Symbol>'
     "drawable/CharacterImage/Ayana/":       'A',
@@ -34,7 +34,7 @@ CATEGORIES = {
     "sound/AS":                             'F',
     "sound/BGM":                            'G',
     "sound/CV/":                            'H',
-    # If specify "<<OTHER>>", files that did not fit all conditions is written at specified column.
+    # If specify "<<OTHER>>", files that did not fit all patterns is written at specified column.
     # "<<OTHER>>" must be specified at the end of the dictionary.
     "<<OTHER>>":                            'I'
 }
@@ -59,13 +59,9 @@ def main():
     # Login to Google API using OAuth2 credentials.
     gc = gspread.authorize(credentials)
 
+    # [ Open target sheet ]
     # Open Google Sheet.
     workbook = gc.open_by_key(os.environ.get("SPREADSHEET_KEY"))
-
-    # [ Configure control target ]
-    # Get sheets list.
-    # worksheets = workbook.worksheets()
-    # print(worksheets)
 
     # Open work sheet
     worksheet = workbook.worksheet(SHEET_NAME)
@@ -75,7 +71,10 @@ def main():
     workbook.values_clear(f"'{SHEET_NAME}'!A{start_row}:Z1000")
 
     # Write "Now writing..."
-    worksheet.update_cell(1, 2, "Now writing... Please wait.")
+    worksheet.update_cell(1, 1, "Now writing... Please wait.")
+
+    # Write information source branch
+    worksheet.update_cell(1, 2, f"Info source branch : {os.environ.get('GITHUB_REF_NAME')}")
 
     # Enumerate path of asset files.
     cols = collect_file_path(CATEGORIES)
@@ -87,9 +86,8 @@ def main():
         write_sheet(worksheet, CATEGORIES[key], cols[key], start_row=start_row+1)   # write values
 
     # Write the end of editing time.
-    worksheet.update_cell(1, 1, '最終更新 : ')
     cur_date = datetime.now(pytz.timezone('Asia/Tokyo'))
-    worksheet.update_cell(1, 2, cur_date.strftime('%Y年 %m月 %d日 %H:%M:%S'))
+    worksheet.update_cell(1, 1, f"最終更新 : {cur_date.strftime('%Y年 %m月 %d日 %H:%M:%S')}")
 
 
 def collect_file_path(category_list):
@@ -97,7 +95,7 @@ def collect_file_path(category_list):
 
     Args:
         category_list (dict[str, str]) : List defining the correspondence
-        between the keys of the sort and the columns to be written.
+        between the patterns in categorization and the columns to be written.
     """
     cols = {}
     for root, dirs, files in os.walk(top='assets/'):
@@ -130,9 +128,9 @@ def write_sheet(worksheet, col, value, start_row):
 
     Args:
         worksheet (gspread.Worksheet): Target worksheet
-        col (str): Target row (e.g. 'B')
-        value (list[str]): Value to be written on worksheet
-        start_row (int):
+        col (str): Target column symbol (e.g. 'B')
+        value (list[str]): Value to be written on {col}{start_row}:{col}{len(value)} at {worksheet}.
+        start_row (int): The number of row that this func starts writing at.
     """
     end_row = start_row - 1 + len(value)
     cells = worksheet.range(f'{col}{start_row}:{col}{end_row}')
