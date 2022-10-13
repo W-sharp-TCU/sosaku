@@ -3,7 +3,7 @@ name: Enumerate asset file paths
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
