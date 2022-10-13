@@ -5,7 +5,6 @@ import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
-import 'package:sosaku/Wrapper/wrapper_StringParser.dart';
 import 'l10n/l10n.dart';
 import 'nonweb_url_strategy.dart'
     if (dart.library.html) 'web_url_strategy.dart';
@@ -35,7 +34,6 @@ Future<void> main() async {
       stackTraceLevel: Level.SEVERE,
       includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
   //runApp(const ProviderScope(child: MyApp()));
-  StringParser parser = StringParser.parseFormula("14+5*(4+*3+5)+11");
 }
 
 class MyApp extends StatelessWidget {

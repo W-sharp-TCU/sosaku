@@ -9,4 +9,4 @@ Web :
 
 **SDK** : Flutter latest-stable  
 **Target** : Android, iOS, Web  
-**開発期間(予定)** : 2021年12月1日 ～ 2022年12月15日
+**開発期間(予定)** : 2021年12月1日 ～ 2023年3月31日

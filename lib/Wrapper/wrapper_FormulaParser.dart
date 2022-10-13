@@ -1,32 +1,29 @@
 import 'package:sosaku/Tree.dart';
 
-enum StringType { formula, general }
-
-class StringParser {
-  // Configurations
+class FormulaParser {
+  /// ****************************** Config ***********************************/
   static const Map<String, String> brackets = {
     // '<begin symbol>': '<end symbol>'
     '[': ']',
-    '{': '}',
     '(': ')',
   };
 
   static const Map<String, List> operators = {
     // '<symbol>': [<function>, <priority>]
-    '+': [StringParser._add, 100],
-    '-': [StringParser._sub, 100],
-    '*': [StringParser._mul, 150],
-    '/': [StringParser._div, 150],
-    '==': [StringParser._equal, 100],
-    '>>': [StringParser._greater, 100],
-    '<<': [StringParser._less, 100],
-    '>=': [StringParser._geq, 100],
-    '<=': [StringParser._leq, 100],
-    '&&': [StringParser._and, 50],
-    '||': [StringParser._or, 50],
+    '+': [FormulaParser._add, 100],
+    '-': [FormulaParser._sub, 100],
+    '*': [FormulaParser._mul, 150],
+    '/': [FormulaParser._div, 150],
+    '==': [FormulaParser._equal, 100],
+    '>>': [FormulaParser._greater, 100],
+    '<<': [FormulaParser._less, 100],
+    '>=': [FormulaParser._geq, 100],
+    '<=': [FormulaParser._leq, 100],
+    '&&': [FormulaParser._and, 50],
+    '||': [FormulaParser._or, 50],
   };
 
-  /// *********** Operating functions ***************************************/
+  /// Operating functions
   static double _add(double a, double b) => a + b;
   static double _sub(double a, double b) => a - b;
   static double _mul(double a, double b) => a * b;
@@ -43,23 +40,24 @@ class StringParser {
 
   /// *************************************************************************/
 
-  StringType type;
   String target;
 
-  StringParser({required this.type, required this.target});
+  FormulaParser({this.target = "0"});
 
-  factory StringParser.parseFormula(String target) {
-    StringParser parser =
-        StringParser(type: StringType.formula, target: target);
-    parser.toPrefixNotation();
-    return parser;
+  bool isSatisfied() {
+    return false;
   }
 
-  String? toPrefixNotation({String? formula}) {
-    formula ??= target;
+  String? toPrefixNotation({String? infixNotation}) {
+    infixNotation ??= target;
     String? prefixNotation;
-    makeSyntaxTree(formula);
+    makeSyntaxTree(infixNotation);
     return prefixNotation;
+  }
+
+  String? toPostfixNotation({String? infixNotation}) {
+    infixNotation ??= target;
+    return null;
   }
 
   Tree<String>? makeSyntaxTree(String infixNotation) {
