@@ -63,9 +63,10 @@ class SettingContents extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          ref
+                            ref
                               .watch(settingsProvider)
                               .textSliderValue
+                              .toInt()
                               .toString(),
                           style: TextStyle(
                             fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -125,9 +126,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
                                   .voiceSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -172,9 +174,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
                                   .bgmSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -219,9 +222,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
                                   .uiSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -266,9 +270,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
                                   .asSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
