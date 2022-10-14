@@ -80,7 +80,7 @@ class SettingContents extends ConsumerWidget {
               ///sounds setting
               Container(
                 width: GetScreenSize.screenWidth(),
-                height: GetScreenSize.screenHeight() * 0.4,
+                height: GetScreenSize.screenHeight() * 0.6,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -185,54 +185,7 @@ class SettingContents extends ConsumerWidget {
                       ],
                     ),
 
-                    ///SE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: GetScreenSize.screenWidth() * 0.1,
-                          child: Center(
-                            child: Text(
-                              "AS",
-                              style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.04,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: GetScreenSize.screenWidth() * 0.7,
-                          height: GetScreenSize.screenHeight() * 0.1,
-                          child: Slider(
-                            value: ref.watch(settingsProvider).seSliderValue,
-                            min: 0,
-                            max: 10,
-                            divisions: 10,
-                            onChanged: (double value) {
-                              ref
-                                  .read(settingsProvider)
-                                  .setSESliderValue(value);
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: GetScreenSize.screenWidth() * 0.05,
-                          child: Center(
-                            child: Text(
-                              ref
-                                  .watch(settingsProvider)
-                                  .seSliderValue
-                                  .toString(),
-                              style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.04,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    /// UI
+                    ///UI
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -251,14 +204,14 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.7,
                           height: GetScreenSize.screenHeight() * 0.1,
                           child: Slider(
-                            value: ref.watch(settingsProvider).asSliderValue,
+                            value: ref.watch(settingsProvider).uiSliderValue,
                             min: 0,
                             max: 10,
                             divisions: 10,
                             onChanged: (double value) {
                               ref
                                   .read(settingsProvider)
-                                  .setVoiceSliderValue(value);
+                                  .setUiSliderValue(value);
                             },
                           ),
                         ),
@@ -268,7 +221,54 @@ class SettingContents extends ConsumerWidget {
                             child: Text(
                               ref
                                   .watch(settingsProvider)
-                                  .voiceSliderValue
+                                  .uiSliderValue
+                                  .toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    /// As
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.1,
+                          child: Center(
+                            child: Text(
+                              "AS",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.7,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                          child: Slider(
+                            value: ref.watch(settingsProvider).asSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: (double value) {
+                              ref
+                                  .read(settingsProvider)
+                                  .setAsSliderValue(value);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          child: Center(
+                            child: Text(
+                              ref
+                                  .watch(settingsProvider)
+                                  .asSliderValue
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,

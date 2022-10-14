@@ -36,10 +36,15 @@ class SettingsController {
   }
 
   Future<double> getUiVolumeValue() async {
-    double _uiVolumeValue = await SharedPref.getDouble('seVolume', 5.0);
+    double _uiVolumeValue = await SharedPref.getDouble('uiVolume', 5.0);
     SoundPlayer().uiVolume = _uiVolumeValue / 10;
     UiVolume = _uiVolumeValue;
     return _uiVolumeValue;
+  }
+
+  Future<double> getSeVolumeValue() async {
+    getAsVolumeValue();
+    return getBgmVolumeValue();
   }
 
   void setTextSpeedValue(double value) {
@@ -66,8 +71,13 @@ class SettingsController {
   }
 
   void setUiVolumeValue(double value) {
-    SharedPref.setDouble('seVolume', value);
+    SharedPref.setDouble('uiVolume', value);
     SoundPlayer().uiVolume = value / 10;
     UiVolume = value;
+  }
+
+  void setSeVolumeValue(double value) {
+    setBgmVolumeValue(value);
+    setAsVolumeValue(value);
   }
 }

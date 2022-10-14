@@ -10,19 +10,19 @@ class SettingsProvider extends ChangeNotifier {
   double _textSliderValue = settingsController.textSpeed;
   double _voiceSliderValue = settingsController.CvVolume;
   double _bgmSliderValue = settingsController.BgmVolume;
-  double _seSliderValue = settingsController.UiVolume;
+  double _uiSliderValue = settingsController.UiVolume;
   double _asSliderValue = settingsController.AsVolume;
   double get textSliderValue => _textSliderValue;
   double get voiceSliderValue => _voiceSliderValue;
   double get bgmSliderValue => _bgmSliderValue;
-  double get seSliderValue => _seSliderValue;
+  double get uiSliderValue => _uiSliderValue;
   double get asSliderValue => _asSliderValue;
 
   void setAllValue() async {
     _textSliderValue = await settingsController.getTextSpeedValue();
     _voiceSliderValue = await settingsController.getVoiceVolumeValue();
     _bgmSliderValue = await settingsController.getBgmVolumeValue();
-    _seSliderValue = await settingsController.getUiVolumeValue();
+    _uiSliderValue = await settingsController.getUiVolumeValue();
     _asSliderValue = await settingsController.getAsVolumeValue();
     notifyListeners();
   }
@@ -45,8 +45,8 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSESliderValue(double value) {
-    _seSliderValue = value;
+  void setUiSliderValue(double value) {
+    _uiSliderValue = value;
     settingsController.setUiVolumeValue(value);
     notifyListeners();
   }
