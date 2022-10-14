@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'SaveManager.dart';
+
 class SaveData {
   late SaveManager _saveManager;
   Map<String, dynamic> _data = {};
@@ -10,7 +12,7 @@ class SaveData {
 
   void commit(int dataNum) {
     String jsonData = jsonEncode(_data);
-    _saveManager.saveToSlot(this, jsonData, dataNum);
+    _saveManager.saveToSlot(jsonData, dataNum);
   }
 
   String get lastModified => _data['lastModified'];
