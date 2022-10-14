@@ -63,9 +63,10 @@ class SettingContents extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          ref
+                            ref
                               .watch(settingsProvider)
                               .textSliderValue
+                              .toInt()
                               .toString(),
                           style: TextStyle(
                             fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -80,7 +81,7 @@ class SettingContents extends ConsumerWidget {
               ///sounds setting
               Container(
                 width: GetScreenSize.screenWidth(),
-                height: GetScreenSize.screenHeight() * 0.4,
+                height: GetScreenSize.screenHeight() * 0.6,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -125,9 +126,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
                                   .voiceSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -172,9 +174,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
                                   .bgmSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -185,7 +188,55 @@ class SettingContents extends ConsumerWidget {
                       ],
                     ),
 
-                    ///SE
+                    ///UI
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.1,
+                          child: Center(
+                            child: Text(
+                              "UI",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.7,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                          child: Slider(
+                            value: ref.watch(settingsProvider).uiSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: (double value) {
+                              ref
+                                  .read(settingsProvider)
+                                  .setUiSliderValue(value);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          child: Center(
+                            child: Text(
+                                ref
+                                  .watch(settingsProvider)
+                                  .uiSliderValue
+                                  .toInt()
+                                  .toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    /// As
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -204,14 +255,14 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.7,
                           height: GetScreenSize.screenHeight() * 0.1,
                           child: Slider(
-                            value: ref.watch(settingsProvider).seSliderValue,
+                            value: ref.watch(settingsProvider).asSliderValue,
                             min: 0,
                             max: 10,
                             divisions: 10,
                             onChanged: (double value) {
                               ref
                                   .read(settingsProvider)
-                                  .setSESliderValue(value);
+                                  .setAsSliderValue(value);
                             },
                           ),
                         ),
@@ -219,9 +270,10 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                              ref
+                                ref
                                   .watch(settingsProvider)
-                                  .seSliderValue
+                                  .asSliderValue
+                                  .toInt()
                                   .toString(),
                               style: TextStyle(
                                 fontSize: GetScreenSize.screenHeight() * 0.04,
@@ -230,7 +282,7 @@ class SettingContents extends ConsumerWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
