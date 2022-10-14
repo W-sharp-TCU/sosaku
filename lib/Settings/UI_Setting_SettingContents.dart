@@ -230,7 +230,54 @@ class SettingContents extends ConsumerWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
+
+                    /// UI
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.1,
+                          child: Center(
+                            child: Text(
+                              "UI",
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.7,
+                          height: GetScreenSize.screenHeight() * 0.1,
+                          child: Slider(
+                            value: ref.watch(settingsProvider).asSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: (double value) {
+                              ref
+                                  .read(settingsProvider)
+                                  .setVoiceSliderValue(value);
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: GetScreenSize.screenWidth() * 0.05,
+                          child: Center(
+                            child: Text(
+                              ref
+                                  .watch(settingsProvider)
+                                  .voiceSliderValue
+                                  .toString(),
+                              style: TextStyle(
+                                fontSize: GetScreenSize.screenHeight() * 0.04,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
