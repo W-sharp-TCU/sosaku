@@ -134,7 +134,5 @@ class ConversationScreen extends HookConsumerWidget
   }
 
   @override
-  Future<void> prepare(BuildContext context) async {
-    // do nothing.
-  }
+  Future<void> prepare(BuildContext context) async {}
 }

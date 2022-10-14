@@ -22,7 +22,7 @@ class SelectActionScreen extends HookConsumerWidget
   static const String _screenImagePath =
       "./assets/drawable/Conversation/004_corridorBB.png";
   static const String _characterImagePath =
-      "./assets/drawable/CharacterImage/Ayana/normal.png";
+      "./assets/drawable/CharacterImage/Ayana/normal-mouth_close-eye_open.png";
   static const String _buttonImagePath = "";
 
   @override

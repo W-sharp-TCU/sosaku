@@ -116,7 +116,7 @@ class SelectActionScreenController {
     animationController.animate(
         'statusUp', 'opacity', [Linear(0, 100, 0, 1), Linear(700, 1000, 1, 0)]);
 
-    animationController.setCallback('statusUp', {
+    animationController.setCallbacks('statusUp', {
       'opacity': () {
         _selectActionScreenProvider!.setIsStatusUp(false);
         statusUps.remove(statusName);

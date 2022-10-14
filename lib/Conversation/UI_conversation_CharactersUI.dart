@@ -18,8 +18,6 @@ class CharactersUI extends ConsumerWidget {
         animationController.createProvider('conversationCharacter', {
       'height': 0,
     });
-    final positionProvider =
-        animationController.createProvider('characterPosition', {});
 
     return Stack(
       children: [
@@ -35,18 +33,18 @@ class CharactersUI extends ConsumerWidget {
                 //     GetScreenSize.screenWidth() * 0.25,
                 left: GetScreenSize.screenWidth() *
                         ref
-                            .watch(positionProvider)
-                            .stateDouble['${layer.layerId}positionX']! -
+                            .watch(layer.animationProvider)
+                            .stateDouble['positionX']! -
                     GetScreenSize.screenWidth() * 0.25,
                 child: Opacity(
                   opacity: ref
-                      .watch(positionProvider)
-                      .stateDouble['${layer.layerId}opacity']!,
+                      .watch(layer.animationProvider)
+                      .stateDouble['opacity']!,
                   child: Image(
                     fit: BoxFit.fitHeight,
                     image: AssetImage(
                       // ref.watch(conversationImageProvider).characterImagePath,
-                      'assets/drawable/CharacterImage/${layer.name}/${layer.face}.png',
+                      'assets/drawable/CharacterImage/${layer.name}/${layer.face}-mouth_${layer.mouth}-eye_${layer.eye}.png',
                     ),
                   ),
                 ))
