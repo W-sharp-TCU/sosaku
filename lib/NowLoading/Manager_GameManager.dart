@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
@@ -139,56 +140,36 @@ class GameManager {
 
   Future<void> _prepareForNextScreen(
       BuildContext context, GameScreenInterface nextScreen) async {
-    List<String> bgImagePaths = [];
-    List<String> characterImagePaths = [];
-    List<String> bgmPaths = [];
-    List<String> cvPaths = [];
-    List<String> sePaths = [];
-    if (nextScreen.runtimeType == ConversationScreen) {
-      // todo: implement process of preparing for ConversationScreen.
-      // load json files of scenario data.
-      Map jsonMap =
-          await _loadJson("assets/text/ScenarioData/ChapterTest/event1.json");
-      logger.shout("GameManager._prepareForNextScreen(): event1.json loaded.");
-      logger.finer(
-          "GameManager._prepareForNextScreen(): Set data to conversationScreenController.");
-    } else if (nextScreen is SelectActionScreen) {
-      // todo: SelectActionScreenで使うassetsを列挙する
-    }
+    // note: 次のScreenの内容決め
+    //  ConversationScreen:
+    //    1. セーブデータから次のイベント候補取得
+    //    2. 候補からランダムに決める
+    //    3. 決めた結果をセーブに書き込み(更新)
+    //  SelectActionScreen:
+    //    川本に電話可能か調べる
+    // note: 次に使うアセットのロード
+    //  ConversationScreen: CSVからロード
+    //  SelectActionScreen: prepare関数実行
+    //  他のScreen: prepare関数実行
+    //  不正なScreen: SplashScreenのassetsロード
+    // note:
 
-    // pre-cache sound sources
-    if (bgmPaths.isNotEmpty) {
-      bgmPaths = bgmPaths.toSet().toList();
-      await SoundPlayer()
-          .precacheSounds(filePaths: bgmPaths, audioType: SoundPlayer.bgm);
+    // Determine the contents of next screen.
+    switch (nextScreen.runtimeType) {
+      case ConversationScreen:
+        _getEventCode();
+        // conversationScreenController.prepare(context);
+        break;
+      case SelectAction:
+      // todo: 川本に電話可能？
     }
-    if (cvPaths.isNotEmpty) {
-      cvPaths = cvPaths.toSet().toList();
-      await SoundPlayer()
-          .precacheSounds(filePaths: cvPaths, audioType: SoundPlayer.cv);
-    }
-    if (sePaths.isNotEmpty) {
-      sePaths = sePaths.toSet().toList();
-      await SoundPlayer()
-          .precacheSounds(filePaths: sePaths, audioType: SoundPlayer.as);
-    }
-    // pre-cache image sources
-    bgImagePaths = bgImagePaths.toSet().toList();
-    characterImagePaths = characterImagePaths.toSet().toList();
-    for (var e in bgImagePaths) {
-      await precacheImage(AssetImage(e), context);
-    }
-    for (var e in characterImagePaths) {
-      await precacheImage(AssetImage(e), context);
-    }
-    logger.shout(
-        "GameManager._prepareForNextScreen(): Finished pre-caching assets.");
+    nextScreen.prepare(context);
   }
 
-  /*void _getEventCode() {
+  void _getEventCode() {
     // note: SaveDataクラスから既出のイベントを取得する
     // note: この関数内で条件文をべた書き?
-  }*/
+  }
 
   /// private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.

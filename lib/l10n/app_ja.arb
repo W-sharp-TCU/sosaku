@@ -13,6 +13,15 @@
   "gallery": "ギャラリー",
   "documents": "各種表記",
   "save": "セーブ",
-  "backToHome": "ホームに戻る",
-  "load" : "ロード"
+  "backToTitle": "タイトルへ戻る",
+  "load" : "ロード",
+  "back": "戻る",
+  "reset": "リセット",
+  "text_speed": "テキスト送りの速度",
+  "Sounds": "サウンド",
+  "UI": "UIサウンド",
+  "BGM": "BGM",
+  "AS": "環境音",
+  "CV": "キャラクターボイス",
+  "help": "ヘルプ"
 }
