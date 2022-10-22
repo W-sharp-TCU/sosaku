@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:sosaku/main.dart';
 
 /// StatefulWidget witch manage app lifecycle
 /// === Usage ===
@@ -11,7 +12,7 @@ import 'package:flutter/widgets.dart';
 ///   }
 /// }
 /// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/// class _screenState() implements LifecycleCallback {
+/// class _XXScreenLifecycleCallback() implements LifecycleCallback {
 ///   << Override functions >>
 /// }
 /// =============
@@ -20,7 +21,7 @@ class LifecycleManager extends StatefulWidget {
   final LifecycleCallback callback;
 
   const LifecycleManager(
-      {Key? key, required this.child, required this.callback})
+      {Key? key, required this.callback, required this.child})
       : super(key: key);
 
   @override
@@ -31,19 +32,19 @@ class _LifecycleManagerState extends State<LifecycleManager>
     with WidgetsBindingObserver {
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state = $state');
+    logger.finer('Current state : $state');
     switch (state) {
       case AppLifecycleState.resumed:
         widget.callback.onResumed();
@@ -70,14 +71,16 @@ class _LifecycleManagerState extends State<LifecycleManager>
 
 /// callback interface
 abstract class LifecycleCallback {
-  /// Called when the app is put in foreground from background.
-  void onResumed();
+  const LifecycleCallback();
 
   /// Called when the app is put in background.
   void onPaused();
 
+  /// Called when the app is put in foreground from background.
+  void onResumed();
+
   /// Called when the app is not controllable.
-  /// ex) Time when user receive telephone calls
+  /// ex) Time when user receive telephone calls.
   /// ex) Time when user open notification center or control center.
   void onInactive();
 

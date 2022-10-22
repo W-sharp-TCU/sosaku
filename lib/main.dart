@@ -1,31 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
-import 'package:sosaku/Home/UI_home_HomeScreen.dart';
 import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
-import 'Settings/Controller_Settings_SettingsController.dart';
 import 'l10n/l10n.dart';
+import 'nonweb_url_strategy.dart'
+    if (dart.library.html) 'web_url_strategy.dart';
 
 late PackageInfo packageInfo;
+SimpleLogger logger = SimpleLogger();
 
 Future<void> main() async {
-  // restrict device screen orientation
+  // Restrict device's screen orientation.
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
   SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.immersive); // hide Android status bar & navigation bar.
-  packageInfo = await PackageInfo.fromPlatform();
+      SystemUiMode.immersive); // Hide Status Bar & Navigation Bar.
+  configureUrl();
+  packageInfo = await PackageInfo.fromPlatform(); // Get App info (e.g. version)
   SettingsController settingsController = SettingsController();
   await settingsController.getBgmVolumeValue();
   await settingsController.getUiVolumeValue();
   await settingsController.getVoiceVolumeValue();
   await settingsController.getTextSpeedValue();
+  logger.setLevel(Level.ALL,
+      stackTraceLevel: Level.ALL, includeCallerInfo: true); // for debug
+  /*logger.setLevel(Level.INFO,
+      stackTraceLevel: Level.SEVERE,
+      includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -41,7 +49,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: "SourceHanSansJP"),
       scrollBehavior:
           CustomScrollBehavior(), // support dragging mouse to scroll on the web.
-      home: HomeScreen(), // todo: リリース前には SplashScreen() に書き換える
+      home: const SplashScreen(), // todo: リリース前には SplashScreen() に書き換える
     );
   }
 }

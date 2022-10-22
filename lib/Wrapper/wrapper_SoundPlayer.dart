@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
+
+import '../main.dart';
 
 // todo: configure AudioContext
 /// **Play UI sounds, Background Musics, Ambient Sounds & Character's voices.**
@@ -93,9 +96,9 @@ class SoundPlayer {
         throw AssertionError("SoundPlayer: unexpected audioType error\n"
             "Specify 'ui', 'bgm', 'as' or 'cv' to audioType.");
     }
-    print("SoundPlayer.precacheSounds(): [list content original] $filePaths");
+    logger.fine("precached $audioType file(s) : $filePaths");
     await _deleteUnnecessaryCaches(filePaths, caches);
-    print("SoundPlayer.precacheSounds(): [list content deleted] $filePaths");
+    logger.finer("actual precached $audioType file(s) : $filePaths");
     for (String element in filePaths) {
       AudioPlayer newPlayer = AudioPlayer();
       newPlayer.setPlayerMode(playerMode);
@@ -105,12 +108,12 @@ class SoundPlayer {
       caches[element] = _PlayerTuple(element, newPlayer, newPlayer.state);
       newPlayer.onPlayerStateChanged.listen((event) {
         caches[element]?.state = event;
-        print(
-            "SoundPlayer: Player's state was changed to $event.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
+        logger.fine(
+            "Player's state was changed to $event.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
       });
       newPlayer.onPlayerComplete.listen((event) {
         caches[element]?.state = PlayerState.completed;
-        print(
+        logger.fine(
             "SoundPlayer: Player's state was changed to ${PlayerState.completed}.\n\t[UI:$uiState, BGM:$bgmState, AS:$asState, CV:$cvState]");
       });
     }
@@ -187,10 +190,16 @@ class SoundPlayer {
   ///    fade-out effect and then stop before new audio file start playing.
   ///
   /// @param [fadeIn] : if "true", new audio file start playing with fade-in effect.
+  ///
+  /// @param [delay] : Set millisecond if you want to play late. Default is 0 millisecond.
   void playBGM(String filePath,
-      {bool loop = true, bool fadeOut = true, bool fadeIn = false}) async {
+      {bool loop = true,
+      bool fadeOut = true,
+      bool fadeIn = false,
+      int delay = 0}) async {
     final double startVolume;
     final ReleaseMode mode;
+    await Future.delayed(Duration(milliseconds: delay));
     await stopBGM(fadeOut: fadeOut);
     if (loop) {
       mode = ReleaseMode.loop;
@@ -423,7 +432,7 @@ class SoundPlayer {
 
   Future<void> _fadeOut(AudioPlayer audioPlayer, int audioType) async {
     double volume = _volumes[audioType];
-    while (volume >= 0) {
+    while (volume > 0) {
       volume = volume - (_volumes[audioType] / _fadeStep);
       if (volume <= 0) {
         volume = 0;
@@ -437,7 +446,7 @@ class SoundPlayer {
   Future<void> _fadeIn(AudioPlayer audioPlayer, int audioType) async {
     double goal = _volumes[audioType];
     double volume = 0;
-    while (volume <= goal) {
+    while (volume < goal) {
       volume = volume + (goal / _fadeStep);
       if (volume >= goal) {
         volume = goal;
@@ -475,8 +484,8 @@ class SoundPlayer {
     } else {
       _volumes[bgm] = value;
     }
-    _uiCaches.forEach((key, value) {
-      value.player.setVolume(_volumes[ui]);
+    _bgmCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[bgm]);
     });
   }
 
@@ -488,8 +497,8 @@ class SoundPlayer {
     } else {
       _volumes[as] = value;
     }
-    _uiCaches.forEach((key, value) {
-      value.player.setVolume(_volumes[ui]);
+    _asCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[as]);
     });
   }
 
@@ -501,8 +510,8 @@ class SoundPlayer {
     } else {
       _volumes[cv] = value;
     }
-    _uiCaches.forEach((key, value) {
-      value.player.setVolume(_volumes[ui]);
+    _cvCaches.forEach((key, value) {
+      value.player.setVolume(_volumes[cv]);
     });
   }
 
@@ -589,27 +598,29 @@ class SoundPlayer {
   /// Private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
   SoundPlayer._internalConstructor() {
-    /*// Configure audio context
+    // Configure audio context
     AudioContextAndroid androidConfig = AudioContextAndroid(
         isSpeakerphoneOn: false,
-        stayAwake: false,
-        contentType: AndroidContentType.speech,
+        stayAwake: true,
+        contentType: AndroidContentType.music,
         usageType: AndroidUsageType.game,
-        audioFocus: AndroidAudioFocus.none);
+        audioFocus: AndroidAudioFocus.gainTransient);
     AudioContextIOS iosConfig = AudioContextIOS(
-      defaultToSpeaker: false,
-      category: AVAudioSessionCategory.playback,
+      defaultToSpeaker: true,
+      category: AVAudioSessionCategory.soloAmbient,
       options: [
         AVAudioSessionOptions.allowAirPlay,
-        AVAudioSessionOptions.allowBluetooth,
+        AVAudioSessionOptions.allowBluetoothA2DP
       ],
     );
-    AudioPlayer.global.setGlobalAudioContext(
-        AudioContext(android: androidConfig, iOS: iosConfig));
+    if (!kIsWeb) {
+      AudioPlayer.global.setGlobalAudioContext(
+          AudioContext(android: androidConfig, iOS: iosConfig));
+    }
 
     // Configure log level
     AudioPlayer.global
-        .changeLogLevel(LogLevel.error); // todo: delete when release*/
+        .changeLogLevel(LogLevel.info); // todo: delete when release*/
   }
 }
 

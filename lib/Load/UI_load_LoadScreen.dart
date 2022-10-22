@@ -2,9 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sosaku/Callback_common_CommonLifecycleCallback.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
+import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
+import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Load/UI_load_LoadFileMenu.dart';
-import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -19,7 +21,7 @@ final loadUIProvider =
 final loadScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => LoadScreenProvider());
 
-class LoadScreen extends ConsumerWidget {
+class LoadScreen extends HookConsumerWidget implements GameScreenInterface {
   const LoadScreen({Key? key}) : super(key: key);
 
   @override
@@ -27,101 +29,91 @@ class LoadScreen extends ConsumerWidget {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
-    return ProviderScope(
-      child: Scaffold(
-        body: LifecycleManager(
-          callback: CommonLifecycleCallback(),
+    return Scaffold(
+      body: GameScreenBase(
+        lifecycleCallback: const CommonLifecycleCallback(),
+        child: Center(
           child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.black,
-            child: Center(
-              child: Container(
-                height: GetScreenSize.screenHeight(),
-                width: GetScreenSize.screenWidth(),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/drawable/load/background.png"),
-                  )
-                ),
-
-                child: Stack(
-                  children: [
-
-                    SizedBox(
-                      height: GetScreenSize.screenHeight(),
-                      width: GetScreenSize.screenWidth(),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            for(var i = 0; i < 10; i++)
-                              SelectLoadFile(i)
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            height: GetScreenSize.screenHeight(),
+            width: GetScreenSize.screenWidth(),
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage("assets/drawable/Load/background.png"),
+            )),
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: GetScreenSize.screenHeight(),
+                  width: GetScreenSize.screenWidth(),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeScreen()));
-                          },
-                          child: Container(
-                              margin: EdgeInsets.only(
-                                  right: GetScreenSize.screenWidth() * 0.02,
-                                  top: GetScreenSize.screenWidth() * 0.02),
-                              width: GetScreenSize.screenWidth() * 0.07,
-                              height: GetScreenSize.screenWidth() * 0.1,
-                              color: Colors.white,
-                              child: const Center(
-                                child: Text("back"),
-                              )
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            ref.read(loadUIProvider).changeFlagDialog();
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                top: GetScreenSize.screenWidth() * 0.02),
-                            width: GetScreenSize.screenWidth() * 0.3,
-                            height: GetScreenSize.screenWidth() * 0.1,
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text("File Select Text"),
-                            ),
-                          ),
-                        ),
+                        for (var i = 0; i < 10; i++) SelectLoadFile(i)
                       ],
                     ),
-                    if (ref.watch(loadUIProvider).popFlagDialog)
-                      const Align(
-                        alignment: Alignment(0, 0),
-                        child: DialogScreen(),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()));
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(
+                              right: GetScreenSize.screenWidth() * 0.02,
+                              top: GetScreenSize.screenWidth() * 0.02),
+                          width: GetScreenSize.screenWidth() * 0.07,
+                          height: GetScreenSize.screenWidth() * 0.1,
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text("back"),
+                          )),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(loadUIProvider).changeFlagDialog();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top: GetScreenSize.screenWidth() * 0.02),
+                        width: GetScreenSize.screenWidth() * 0.3,
+                        height: GetScreenSize.screenWidth() * 0.1,
+                        color: Colors.white,
+                        child: const Center(
+                          child: Text("File Select Text"),
+                        ),
                       ),
-
-                    if(ref.watch(loadUIProvider).popFlagSaveMenu)
-                      const Align(
-                        alignment: Alignment(0, 0),
-                        child: LoadFileMenu(),
-                      )
-
-
+                    ),
                   ],
                 ),
-              ),
+                if (ref.watch(loadUIProvider).popFlagDialog)
+                  const Align(
+                    alignment: Alignment(0, 0),
+                    child: DialogScreen(),
+                  ),
+                if (ref.watch(loadUIProvider).popFlagSaveMenu)
+                  const Align(
+                    alignment: Alignment(0, 0),
+                    child: LoadFileMenu(),
+                  )
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) async {
+    // TODO: implement pre load
   }
 }
 

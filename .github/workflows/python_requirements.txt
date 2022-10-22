@@ -1,0 +1,4 @@
+# Edit Google Google Sheets
+gspread
+oauth2client
+pytz

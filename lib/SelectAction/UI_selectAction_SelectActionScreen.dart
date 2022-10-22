@@ -1,11 +1,19 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+<<<<<<< HEAD
 import 'package:roundcheckbox/roundcheckbox.dart';
+=======
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+>>>>>>> develop
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../Common/Interface_common_GameScreenInterface.dart';
+import '../Common/UI_common_GameScreenBase.dart';
+import '../Wrapper/wrapper_AnimationWidget.dart';
 
 final selectActionScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => SelectActionScreenProvider());
@@ -13,6 +21,7 @@ final selectActionScreenProvider =
 final SelectActionScreenController selectActionScreenController =
     SelectActionScreenController();
 
+<<<<<<< HEAD
 class SelectActionScreen extends ConsumerWidget {
     const SelectActionScreen({Key? key}) : super(key: key);
 
@@ -138,6 +147,16 @@ class SelectActionScreen extends ConsumerWidget {
   static String _characterImagePath =
       "./assets/drawable/CharacterImage/Ayana/normal.png";
   static String _buttonImagePath = "";
+=======
+class SelectActionScreen extends HookConsumerWidget
+    implements GameScreenInterface {
+  const SelectActionScreen({Key? key}) : super(key: key);
+  static const String _screenImagePath =
+      "./assets/drawable/Conversation/004_corridorBB.png";
+  static const String _characterImagePath =
+      "./assets/drawable/CharacterImage/Ayana/normal-mouth_close-eye_open.png";
+  static const String _buttonImagePath = "";
+>>>>>>> develop
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -146,24 +165,25 @@ class SelectActionScreen extends ConsumerWidget {
     final animationProvider = animationController.createProvider('statusUp',
         {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0});
     return Scaffold(
-      body: Container(
+        body: GameScreenBase(
+      child: Container(
         width: double.infinity,
         height: double.infinity,
         color: Colors.black,
         child: Center(
-          child: Container(
+          child: SizedBox(
             width: GetScreenSize.screenWidth(),
             height: GetScreenSize.screenHeight(),
             child: Stack(
               children: <Widget>[
-                Image(
+                const Image(
                   fit: BoxFit.cover,
                   image: AssetImage(
                     _screenImagePath,
                   ),
                 ),
-                Align(
-                  alignment: const Alignment(0.7, 0),
+                const Align(
+                  alignment: Alignment(0.7, 0),
                   child: Image(
                     fit: BoxFit.cover,
                     image: AssetImage(
@@ -179,14 +199,14 @@ class SelectActionScreen extends ConsumerWidget {
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Image(
                             fit: BoxFit.cover,
                             image: AssetImage(
                               _buttonImagePath,
                             ),
                           ),
-                          const Center(
+                          Center(
                             child: Text("バイトに行く"),
                           ),
                         ],
@@ -205,14 +225,14 @@ class SelectActionScreen extends ConsumerWidget {
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Image(
                             fit: BoxFit.cover,
                             image: AssetImage(
                               _buttonImagePath,
                             ),
                           ),
-                          const Center(
+                          Center(
                             child: Text("のののと過ごす"),
                           ),
                         ],
@@ -393,10 +413,11 @@ class SelectActionScreen extends ConsumerWidget {
           ),
         ),
       ),
-    );
+    ));
   }
   */
 
+<<<<<<< HEAD
   /// pre cache image on attention screen.
   static Future<void> prepare(BuildContext context) async {
     ///
@@ -410,6 +431,10 @@ class SelectActionScreen extends ConsumerWidget {
     /// pre ui design
     ///
     /*
+=======
+  @override
+  Future<void> prepare(BuildContext context) async {
+>>>>>>> develop
     await precacheImage(AssetImage(_screenImagePath), context);
     await precacheImage(AssetImage(_characterImagePath), context);
     */
