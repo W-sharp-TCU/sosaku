@@ -1,13 +1,13 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
 import 'package:roundcheckbox/roundcheckbox.dart';
-=======
 import 'package:hooks_riverpod/hooks_riverpod.dart';
->>>>>>> develop
+import 'package:sosaku/Conversation/UI_conversation_MenuUI.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
+import 'package:sosaku/Wrapper/wrapper_AnimationButton.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -21,7 +21,7 @@ final selectActionScreenProvider =
 final SelectActionScreenController selectActionScreenController =
     SelectActionScreenController();
 
-<<<<<<< HEAD
+/*
 class SelectActionScreen extends ConsumerWidget {
     const SelectActionScreen({Key? key}) : super(key: key);
 
@@ -137,17 +137,17 @@ class SelectActionScreen extends ConsumerWidget {
         );
     }
 
-  ///
-  /// pre ui design
-  ///
 
-  /*
   static String _screenImagePath =
       "./assets/drawable/Conversation/004_corridorBB.png";
   static String _characterImagePath =
       "./assets/drawable/CharacterImage/Ayana/normal.png";
   static String _buttonImagePath = "";
-=======
+  */
+
+///
+/// pre ui design
+///
 class SelectActionScreen extends HookConsumerWidget
     implements GameScreenInterface {
   const SelectActionScreen({Key? key}) : super(key: key);
@@ -156,14 +156,21 @@ class SelectActionScreen extends HookConsumerWidget
   static const String _characterImagePath =
       "./assets/drawable/CharacterImage/Ayana/normal-mouth_close-eye_open.png";
   static const String _buttonImagePath = "";
->>>>>>> develop
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // useEffect(() {});
+    useMemoized(() {
+      debugPrint("useMemoized callded");
+      prepare(context);
+      return null;
+    });
+
     SelectActionScreenProvider sasp = ref.watch(selectActionScreenProvider);
     selectActionScreenController.start(sasp, context);
     final animationProvider = animationController.createProvider('statusUp',
         {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0});
+
     return Scaffold(
         body: GameScreenBase(
       child: Container(
@@ -191,6 +198,21 @@ class SelectActionScreen extends HookConsumerWidget
                     ),
                   ),
                 ),
+                /*
+                AnimationButton(
+                  key: const Key("menu"),
+                  onTap: () {
+
+                  },
+                  width: GetScreenSize.screenWidth() * 0.06,
+                  height: GetScreenSize.screenWidth() * 0.06,
+                  margin: EdgeInsets.only(
+                  left: GetScreenSize.screenWidth() * 0.01,
+                  top: GetScreenSize.screenWidth() * 0.01,
+                  right: GetScreenSize.screenWidth() * 0.01),
+                  child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
+                MenuUI(),
+                */
                 Align(
                   alignment: const Alignment(-0.85, -0.75),
                   child: GestureDetector(
@@ -415,28 +437,11 @@ class SelectActionScreen extends HookConsumerWidget
       ),
     ));
   }
-  */
 
-<<<<<<< HEAD
   /// pre cache image on attention screen.
-  static Future<void> prepare(BuildContext context) async {
-    ///
-    /// new ui design
-    ///
-    /*
-    await precacheImage(AssetImage(_buttonImagePath), context);
-    */
-
-    ///
-    /// pre ui design
-    ///
-    /*
-=======
-  @override
   Future<void> prepare(BuildContext context) async {
->>>>>>> develop
     await precacheImage(AssetImage(_screenImagePath), context);
     await precacheImage(AssetImage(_characterImagePath), context);
-    */
+    // await precacheImage(AssetImage(_buttonImagePath), context);
   }
 }

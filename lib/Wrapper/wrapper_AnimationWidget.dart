@@ -18,7 +18,6 @@ class AnimationProvider extends ChangeNotifier {
   bool _isAnimation = false;
 
   Map<String, double> get stateDouble => _stateDouble;
-  bool _isAnimation = false;
   AnimationProvider(String id) {
     _id = id;
   }
@@ -48,10 +47,6 @@ class AnimationProvider extends ChangeNotifier {
   void loop() async {
     _isAnimation = true;
     while (_isAnimation) {
-<<<<<<< HEAD
-      print('loop');
-=======
->>>>>>> develop
       _isAnimation = false;
       for (void Function()? animation in _animations.values) {
         if (animation != null) {
@@ -74,10 +69,6 @@ class AnimationProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-<<<<<<< HEAD
-    print('dispose$_id');
-=======
->>>>>>> develop
     _isAnimation = false;
     _animationProviders.remove(_id);
     _animationADProviders.remove(_id);
@@ -145,16 +136,6 @@ class AnimationWidgetController {
     }
   }
 
-<<<<<<< HEAD
-  void animate(
-      String widgetId, String stateId, List<Animation> animations) async {
-    print('animate');
-    await Future.delayed(const Duration(milliseconds: 16));
-    print(_animationProviders);
-    if (_animationProviders.containsKey(widgetId) &&
-        _animationProviders[widgetId]!._stateDouble.containsKey(stateId)) {
-      print('animate if true');
-=======
   /// Assigns a value to a state that already exists.
   ///
   /// @param providerId : ID of the provider
@@ -213,7 +194,6 @@ class AnimationWidgetController {
     }
     if (_animationProviders.containsKey(providerId) &&
         _animationProviders[providerId]!._stateDouble.containsKey(stateId)) {
->>>>>>> develop
       int duration = 0;
       _animationProviders[providerId]?._stopwatches[stateId]?.reset();
       _animationProviders[providerId]?._stopwatches[stateId]?.start();
@@ -250,14 +230,8 @@ class AnimationWidgetController {
         }
       }
 
-<<<<<<< HEAD
-      _animationProviders[widgetId]?._animations[stateId] = animation;
-      _animationProviders[widgetId]?.loop();
-      print('startloop');
-=======
       _animationProviders[providerId]?._animations[stateId] = animation;
       _animationProviders[providerId]?.loop();
->>>>>>> develop
     }
   }
 
