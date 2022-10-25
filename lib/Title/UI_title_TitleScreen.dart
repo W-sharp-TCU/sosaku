@@ -9,6 +9,7 @@ import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
+import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 import 'package:sosaku/main.dart';
@@ -37,8 +38,12 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('animate');
     // called once
     useEffect(() {
+      animationController.animate('tapToStart', 'opacity', [
+        Wave(0, 100000, 0, 1, 2000, 0),
+      ]);
       SoundPlayer().playBGM(_bgmPaths[0], delay: 2000);
       return null;
     }, []);
@@ -46,66 +51,88 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     // _slideShowController.start(ref.read(titleScreenProvider));
+    final animationProvider = animationController.createProvider('tapToStart', {
+      'opacity': 0,
+    });
 
-    return ProviderScope(
-      child: Scaffold(
-        body: GameScreenBase(
-          lifecycleCallback: const CommonLifecycleCallback(),
-          child: Center(
-            child: GestureDetector(
-              onTap: () {
-                // _slideShowController.stop();
-                SoundPlayer().playUI("assets/sound/UI/next.mp3");
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const HomeScreen(),
-                      transitionDuration: const Duration(milliseconds: 500),
-                      transitionsBuilder: (context, animation,
-                              secondaryAnimation, child) =>
-                          buildFadeTransition(
-                              context, animation, secondaryAnimation, child)),
-                );
-              },
-              child: Container(
-                  height: GetScreenSize.screenHeight(),
-                  width: GetScreenSize.screenWidth(),
-                  color: Colors.black,
-                  child: Stack(
-                    children: [
-                      Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                            ref.watch(titleScreenProvider).mBGImagePath),
-                      ),
-                      Align(
-                        alignment: const Alignment(0, 0.8),
-                        child: Text(
-                          L10n.of(context)!.tapToStart,
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.1,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+    return Scaffold(
+      body: GameScreenBase(
+        lifecycleCallback: const CommonLifecycleCallback(),
+        child: Center(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onPanUpdate: (detail) {
+              print('aaaa');
+            },
+            onTap: () {
+              // _slideShowController.stop();
+              SoundPlayer().playUI("assets/sound/UI/next.mp3");
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const HomeScreen(),
+                    transitionDuration: const Duration(milliseconds: 500),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
+                            buildFadeTransition(
+                                context, animation, secondaryAnimation, child)),
+              );
+            },
+            child: Container(
+                height: GetScreenSize.screenHeight(),
+                width: GetScreenSize.screenWidth(),
+                color: Colors.black,
+                child: Stack(
+                  children: [
+                    Image(
+                      fit: BoxFit.cover,
+                      image: AssetImage(
+                          ref.watch(titleScreenProvider).mBGImagePath),
+                    ),
+                    // Align(
+                    //   alignment: const Alignment(0, 0.8),
+                    //   child: Text(
+                    //     L10n.of(context)!.tapToStart,
+                    //     style: TextStyle(
+                    //       fontSize: GetScreenSize.screenHeight() * 0.1,
+                    //       color: Colors.white.withOpacity(ref
+                    //           .watch(animationProvider)
+                    //           .stateDouble['opacity']!),
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //   ),
+                    // ),
+                    Align(
+                      alignment: const Alignment(-0.95, -0.95),
+                      child: Text(
+                        "Package: ${packageInfo.packageName},  \n"
+                        "Version: ${packageInfo.version},  "
+                        "Build: ${packageInfo.buildNumber}\n"
+                        "Screen Height: ${GetScreenSize.screenHeight()}, \n"
+                        "Width: ${GetScreenSize.screenWidth()}",
+                        style: TextStyle(
+                          fontSize: GetScreenSize.screenHeight() * 0.04,
+                          color: Colors.white,
                         ),
                       ),
-                      Align(
-                        alignment: const Alignment(-0.95, -0.95),
-                        child: Text(
-                          "Package: ${packageInfo.packageName},  "
-                          "Version: ${packageInfo.version},  "
-                          "Build: ${packageInfo.buildNumber}\n"
-                          "Screen Height: ${GetScreenSize.screenHeight()}, "
-                          "Width: ${GetScreenSize.screenWidth()}",
-                          style: TextStyle(
-                            fontSize: GetScreenSize.screenHeight() * 0.04,
-                            color: Colors.white,
+                    ),
+
+                    Consumer(
+                      builder:
+                          (BuildContext context, WidgetRef ref, Widget? child) {
+                        return Opacity(
+                          opacity: ref
+                              .watch(animationProvider)
+                              .stateDouble['opacity']!,
+                          child: const Image(
+                            image: AssetImage(
+                                'assets/drawable/Title/titlestart.png'),
                           ),
-                        ),
-                      )
-                    ],
-                  )),
-            ),
+                        );
+                      },
+                    )
+                  ],
+                )),
           ),
         ),
       ),
