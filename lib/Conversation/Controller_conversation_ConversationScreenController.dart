@@ -8,6 +8,7 @@ import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvide
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
+import '../Wrapper/wrapper_SakuraTransition.dart';
 import '../main.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -549,6 +550,8 @@ class ConversationScreenController {
       }
       logger.fine('finish load csv');
       logger.finer(_eventData.toString());
+      await SakuraTransitionProvider.beginTransition();
+      SakuraTransitionProvider.endTransition();
       // TODO : ディレイ取り除く
       await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
