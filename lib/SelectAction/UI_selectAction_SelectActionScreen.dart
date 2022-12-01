@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Conversation/UI_conversation_MenuUI.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
@@ -222,12 +223,12 @@ class SelectActionScreen extends HookConsumerWidget
                       color: Colors.white,
                       child: Stack(
                         children: const <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
                           Center(
                             child: Text("バイトに行く"),
                           ),
@@ -248,12 +249,12 @@ class SelectActionScreen extends HookConsumerWidget
                       color: Colors.white,
                       child: Stack(
                         children: const <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
                           Center(
                             child: Text("のののと過ごす"),
                           ),
@@ -273,14 +274,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("あやなと過ごす"),
                           ),
                         ],
@@ -299,14 +300,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("1人で執筆"),
                           ),
                         ],
@@ -323,14 +324,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("授業に行く"),
                           ),
                         ],
@@ -349,14 +350,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("川本習に電話"),
                           ),
                         ],
