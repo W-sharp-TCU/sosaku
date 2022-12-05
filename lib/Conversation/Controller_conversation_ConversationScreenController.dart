@@ -8,6 +8,7 @@ import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvide
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
+import '../Wrapper/wrapper_SakuraTransition.dart';
 import '../main.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -169,7 +170,6 @@ class ConversationScreenController {
         _goNextScene();
         break;
       case 'animation':
-        _goNextScene();
         break;
       default:
         throw ('scenario data ${_nowCode - 1} : function "$func" is not defined');
@@ -181,47 +181,51 @@ class ConversationScreenController {
       case 'in':
         String layerId = arg[0];
         String animationIn = arg[1];
-        int countPosNull = 1; // 座標が指定されていないキャラクターの数(1は追加キャラ分)
+        int sumPosNull = 1; // 座標が指定されていないキャラクターの数(1は追加キャラ分)
         for (LayerData layer in _conversationCharacterProvider!.layers.values) {
           if (layer.position == null) {
-            countPosNull++;
+            sumPosNull++;
           }
         }
         // すでに配置されたキャラクターの新しい位置を設定
-        int i = 1;
+        int countPosNull = 1;
         for (LayerData layer in _conversationCharacterProvider!.layers.values) {
-          print('dst');
-          print(i / (countPosNull + 1));
           if (layer.position == null) {
+            double newPosition = countPosNull / (sumPosNull + 1);
             layer.animations.add(() {
               _conversationCharacterProvider?.animationNum++;
+              // デフォルトキャラ移動animationの関数呼び出し
+              // TODO : べた書き開始
               animationController
                   .animate('${layer.layerId}characterAnimation', 'positionX', [
-                Easing(0, 1000, layer.positionX, 1 / (countPosNull + 1))
-                    .inOutQuint(),
+                Easing(0, 1000, layer.positionX, newPosition).inOutQuint(),
               ]);
               animationController.setCallback(
                   '${layer.layerId}characterAnimation', 'positionX', () {
-                layer.positionX = i / (countPosNull + 1);
+                layer.positionX = newPosition;
+                // TODO : べた書き終了
                 _conversationCharacterProvider?.animationNum--;
               });
             });
-            i++;
+            countPosNull++;
           }
         }
         // 新しいキャラクターを登場させる
         print('create new character');
         _conversationCharacterProvider!.layers[layerId] =
-            LayerData(layerId, i / (countPosNull + 1));
+            LayerData(layerId, countPosNull / (sumPosNull + 1));
         print(_conversationCharacterProvider!.layers);
         _conversationCharacterProvider!.layers[layerId]?.animations.add(() {
           _conversationCharacterProvider?.animationNum++;
+          // キャラ登場アニメーションの呼び出し
+          // TODO : べた書き開始
           animationController.animate('${layerId}characterAnimation', 'opacity',
               [Linear(0, 1000, 0, 1)]);
           animationController
               .setCallback('${layerId}characterAnimation', 'opacity', () {
             _conversationCharacterProvider?.animationNum--;
           });
+          // TODO : べた書き終了
         });
         _goNextScene();
         break;
@@ -244,6 +248,57 @@ class ConversationScreenController {
         _goNextScene();
         break;
       case 'position':
+        // String layerId = arg[0];
+        // String animationMove = arg[1];
+        // double newPosition = double.parse(arg[2]);
+        // int sumPosNull = 1; // 座標が指定されていないキャラクターの数(1は追加キャラ分)
+        // for (LayerData layer in _conversationCharacterProvider!.layers.values) {
+        //   if (layer.position == null) {
+        //     sumPosNull++;
+        //   }
+        // }
+        // // すでに配置されたキャラクターの新しい位置を設定
+        // int countPosNull = 1;
+        // for (LayerData layer in _conversationCharacterProvider!.layers.values) {
+        //   if (layer.layerId == layerId) {
+        //     layer.position = ;
+        //     double newPosition = countPosNull / (sumPosNull + 1);
+        //     layer.animations.add(() {
+        //       _conversationCharacterProvider?.animationNum++;
+        //       // デフォルトキャラ移動animationの関数呼び出し
+        //       // TODO : べた書き開始
+        //       animationController
+        //           .animate('${layer.layerId}characterAnimation', 'positionX', [
+        //         Easing(0, 1000, layer.positionX, newPosition).inOutQuint(),
+        //       ]);
+        //       animationController.setCallback(
+        //           '${layer.layerId}characterAnimation', 'positionX', () {
+        //         layer.positionX = newPosition;
+        //         // TODO : べた書き終了
+        //         _conversationCharacterProvider?.animationNum--;
+        //       });
+        //     });
+        //     countPosNull++;
+        //   } else if (layer.position == null) {
+        //     double newPosition = countPosNull / (sumPosNull + 1);
+        //     layer.animations.add(() {
+        //       _conversationCharacterProvider?.animationNum++;
+        //       // デフォルトキャラ移動animationの関数呼び出し
+        //       // TODO : べた書き開始
+        //       animationController
+        //           .animate('${layer.layerId}characterAnimation', 'positionX', [
+        //         Easing(0, 1000, layer.positionX, newPosition).inOutQuint(),
+        //       ]);
+        //       animationController.setCallback(
+        //           '${layer.layerId}characterAnimation', 'positionX', () {
+        //         layer.positionX = newPosition;
+        //         // TODO : べた書き終了
+        //         _conversationCharacterProvider?.animationNum--;
+        //       });
+        //     });
+        //     countPosNull++;
+        //   }
+        // }
         _goNextScene();
         break;
       case 'animation':
@@ -495,6 +550,8 @@ class ConversationScreenController {
       }
       logger.fine('finish load csv');
       logger.finer(_eventData.toString());
+      await SakuraTransitionProvider.beginTransition();
+      SakuraTransitionProvider.endTransition();
       // TODO : ディレイ取り除く
       await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
