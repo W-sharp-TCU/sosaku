@@ -7,9 +7,12 @@ Map<String, AutoDisposeChangeNotifierProvider<AnimationProvider>>
     _animationADProviders = {};
 AnimationWidgetController animationController = AnimationWidgetController();
 
+/// WARNING : アニメーションプロバイダはマイフレームウィジェットの再描画を行うため、
+/// animationProviderのstateDoubleを利用するウィジェットはビルドの末端に配置する(GestureDetectorなどが反応しない場合がある)
 /// This provider manages Double variables for animation.
 /// This provider is used by animationController.
 class AnimationProvider extends ChangeNotifier {
+  int _fps = 60;
   late final String _id;
   final Map<String, double> _stateDouble = {};
   final Map<String, void Function()?> _animations = {};
@@ -63,7 +66,7 @@ class AnimationProvider extends ChangeNotifier {
         }
       }
       notifyListeners();
-      await Future.delayed(const Duration(milliseconds: 16));
+      await Future.delayed(Duration(milliseconds: (1000 / _fps).ceil()));
     }
   }
 
@@ -176,6 +179,10 @@ class AnimationWidgetController {
     return (_animationProviders[providerId]?._animations[stateId] != null);
   }
 
+  void setFPS(String providerId, int fps) {
+    _animationProviders[providerId]?._fps = fps;
+  }
+
   /// Start animation.
   /// This function for controller.
   ///
@@ -183,8 +190,6 @@ class AnimationWidgetController {
   /// @param stateId  : Variable id to be animated
   /// @param animations : List of animations to run
   /// @param repeat : Number of animation iterations (default 1, -1 for infinite loop)
-  /// if(visible = true);
-  /// animate
   Future<void> animate(
       String providerId, String stateId, List<Animation> animations,
       [int repeat = 1]) async {

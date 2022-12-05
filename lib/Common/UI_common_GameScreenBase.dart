@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
+import 'package:sosaku/Wrapper/wrapper_SakuraTransition.dart';
 import 'package:sosaku/Wrapper/wrapper_TapEffectScreen.dart';
 
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -33,7 +34,9 @@ class GameScreenBase extends ConsumerWidget {
               width: GetScreenSize.screenWidth(),
               color: opaque ? Colors.black : Colors.transparent,
               child: TapEffectScreen(
-                child: child,
+                child: SakuraTransition(
+                  child: child,
+                ),
               )),
         ),
       ),

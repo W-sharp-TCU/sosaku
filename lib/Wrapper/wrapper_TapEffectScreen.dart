@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
+import 'package:sosaku/Wrapper/wrapper_SakuraTransition.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -25,6 +26,7 @@ class TapEffectScreen extends ConsumerWidget {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     return GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onPanDown: (detail) {
           for (int i = 0; i < 10; i++) {
             ref.read(tapEffectScreenProvider).create(
@@ -44,53 +46,65 @@ class TapEffectScreen extends ConsumerWidget {
             }
           }
         },
-        child: Stack(children: [
-          Container(
-            child: _child,
-          ),
-          // if (ref.watch(tapEffectScreenProvider)._isAnimation)
-          for (AutoDisposeChangeNotifierProvider<
-                  AnimationProvider> sakuraProvider
-              in ref.watch(tapEffectScreenProvider)._sakuraProviders)
-            Align(
-              alignment: Alignment(
-                ref.watch(sakuraProvider).stateDouble['dx']! +
-                    0.05 *
-                        cos(ref.watch(sakuraProvider).stateDouble['theta']!) *
-                        ref.watch(sakuraProvider).stateDouble['r']!,
-                ref.watch(sakuraProvider).stateDouble['dy']! +
-                    (0.05 * 16 / 9) *
-                        sin(ref.watch(sakuraProvider).stateDouble['theta']!) *
-                        ref.watch(sakuraProvider).stateDouble['r']!,
+        child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            return Stack(children: [
+              Container(
+                child: _child,
               ),
-              child: SizedBox(
-                width: ref.watch(sakuraProvider).stateDouble['ratio']! *
-                    GetScreenSize.screenWidth() *
-                    0.015,
-                height: ref.watch(sakuraProvider).stateDouble['ratio']! *
-                    GetScreenSize.screenWidth() *
-                    0.015,
-                child: Center(
-                    child: Opacity(
-                        opacity:
-                            ref.watch(sakuraProvider).stateDouble['opacity']!,
-                        child: Transform(
-                          transform: Matrix4.identity()
-                            ..setEntry(3, 2, 0)
-                            ..rotateX(
-                                ref.watch(sakuraProvider).stateDouble['rx']!)
-                            ..rotateY(
-                                ref.watch(sakuraProvider).stateDouble['ry']!)
-                            ..rotateZ(
-                                ref.watch(sakuraProvider).stateDouble['rz']!),
-                          child: const Image(
-                            image: AssetImage(
-                                'assets/drawable/Conversation/sakura.png'),
-                          ),
-                        ))),
-              ),
-            ),
-        ]));
+              // if (ref.watch(tapEffectScreenProvider)._isAnimation)
+              for (AutoDisposeChangeNotifierProvider<
+                      AnimationProvider> sakuraProvider
+                  in ref.watch(tapEffectScreenProvider)._sakuraProviders)
+                Align(
+                  alignment: Alignment(
+                    ref.watch(sakuraProvider).stateDouble['dx']! +
+                        0.05 *
+                            cos(ref
+                                .watch(sakuraProvider)
+                                .stateDouble['theta']!) *
+                            ref.watch(sakuraProvider).stateDouble['r']!,
+                    ref.watch(sakuraProvider).stateDouble['dy']! +
+                        (0.05 * 16 / 9) *
+                            sin(ref
+                                .watch(sakuraProvider)
+                                .stateDouble['theta']!) *
+                            ref.watch(sakuraProvider).stateDouble['r']!,
+                  ),
+                  child: SizedBox(
+                    width: ref.watch(sakuraProvider).stateDouble['ratio']! *
+                        GetScreenSize.screenWidth() *
+                        0.015,
+                    height: ref.watch(sakuraProvider).stateDouble['ratio']! *
+                        GetScreenSize.screenWidth() *
+                        0.015,
+                    child: Center(
+                        child: Opacity(
+                            opacity: ref
+                                .watch(sakuraProvider)
+                                .stateDouble['opacity']!,
+                            child: Transform(
+                              transform: Matrix4.identity()
+                                ..setEntry(3, 2, 0)
+                                ..rotateX(ref
+                                    .watch(sakuraProvider)
+                                    .stateDouble['rx']!)
+                                ..rotateY(ref
+                                    .watch(sakuraProvider)
+                                    .stateDouble['ry']!)
+                                ..rotateZ(ref
+                                    .watch(sakuraProvider)
+                                    .stateDouble['rz']!),
+                              child: const Image(
+                                image: AssetImage(
+                                    'assets/drawable/Conversation/sakura.png'),
+                              ),
+                            ))),
+                  ),
+                ),
+            ]);
+          },
+        ));
   }
 }
 
@@ -98,7 +112,6 @@ class TapEffectScreenProvider extends ChangeNotifier {
   static const int _max = 30;
   static const int _duration = 1000;
   int _i = 0;
-
   final List<AutoDisposeChangeNotifierProvider<AnimationProvider>>
       _sakuraProviders = [];
   TapEffectScreenProvider() {
