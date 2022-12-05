@@ -22,81 +22,10 @@ class ConversationScreenController {
   ConversationLogProvider? _conversationLogProvider;
   ConversationCharacterProvider? _conversationCharacterProvider;
   BuildContext? _context;
-  Timer? _timer;
 
   /// Code number of scenario data.
   int _nowCode = 0;
 
-  /// bgImage
-  /// characterImage
-  /// characterName
-  /// text
-  /// selection
-  /// bgm
-  /// voice
-  /// se
-  /// goto
-  ///
-  /// characterPosition
-  /// characterAnimation
-  /// characterImage key path pos(1)
-  ///
-  /// characterImage key path pos(-1)
-  ///
-  // final List<List<String>> _conversationData = [
-  //   ['bg', 'set', 'assets/drawable/Conversation/002_classroomBB.png'],
-  //   ['character', 'in', 'あやな1'],
-  //   ['text', '', 'あやな', '早くしないと学食混んじゃうじゃない！'],
-  //   ['', ''],
-  //   ['text', '', 'あやな', 'それじゃあ、このパソコンの角で起こしてほしかったかしら？'],
-  //   ['character', 'in', 'あやな2'],
-  //   ['', ''],
-  //   ['text', '', 'ののの', '次の授業なんだっけ？'],
-  //   ['selection', '', '国語', '13'],
-  //   ['selection', '', '数学', '16'],
-  //   ['selection', '', '英語', '19'],
-  //   ['', ''],
-  //   ['text', '', 'あやな', '次の授業は国語だよ'],
-  //   ['', ''],
-  //   ['goto', '', '22'],
-  //   ['text', '', 'あやな', '次の授業は数学だよ'],
-  //   ['', ''],
-  //   ['goto', '', '22'],
-  //   ['text', '', 'あやな', '次の授業は英語だよ'],
-  //   ['', ''],
-  //   ['goto', '', '22'],
-  //   ['character', 'in', 'あやな3'],
-  //   [
-  //     'text',
-  //     '',
-  //     'あやな',
-  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-  //   ],
-  //   ['', ''],
-  //   ['character', 'in', 'あやな4'],
-  //   [
-  //     'text',
-  //     '',
-  //     'あやな',
-  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-  //   ],
-  //   ['', ''],
-  //   [
-  //     'text',
-  //     '',
-  //     'あやな',
-  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-  //   ],
-  //   ['', ''],
-  //   [
-  //     'text',
-  //     '',
-  //     'あやな',
-  //     '吾輩わがはいは猫である。名前はまだ無い。どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。'
-  //   ],
-  //   ['', ''],
-  //   ['end']
-  // ];
   final List<List<String>> _eventData = [];
 
   void _goNextScene() {
@@ -493,8 +422,6 @@ class ConversationScreenController {
       _interval = interval;
     }
     _playerName = playerName ?? _playerName;
-    _timer?.cancel();
-    // _animationLoop();
   }
 
   /// Start controller.
@@ -550,8 +477,8 @@ class ConversationScreenController {
       }
       logger.fine('finish load csv');
       logger.finer(_eventData.toString());
-      await SakuraTransitionProvider.beginTransition();
-      SakuraTransitionProvider.endTransition();
+      // await SakuraTransitionProvider.beginTransition();
+      // SakuraTransitionProvider.endTransition();
       // TODO : ディレイ取り除く
       await Future.delayed(const Duration(milliseconds: 100));
       _goNextScene();
@@ -562,7 +489,6 @@ class ConversationScreenController {
   /// Stop controller.
   /// This function is for ConversationScreenUI.
   void stop() async {
-    _timer?.cancel();
     _conversationImageProvider = null;
     _conversationTextProvider = null;
     _conversationLogProvider = null;
@@ -633,7 +559,6 @@ class ConversationScreenController {
 
   /// Processing at the end of an event.
   void endEvent() async {
-    _timer?.cancel();
     if (_conversationImageProvider != null &&
         _conversationTextProvider != null &&
         _conversationLogProvider != null &&
