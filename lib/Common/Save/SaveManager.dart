@@ -1,17 +1,13 @@
-//import 'dart:convert';
+import '../../Wrapper/wrapper_SharedPref.dart';
+import 'SaveSlot.dart';
 
-import 'package:sosaku/Wrapper/wrapper_SharedPref.dart';
-
-class SaveManager{
-
-  late SaveSlot _playingSlot;
-  //late int _playingSlotNum;
-  late String _jsonData;
-  static String _nullData = "";
+class SaveManager {
+  int _playingSlotNum = -1;
+  final List<SaveSlot> _saveSlots = [];
+  static const String _nullValue = "";
   int _timer = 0;
   bool _timerSwitch = false;
-  static int _autoSaveCycle = 300;//sec
-
+  static const int _autoSaveDuration = 300; // sec.
 
   ///Singleton constructor
   static final SaveManager _myInstance = SaveManager._internalConstructor();
@@ -19,41 +15,52 @@ class SaveManager{
   factory SaveManager() => _myInstance;
 
   ///"_playingSlot" getter
-  SaveSlot get playingSlot=> _playingSlot;
+  SaveSlot get playingSlot => _saveSlots[_playingSlotNum];
 
   ///select saveSlot that will be played
   ///
   /// @param slotNum: sava slot number of playing data
-  selectSlot(int slotNum)async{
-    _jsonData = await SharedPref.getString("slot"+slotNum.toString(), _nullData);
-    _playingSlot = SaveSlot(this, _jsonData);
-    //_playingSlotNum  = slotNum;
+  void selectSlot(int slotNum) {
+    _playingSlotNum = slotNum;
+  }
+
+  /// Load save data of all slots.
+  /// This method is called before Load Screen appear.
+  void loadAll() async {
+    int numOfSlot = await SharedPref.getInt("numOfSlot", 0);
+    for (int i = 0; i < numOfSlot; i++) {
+      String jsonData =
+          await SharedPref.getString("slot" + i.toString(), _nullValue);
+      _saveSlots.add(SaveSlot(this, jsonData));
+    }
   }
 
   ///save playing data
   ///
   /// @param data: data of status, event history, and more
   /// @param slotNum: save to save slot of this number
-  saveToSlot(String data, int slotNum){
+  void saveToSlot(String data, int slotNum) {
     //slotNum ?? _playingSlotNum;
-    SharedPref.setString("slot"+slotNum.toString(), data);
+    SharedPref.setString("slot" + slotNum.toString(), data);
   }
 
   ///start auto save timer
-  void startSaveTimer()async {
+  void startSaveTimer() async {
     _timer = 0;
     _timerSwitch = true;
-    while(_timerSwitch) {
-      await Future.delayed(Duration(milliseconds: 10), ()=>_timer+=10);
-      if(_autoSaveCycle*1000 <= _timer){
-        saveToSlot(_playingSlot._data, 0);
+    while (_timerSwitch) {
+      await Future.delayed(
+          const Duration(milliseconds: 10), () => _timer += 10);
+      if (_autoSaveDuration * 1000 <= _timer) {
+        // saveToSlot(_playingSlot._data, 0);
+        playingSlot.commit(0);
         _timer = 0;
       }
     }
   }
 
   ///stop auto save timer
-  void stopSaveTimer(){
+  void stopSaveTimer() {
     _timerSwitch = false;
   }
 
@@ -61,47 +68,22 @@ class SaveManager{
   ///
   /// @param from: copy from save slot of this number
   /// @param to: copy to save slot of this number
-  void dataCopy(int from, int to)async{
-    String dataFrom = await SharedPref.getString("slot"+from.toString(), _nullData);
+  void dataCopy(int from, int to) async {
+    String dataFrom =
+        await SharedPref.getString("slot" + from.toString(), _nullValue);
     saveToSlot(dataFrom, to);
   }
 
   ///delete save data
   ///
   /// @param slotNum: delete save data saved save slot of this number
-  void deleteData(int slotNum){
-    saveToSlot(_nullData, slotNum);
+  void deleteData(int slotNum) {
+    saveToSlot(_nullValue, slotNum);
   }
 
   ///TODO create exportData function
-  void exportData(int slotNum){
-
-  }
+  void exportData(int slotNum) {}
 
   ///TODO create importData function
-  void importData(int slotNum){
-
-  }
-
-}
-
-
-
-//it was made provisionally to test.
-class SaveSlot{
-
-  SaveManager _saveManager;
-  String _data;
-  //int _slotNum;
-
-  SaveSlot(this._saveManager, this._data);
-
-  String get data => _data;
-  set data(String s) => _data = s;
-
-  void commit(int saveSlotNum){
-    //saveSlotNum ??= _slotNum;
-    _saveManager.saveToSlot(_data, saveSlotNum);
-  }
-
+  void importData(int slotNum) {}
 }

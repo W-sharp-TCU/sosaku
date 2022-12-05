@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sosaku/Common/Save/SaveManager.dart';
 import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
 import '../Common/Interface_common_GameScreenInterface.dart';
+import '../Common/Save/SaveSlot.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
@@ -99,7 +101,9 @@ class GameManager {
     return nextScreen;
   }
 
-  /// notify current status to GameManager
+  /// Notify current status to GameManager
+  ///
+  /// **This method is called by only ConversationScreenController or SelectActionScreenController.**
   ///
   /// @param [screenInfo] : Specify ScreenInfo instance created by
   ///    factory constructor for the sake of each screen.
@@ -111,25 +115,31 @@ class GameManager {
   GameScreenInterface _determineNextScreen() {
     GameScreenInterface nextScreen;
     print("call _determineNextScreen");
+    // When NowLoadingScreen is called for the first time after the app is launched.
     if (_lastScreenInfo == null) {
-      nextScreen = const TitleScreen(); // todo: 正しいのに書き換える
-    } else {
-      switch (_lastScreenInfo!.screenType) {
-        case SelectActionScreen:
-          nextScreen = const ConversationScreen();
-          break;
-        case ConversationScreen:
-          nextScreen = const SelectActionScreen();
-          break;
-        default:
-          nextScreen = const TitleScreen();
-          throw Error();
-      }
+      SaveSlot saveSlot = SaveManager().playingSlot;
+      _lastScreenInfo = ScreenInfo._privateConstructor(saveSlot.lastScreenType,
+          buttonNo: -1,
+          lastChapter: saveSlot.lastChapter,
+          lastSection: saveSlot.lastWeek);
+      // todo: 上の引数を正しいものに書き換え
+    }
+    switch (_lastScreenInfo!.screenType) {
+      case SelectActionScreen:
+        nextScreen = const ConversationScreen();
+        break;
+      case ConversationScreen:
+        nextScreen = const SelectActionScreen();
+        break;
+      default:
+        nextScreen = const TitleScreen();
+        throw Error();
     }
     logger.shout("The nextScreen type is $nextScreen");
     return nextScreen;
   }
 
+  // todo: 消す -> _loadCSV()作成
   Future<Map<String, dynamic>> _loadJson(String filePath) async {
     String jsonString = await rootBundle.loadString(filePath);
 
