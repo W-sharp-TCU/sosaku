@@ -59,7 +59,7 @@ class SideUIs extends ConsumerWidget {
                     top: GetScreenSize.screenWidth() * 0.01,
                     right: GetScreenSize.screenWidth() * 0.01),
                 child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
-            menuScreen: const MenuScreen(),
+            // menuScreen: const MenuScreen(),
           ),
 
           ///UI appear
