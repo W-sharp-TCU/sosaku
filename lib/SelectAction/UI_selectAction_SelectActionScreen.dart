@@ -5,12 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
-import 'package:sosaku/Conversation/UI_conversation_MenuUI.dart';
+import 'package:sosaku/Menu/UI_Menu_OpenMenuButton.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationButton.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Common/UI_common_GameScreenBase.dart';
@@ -22,133 +21,6 @@ final selectActionScreenProvider =
 final SelectActionScreenController selectActionScreenController =
     SelectActionScreenController();
 
-/*
-class SelectActionScreen extends ConsumerWidget {
-    const SelectActionScreen({Key? key}) : super(key: key);
-
-    ///
-    /// new ui design
-    ///
-    @override
-    Widget build(BuildContext context, WidgetRef ref) {
-        GetScreenSize.setSize(
-        MediaQuery.of(context).size.height,
-        MediaQuery.of(context).size.width
-        );
-        /// List<Sting> actionList is list of selectable actions.
-        /// If other elements(ex. function of selected actions) are contained in this list, change List to Map or List<List> and ListBuilder code too.
-        List<String> actionList = ["test1", "test2"];
-        SelectActionScreenProvider sasp = ref.watch(selectActionScreenProvider);
-        selectActionScreenController.start(sasp, context);
-        /*
-        final animationProvider = animationController.createProvider('statusUp',
-            {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0}); 
-        */
-        return Scaffold(
-            body: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.white,
-                child: Center(
-                    child: SizedBox(
-                        width: GetScreenSize.screenWidth(),
-                        height: GetScreenSize.screenHeight(),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                                Expanded(
-                                    child: TableCalendar(
-                                        firstDay: DateTime.utc(2022, 9, 1), 
-                                        lastDay: DateTime.utc(2022, 9, 30),
-                                        focusedDay: DateTime.now(), 
-                                        shouldFillViewport: true,
-                                    ),
-                                ),
-                                SizedBox(
-                                    width: GetScreenSize.screenWidth() * 0.05,
-                                ),
-                                SizedBox(
-                                    width: GetScreenSize.screenWidth() * 0.45,
-                                    child: Column(
-                                        children: <Widget>[
-                                            SizedBox(
-                                                height: GetScreenSize.screenHeight() * 0.05,
-                                            ),
-                                            Expanded(
-                                                child: ListView.builder(
-                                                    itemCount: actionList.length,
-                                                    itemBuilder: (context, index) {
-                                                        return Card(
-                                                            elevation: 0,
-                                                            child: Row(
-                                                            children: <Widget>[
-                                                                RoundCheckBox(
-                                                                    onTap: (selected){
-                                                                        // call a function when selected.
-                                                
-                                                                    }
-                                                                ),
-                                                                Text(
-                                                                    actionList[index],
-                                                                    style: const TextStyle(
-                                                                        fontSize: 20,
-                                                                    ),
-                                                                ),
-                                                            ],),
-                                                        );
-                                                    },
-                                                ),
-                                            ),
-                                            SizedBox(
-                                                height: GetScreenSize.screenHeight() * 0.1,
-                                                child: Stack(
-                                                    children: <Widget>[
-                                                        // If image of button is created, enable under code to load image.  
-                                                        // Image(
-                                                        //     image: 
-                                                        // ),
-                                                        GestureDetector(
-                                                            child: const Center(
-                                                                child: Text(
-                                                                    "OK",
-                                                                    style: TextStyle(
-                                                                        fontSize: 15,
-                                                                    ),    
-                                                                ),
-                                                            ),    
-                                                            onTap: () {
-                                                                // call a function to do selected action.
-
-                                                            },                                        
-                                                        ),
-                                                    ],
-                                                ),
-                                            ),
-                                            SizedBox(
-                                                height: GetScreenSize.screenHeight() * 0.05,
-                                            ),
-                                        ],
-                                    ),    
-                                ),
-                            ],            
-                        ),
-                    ),
-                ),
-            ),
-        );
-    }
-
-
-  static String _screenImagePath =
-      "./assets/drawable/Conversation/004_corridorBB.png";
-  static String _characterImagePath =
-      "./assets/drawable/CharacterImage/Ayana/normal.png";
-  static String _buttonImagePath = "";
-  */
-
-///
-/// pre ui design
-///
 class SelectActionScreen extends HookConsumerWidget
     implements GameScreenInterface {
   const SelectActionScreen({Key? key}) : super(key: key);
@@ -199,21 +71,7 @@ class SelectActionScreen extends HookConsumerWidget
                     ),
                   ),
                 ),
-                /*
-                AnimationButton(
-                  key: const Key("menu"),
-                  onTap: () {
-
-                  },
-                  width: GetScreenSize.screenWidth() * 0.06,
-                  height: GetScreenSize.screenWidth() * 0.06,
-                  margin: EdgeInsets.only(
-                  left: GetScreenSize.screenWidth() * 0.01,
-                  top: GetScreenSize.screenWidth() * 0.01,
-                  right: GetScreenSize.screenWidth() * 0.01),
-                  child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
-                MenuUI(),
-                */
+                const OpenMenuButton(),
                 Align(
                   alignment: const Alignment(-0.85, -0.75),
                   child: GestureDetector(

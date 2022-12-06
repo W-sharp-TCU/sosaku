@@ -62,9 +62,9 @@ class BelowUIs extends ConsumerWidget {
           child: Container(
             height: GetScreenSize.screenHeight() * 0.25,
             width: GetScreenSize.screenWidth(),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 gradient: LinearGradient(
-              colors: [
+              colors: const [
                 Color.fromRGBO(255, 201, 210, 0.7),
                 Color.fromRGBO(255, 201, 210, 0.1)
               ],
