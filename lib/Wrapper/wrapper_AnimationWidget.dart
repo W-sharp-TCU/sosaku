@@ -105,6 +105,7 @@ class AnimationWidgetController {
   /// }
   AutoDisposeChangeNotifierProvider<AnimationProvider> createProvider(
       String providerId, Map<String, double> states) {
+    print('createprovider');
     if (!_animationProviders.containsKey(providerId)) {
       _animationProviders[providerId] = AnimationProvider(providerId);
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
