@@ -32,12 +32,14 @@ class _LifecycleManagerState extends State<LifecycleManager>
     with WidgetsBindingObserver {
   @override
   void initState() {
+    // ignore: unnecessary_non_null_assertion
     WidgetsBinding.instance!.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
+    // ignore: unnecessary_non_null_assertion
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }

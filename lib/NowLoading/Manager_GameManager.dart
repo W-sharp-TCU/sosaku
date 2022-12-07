@@ -117,7 +117,7 @@ class GameManager {
     print("call _determineNextScreen");
     // When NowLoadingScreen is called for the first time after the app is launched.
     if (_lastScreenInfo == null) {
-      SaveSlot saveSlot = SaveManager().playingSlot;
+      SaveSlot saveSlot = SaveManager().playingSlot; // todo: セーブデータの初期値確認
       _lastScreenInfo = ScreenInfo._privateConstructor(saveSlot.lastScreenType,
           buttonNo: -1,
           lastChapter: saveSlot.lastChapter,
@@ -175,6 +175,25 @@ class GameManager {
     }
     nextScreen.prepare(context);
   }
+
+  // Map<String, List<String>> _collectNeedAssets(String csv) {
+  //   const String delimiter = ',';
+  //   List<String> lines = csv.split('\n');
+  //   Set<String> bgImagePaths = {}; // todo: 収集
+  //   Set<String> characterImagePaths = {}; // todo:
+  //   Set<String> uiImagePaths = {}; // todo:
+  //   Set<String> uiAudioPaths = {}; // todo: note: ベタ書き？
+  //   Set<String> bgmPaths = {};
+  //   Set<String> asPaths = {};
+  //   Set<String> cvPaths = {};
+  //
+  //   for (String line in lines) {
+  //     List<String> elements = line.split(delimiter);
+  //     // elements = [comment,	code,	op,	func,	arg1,	arg2,	arg3]
+  //     // bgmPaths収集
+  //     if (elements[])
+  //     }
+  //   }}
 
   void _getEventCode() {
     // note: SaveDataクラスから既出のイベントを取得する

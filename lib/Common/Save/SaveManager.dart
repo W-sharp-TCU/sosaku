@@ -6,26 +6,26 @@ class SaveManager {
   final List<SaveSlot> _saveSlots = [];
   static const String _nullValue = "";
   int _timer = 0;
-  bool _timerSwitch = false;
-  static const int _autoSaveDuration = 300; // sec.
+  bool _isAutoSaveScheduled = false;
+  static const int _autoSaveDuration = 180; // sec.
 
-  ///Singleton constructor
+  /// Singleton constructor
   static final SaveManager _myInstance = SaveManager._internalConstructor();
   SaveManager._internalConstructor();
   factory SaveManager() => _myInstance;
 
-  ///"_playingSlot" getter
+  /// "_playingSlot" getter
   SaveSlot get playingSlot => _saveSlots[_playingSlotNum];
 
-  ///select saveSlot that will be played
+  /// Select saveSlot that will be played
   ///
-  /// @param slotNum: sava slot number of playing data
+  /// @param [slotNum] : sava slot number of playing data
   void selectSlot(int slotNum) {
     _playingSlotNum = slotNum;
   }
 
   /// Load save data of all slots.
-  /// This method is called before Load Screen appear.
+  /// This method should be called before Load Screen appear.
   void loadAll() async {
     int numOfSlot = await SharedPref.getInt("numOfSlot", 0);
     for (int i = 0; i < numOfSlot; i++) {
@@ -35,55 +35,66 @@ class SaveManager {
     }
   }
 
-  ///save playing data
+  /// Save current playing data
   ///
-  /// @param data: data of status, event history, and more
-  /// @param slotNum: save to save slot of this number
+  /// **This method should only be called from SaveSlot.**
+  ///
+  /// @param [data] : Save data such as current status, event history, and more.
+  ///    The value must be JSON encoded.
+  ///
+  /// @param [slotNum] : save to save slot of this number
   void saveToSlot(String data, int slotNum) {
     //slotNum ?? _playingSlotNum;
     SharedPref.setString("slot" + slotNum.toString(), data);
   }
 
-  ///start auto save timer
+  /// Start auto save timer
   void startSaveTimer() async {
+    // todo: 書き換えお願いします To: Kentaro.T
+    // --- 以下説明 ---
+    // _isAutoSaveScheduledがtrueのとき、playingSlot.commit(0) が一定時間ごとに実行される。
+    // オートセーブする周期は_autoSaveDurationで定義されている(10行目参照)
+    // _timerは、前回のセーブから何ミリ秒経ったかを記録しているだけなので、消しても大丈夫かと
+    // 消すときは8行目の定義も消しといてくれると助かります m(._.)m
+    // startSaveTimer()とstopSaveTimer()は、まだどこのクラスでも呼び出されていないので関数消したり、ガッツリ変えて大丈夫です。
     _timer = 0;
-    _timerSwitch = true;
-    while (_timerSwitch) {
+    _isAutoSaveScheduled = true;
+    while (_isAutoSaveScheduled) {
       await Future.delayed(
           const Duration(milliseconds: 10), () => _timer += 10);
       if (_autoSaveDuration * 1000 <= _timer) {
-        // saveToSlot(_playingSlot._data, 0);
         playingSlot.commit(0);
         _timer = 0;
       }
     }
   }
 
-  ///stop auto save timer
+  /// Stop auto save timer
   void stopSaveTimer() {
-    _timerSwitch = false;
+    _isAutoSaveScheduled = false;
   }
 
-  ///copy save data
+  /// Copy save data
   ///
-  /// @param from: copy from save slot of this number
-  /// @param to: copy to save slot of this number
+  /// @param [from] : copy from save slot of this number
+  ///
+  /// @param [to] : copy to save slot of this number
   void dataCopy(int from, int to) async {
     String dataFrom =
         await SharedPref.getString("slot" + from.toString(), _nullValue);
     saveToSlot(dataFrom, to);
   }
 
-  ///delete save data
+  /// Delete save data
   ///
-  /// @param slotNum: delete save data saved save slot of this number
+  /// @param [slotNum] : delete save data saved save slot of this number
   void deleteData(int slotNum) {
     saveToSlot(_nullValue, slotNum);
   }
 
-  ///TODO create exportData function
+  /// TODO create exportData function
   void exportData(int slotNum) {}
 
-  ///TODO create importData function
+  /// TODO create importData function
   void importData(int slotNum) {}
 }
