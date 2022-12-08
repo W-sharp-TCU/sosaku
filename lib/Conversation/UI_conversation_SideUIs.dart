@@ -1,8 +1,12 @@
 ///package
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Menu/Controller_menu_MenuController.dart';
+import 'package:sosaku/Menu/UI_Menu_OpenMenuButton.dart';
+import 'package:sosaku/Menu/UI_Menu_MenuScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 
+import '../Settings/Provider_Settings_SettingsProvider.dart';
 import '../Wrapper/wrapper_AnimationButton.dart';
 
 ///other dart files
@@ -28,18 +32,35 @@ class SideUIs extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ///menu
-          AnimationButton(
-              key: const Key('menu'),
-              onTap: () {
-                conversationScreenController.openMenu();
-              },
-              width: GetScreenSize.screenWidth() * 0.06,
-              height: GetScreenSize.screenWidth() * 0.06,
-              margin: EdgeInsets.only(
-                  left: GetScreenSize.screenWidth() * 0.01,
-                  top: GetScreenSize.screenWidth() * 0.01,
-                  right: GetScreenSize.screenWidth() * 0.01),
-              child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
+          OpenMenuButton(
+            openMenuButton: AnimationButton(
+                key: const Key('menu'),
+                onTap: () {
+                  conversationScreenController.openMenu();
+                  MenuScreenController.onTapOpenDefault(
+                    context,
+                    MenuScreen(
+                      onTapClose: () {
+                        conversationScreenController.openMenu();
+                        conversationScreenController.setSettings(
+                            textSpeed: settingsController.textSpeed);
+                      },
+                      onTapGoTitle: () {
+                        // TODO : conversationScreenControllerにタイトルに戻る関数を作成する
+                        conversationScreenController.endEvent();
+                      },
+                    ),
+                  );
+                },
+                width: GetScreenSize.screenWidth() * 0.06,
+                height: GetScreenSize.screenWidth() * 0.06,
+                margin: EdgeInsets.only(
+                    left: GetScreenSize.screenWidth() * 0.01,
+                    top: GetScreenSize.screenWidth() * 0.01,
+                    right: GetScreenSize.screenWidth() * 0.01),
+                child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
+            // menuScreen: const MenuScreen(),
+          ),
 
           ///UI appear
           AnimationButton(

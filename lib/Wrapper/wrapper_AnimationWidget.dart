@@ -8,7 +8,7 @@ Map<String, AutoDisposeChangeNotifierProvider<AnimationProvider>>
 AnimationWidgetController animationController = AnimationWidgetController();
 
 /// WARNING : アニメーションプロバイダはマイフレームウィジェットの再描画を行うため、
-/// ステートを利用するウィジェットはビルドの末端に配置する(GestureDetectorなどが反応しなくなる)
+/// animationProviderのstateDoubleを利用するウィジェットはビルドの末端に配置する(GestureDetectorなどが反応しない場合がある)
 /// This provider manages Double variables for animation.
 /// This provider is used by animationController.
 class AnimationProvider extends ChangeNotifier {
@@ -105,6 +105,7 @@ class AnimationWidgetController {
   /// }
   AutoDisposeChangeNotifierProvider<AnimationProvider> createProvider(
       String providerId, Map<String, double> states) {
+    print('createprovider');
     if (!_animationProviders.containsKey(providerId)) {
       _animationProviders[providerId] = AnimationProvider(providerId);
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(

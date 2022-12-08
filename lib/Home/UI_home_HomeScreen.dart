@@ -109,7 +109,7 @@ class HomeScreen extends HookConsumerWidget implements GameScreenInterface {
               alignment: const Alignment(0.7, 0.50),
               child: GestureDetector(
                 child: Button(buttonName: L10n.of(context)!.gallery),
-                onTap: () {
+                onTap: () async {
                   print("pushed button 4");
                   // _slideShowController.stop();
                   SoundPlayer().playUI("assets/sound/UI/next.mp3");

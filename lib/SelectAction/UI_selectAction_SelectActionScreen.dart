@@ -1,9 +1,14 @@
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
+import 'package:sosaku/Menu/UI_Menu_OpenMenuButton.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
+import 'package:sosaku/Wrapper/wrapper_AnimationButton.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
 import '../Common/Interface_common_GameScreenInterface.dart';
@@ -27,10 +32,18 @@ class SelectActionScreen extends HookConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // useEffect(() {});
+    useMemoized(() {
+      debugPrint("useMemoized callded");
+      prepare(context);
+      return null;
+    });
+
     SelectActionScreenProvider sasp = ref.watch(selectActionScreenProvider);
     selectActionScreenController.start(sasp, context);
     final animationProvider = animationController.createProvider('statusUp',
         {'arrow': GetScreenSize.screenHeight() * 0.6, 'opacity': 0});
+
     return Scaffold(
         body: GameScreenBase(
       child: Container(
@@ -58,6 +71,7 @@ class SelectActionScreen extends HookConsumerWidget
                     ),
                   ),
                 ),
+                const OpenMenuButton(),
                 Align(
                   alignment: const Alignment(-0.85, -0.75),
                   child: GestureDetector(
@@ -67,12 +81,12 @@ class SelectActionScreen extends HookConsumerWidget
                       color: Colors.white,
                       child: Stack(
                         children: const <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
                           Center(
                             child: Text("バイトに行く"),
                           ),
@@ -93,12 +107,12 @@ class SelectActionScreen extends HookConsumerWidget
                       color: Colors.white,
                       child: Stack(
                         children: const <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
                           Center(
                             child: Text("のののと過ごす"),
                           ),
@@ -118,14 +132,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("あやなと過ごす"),
                           ),
                         ],
@@ -144,14 +158,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("1人で執筆"),
                           ),
                         ],
@@ -168,14 +182,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("授業に行く"),
                           ),
                         ],
@@ -194,14 +208,14 @@ class SelectActionScreen extends HookConsumerWidget
                       height: GetScreenSize.screenHeight() * 0.2,
                       color: Colors.white,
                       child: Stack(
-                        children: <Widget>[
-                          Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage(
-                              _buttonImagePath,
-                            ),
-                          ),
-                          const Center(
+                        children: const <Widget>[
+                          // Image(
+                          //   fit: BoxFit.cover,
+                          //   image: AssetImage(
+                          //     _buttonImagePath,
+                          //   ),
+                          // ),
+                          Center(
                             child: Text("川本習に電話"),
                           ),
                         ],
@@ -283,9 +297,10 @@ class SelectActionScreen extends HookConsumerWidget
     ));
   }
 
-  @override
+  /// pre cache image on attention screen.
   Future<void> prepare(BuildContext context) async {
     await precacheImage(AssetImage(_screenImagePath), context);
     await precacheImage(AssetImage(_characterImagePath), context);
+    // await precacheImage(AssetImage(_buttonImagePath), context);
   }
 }
