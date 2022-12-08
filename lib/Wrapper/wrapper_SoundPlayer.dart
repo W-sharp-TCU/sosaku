@@ -617,10 +617,6 @@ class SoundPlayer {
       AudioPlayer.global.setGlobalAudioContext(
           AudioContext(android: androidConfig, iOS: iosConfig));
     }
-
-    // Configure log level
-    AudioPlayer.global
-        .changeLogLevel(LogLevel.info); // todo: delete when release*/
   }
 }
 

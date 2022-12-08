@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sosaku/Common/Save/SaveManager.dart';
-import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
-import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
 
 import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Common/Save/SaveSlot.dart';
@@ -92,7 +88,7 @@ class GameManager {
 
   /// Start all process.
   ///
-  /// App's screen will transition to new page determined by this class automatically
+  /// App's screen will jump to new page determined by this class automatically
   /// some milliseconds after this function is executed.
   Future<GameScreenInterface> processing(BuildContext context) async {
     GameScreenInterface nextScreen = _determineNextScreen();
@@ -137,15 +133,6 @@ class GameManager {
     }
     logger.shout("The nextScreen type is $nextScreen");
     return nextScreen;
-  }
-
-  // todo: 消す -> _loadCSV()作成
-  Future<Map<String, dynamic>> _loadJson(String filePath) async {
-    String jsonString = await rootBundle.loadString(filePath);
-
-    // replace <Player> to player's name // todo: 下を書き換える
-    Map<String, dynamic> jsonData = json.decode(jsonString);
-    return jsonData;
   }
 
   Future<void> _prepareForNextScreen(

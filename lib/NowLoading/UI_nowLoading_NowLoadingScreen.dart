@@ -6,7 +6,7 @@ import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/NowLoading/Manager_GameManager.dart';
 
-import '../Wrapper/wrapper_TransitionBuilders.dart';
+import '../Wrapper/Functions_wrapper_TransitionBuilders.dart';
 
 // ignore: must_be_immutable
 class NowLoadingScreen extends HookConsumerWidget {

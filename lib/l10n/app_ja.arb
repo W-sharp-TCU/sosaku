@@ -17,11 +17,11 @@
   "load" : "ロード",
   "back": "戻る",
   "reset": "リセット",
-  "text_speed": "テキスト送りの速度",
-  "Sounds": "サウンド",
-  "UI": "UIサウンド",
-  "BGM": "BGM",
-  "AS": "環境音",
-  "CV": "キャラクターボイス",
+  "textSpeed": "テキスト送りの速度",
+  "sounds": "サウンド",
+  "uiSound": "UIサウンド",
+  "backgroundMusic": "BGM",
+  "atmosphereSounds": "環境音",
+  "characterVoice": "キャラクターボイス",
   "help": "ヘルプ"
 }

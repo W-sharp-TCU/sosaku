@@ -3,13 +3,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
-import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Home/Provider_home_HomeScreenProvider.dart';
 import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
-import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
+import 'package:sosaku/Wrapper/Functions_wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
 import '../Wrapper/wrapper_SoundPlayer.dart';
