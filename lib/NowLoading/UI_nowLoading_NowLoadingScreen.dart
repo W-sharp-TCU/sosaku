@@ -18,10 +18,26 @@ class NowLoadingScreen extends HookConsumerWidget {
 
   /// Show Now Loading Screen while processing.
   ///
-  /// @param key (optional) : Flutter key.
-  /// @param process : Specify processes you want to do while Now Loading Screen is appeared.
+  /// @param [key] (optional) : Flutter key.
+  ///
+  /// @param [process] (optional) : Specify processes you want to do while Now Loading Screen is appeared.
   ///                   ex) () async { await precacheImage(AssetImage("FILENAME"), context) }
-  /// @param goto : Specify [Widget] you want to show after load processes finish.
+  ///
+  /// @param [goto] (optional) : Specify [Widget] you want to show after load processes finish.
+  ///
+  /// ### Example
+  /// ```dart
+  /// Navigator.pushReplacement(
+  ///   context,
+  ///   MaterialPageRoute(
+  ///     builder: (context) => NowLoadingScreen(
+  ///       process: () async {
+  ///         print("Extra loading process");
+  ///       },
+  ///     ),
+  ///   ),
+  /// );
+  /// ```
   const NowLoadingScreen({Key? key, this.process, this.goto}) : super(key: key);
 
   @override
