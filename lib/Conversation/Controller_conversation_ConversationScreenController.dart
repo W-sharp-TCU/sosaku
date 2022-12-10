@@ -573,4 +573,11 @@ class ConversationScreenController {
       stop();
     }
   }
+
+  void save() {
+    // map<>
+    // map[log] = logProvider.save()
+    // map[] =
+    //
+  }
 }

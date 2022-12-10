@@ -13,6 +13,7 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 final sakuraTransitionProvider =
     ChangeNotifierProvider.autoDispose((ref) => SakuraTransitionProvider());
 
+/// FIXME : セレクトアクション画面で勝手に起動して重くなる
 class SakuraTransition extends ConsumerWidget {
   Widget? _child;
 
