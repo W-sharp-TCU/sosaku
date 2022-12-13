@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'SaveManager.dart';
+import 'Data_common_SaveManager.dart';
 
 class SaveSlot {
   late SaveManager _saveManager;

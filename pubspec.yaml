@@ -81,7 +81,7 @@ flutter:
 
   assets:
     - assets/drawable/
-    - assets/drawable/ActionResult/
+    - assets/drawable/Common/
     - assets/drawable/CharacterImage/Ayana/
     - assets/drawable/CharacterImage/Nonono/
     - assets/drawable/CharacterImage/Sakaki/

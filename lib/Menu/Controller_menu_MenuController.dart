@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../Home/UI_home_HomeScreen.dart';
-import '../Settings/UI_Setting_SettingScreen.dart';
-import '../Wrapper/wrapper_TransitionBuilders.dart';
+import '../Settings/UI_settings_SettingScreen.dart';
+import '../Wrapper/Functions_wrapper_TransitionBuilders.dart';
 import 'Provider_menu_MenuScreenProvider.dart';
 import 'UI_Menu_MenuScreen.dart';
 

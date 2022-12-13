@@ -6,7 +6,7 @@ import 'package:sosaku/Menu/UI_Menu_OpenMenuButton.dart';
 import 'package:sosaku/Menu/UI_Menu_MenuScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 
-import '../Settings/Provider_Settings_SettingsProvider.dart';
+import '../Settings/Provider_settings_SettingsProvider.dart';
 import '../Wrapper/wrapper_AnimationButton.dart';
 
 ///other dart files
