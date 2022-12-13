@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
-import 'package:sosaku/Settings/Controller_Settings_SettingsController.dart';
+import 'package:sosaku/Settings/Controller_settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
 import 'l10n/l10n.dart';
 import 'nonweb_url_strategy.dart'

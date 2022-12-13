@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
-import 'package:sosaku/Settings/UI_Setting_SettingScreen.dart';
+import 'package:sosaku/Settings/UI_settings_SettingScreen.dart';
 
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
-import 'UI_Setting_SettingScreen.dart';
 
 class SettingContents extends ConsumerWidget {
   const SettingContents({Key? key}) : super(key: key);
@@ -63,7 +62,7 @@ class SettingContents extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                            ref
+                          ref
                               .watch(settingsProvider)
                               .textSliderValue
                               .toInt()
@@ -126,7 +125,7 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                                ref
+                              ref
                                   .watch(settingsProvider)
                                   .voiceSliderValue
                                   .toInt()
@@ -174,7 +173,7 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                                ref
+                              ref
                                   .watch(settingsProvider)
                                   .bgmSliderValue
                                   .toInt()
@@ -222,7 +221,7 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                                ref
+                              ref
                                   .watch(settingsProvider)
                                   .uiSliderValue
                                   .toInt()
@@ -270,7 +269,7 @@ class SettingContents extends ConsumerWidget {
                           width: GetScreenSize.screenWidth() * 0.05,
                           child: Center(
                             child: Text(
-                                ref
+                              ref
                                   .watch(settingsProvider)
                                   .asSliderValue
                                   .toInt()

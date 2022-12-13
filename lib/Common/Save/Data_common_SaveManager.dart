@@ -1,5 +1,5 @@
 import '../../Wrapper/wrapper_SharedPref.dart';
-import 'SaveSlot.dart';
+import 'Data_common_SaveSlot.dart';
 
 class SaveManager {
   int _playingSlotNum = -1;

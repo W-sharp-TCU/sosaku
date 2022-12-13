@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'Controller_Settings_SettingsController.dart';
+import 'Controller_settings_SettingsController.dart';
 
 SettingsController settingsController = SettingsController();
 

@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:simple_logger/simple_logger.dart';
-import 'package:sosaku/Common/Save/SaveManager.dart';
+import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
 import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
@@ -10,7 +10,7 @@ import 'package:sosaku/Wrapper/Functions_wrapper_convertCSV.dart';
 
 import '../Common/Enum_common.ScreenType.dart';
 import '../Common/Interface_common_GameScreenInterface.dart';
-import '../Common/Save/SaveSlot.dart';
+import '../Common/Save/Data_common_SaveSlot.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 

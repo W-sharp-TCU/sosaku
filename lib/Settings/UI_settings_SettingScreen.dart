@@ -8,8 +8,8 @@ import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 
 ///import other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
-import 'UI_Setting_SettingContents.dart';
-import 'Provider_Settings_SettingsProvider.dart';
+import 'UI_settings_SettingContents.dart';
+import 'Provider_settings_SettingsProvider.dart';
 
 final settingsProvider =
     ChangeNotifierProvider.autoDispose((ref) => SettingsProvider());
