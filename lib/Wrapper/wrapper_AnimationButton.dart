@@ -26,7 +26,7 @@ class AnimationButton extends ConsumerWidget {
       int duration = 150,
       double ratio = 1.1,
       double opacity = 1,
-      String image = 'assets/drawable/Conversation/button_sample.png',
+      String image = 'assets/drawable/Conversation/hanyoubotton.png',
       Function? onTap,
       Widget? child})
       : super(key: key ?? UniqueKey()) {
@@ -67,11 +67,12 @@ class AnimationButton extends ConsumerWidget {
                     Linear(0, d, m, 0),
                     Easing(d, d + _duration, 0, 1).outElastic()
                   ]);
-                  animationController.setCallbacks(key.toString(), {
-                    'margin': () {
-                      _onTap?.call();
-                    }
-                  });
+                  // animationController.setCallbacks(key.toString(), {
+                  //   'margin': () {
+                  //     _onTap?.call();
+                  //   }
+                  // });
+                  _onTap?.call();
                 },
                 onTapDown: (detail) {
                   /// zoomIn

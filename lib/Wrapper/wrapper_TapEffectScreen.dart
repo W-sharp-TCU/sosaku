@@ -50,6 +50,7 @@ class TapEffectScreen extends ConsumerWidget {
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             return Stack(children: [
               Container(
+                color: Colors.transparent,
                 child: _child,
               ),
               // if (ref.watch(tapEffectScreenProvider)._isAnimation)
@@ -71,7 +72,8 @@ class TapEffectScreen extends ConsumerWidget {
                                 .stateDouble['theta']!) *
                             ref.watch(sakuraProvider).stateDouble['r']!,
                   ),
-                  child: SizedBox(
+                  child: Container(
+                    color: Colors.transparent,
                     width: ref.watch(sakuraProvider).stateDouble['ratio']! *
                         GetScreenSize.screenWidth() *
                         0.015,

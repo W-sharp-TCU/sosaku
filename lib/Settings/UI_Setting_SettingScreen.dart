@@ -23,23 +23,26 @@ class SettingScreen extends HookConsumerWidget implements GameScreenInterface {
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: GameScreenBase(
+        opaque: false,
         lifecycleCallback: const CommonLifecycleCallback(),
         child: Center(
           child: Container(
             width: GetScreenSize.screenWidth(),
             height: GetScreenSize.screenHeight(),
             decoration: const BoxDecoration(
-              color: Colors.green,
-            ),
+                // color: Colors.green,
+                color: Colors.transparent),
             child: Stack(
               children: [
                 ///upper widgets
                 Align(
                   alignment: const Alignment(0, -1),
-                  child: SizedBox(
+                  child: Container(
                     width: GetScreenSize.screenWidth(),
                     height: GetScreenSize.screenHeight() * 0.3,
+                    color: Colors.transparent,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,

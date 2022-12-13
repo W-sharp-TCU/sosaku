@@ -14,7 +14,7 @@ AnimationWidgetController animationController = AnimationWidgetController();
 class AnimationProvider extends ChangeNotifier {
   late final String _id;
   final Map<String, double> _stateDouble = {};
-  final Map<String, String> _stateString = {};
+  final Map<String, dynamic> _stateDynamic = {};
   final Map<String, void Function()?> _animations = {};
   final Map<String, Stopwatch> _stopwatches = {};
   final Map<String, Function()?> _callbacks = {};
@@ -22,7 +22,7 @@ class AnimationProvider extends ChangeNotifier {
   bool _isAnimation = false;
 
   Map<String, double> get stateDouble => _stateDouble;
-  Map<String, String> get stateString => _stateString;
+  Map<String, dynamic> get stateDynamic => _stateDynamic;
 
   AnimationProvider(String id) {
     _id = id;
@@ -37,9 +37,9 @@ class AnimationProvider extends ChangeNotifier {
     }
   }
 
-  void addNewStateString(String stateName, String initialValue) {
-    if (!_stateString.containsKey(stateName)) {
-      _stateString[stateName] = initialValue;
+  void addNewStateDynamic(String stateName, String initialValue) {
+    if (!_stateDynamic.containsKey(stateName)) {
+      _stateDynamic[stateName] = initialValue;
     }
   }
 
@@ -50,9 +50,9 @@ class AnimationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setStateString(String stateName, String state) {
-    if (_stateString.containsKey(stateName)) {
-      _stateString[stateName] = state;
+  void setStateDynamic(String stateName, String state) {
+    if (_stateDynamic.containsKey(stateName)) {
+      _stateDynamic[stateName] = state;
     }
     notifyListeners();
   }
@@ -123,7 +123,7 @@ class AnimationWidgetController {
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
           (ref) => _animationProviders[providerId]!);
     }
-    addNewState(providerId, states);
+    addNewStates(providerId, states);
     return _animationADProviders[providerId]!;
   }
 
@@ -144,7 +144,7 @@ class AnimationWidgetController {
   ///
   /// @param providerId : ID of the provider to which the state is to be added
   /// @param states : Map of state names and their initial values
-  void addNewState(String providerId, Map<String, double> states) {
+  void addNewStates(String providerId, Map<String, double> states) {
     for (String stateName in states.keys) {
       _animationProviders[providerId]
           ?.addNewStateDouble(stateName, states[stateName] ?? 0);

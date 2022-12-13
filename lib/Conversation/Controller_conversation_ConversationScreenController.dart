@@ -26,33 +26,33 @@ class ConversationScreenController {
   /// Code number of scenario data.
   int _nowCode = 0;
 
-  final List<List<String>> _eventData = [];
+  List<List<String>> _eventData = [];
 
   void _goNextScene() {
     String op = _eventData[_nowCode][0];
     String? func = _eventData[_nowCode][1];
-    List<String> arg = _eventData[_nowCode].sublist(2);
+    List<String> args = _eventData[_nowCode].sublist(2);
     _nowCode++;
     switch (op) {
       case 'bg':
-        _bg(func, arg);
+        _bg(func, args);
         break;
       case 'character':
-        _character(func, arg);
+        _character(func, args);
         break;
       case 'text':
-        _text(func, arg);
+        _text(func, args);
         break;
       case 'selection':
-        _selection(func, arg);
+        _selection(func, args);
         break;
       case 'narration':
-        _text(func, arg);
+        _text(func, args);
         break;
       case 'bgm':
         break;
       case 'voice':
-        _voice(func, arg);
+        _voice(func, args);
         break;
       case 'se':
         break;
@@ -61,10 +61,10 @@ class ConversationScreenController {
         _addLog();
         break;
       case 'sleep':
-        _sleep(func, arg);
+        _sleep(func, args);
         break;
       case 'goto':
-        _goto(func, arg);
+        _goto(func, args);
         break;
       case 'if':
         break;
@@ -460,23 +460,9 @@ class ConversationScreenController {
       SoundPlayer().precacheSounds(
           filePaths: ['assets/sound/CV/voice_sample_002.wav'],
           audioType: SoundPlayer.ui);
-      // load csv
-      logger.fine('start load csv...');
-      String scenarioCsv = await rootBundle.loadString(
+      // TODO : GameManagerにprepare関数を記述したら削除
+      prepare(context,
           'assets/text/ScenarioData/ChapterTest/scenario_data_sample.csv');
-      // Windowsローカル環境の改行コードは\r\nに対して
-      // GitHubPagesの改行コードは\nだから
-      // CsvToListConverterのeolを\nに指定しないと動かない
-      List<List> scenarioList =
-          const CsvToListConverter(eol: '\n').convert(scenarioCsv);
-      logger.finer(scenarioList.toList());
-      scenarioList.removeAt(0);
-      for (List scenario in scenarioList) {
-        scenario.removeRange(0, 2);
-        _eventData.add(scenario.map((e) => e.toString()).toList());
-      }
-      logger.fine('finish load csv');
-      logger.finer(_eventData.toString());
       // await SakuraTransitionProvider.beginTransition();
       // SakuraTransitionProvider.endTransition();
       // TODO : ディレイ取り除く
@@ -574,10 +560,76 @@ class ConversationScreenController {
     }
   }
 
+  Future<void> prepare(BuildContext context, String csvFilePath) async {
+    // CSVをロード
+    _eventData = await _loadCSV(csvFilePath);
+    // ロードしたCSVから登場人物一覧を作成
+    List<String> characterNames = _createCharacterList(_eventData);
+    // 登場人物の一覧から表情差分をロード
+    await _precacheCharacterImages(characterNames, context);
+
+    // TODO : precache BG Image
+    // TODO : precache BGM
+  }
+
+  /// CSVをロード
+  Future<List<List<String>>> _loadCSV(String csvFilePath) async {
+    List<List<String>> eventData = [];
+    String scenarioCsv = await rootBundle.loadString(csvFilePath);
+    // Windowsローカル環境の改行コードは\r\nに対して
+    // GitHubPagesの改行コードは\nだから
+    // CsvToListConverterのeolを\nに指定しないと動かない
+    List<List> scenarioList =
+        const CsvToListConverter(eol: '\n').convert(scenarioCsv);
+    scenarioList.removeAt(0);
+    for (List scenario in scenarioList) {
+      scenario.removeRange(0, 2);
+      eventData.add(scenario.map((e) => e.toString()).toList());
+    }
+    return eventData;
+  }
+
+  /// 登場人物の一覧を作成
+  List<String> _createCharacterList(List<List<String>> eventData) {
+    List<String> names = ['Ayana', 'Nonono', 'Neneka', 'Sakaki', 'Kawamoto'];
+    List<String> characterList = [];
+    for (List<String> inst in eventData) {
+      if (inst[0] == 'character' && inst[1] == 'in') {
+        for (String name in names) {
+          if (inst[2].contains(name) && !characterList.contains(name)) {
+            characterList.add(name);
+          }
+        }
+      }
+    }
+    return characterList;
+  }
+
+  /// 指定したキャラクター毎に16種類の表情差分をキャッシュ
+  Future<void> _precacheCharacterImages(
+      List<String> characterNames, BuildContext context) async {
+    List<String> faces = ['flat', 'angry', 'puzzle', 'smile'];
+    List<String> mouths = ['mouth_open', 'mouth_close'];
+    List<String> eyes = ['eye_open', 'eye_close'];
+    for (String characterName in characterNames) {
+      for (String face in faces) {
+        for (String mouth in mouths) {
+          for (String eye in eyes) {
+            await precacheImage(
+                AssetImage(
+                    'assets/drawable/CharacterImage/$characterName/$face-$mouth-$eye.png'),
+                context);
+          }
+        }
+      }
+    }
+  }
+
   void save() {
     // map<>
     // map[log] = logProvider.save()
     // map[] =
     //
   }
+  void load() {}
 }

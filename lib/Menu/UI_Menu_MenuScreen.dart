@@ -15,7 +15,7 @@ final menuScreenProvider =
 
 class MenuScreen extends ConsumerWidget {
   static const sideButtonImage =
-      'assets/drawable/Conversation/button_sample.png';
+      'assets/drawable/Conversation/yokonagabotton.png';
   final Function? onTapClose;
   final Function? onTapSave;
   final Function? onTapOption;
@@ -37,8 +37,11 @@ class MenuScreen extends ConsumerWidget {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: GameScreenBase(
-        child: SizedBox(
+        opaque: false,
+        child: Container(
+            color: Colors.transparent,
             width: GetScreenSize.screenWidth(),
             height: GetScreenSize.screenHeight(),
             child: Center(
@@ -60,21 +63,20 @@ class MenuScreen extends ConsumerWidget {
                                   Align(
                                     alignment: const Alignment(1, -1),
                                     child: AnimationButton(
-                                        key: const Key('menuClose'),
-                                        onTap: () {
-                                          onTapClose?.call();
-                                          MenuScreenController
-                                              .onTapCloseDefault(context);
-                                        },
-                                        width:
-                                            GetScreenSize.screenWidth() * 0.06,
-                                        height:
-                                            GetScreenSize.screenWidth() * 0.06,
-                                        margin: EdgeInsets.all(
-                                            GetScreenSize.screenWidth() * 0.02),
-                                        child: const FittedBox(
-                                            fit: BoxFit.contain,
-                                            child: Text('×'))),
+                                      key: const Key('menuClose'),
+                                      onTap: () {
+                                        onTapClose?.call();
+                                        MenuScreenController.onTapCloseDefault(
+                                            context);
+                                      },
+                                      width: GetScreenSize.screenWidth() * 0.07,
+                                      height:
+                                          GetScreenSize.screenWidth() * 0.07,
+                                      image:
+                                          'assets/drawable/Conversation/batsu.png',
+                                      margin: EdgeInsets.all(
+                                          GetScreenSize.screenWidth() * 0.02),
+                                    ),
                                   ),
 
                               /// right 4 buttons
@@ -83,7 +85,7 @@ class MenuScreen extends ConsumerWidget {
                                   child: Container(
                                       width: GetScreenSize.screenWidth() * 0.4,
                                       height:
-                                          GetScreenSize.screenHeight() * 0.6,
+                                          GetScreenSize.screenHeight() * 0.72,
                                       margin: EdgeInsets.only(
                                           bottom: GetScreenSize.screenHeight() *
                                               0.05),
@@ -97,10 +99,10 @@ class MenuScreen extends ConsumerWidget {
                                               key: const Key('menuSave'),
                                               width:
                                                   GetScreenSize.screenWidth() *
-                                                      0.35,
+                                                      0.4,
                                               height:
-                                                  GetScreenSize.screenHeight() *
-                                                      0.12,
+                                                  GetScreenSize.screenWidth() *
+                                                      0.1,
                                               image: sideButtonImage,
                                               onTap: () {
                                                 onTapSave?.call();
@@ -116,10 +118,10 @@ class MenuScreen extends ConsumerWidget {
                                               key: const Key('menuOption'),
                                               width:
                                                   GetScreenSize.screenWidth() *
-                                                      0.35,
+                                                      0.4,
                                               height:
-                                                  GetScreenSize.screenHeight() *
-                                                      0.12,
+                                                  GetScreenSize.screenWidth() *
+                                                      0.1,
                                               image: sideButtonImage,
                                               onTap: () {
                                                 onTapOption?.call();
@@ -136,10 +138,10 @@ class MenuScreen extends ConsumerWidget {
                                               key: const Key('menuHelp'),
                                               width:
                                                   GetScreenSize.screenWidth() *
-                                                      0.35,
+                                                      0.4,
                                               height:
-                                                  GetScreenSize.screenHeight() *
-                                                      0.12,
+                                                  GetScreenSize.screenWidth() *
+                                                      0.1,
                                               image: sideButtonImage,
                                               onTap: () {
                                                 onTapHelp?.call();
@@ -155,10 +157,10 @@ class MenuScreen extends ConsumerWidget {
                                               key: const Key('menuGoTitle'),
                                               width:
                                                   GetScreenSize.screenWidth() *
-                                                      0.35,
+                                                      0.4,
                                               height:
-                                                  GetScreenSize.screenHeight() *
-                                                      0.12,
+                                                  GetScreenSize.screenWidth() *
+                                                      0.1,
                                               image: sideButtonImage,
                                               onTap: () {
                                                 onTapGoTitle?.call();
