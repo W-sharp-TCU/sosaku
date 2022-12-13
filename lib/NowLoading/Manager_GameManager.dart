@@ -1,15 +1,21 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/Common/Save/SaveManager.dart';
+import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
+import 'package:sosaku/Wrapper/Functions_wrapper_convertCSV.dart';
 
+import '../Common/Enum_common.ScreenType.dart';
 import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Common/Save/SaveSlot.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
 class ScreenInfo {
-  final Type screenType;
+  final ScreenType screenType;
   // For Conversation Screen
   final int? lastChapter;
   final int? lastSection;
@@ -17,16 +23,21 @@ class ScreenInfo {
   final int? buttonNo;
 
   factory ScreenInfo.fromSelectAction(int selectedButtonNo) =>
-      ScreenInfo._privateConstructor(SelectActionScreen,
+      ScreenInfo._privateConstructor(ScreenType.selectActionScreen,
           buttonNo: selectedButtonNo);
 
   factory ScreenInfo.fromConversation(
           {required int lastChapter, required int lastSection}) =>
-      ScreenInfo._privateConstructor(ConversationScreen,
+      ScreenInfo._privateConstructor(ScreenType.conversationScreen,
           lastChapter: lastChapter, lastSection: lastSection);
 
   ScreenInfo._privateConstructor(this.screenType,
       {this.lastChapter, this.lastSection, this.buttonNo});
+
+  @override
+  String toString() {
+    return "ScreenInfo(screenType:$screenType, lastChapter:$lastChapter, lastSection:$lastSection, buttonNo:$buttonNo)";
+  }
 }
 
 /// **Determine which screen will be show.**
@@ -110,28 +121,32 @@ class GameManager {
 
   GameScreenInterface _determineNextScreen() {
     GameScreenInterface nextScreen;
-    print("call _determineNextScreen");
+    print("GameManager._determineNextScreen() >> Start.");
     // When NowLoadingScreen is called for the first time after the app is launched.
+    logger.fine("_lastScreenInfo = $_lastScreenInfo");
     if (_lastScreenInfo == null) {
-      SaveSlot saveSlot = SaveManager().playingSlot; // todo: セーブデータの初期値確認
-      _lastScreenInfo = ScreenInfo._privateConstructor(saveSlot.lastScreenType,
-          buttonNo: -1,
-          lastChapter: saveSlot.lastChapter,
-          lastSection: saveSlot.lastWeek);
-      // todo: 上の引数を正しいものに書き換え
+      print("GameManager._determineNextScreen() >> null -> ConversationScreen");
+      nextScreen = const ConversationScreen();
+    } else {
+      switch (_lastScreenInfo!.screenType) {
+        case ScreenType.selectActionScreen:
+          print(
+              "GameManager._determineNextScreen() >> lastScreen = SelectAction");
+          nextScreen = const ConversationScreen();
+          break;
+        case ScreenType.conversationScreen:
+          print(
+              "GameManager._determineNextScreen() >> lastScreen = ConversationAction");
+          nextScreen = const SelectActionScreen();
+          break;
+        default:
+          print(
+              "GameManager._determineNextScreen() >> case default -> TitleScreen");
+          nextScreen = const TitleScreen();
+          throw Error();
+      }
     }
-    switch (_lastScreenInfo!.screenType) {
-      case SelectActionScreen:
-        nextScreen = const ConversationScreen();
-        break;
-      case ConversationScreen:
-        nextScreen = const SelectActionScreen();
-        break;
-      default:
-        nextScreen = const TitleScreen();
-        throw Error();
-    }
-    logger.shout("The nextScreen type is $nextScreen");
+    logger.info("The nextScreen type is $nextScreen");
     return nextScreen;
   }
 
@@ -152,12 +167,20 @@ class GameManager {
     // note:
 
     // Determine the contents of next screen.
+    print("GameManager._prepareForNextScreen >> Start.");
     switch (nextScreen.runtimeType) {
       case ConversationScreen:
-        _getEventCode();
-        // conversationScreenController.prepare(context);
+        print("GameManager._prepareForNextScreen >> case : ConversationScreen");
+        int eventCode = _getEventCode();
+        print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
+        String scenarioPath = "assets/text/event$eventCode.csv";
+        print(
+            "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
+        // conversationScreenController.prepare(context, scenarioPath);
         break;
-      case SelectAction:
+      case SelectActionScreen:
+        print("GameManager._prepareForNextScreen >> case : SelectActionScreen");
+      // selectActionScreenController.prepare(context, isKawamoto());
       // todo: 川本に電話可能？
     }
     nextScreen.prepare(context);
@@ -182,9 +205,15 @@ class GameManager {
   //     }
   //   }}
 
-  void _getEventCode() {
-    // note: SaveDataクラスから既出のイベントを取得する
-    // note: この関数内で条件文をべた書き?
+  Future<List<Map<String, dynamic>>> _loadScenario(String filePath) async {
+    String csv = await rootBundle.loadString(filePath);
+    var scenarioData = convertCSV(csv);
+    return scenarioData;
+  }
+
+  /// get next conversation event code.
+  int _getEventCode() {
+    return 1; // todo: 常に1
   }
 
   /// private named constructor
