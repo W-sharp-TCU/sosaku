@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
-import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
+import 'package:sosaku/Wrapper/Functions_wrapper_TransitionBuilders.dart';
 import 'package:sosaku/l10n/l10n.dart';
 
 /// class AttentionScreen.

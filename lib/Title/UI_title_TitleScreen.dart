@@ -1,17 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
-import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
-import 'package:sosaku/l10n/l10n.dart';
+import 'package:sosaku/Wrapper/Functions_wrapper_TransitionBuilders.dart';
 import 'package:sosaku/main.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';

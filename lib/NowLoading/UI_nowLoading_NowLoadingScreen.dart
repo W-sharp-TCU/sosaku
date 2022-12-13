@@ -6,9 +6,8 @@ import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/NowLoading/Manager_GameManager.dart';
 
-import '../Wrapper/wrapper_TransitionBuilders.dart';
+import '../Wrapper/Functions_wrapper_TransitionBuilders.dart';
 
-// ignore: must_be_immutable
 class NowLoadingScreen extends HookConsumerWidget {
   /// Now Loading Screen will show in [_minDuration] milliseconds at least.
   static const int _minDuration = 3000; // [ms]
@@ -18,10 +17,27 @@ class NowLoadingScreen extends HookConsumerWidget {
 
   /// Show Now Loading Screen while processing.
   ///
-  /// @param key (optional) : Flutter key.
-  /// @param process : Specify processes you want to do while Now Loading Screen is appeared.
-  ///                   ex) () async { await precacheImage(AssetImage("FILENAME"), context) }
-  /// @param goto : Specify [Widget] you want to show after load processes finish.
+  /// @param [key] (optional) : Flutter key.
+  ///
+  /// @param [process] (optional) : Specify processes you want to do while Now Loading Screen is appeared.
+  ///
+  /// @param [goto] (optional) : Screen you want to jump after all process finished.
+  ///   [goto] will be determined by [GameManager] if you don't specify this option.
+  ///   Specify [Widget] that implements [GameScreenInterface] if you specify this option.
+  ///
+  /// ### Example
+  /// ```dart
+  /// Navigator.pushReplacement(
+  ///   context,
+  ///   MaterialPageRoute(
+  ///     builder: (context) => NowLoadingScreen(
+  ///       process: () async {
+  ///         print("Extra loading process");
+  ///       },
+  ///     ),
+  ///   ),
+  /// );
+  /// ```
   const NowLoadingScreen({Key? key, this.process, this.goto}) : super(key: key);
 
   @override

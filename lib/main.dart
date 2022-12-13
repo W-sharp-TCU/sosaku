@@ -33,7 +33,7 @@ Future<void> main() async {
       stackTraceLevel: Level.ALL, includeCallerInfo: true); // for debug
   /*logger.setLevel(Level.INFO,
       stackTraceLevel: Level.SEVERE,
-      includeCallerInfo: false); // todo: リリース時にはこちらに書き換える*/
+      includeCallerInfo: false);*/ // todo: リリース時にはこちらに書き換える
   runApp(const ProviderScope(child: MyApp()));
 }
 
