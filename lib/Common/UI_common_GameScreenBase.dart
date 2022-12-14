@@ -30,15 +30,16 @@ class GameScreenBase extends ConsumerWidget {
         color: opaque ? Colors.black : Colors.transparent,
         child: Center(
           child: Container(
-              height: GetScreenSize.screenHeight(),
-              width: GetScreenSize.screenWidth(),
-              color: opaque ? Colors.black : Colors.transparent,
-              child: TapEffectScreen(
-                child: child,
-                // child: SakuraTransition(
-                //   child: child,
-                // ),
-              )),
+            height: GetScreenSize.screenHeight(),
+            width: GetScreenSize.screenWidth(),
+            color: opaque ? Colors.black : Colors.transparent,
+            child: TapEffectScreen(
+              child: child,
+              // child: SakuraTransition(
+              //   child: child,
+              // ),
+            ),
+          ),
         ),
       ),
     );

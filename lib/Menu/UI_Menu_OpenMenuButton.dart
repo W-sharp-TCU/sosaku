@@ -38,7 +38,7 @@ class OpenMenuButton extends ConsumerWidget {
               width: GetScreenSize.screenWidth() * 0.06,
               height: GetScreenSize.screenWidth() * 0.06,
               margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.02),
-              child: const FittedBox(fit: BoxFit.contain, child: Text('三'))),
+              child: const FittedBox(fit: BoxFit.contain, child: Text('≡'))),
         );
   }
 }

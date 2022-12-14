@@ -97,8 +97,10 @@ class HomeScreen extends HookConsumerWidget implements GameScreenInterface {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => const SettingScreen(),
-                        transitionDuration: const Duration(milliseconds: 10)),
+                      opaque: false,
+                      pageBuilder: (_, __, ___) => const SettingScreen(),
+                      transitionDuration: const Duration(milliseconds: 10),
+                    ),
                   );
                 },
               ),

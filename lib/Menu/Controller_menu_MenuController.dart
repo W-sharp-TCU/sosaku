@@ -20,7 +20,8 @@ class MenuScreenController {
     Navigator.push(
       context,
       PageRouteBuilder(
-          pageBuilder: (_, __, ___) => menuScreen ?? MenuScreen(),
+          opaque: false,
+          pageBuilder: (_, __, ___) => menuScreen ?? const MenuScreen(),
           transitionDuration: const Duration(milliseconds: 100)),
     );
   }
@@ -36,6 +37,7 @@ class MenuScreenController {
     Navigator.push(
       context,
       PageRouteBuilder(
+          opaque: false,
           pageBuilder: (_, __, ___) => const SettingScreen(),
           transitionDuration: const Duration(milliseconds: 100)),
     );

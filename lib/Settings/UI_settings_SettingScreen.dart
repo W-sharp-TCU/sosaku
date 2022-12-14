@@ -1,4 +1,6 @@
 ///package
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,90 +30,97 @@ class SettingScreen extends HookConsumerWidget implements GameScreenInterface {
         opaque: false,
         lifecycleCallback: const CommonLifecycleCallback(),
         child: Center(
-          child: Container(
-            width: GetScreenSize.screenWidth(),
-            height: GetScreenSize.screenHeight(),
-            decoration: const BoxDecoration(
-                // color: Colors.green,
-                color: Colors.transparent),
-            child: Stack(
-              children: [
-                ///upper widgets
-                Align(
-                  alignment: const Alignment(0, -1),
-                  child: Container(
-                    width: GetScreenSize.screenWidth(),
-                    height: GetScreenSize.screenHeight() * 0.3,
-                    color: Colors.transparent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ///back button
-                        GestureDetector(
-                          onTap: () {
-                            // Close the settings screen.
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                right: GetScreenSize.screenWidth() * 0.02,
-                                top: GetScreenSize.screenWidth() * 0.01),
-                            width: GetScreenSize.screenWidth() * 0.07,
-                            height: GetScreenSize.screenWidth() * 0.07,
-                            color: Colors.white,
-                            child: const Center(
-                              child: Text("back"),
-                            ),
-                          ),
-                        ),
-
-                        ///Setting text
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: GetScreenSize.screenWidth() * 0.01),
-                          width: GetScreenSize.screenWidth() * 0.3,
-                          height: GetScreenSize.screenWidth() * 0.07,
-                          color: Colors.white,
-                          child: Center(
-                            child: Text(
-                              "Setting",
-                              style: TextStyle(
-                                fontSize: GetScreenSize.screenHeight() * 0.04,
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: GetScreenSize.screenHeight() * 0.01,
+                sigmaY: GetScreenSize.screenHeight() * 0.01,
+              ),
+              child: Container(
+                width: GetScreenSize.screenWidth(),
+                height: GetScreenSize.screenHeight(),
+                color: Colors.black.withOpacity(0.5),
+                child: Stack(
+                  children: [
+                    ///upper widgets
+                    Align(
+                      alignment: const Alignment(0, -1),
+                      child: Container(
+                        width: GetScreenSize.screenWidth(),
+                        height: GetScreenSize.screenHeight() * 0.3,
+                        color: Colors.transparent,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ///back button
+                            GestureDetector(
+                              onTap: () {
+                                // Close the settings screen.
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    right: GetScreenSize.screenWidth() * 0.02,
+                                    top: GetScreenSize.screenWidth() * 0.01),
+                                width: GetScreenSize.screenWidth() * 0.07,
+                                height: GetScreenSize.screenWidth() * 0.07,
+                                color: Colors.white,
+                                child: const Center(
+                                  child: Text("back"),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
 
-                        const Spacer(),
+                            ///Setting text
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: GetScreenSize.screenWidth() * 0.01),
+                              width: GetScreenSize.screenWidth() * 0.3,
+                              height: GetScreenSize.screenWidth() * 0.07,
+                              color: Colors.white,
+                              child: Center(
+                                child: Text(
+                                  "Setting",
+                                  style: TextStyle(
+                                    fontSize:
+                                        GetScreenSize.screenHeight() * 0.04,
+                                  ),
+                                ),
+                              ),
+                            ),
 
-                        ///reset to init
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: GetScreenSize.screenWidth() * 0.1,
-                            height: GetScreenSize.screenWidth() * 0.07,
-                            margin: EdgeInsets.only(
-                              top: GetScreenSize.screenWidth() * 0.01,
-                              right: GetScreenSize.screenWidth() * 0.1,
+                            const Spacer(),
+
+                            ///reset to init
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                width: GetScreenSize.screenWidth() * 0.1,
+                                height: GetScreenSize.screenWidth() * 0.07,
+                                margin: EdgeInsets.only(
+                                  top: GetScreenSize.screenWidth() * 0.01,
+                                  right: GetScreenSize.screenWidth() * 0.1,
+                                ),
+                                color: Colors.white,
+                                child: const Text(
+                                  "resetButton",
+                                ),
+                              ),
                             ),
-                            color: Colors.white,
-                            child: const Text(
-                              "resetButton",
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
 
-                ///scroll widget(UI_Setting_SettingContexts.dart)
-                const Align(
-                  alignment: Alignment(0, 1),
-                  child: SettingContents(),
+                    ///scroll widget(UI_Setting_SettingContexts.dart)
+                    const Align(
+                      alignment: Alignment(0, 1),
+                      child: SettingContents(),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
