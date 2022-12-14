@@ -16,7 +16,7 @@ class SelectionsUI extends ConsumerWidget {
     final animationProvider =
         animationController.createProvider('selections', {});
     for (int i = 0; i < listSize; i++) {
-      animationController.addNewState('selections',
+      animationController.addNewStates('selections',
           {'alignment' + i.toString(): 2, 'opacity' + i.toString(): 0});
     }
 

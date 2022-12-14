@@ -4,16 +4,6 @@ import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 
 import '../Wrapper/wrapper_AnimationWidget.dart';
 
-enum Name { ayana, nonono, neneka, sakaki, kawamoto }
-
-enum Face { angry, flat, normal, puzzle, smile }
-
-enum Mouth { open, close }
-
-enum Eye { open, close }
-
-enum Animation { shake }
-
 class LayerData {
   late final String _layerId;
   late final String name;
@@ -43,16 +33,12 @@ class LayerData {
       'opacity': 0
     });
 
-    if (_layerId.contains('あやな')) {
-      name = 'Ayana';
-    } else if (_layerId.contains('ののの')) {
-      name = 'Nonono';
-    } else if (_layerId.contains('音々花')) {
-      name = 'Neneka';
-    } else if (_layerId.contains('榊')) {
-      name = 'Sakaki';
-    } else if (_layerId.contains('川本')) {
-      name = 'Kawamoto';
+    List<String> names = ['Ayana', 'Nonono', 'Neneka', 'Sakaki', 'Kawamoto'];
+    for (String name in names) {
+      if (_layerId.contains(name)) {
+        this.name = name;
+        break;
+      }
     }
   }
   // void moveToX(double x) {
@@ -71,9 +57,9 @@ class ConversationCharacterController {
   void characterIn(String layerId, String animation) {}
   void characterOut(String layerId, String animation) {}
   void position(String layerId, double position) {}
-  void expression(String layerId, Face face) {}
-  void mouth(String layerId, Mouth mouth) {}
-  void eye(String layerId, Eye eye) {}
+  void expression(String layerId, String face) {}
+  void mouth(String layerId, String mouth) {}
+  void eye(String layerId, String eye) {}
   void applyChanges() {}
 }
 

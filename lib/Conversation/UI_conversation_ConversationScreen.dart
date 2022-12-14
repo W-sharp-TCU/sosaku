@@ -8,6 +8,7 @@ import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Conversation/Provider_conversationConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Conversation/UI_conversation_CharactersUI.dart';
+import 'package:sosaku/Menu/UI_Menu_MenuScreen.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
@@ -17,7 +18,6 @@ import 'Provider_conversation_ConversationTextProvider.dart';
 import 'UI_conversation_SelectionsUI.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
-import 'UI_conversation_MenuUI.dart';
 import 'UI_conversation_BelowUIs.dart';
 import 'UI_conversation_SideUIs.dart';
 import 'UI_conversation_Triangle.dart';
@@ -110,11 +110,11 @@ class ConversationScreen extends HookConsumerWidget
 
             ///Menu screen
             //if文おねがいします
-            if (ref.watch(conversationImageProvider).isMenu)
-              const Align(
-                alignment: Alignment(0, 0),
-                child: MenuUI(),
-              ),
+            // if (ref.watch(conversationImageProvider).isMenu)
+            //   Align(
+            //     alignment: const Alignment(0, 0),
+            //     child: MenuScreen(),
+            //   ),
 
             ///side Widgets
             if (!ref.watch(conversationImageProvider).isHideUi)

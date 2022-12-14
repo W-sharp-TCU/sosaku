@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.2-alpha+1
+version: 0.1.3-alpha+1
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -29,26 +29,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  hooks_riverpod:         # ChangeNotifier & HookConsumerWidget
   flutter_hooks:          # useEffect function
+  hooks_riverpod:         # ChangeNotifier & HookConsumerWidget
   flutter_localizations:  # L10n support
     sdk: flutter
   intl: ^0.17.0           # L10n support
-  shared_preferences:     # local app storage access
-  path_provider:          # search location apps can access
   audioplayers: ^1.1.0    # play sounds
-  universal_platform:     # support isWeb() function
   bordered_text: ^2.0.0
+  csv: ^5.0.1
   package_info_plus:      # for checking running app version
-  simple_logger:          # logging with a simple way
-  # Usage: visit https://medium.com/flutter-jp/logger-ec25d8dd179a
+  path_provider:          # search location apps can access
+  roundcheckbox: ^2.0.5
+  shared_preferences:     # local app storage access
+  simple_logger:          # logging with a simple way (Visit https://medium.com/flutter-jp/logger-ec25d8dd179a to learn usage.)
+  table_calendar: ^3.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  csv: ^5.0.1
-
-
 
 dev_dependencies:
   flutter_test:
@@ -60,8 +58,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.4
-  icons_launcher:
   flutter_native_splash:
+  icons_launcher:
 
 
 # For information on the generic Dart part of this file, see the
@@ -79,7 +77,7 @@ flutter:
 
   assets:
     - assets/drawable/
-    - assets/drawable/ActionResult/
+    - assets/drawable/Common/
     - assets/drawable/CharacterImage/Ayana/
     - assets/drawable/CharacterImage/Nonono/
     - assets/drawable/CharacterImage/Sakaki/

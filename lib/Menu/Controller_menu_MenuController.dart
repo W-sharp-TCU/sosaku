@@ -1,52 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 
 import '../Home/UI_home_HomeScreen.dart';
-import '../Settings/UI_Setting_SettingScreen.dart';
-import '../Wrapper/wrapper_TransitionBuilders.dart';
+import '../Settings/UI_settings_SettingScreen.dart';
+import '../Wrapper/Functions_wrapper_TransitionBuilders.dart';
 import 'Provider_menu_MenuScreenProvider.dart';
+import 'UI_Menu_MenuScreen.dart';
 
 class MenuScreenController {
   MenuScreenProvider? _menuScreenProvider;
-  late BuildContext _context;
   MenuScreenController();
 
   void start(MenuScreenProvider menuScreenProvider, BuildContext context) {
     if (_menuScreenProvider != null) {
       _menuScreenProvider = menuScreenProvider;
     }
-    _context = context;
   }
 
-  void save() {}
-  void openOption() {
+  static void onTapOpenDefault(BuildContext context, MenuScreen? menuScreen) {
     Navigator.push(
-      _context,
+      context,
       PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (_, __, ___) => menuScreen ?? const MenuScreen(),
+          transitionDuration: const Duration(milliseconds: 100)),
+    );
+  }
+
+  static void onTapCloseDefault(BuildContext context) {
+    Navigator.pop(context);
+  }
+
+  static void onTapSaveDefault() {
+    // TODO : 進行状況をセーブ
+  }
+  static void onTapOptionDefault(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+          opaque: false,
           pageBuilder: (_, __, ___) => const SettingScreen(),
           transitionDuration: const Duration(milliseconds: 100)),
     );
   }
 
-  void openHelp() {
-    if (_menuScreenProvider?.isHelp == false) {
-      _menuScreenProvider?.setIsHelp(isHelp: true);
-    } else {
-      _menuScreenProvider?.setIsHelp(isHelp: false);
-    }
+  static void onTapHelpDefault() {
+    // TODO : ヘルプ画面へ遷移
   }
-
-  void goHome() {
+  static void onTapGoTitleDefault(BuildContext context) {
     Navigator.pushReplacement(
-      _context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
-  }
-
-  void goTitle() {
-    conversationScreenController.stop();
-    Navigator.pushReplacement(
-      _context,
+      context,
       PageRouteBuilder(
           pageBuilder: (_, __, ___) => HomeScreen(),
           transitionDuration: const Duration(milliseconds: 500),

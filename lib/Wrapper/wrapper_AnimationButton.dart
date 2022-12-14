@@ -7,15 +7,6 @@ import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 ///other dart files
 import '../Wrapper/wrapper_GetScreenSize.dart';
 
-class _AnimationButtonId {
-  static int _i = 0;
-  static getId() {
-    String id = 'AnimationButton' + _i.toString();
-    _i++;
-    return id;
-  }
-}
-
 class AnimationButton extends ConsumerWidget {
   late double _width;
   late double _height;
@@ -35,7 +26,7 @@ class AnimationButton extends ConsumerWidget {
       int duration = 150,
       double ratio = 1.1,
       double opacity = 1,
-      String image = 'assets/drawable/Conversation/button_sample.png',
+      String image = 'assets/drawable/Conversation/hanyoubotton.png',
       Function? onTap,
       Widget? child})
       : super(key: key ?? UniqueKey()) {
@@ -54,6 +45,8 @@ class AnimationButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     GetScreenSize.setSize(
         MediaQuery.of(context).size.height, MediaQuery.of(context).size.width);
+
+    /// アニメーションボタンのプロバイダを作成
     final AutoDisposeChangeNotifierProvider<AnimationProvider>
         animationProvider =
         animationController.createProvider(key.toString(), {'margin': 1});
@@ -74,11 +67,12 @@ class AnimationButton extends ConsumerWidget {
                     Linear(0, d, m, 0),
                     Easing(d, d + _duration, 0, 1).outElastic()
                   ]);
-                  animationController.setCallbacks(key.toString(), {
-                    'margin': () {
-                      _onTap?.call();
-                    }
-                  });
+                  // animationController.setCallbacks(key.toString(), {
+                  //   'margin': () {
+                  //     _onTap?.call();
+                  //   }
+                  // });
+                  _onTap?.call();
                 },
                 onTapDown: (detail) {
                   /// zoomIn
@@ -125,26 +119,3 @@ class AnimationButton extends ConsumerWidget {
                     child: _child))));
   }
 }
-
-// class ButtonSize {
-//   static double getWidth(Key key, {double? ratio, double? width}) {
-//     ratio = 1.1;
-//     width = GetScreenSize.screenWidth() * 1;
-//     return width! -
-//         width! *
-//             (ratio! - 1) *
-//             animationController
-//                 .getProvider(key.toString())!
-//                 .stateDouble['margin']!;
-//   }
-//
-//   static double getHeight(Key key, {double ratio = 1.1, double height = 1}) {
-//     height = height! * GetScreenSize.screenHeight();
-//     return height! -
-//         height! *
-//             (ratio! - 1) *
-//             animationController
-//                 .getProvider(key.toString())!
-//                 .stateDouble['margin']!;
-//   }
-// }

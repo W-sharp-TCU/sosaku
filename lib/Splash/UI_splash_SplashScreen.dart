@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sosaku/Splash/UI_splash_AttentionScreen.dart';
-import 'package:sosaku/Wrapper/wrapper_TransitionBuilders.dart';
+import 'package:sosaku/Wrapper/Functions_wrapper_TransitionBuilders.dart';
 
 import '../Wrapper/wrapper_GetScreenSize.dart';
 

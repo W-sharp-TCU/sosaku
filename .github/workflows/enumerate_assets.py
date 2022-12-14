@@ -23,7 +23,7 @@ import pytz
 
 # ########################## Config #############################
 SHEET_NAME = 'assets_list'
-# Define the pattern for categorize
+# Defines the correspondence between the directory path and the column number to write.
 CATEGORIES = {
     #      "<Directory Path>":       '<Column Symbol>'
     "drawable/CharacterImage/Ayana/":       'A',
@@ -34,11 +34,12 @@ CATEGORIES = {
     "sound/AS":                             'F',
     "sound/BGM":                            'G',
     "sound/CV/":                            'H',
-    # If specify "<<OTHER>>", files that did not fit all patterns is written at specified column.
+    # If "<<OTHER>>" is specified, files that did not match any of the above patterns
+    # are written to the specified column.
     # "<<OTHER>>" must be specified at the end of the dictionary.
     "<<OTHER>>":                            'I'
 }
-EXCLUDE_FILES = [   # Files to be excluded from search
+EXCLUDE_FILES = [   # Files excluded from search
     "PlaceHolder"
 ]
 ONLY_FILES_WITH_EXTENSIONS = True   # Enumerate only files with extensions

@@ -7,22 +7,28 @@ Map<String, AutoDisposeChangeNotifierProvider<AnimationProvider>>
     _animationADProviders = {};
 AnimationWidgetController animationController = AnimationWidgetController();
 
+/// WARNING : アニメーションプロバイダはマイフレームウィジェットの再描画を行うため、
+/// animationProviderのstateDoubleを利用するウィジェットはビルドの末端に配置する(GestureDetectorなどが反応しない場合がある)
 /// This provider manages Double variables for animation.
 /// This provider is used by animationController.
 class AnimationProvider extends ChangeNotifier {
   late final String _id;
   final Map<String, double> _stateDouble = {};
+  final Map<String, dynamic> _stateDynamic = {};
   final Map<String, void Function()?> _animations = {};
   final Map<String, Stopwatch> _stopwatches = {};
   final Map<String, Function()?> _callbacks = {};
+  int _fps = 60;
   bool _isAnimation = false;
 
   Map<String, double> get stateDouble => _stateDouble;
+  Map<String, dynamic> get stateDynamic => _stateDynamic;
+
   AnimationProvider(String id) {
     _id = id;
   }
 
-  void addNewState(String stateName, double initialValue) {
+  void addNewStateDouble(String stateName, double initialValue) {
     if (!_stateDouble.containsKey(stateName)) {
       _stateDouble[stateName] = initialValue;
       _animations[stateName] = null;
@@ -31,9 +37,22 @@ class AnimationProvider extends ChangeNotifier {
     }
   }
 
+  void addNewStateDynamic(String stateName, String initialValue) {
+    if (!_stateDynamic.containsKey(stateName)) {
+      _stateDynamic[stateName] = initialValue;
+    }
+  }
+
   void setStateDouble(String stateName, double state) {
     if (_stateDouble.containsKey(stateName)) {
-      _stateDouble[stateName] = state ?? 0;
+      _stateDouble[stateName] = state;
+    }
+    notifyListeners();
+  }
+
+  void setStateDynamic(String stateName, String state) {
+    if (_stateDynamic.containsKey(stateName)) {
+      _stateDynamic[stateName] = state;
     }
     notifyListeners();
   }
@@ -47,23 +66,20 @@ class AnimationProvider extends ChangeNotifier {
   void loop() async {
     _isAnimation = true;
     while (_isAnimation) {
-      _isAnimation = false;
-      for (void Function()? animation in _animations.values) {
-        if (animation != null) {
-          _isAnimation = true;
-          break;
-        }
+      if (_animations.values.every((element) => element == null)) {
+        _isAnimation = false;
       }
+
       for (String stateName in _stateDouble.keys) {
-        _animations[stateName]?.call();
-        if (_animations[stateName] == null && _callbacks[stateName] != null) {
-          Function()? callback = _callbacks[stateName];
+        if (_animations[stateName] == null) {
+          _callbacks[stateName]?.call();
           _callbacks[stateName] = null;
-          callback?.call();
+        } else {
+          _animations[stateName]?.call();
         }
       }
       notifyListeners();
-      await Future.delayed(const Duration(milliseconds: 16));
+      await Future.delayed(Duration(milliseconds: (1000 / _fps).ceil()));
     }
   }
 
@@ -107,7 +123,7 @@ class AnimationWidgetController {
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
           (ref) => _animationProviders[providerId]!);
     }
-    addNewState(providerId, states);
+    addNewStates(providerId, states);
     return _animationADProviders[providerId]!;
   }
 
@@ -128,10 +144,10 @@ class AnimationWidgetController {
   ///
   /// @param providerId : ID of the provider to which the state is to be added
   /// @param states : Map of state names and their initial values
-  void addNewState(String providerId, Map<String, double> states) {
+  void addNewStates(String providerId, Map<String, double> states) {
     for (String stateName in states.keys) {
       _animationProviders[providerId]
-          ?.addNewState(stateName, states[stateName] ?? 0);
+          ?.addNewStateDouble(stateName, states[stateName] ?? 0);
     }
   }
 
@@ -175,6 +191,10 @@ class AnimationWidgetController {
     return (_animationProviders[providerId]?._animations[stateId] != null);
   }
 
+  void setFPS(String providerId, int fps) {
+    _animationProviders[providerId]?._fps = fps;
+  }
+
   /// Start animation.
   /// This function for controller.
   ///
@@ -182,11 +202,10 @@ class AnimationWidgetController {
   /// @param stateId  : Variable id to be animated
   /// @param animations : List of animations to run
   /// @param repeat : Number of animation iterations (default 1, -1 for infinite loop)
-  /// if(visible = true);
-  /// animate
   Future<void> animate(
       String providerId, String stateId, List<Animation> animations,
       [int repeat = 1]) async {
+    print('animate$providerId');
     while (!_animationProviders.containsKey(providerId) ||
         !_animationProviders[providerId]!._stateDouble.containsKey(stateId)) {
       await Future.delayed(const Duration(milliseconds: 1));

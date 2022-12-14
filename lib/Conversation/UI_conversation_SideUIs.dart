@@ -1,8 +1,12 @@
 ///package
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sosaku/Menu/Controller_menu_MenuController.dart';
+import 'package:sosaku/Menu/UI_Menu_OpenMenuButton.dart';
+import 'package:sosaku/Menu/UI_Menu_MenuScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 
+import '../Settings/Provider_settings_SettingsProvider.dart';
 import '../Wrapper/wrapper_AnimationButton.dart';
 
 ///other dart files
@@ -28,18 +32,38 @@ class SideUIs extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ///menu
-          AnimationButton(
-              key: const Key('menu'),
-              onTap: () {
-                conversationScreenController.openMenu();
-              },
-              width: GetScreenSize.screenWidth() * 0.06,
-              height: GetScreenSize.screenWidth() * 0.06,
-              margin: EdgeInsets.only(
-                  left: GetScreenSize.screenWidth() * 0.01,
-                  top: GetScreenSize.screenWidth() * 0.01,
-                  right: GetScreenSize.screenWidth() * 0.01),
-              child: const FittedBox(fit: BoxFit.contain, child: Text("三"))),
+          OpenMenuButton(
+            openMenuButton: AnimationButton(
+                key: const Key('menu'),
+                onTap: () {
+                  conversationScreenController.openMenu();
+                  MenuScreenController.onTapOpenDefault(
+                    context,
+                    MenuScreen(
+                      onTapClose: () {
+                        conversationScreenController.openMenu();
+                        conversationScreenController.setSettings(
+                            textSpeed: settingsController.textSpeed);
+                      },
+                      onTapGoTitle: () {
+                        // TODO : conversationScreenControllerにタイトルに戻る関数を作成する
+                        conversationScreenController.endEvent();
+                      },
+                    ),
+                  );
+                },
+                width: GetScreenSize.screenWidth() * 0.07,
+                height: GetScreenSize.screenWidth() * 0.07,
+                margin: EdgeInsets.only(
+                    left: GetScreenSize.screenWidth() * 0.01,
+                    top: GetScreenSize.screenWidth() * 0.01,
+                    right: GetScreenSize.screenWidth() * 0.01),
+                child: const FittedBox(
+                    fit: BoxFit.contain, child: Icon(Icons.menu))),
+            // menuScreen: const MenuScreen(),
+          ),
+
+          const Spacer(),
 
           ///UI appear
           AnimationButton(
@@ -47,18 +71,18 @@ class SideUIs extends ConsumerWidget {
               onTap: () {
                 conversationScreenController.changeHideUi();
               },
-              width: GetScreenSize.screenWidth() * 0.06,
-              height: GetScreenSize.screenWidth() * 0.06,
+              width: GetScreenSize.screenWidth() * 0.07,
+              height: GetScreenSize.screenWidth() * 0.07,
               margin: EdgeInsets.only(
                   left: GetScreenSize.screenWidth() * 0.01,
-                  top: GetScreenSize.screenWidth() * 0.01,
+                  // top: GetScreenSize.screenWidth() * 0.01,
                   right: GetScreenSize.screenWidth() * 0.01),
               child: const FittedBox(
                 fit: BoxFit.contain,
-                child: Text("UI"),
+                child: Icon(Icons.close),
               )),
 
-          const Spacer(),
+          // const Spacer(),
 
           ///auto button
           AnimationButton(
@@ -66,13 +90,18 @@ class SideUIs extends ConsumerWidget {
               onTap: () {
                 conversationScreenController.changeAutoPlay();
               },
-              width: GetScreenSize.screenWidth() * 0.1,
-              height: GetScreenSize.screenHeight() * 0.05,
-              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
-              child: const FittedBox(
-                fit: BoxFit.contain,
-                child: Text("Auto"),
-              )),
+              width: GetScreenSize.screenWidth() * 0.07,
+              height: GetScreenSize.screenWidth() * 0.07,
+              margin: EdgeInsets.only(
+                  left: GetScreenSize.screenWidth() * 0.01,
+                  right: GetScreenSize.screenWidth() * 0.01),
+              // image: 'assets/drawable/Conversation/yokonagabotton.png',
+              child: FittedBox(
+                  fit: BoxFit.contain,
+                  // child: Text("Auto"),
+                  child: ref.watch(conversationImageProvider).isAuto
+                      ? const Icon(Icons.stop)
+                      : const Icon(Icons.play_arrow))),
 
           ///Log button
           AnimationButton(
@@ -80,12 +109,15 @@ class SideUIs extends ConsumerWidget {
               onTap: () {
                 conversationScreenController.openLog();
               },
-              width: GetScreenSize.screenWidth() * 0.1,
-              height: GetScreenSize.screenHeight() * 0.05,
-              margin: EdgeInsets.all(GetScreenSize.screenWidth() * 0.01),
+              width: GetScreenSize.screenWidth() * 0.07,
+              height: GetScreenSize.screenWidth() * 0.07,
+              margin: EdgeInsets.only(
+                  left: GetScreenSize.screenWidth() * 0.01,
+                  right: GetScreenSize.screenWidth() * 0.01),
+              // image: 'assets/drawable/Conversation/yokonagabotton.png',
               child: const FittedBox(
                 fit: BoxFit.contain,
-                child: Text("LOG"),
+                child: Icon(Icons.note),
               )),
 
           /// いしかわ先生の元コード

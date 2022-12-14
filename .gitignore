@@ -52,3 +52,6 @@ app.*.map.json
 *.keystore
 *.jks
 key.properties
+
+# project user settings files
+gradle.properties
