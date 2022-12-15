@@ -165,13 +165,6 @@ class AnimationWidgetController {
     }
   }
 
-  void setState(String providerId, String stateId, double state) async {
-    while (!_animationProviders.containsKey(providerId)) {
-      await Future.delayed(const Duration(milliseconds: 1));
-    }
-    _animationProviders[providerId]?.setStateDouble(stateId, state);
-  }
-
   /// Sets the callback to be called when the animation of each state ends.
   ///
   /// @param providerId : ID of the provider
@@ -181,10 +174,6 @@ class AnimationWidgetController {
       _animationProviders[providerId]
           ?.setAnimationCallback(stateId, callbacks[stateId]);
     }
-  }
-
-  void setCallback(String providerId, String stateId, Function()? callback) {
-    _animationProviders[providerId]?.setAnimationCallback(stateId, callback);
   }
 
   bool isAnimation(String providerId, String stateId) {
@@ -205,7 +194,6 @@ class AnimationWidgetController {
   Future<void> animate(
       String providerId, String stateId, List<Animation> animations,
       [int repeat = 1]) async {
-    print('animate$providerId');
     while (!_animationProviders.containsKey(providerId) ||
         !_animationProviders[providerId]!._stateDouble.containsKey(stateId)) {
       await Future.delayed(const Duration(milliseconds: 1));
