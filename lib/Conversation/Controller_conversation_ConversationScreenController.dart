@@ -129,11 +129,13 @@ class ConversationScreenController {
                   .animate('${layer.layerId}characterAnimation', 'positionX', [
                 Easing(0, 1000, layer.positionX, newPosition).inOutQuint(),
               ]);
-              animationController.setCallback(
-                  '${layer.layerId}characterAnimation', 'positionX', () {
-                layer.positionX = newPosition;
-                // TODO : べた書き終了
-                _conversationCharacterProvider?.animationNum--;
+              animationController
+                  .setCallbacks('${layer.layerId}characterAnimation', {
+                'positionX': () {
+                  layer.positionX = newPosition;
+                  // TODO : べた書き終了
+                  _conversationCharacterProvider?.animationNum--;
+                }
               });
             });
             countPosNull++;
@@ -150,9 +152,10 @@ class ConversationScreenController {
           // TODO : べた書き開始
           animationController.animate('${layerId}characterAnimation', 'opacity',
               [Linear(0, 1000, 0, 1)]);
-          animationController
-              .setCallback('${layerId}characterAnimation', 'opacity', () {
-            _conversationCharacterProvider?.animationNum--;
+          animationController.setCallbacks('${layerId}characterAnimation', {
+            'opacity': () {
+              _conversationCharacterProvider?.animationNum--;
+            }
           });
           // TODO : べた書き終了
         });
@@ -248,9 +251,10 @@ class ConversationScreenController {
                 100,
                 1 / 2)
           ]);
-          animationController
-              .setCallback('${layerId}characterAnimation', 'positionX', () {
-            _conversationCharacterProvider?.animationNum--;
+          animationController.setCallbacks('${layerId}characterAnimation', {
+            'positionX': () {
+              _conversationCharacterProvider?.animationNum--;
+            }
           });
         });
         _goNextScene();
@@ -275,10 +279,12 @@ class ConversationScreenController {
                 Easing(0, 1000, layer.positionX, 1 / (countPosNull - 1))
                     .inOutQuint(),
               ]);
-              animationController.setCallback(
-                  '${layer.layerId}characterAnimation', 'positionX', () {
-                layer.positionX = i / (countPosNull - 1);
-                _conversationCharacterProvider?.animationNum--;
+              animationController
+                  .setCallbacks('${layer.layerId}characterAnimation', {
+                'positionX': () {
+                  layer.positionX = i / (countPosNull - 1);
+                  _conversationCharacterProvider?.animationNum--;
+                }
               });
             });
             i++;
@@ -291,10 +297,11 @@ class ConversationScreenController {
           _conversationCharacterProvider?.animationNum++;
           animationController.animate('${layerId}characterAnimation', 'opacity',
               [Linear(0, 1000, 1, 0)]);
-          animationController
-              .setCallback('${layerId}characterAnimation', 'opacity', () {
-            _conversationCharacterProvider!.layers.remove(layerId);
-            _conversationCharacterProvider?.animationNum--;
+          animationController.setCallbacks('${layerId}characterAnimation', {
+            'opacity': () {
+              _conversationCharacterProvider!.layers.remove(layerId);
+              _conversationCharacterProvider?.animationNum--;
+            }
           });
         });
         _goNextScene();
