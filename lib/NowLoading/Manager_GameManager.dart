@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jsonlogic/jsonlogic.dart';
 import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
 import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
@@ -102,6 +103,10 @@ class GameManager {
   /// App's screen will jump to new page determined by this class automatically
   /// some milliseconds after this function is executed.
   Future<GameScreenInterface> processing(BuildContext context) async {
+    // var jl = Jsonlogic();
+    // var data = {"ayanaLov": 100, "ayanaSkill": 240};
+    // // print("GameManager.jlTest>> ${jl.apply(rule, data)}");
+    // note: eventMapはyamlで書いて、Mapに変換 -> Jsonlogic.analyseで判定
     GameScreenInterface nextScreen = _determineNextScreen();
     await _prepareForNextScreen(context, nextScreen);
     /* _lastScreenInfo = null; */ // todo: 戻す
@@ -176,7 +181,7 @@ class GameManager {
         String scenarioPath = "assets/text/event$eventCode.csv";
         print(
             "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
-        // conversationScreenController.prepare(context, scenarioPath);
+        conversationScreenController.prepare(context, scenarioPath);
         break;
       case SelectActionScreen:
         print("GameManager._prepareForNextScreen >> case : SelectActionScreen");

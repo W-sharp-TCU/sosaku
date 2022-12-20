@@ -266,6 +266,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+  jsonlogic:
+    dependency: "direct main"
+    description:
+      name: jsonlogic
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   lints:
     dependency: transitive
     description:
@@ -601,7 +608,7 @@ packages:
     source: hosted
     version: "6.1.0"
   yaml:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: yaml
       url: "https://pub.dartlang.org"

@@ -37,12 +37,14 @@ dependencies:
   audioplayers:           # play sounds
   bordered_text:
   csv:
+  jsonlogic:              # analyze JSON Logic string
   package_info_plus:      # for checking running app version
   path_provider:          # search location apps can access
   roundcheckbox:
   shared_preferences:     # local app storage access
   simple_logger:          # logging with a simple way (Visit https://medium.com/flutter-jp/logger-ec25d8dd179a to learn usage.)
   table_calendar:
+  yaml:                   # Load & convert yaml string
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
