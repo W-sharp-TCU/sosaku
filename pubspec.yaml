@@ -33,16 +33,16 @@ dependencies:
   hooks_riverpod:         # ChangeNotifier & HookConsumerWidget
   flutter_localizations:  # L10n support
     sdk: flutter
-  intl: ^0.17.0           # L10n support
-  audioplayers: ^1.1.0    # play sounds
-  bordered_text: ^2.0.0
-  csv: ^5.0.1
+  intl:                   # L10n support
+  audioplayers:           # play sounds
+  bordered_text:
+  csv:
   package_info_plus:      # for checking running app version
   path_provider:          # search location apps can access
-  roundcheckbox: ^2.0.5
+  roundcheckbox:
   shared_preferences:     # local app storage access
   simple_logger:          # logging with a simple way (Visit https://medium.com/flutter-jp/logger-ec25d8dd179a to learn usage.)
-  table_calendar: ^3.0.6
+  table_calendar:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -57,7 +57,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.4
+  flutter_lints:
   flutter_native_splash:
   icons_launcher:
 
