@@ -5,6 +5,8 @@ import 'package:sosaku/Conversation/Animation_conversation_ConversationAnimation
 import 'package:sosaku/Conversation/Provider_conversationConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
+import 'package:sosaku/NowLoading/Manager_GameManager.dart';
+import 'package:sosaku/NowLoading/UI_nowLoading_NowLoadingScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/wrapper_SoundPlayer.dart';
@@ -550,10 +552,12 @@ class ConversationScreenController {
         _conversationLogProvider != null &&
         _conversationCharacterProvider != null &&
         _context != null) {
+      GameManager().notify(ScreenInfo.fromConversation(
+          eventCode: -1, instructionNo: -1)); // todo: 早く作れ眞柄
       await Navigator.pushReplacement(
         _context!,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const TitleScreen(),
+          pageBuilder: (_, __, ___) => const NowLoadingScreen(),
         ),
       );
       stop();
