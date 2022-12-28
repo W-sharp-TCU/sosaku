@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -18,8 +20,8 @@ import '../main.dart';
 class ScreenInfo {
   final ScreenType screenType;
   // For Conversation Screen
-  final int? lastChapter;
-  final int? lastSection;
+  final int? lastEvent;
+  final int? lastInstructionNo;
   // For Select Action Screen
   final int? buttonNo;
 
@@ -28,16 +30,16 @@ class ScreenInfo {
           buttonNo: selectedButtonNo);
 
   factory ScreenInfo.fromConversation(
-          {required int lastChapter, required int lastSection}) =>
+          {required int eventCode, required int instructionNo}) =>
       ScreenInfo._privateConstructor(ScreenType.conversationScreen,
-          lastChapter: lastChapter, lastSection: lastSection);
+          lastEvent: eventCode, lastInstructionNo: instructionNo);
 
   ScreenInfo._privateConstructor(this.screenType,
-      {this.lastChapter, this.lastSection, this.buttonNo});
+      {this.lastEvent, this.lastInstructionNo, this.buttonNo});
 
   @override
   String toString() {
-    return "ScreenInfo(screenType:$screenType, lastChapter:$lastChapter, lastSection:$lastSection, buttonNo:$buttonNo)";
+    return "ScreenInfo(screenType:$screenType, lastEvent:$lastEvent, lastInstructionNo:$lastInstructionNo, buttonNo:$buttonNo)";
   }
 }
 
@@ -191,24 +193,11 @@ class GameManager {
     nextScreen.prepare(context);
   }
 
-  // Map<String, List<String>> _collectNeedAssets(String csv) {
-  //   const String delimiter = ',';
-  //   List<String> lines = csv.split('\n');
-  //   Set<String> bgImagePaths = {}; // todo: 収集
-  //   Set<String> characterImagePaths = {}; // todo:
-  //   Set<String> uiImagePaths = {}; // todo:
-  //   Set<String> uiAudioPaths = {}; // todo: note: ベタ書き？
-  //   Set<String> bgmPaths = {};
-  //   Set<String> asPaths = {};
-  //   Set<String> cvPaths = {};
-  //
-  //   for (String line in lines) {
-  //     List<String> elements = line.split(delimiter);
-  //     // elements = [comment,	code,	op,	func,	arg1,	arg2,	arg3]
-  //     // bgmPaths収集
-  //     if (elements[])
-  //     }
-  //   }}
+  void _getJson() async {
+    String eventMapJsonPath = "assets/text/eventMap.jsonc";
+    String jsonString = await rootBundle.loadString(eventMapJsonPath);
+    Map jsonMap = jsonDecode(jsonString);
+  }
 
   Future<List<Map<String, dynamic>>> _loadScenario(String filePath) async {
     String csv = await rootBundle.loadString(filePath);
