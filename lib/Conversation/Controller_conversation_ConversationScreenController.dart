@@ -40,6 +40,9 @@ class ConversationScreenController {
       case 'character':
         _character(func, args);
         break;
+      case 'layer':
+        _layer(func, args);
+        break;
       case 'text':
         _text(func, args);
         break;
@@ -47,7 +50,7 @@ class ConversationScreenController {
         _selection(func, args);
         break;
       case 'narration':
-        _text(func, args);
+        _narration(func, args);
         break;
       case 'bgm':
         break;
@@ -311,6 +314,8 @@ class ConversationScreenController {
     }
   }
 
+  void _layer(String func, List<String> arg) async {}
+
   void _text(String func, List<String> arg) async {
     String name = arg[0];
     String text = arg[1];
@@ -348,6 +353,8 @@ class ConversationScreenController {
     _goNextScene();
   }
 
+  void _narration(String func, List<String> arg) {}
+
   void _bgm(String path) {
     SoundPlayer().playBGM(path);
     _goNextScene();
@@ -366,12 +373,6 @@ class ConversationScreenController {
     _goNextScene();
   }
 
-  void _goto(String func, List<String> arg) {
-    int goto = int.parse(arg[2]);
-    _nowCode = goto;
-    _goNextScene();
-  }
-
   void _sleep(String func, List<String> arg) async {
     int duration = (double.parse(arg[0]) * 1000).ceil();
     _conversationImageProvider?.setIsSleep(true);
@@ -379,6 +380,14 @@ class ConversationScreenController {
     _conversationImageProvider?.setIsSleep(false);
     _goNextScene();
   }
+
+  void _goto(String func, List<String> arg) {
+    int goto = int.parse(arg[2]);
+    _nowCode = goto;
+    _goNextScene();
+  }
+
+  void _if(String func, List<String> arg) {}
 
   void _addLog() {
     _conversationLogProvider?.names

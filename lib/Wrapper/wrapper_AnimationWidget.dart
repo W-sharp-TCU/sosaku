@@ -7,6 +7,8 @@ Map<String, AutoDisposeChangeNotifierProvider<AnimationProvider>>
     _animationADProviders = {};
 AnimationWidgetController animationController = AnimationWidgetController();
 
+// TODO : int型のアニメーション実装(もしかしたら軽量化できる？)
+// TODO : ジェネリクスに対応させてスマートに
 /// WARNING : アニメーションプロバイダはマイフレームウィジェットの再描画を行うため、
 /// animationProviderのstateDoubleを利用するウィジェットはビルドの末端に配置する(GestureDetectorなどが反応しない場合がある)
 /// This provider manages Double variables for animation.
@@ -23,7 +25,6 @@ class AnimationProvider extends ChangeNotifier {
 
   Map<String, double> get stateDouble => _stateDouble;
   Map<String, dynamic> get stateDynamic => _stateDynamic;
-
   AnimationProvider(String id) {
     _id = id;
   }
@@ -97,7 +98,8 @@ class AnimationWidgetController {
   /// This function should be called within the build function of the UI.
   ///
   /// @param providerId : ID of the provider to be created
-  /// @param states : Map of state names and their initial values
+  /// @param statesDouble : Map of state names and their initial values(animatable)
+  /// @param statesDynamic : Map of state names and their initial values(non-animatable)
   /// @return Instance of AutoDisposeChangeNotifierProvider
   ///
   /// Here is an example of use.
@@ -117,13 +119,14 @@ class AnimationWidgetController {
   ///   );
   /// }
   AutoDisposeChangeNotifierProvider<AnimationProvider> createProvider(
-      String providerId, Map<String, double> states) {
+      String providerId, Map<String, double> statesDouble,
+      [Map<String, dynamic>? statesDynamic]) {
     if (!_animationProviders.containsKey(providerId)) {
       _animationProviders[providerId] = AnimationProvider(providerId);
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
           (ref) => _animationProviders[providerId]!);
     }
-    addNewStates(providerId, states);
+    addNewStates(providerId, statesDouble);
     return _animationADProviders[providerId]!;
   }
 
@@ -192,7 +195,7 @@ class AnimationWidgetController {
   /// @param animations : List of animations to run
   /// @param repeat : Number of animation iterations (default 1, -1 for infinite loop)
   Future<void> animate(
-      String providerId, String stateId, List<Animation> animations,
+      String providerId, String stateId, List<CustomAnimation> animations,
       [int repeat = 1]) async {
     while (!_animationProviders.containsKey(providerId) ||
         !_animationProviders[providerId]!._stateDouble.containsKey(stateId)) {
@@ -204,7 +207,7 @@ class AnimationWidgetController {
       _animationProviders[providerId]?._stopwatches[stateId]?.reset();
       _animationProviders[providerId]?._stopwatches[stateId]?.start();
 
-      for (Animation animation in animations) {
+      for (CustomAnimation animation in animations) {
         if (duration < animation.timeEnd) {
           duration = animation.timeEnd;
         }
@@ -216,7 +219,7 @@ class AnimationWidgetController {
                     .elapsedMilliseconds <
                 duration * repeat ||
             repeat == -1) {
-          for (Animation animation in animations) {
+          for (CustomAnimation animation in animations) {
             _animationProviders[providerId]?._stateDouble[stateId] =
                 animation.getValue(_animationProviders[providerId]!
                             ._stopwatches[stateId]!
@@ -226,7 +229,7 @@ class AnimationWidgetController {
                     0;
           }
         } else {
-          for (Animation animation in animations) {
+          for (CustomAnimation animation in animations) {
             _animationProviders[providerId]?._stateDouble[stateId] =
                 animation.getValue(duration) ??
                     _animationProviders[providerId]?._stateDouble[stateId] ??
@@ -262,7 +265,7 @@ class AnimationWidgetController {
   }
 }
 
-abstract class Animation {
+abstract class CustomAnimation {
   final int _timeBegin;
   final int _timeEnd;
   bool _isReverse = false;
@@ -271,7 +274,7 @@ abstract class Animation {
   int get timeEnd => _timeEnd;
   bool get isReverse => _isReverse;
 
-  Animation(this._timeBegin, this._timeEnd);
+  CustomAnimation(this._timeBegin, this._timeEnd);
   double? getValue(int time) {
     if (_isReverse) {
       time = -time + 2 * (_timeEnd - _timeBegin);
@@ -284,13 +287,13 @@ abstract class Animation {
   }
 
   double? _func(int time);
-  Animation reverse() {
+  CustomAnimation reverse() {
     _isReverse = true;
     return this;
   }
 }
 
-class Linear extends Animation {
+class Linear extends CustomAnimation {
   final double _begin;
   final double _end;
 
@@ -304,7 +307,7 @@ class Linear extends Animation {
   }
 }
 
-class Wave extends Animation {
+class Wave extends CustomAnimation {
   double min;
   double max;
   double t;
@@ -321,7 +324,7 @@ class Wave extends Animation {
   }
 }
 
-class Pause extends Animation {
+class Pause extends CustomAnimation {
   Pause(int _timeBegin, int _timeEnd) : super(_timeBegin, _timeEnd);
   @override
   double? _func(int time) {
@@ -329,7 +332,7 @@ class Pause extends Animation {
   }
 }
 
-class Easing extends Animation {
+class Easing extends CustomAnimation {
   final double _begin;
   final double _end;
   String _type = '';
@@ -337,32 +340,45 @@ class Easing extends Animation {
   Easing(int _timeBegin, int _timeEnd, this._begin, this._end)
       : super(_timeBegin, _timeEnd);
 
-  Animation inQuint() {
+  /// Use only if you want to specify the Easing type as a String.
+  /// Use functions such as inQuint if not needed.
+  CustomAnimation setType(String type) {
+    assert(type == 'InQuint' ||
+        type == 'OutQuint' ||
+        type == 'InOutQuint' ||
+        type == 'InElastic' ||
+        type == 'OutElastic' ||
+        type == 'InOutElastic');
+    _type = type;
+    return this;
+  }
+
+  CustomAnimation inQuint() {
     _type = 'InQuint';
     return this;
   }
 
-  Animation outQuint() {
+  CustomAnimation outQuint() {
     _type = 'OutQuint';
     return this;
   }
 
-  Animation inOutQuint() {
+  CustomAnimation inOutQuint() {
     _type = 'InOutQuint';
     return this;
   }
 
-  Animation inElastic() {
+  CustomAnimation inElastic() {
     _type = 'InElastic';
     return this;
   }
 
-  Animation outElastic() {
+  CustomAnimation outElastic() {
     _type = 'OutElastic';
     return this;
   }
 
-  Animation inOutElastic() {
+  CustomAnimation inOutElastic() {
     _type = 'InOutElastic';
     return this;
   }
@@ -406,6 +422,10 @@ class Easing extends Animation {
                               2 +
                           1) +
                   _begin;
+        default:
+          // linear
+          return _begin +
+              (_end - _begin) * ((time - _timeBegin) / (_timeEnd - _timeBegin));
       }
     }
   }
