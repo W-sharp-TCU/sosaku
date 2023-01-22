@@ -1,8 +1,13 @@
-version: '20221220'
+# version is `YYYYMMDD`
+version: '20230104'
 eventMap:
-  - event_number: 100
+  # Target Event Code 1
+  - eventCode: 100
+    # Goto list
     goto:
-      - event_number: 101
+      # Destination 1
+      - eventCode: 101
+        # condition (Json Logic)
         condition:
           and:
             - <:
@@ -11,5 +16,13 @@ eventMap:
             - <:
                 - var: ayanaSkill
                 - 250
-      - event_number: 102
+      # Destination 2
+      - eventCode: 102
+        # no condition (null)
+        condition: null
+  # Target Event Code 2
+  - eventCode: 101
+    # Goto list (If only 1 event is in goto list, it's condition must be null.)
+    goto:
+      - eventCode: 102
         condition: null

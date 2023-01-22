@@ -55,55 +55,25 @@ class ScreenInfo {
 /// ### Global Methods
 /// [processing], [notify]
 class GameManager {
-  // note: どうやって次の画面を決めるか
-  // たった今なんの画面だったか知る必要がある
-  //  -> notify関数を作る? or セーブデータから知る
-  // 次にどうするべきか判断する
-  //  -> 行動選択後にイベントが発生するのか、とか
-  // 下に示す準備をして呼び出す
-  //
-  // note: Conversationを呼び出すとき
-  // todo: どのイベントを呼び出すか決める
-  //  -> 今何週目か、今まで見たことあるイベントは除外、残りでランダム
-  // Jsonから項目を抽出する
-  // ConversationControllerに各アセットをロードする
-  // アセットをプリロードする (過去は振り返らない)
-  // todo: どこから始めるか決める
-  // nowCode, log, eventCodeを保存
-  //  -> 引数として渡す?
-  // Conversationを呼び出す
-  //
-  // note: SelectActionを呼び出すとき
-  // todo: 今何週目か、川本電話可能かなどを取得する
-  // todo: アセットをプリロードする(アセットは固定?)
-  // todo: 引数と一緒にSelectActionを呼び出す
-  //
-  //  -> SelectActionで呼び出すべきでは?
-  // (選択要素解禁はどうする？
-  //  -> 追加情報がないかGameManagerに問い合わせる形をとるか、直に書いてもらうか)
-  //
-  // note: ロード中にアプリを落とされたら? 2で行く!
-  // 1. ロールバックする -> もう一度同じ画面を見せるのは良くない
-  // 2. onPausedで次の画面決定まで頑張る -> 次回のNow Loadingで高速化できる
-  //    -> ロード画面ではどう表示する? -> 次の画面・No image でもあり?
-  //
-  // flutter + hooks で初期化(init())を使用する
-  // static prepare() ==> prepare() に変更
-  // Widgetクラスのコンストラクタは変更禁止にした
-  // GameScreenInterfaceを作成する (prepare())
+  static const String eventMapJsonPath = "assets/text/eventMap.json";
+  Map<String, dynamic>? eventMap;
+
+  /// private named constructor
+  /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
+  GameManager._internalConstructor();
 
   static final GameManager _singletonInstance =
       GameManager._internalConstructor();
 
   ScreenInfo? _lastScreenInfo = ScreenInfo.fromSelectAction(-1); // todo: 書き換える
 
-  /// get single-ton
+  /// Get single-ton
   factory GameManager() => _singletonInstance;
 
   /// Start all process.
   ///
-  /// App's screen will jump to new page determined by this class automatically
-  /// some milliseconds after this function is executed.
+  /// A few milliseconds after this function is executed, the application screen
+  /// automatically jumps to the new page specified in this class.
   Future<GameScreenInterface> processing(BuildContext context) async {
     // var jl = Jsonlogic();
     // var data = {"ayanaLov": 100, "ayanaSkill": 240};
@@ -193,10 +163,14 @@ class GameManager {
     nextScreen.prepare(context);
   }
 
-  void _getJson() async {
-    String eventMapJsonPath = "assets/text/eventMap.jsonc";
-    String jsonString = await rootBundle.loadString(eventMapJsonPath);
-    Map jsonMap = jsonDecode(jsonString);
+  Future<Map<String, dynamic>> _getJson({force = false}) async {
+    if ((eventMap == null) || force) {
+      String jsonString = await rootBundle.loadString(eventMapJsonPath);
+      eventMap = jsonDecode(jsonString);
+      logger.info(
+          "eventMap version.${eventMap!["version"]} loaded successfully.");
+    }
+    return eventMap!["eventMap"];
   }
 
   Future<List<Map<String, dynamic>>> _loadScenario(String filePath) async {
@@ -206,11 +180,11 @@ class GameManager {
   }
 
   /// get next conversation event code.
-  int _getEventCode() {
-    return 1; // todo: 常に1
+  Future<int> _getEventCode(int currentEventCode) async {
+    var jl = Jsonlogic();
+    var map = await _getJson();
+    var cond = map[currentEventCode]["condition"];
+    var data = {"ayanaLove": 100, "ayanaSkill": 200};
+    if (jl.apply(cond, data)) return 100;
   }
-
-  /// private named constructor
-  /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
-  GameManager._internalConstructor();
 }

@@ -1,11 +1,11 @@
 {
-  "version": "20221220",
+  "version": "20230104",
   "eventMap": [
     {
-      "event_number": 100,
+      "eventCode": 100,
       "goto": [
         {
-          "event_number": 101,
+          "eventCode": 101,
           "condition": {
             "and": [
               {
@@ -28,7 +28,16 @@
           }
         },
         {
-          "event_number": 102,
+          "eventCode": 102,
+          "condition": null
+        }
+      ]
+    },
+    {
+      "eventCode": 101,
+      "goto": [
+        {
+          "eventCode": 102,
           "condition": null
         }
       ]

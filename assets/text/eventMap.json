@@ -1,11 +1,9 @@
 {
-  "version": "20221221",
-  "eventMap": [
-    {
-      "eventNumber": 100,
-      "goto": [
-        {
-          "eventNumber": 101,
+  "version": "20230104",
+  "eventMap": {
+    "100": {
+      "goto": {
+        "101": {
           "condition": {
             "and": [
               {
@@ -27,24 +25,17 @@
             ]
           }
         },
-        {
-          "eventNumber": 102,
+        "102": {
           "condition": null
         }
-      ]
+      }
     },
-    {
-      "eventNumber": 101,
-      "goto": [
-        {
-          "eventNumber": 102,
+    "101": {
+      "goto": {
+        "102": {
           "condition": null
         }
-      ]
-    },
-    {
-      "eventNumber": 102,
-      "goto": null
+      }
     }
-  ]
+  }
 }
