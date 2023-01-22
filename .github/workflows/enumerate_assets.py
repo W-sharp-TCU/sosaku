@@ -14,6 +14,7 @@
 # ############################################################# #
 
 import os
+import sys
 import json
 
 from google.oauth2.service_account import Credentials
@@ -47,6 +48,11 @@ ONLY_FILES_WITH_EXTENSIONS = True   # Enumerate only files with extensions
 
 
 def main():
+    args = sys.argv
+    if len(args) >= 2:
+      print(sys.argv[1])
+    else:
+      print("No argument.")
     start_row = 5
     # [ Authorize ]
     scope = ['https://www.googleapis.com/auth/spreadsheets',
