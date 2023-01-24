@@ -1,13 +1,21 @@
 name: Enumerate asset file paths
 
+# Triggered when some commits is pushed to develop branch
+# or when contributor push `Run workflow` button.
 on:
   push:
     branches:
       - develop
+  workflow_dispatch:
+    inputs:
+      user:
+        description: 'Your GitHub user name'
+        required: false
+        type: string
 
 jobs:
   build:
-    name: Upload assets file paths to Google Sheets
+    name: Write file paths for the assets in Sosaku Scenario Editor.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,4 +35,4 @@ jobs:
           # Set Repository secrets to environment variable
           CREDENTIAL_JSON: ${{ secrets.CREDENTIAL_JSON }}
           SPREADSHEET_KEY: ${{ secrets.SPREADSHEET_KEY }}
-        run: python .github/workflows/enumerate_assets.py
+        run: python .github/workflows/enumerate_assets.py ${{ inputs.user }}

@@ -107,7 +107,7 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
                         "Width: ${GetScreenSize.screenWidth()}",
                         style: TextStyle(
                           fontSize: GetScreenSize.screenHeight() * 0.04,
-                          color: Colors.white,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
