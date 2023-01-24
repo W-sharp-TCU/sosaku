@@ -1,19 +1,15 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jsonlogic/jsonlogic.dart';
-import 'package:simple_logger/simple_logger.dart';
 import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
-import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
-import 'package:sosaku/Wrapper/Functions_wrapper_convertCSV.dart';
 
-import '../Common/Enum_common.ScreenType.dart';
+import '../Common/Enum_common_ScreenType.dart';
 import '../Common/Interface_common_GameScreenInterface.dart';
-import '../Common/Save/Data_common_SaveSlot.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
@@ -57,6 +53,8 @@ class ScreenInfo {
 class GameManager {
   static const String eventMapJsonPath = "assets/text/eventMap.json";
   Map<String, dynamic>? eventMap;
+  Jsonlogic jlParser = Jsonlogic();
+  final Random random = Random((DateTime.now().millisecondsSinceEpoch).floor());
 
   /// private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
@@ -148,12 +146,12 @@ class GameManager {
     switch (nextScreen.runtimeType) {
       case ConversationScreen:
         print("GameManager._prepareForNextScreen >> case : ConversationScreen");
-        int eventCode = _getEventCode();
-        print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
-        String scenarioPath = "assets/text/event$eventCode.csv";
-        print(
-            "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
-        conversationScreenController.prepare(context, scenarioPath);
+        // int eventCode = await _getEventCode(SaveManager().playingSlot.lastChapter); // todo: 有効化
+        // print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
+        // String scenarioPath = "assets/text/event$eventCode.csv";  // todo: 有効化
+        // print(
+            // "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
+        // conversationScreenController.prepare(context, scenarioPath); // todo: 有効化
         break;
       case SelectActionScreen:
         print("GameManager._prepareForNextScreen >> case : SelectActionScreen");
@@ -163,28 +161,26 @@ class GameManager {
     nextScreen.prepare(context);
   }
 
-  Future<Map<String, dynamic>> _getJson({force = false}) async {
+  Future<Map<String, dynamic>> _getEventMap({force = false}) async {
     if ((eventMap == null) || force) {
       String jsonString = await rootBundle.loadString(eventMapJsonPath);
       eventMap = jsonDecode(jsonString);
       logger.info(
-          "eventMap version.${eventMap!["version"]} loaded successfully.");
+          "EventMap version.${eventMap!["version"]} loaded successfully.");
     }
     return eventMap!["eventMap"];
   }
 
-  Future<List<Map<String, dynamic>>> _loadScenario(String filePath) async {
-    String csv = await rootBundle.loadString(filePath);
-    var scenarioData = convertCSV(csv);
-    return scenarioData;
-  }
-
   /// get next conversation event code.
   Future<int> _getEventCode(int currentEventCode) async {
-    var jl = Jsonlogic();
-    var map = await _getJson();
-    var cond = map[currentEventCode]["condition"];
-    var data = {"ayanaLove": 100, "ayanaSkill": 200};
-    if (jl.apply(cond, data)) return 100;
+    var maps = await _getEventMap();
+    var destinations = maps[currentEventCode];
+    List<int> candidateEvents = [];
+    for (var event in destinations) {
+      if (jlParser.apply(event["condition"], SaveManager().playingSlot.status)) {
+        candidateEvents.add(int.parse(event["goto"]));
+      }
+    }
+    return candidateEvents[random.nextInt(candidateEvents.length)];
   }
 }
