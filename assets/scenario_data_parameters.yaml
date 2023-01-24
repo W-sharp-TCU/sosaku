@@ -1,7 +1,9 @@
 # Animation definition file for Sosaku Scenario Editor
-# --------------- Rule ---------------
+# -------------------- Rule --------------------
 # 1. All entries should be sorted alphabetically.
 # 2. All item names should be written in CamelCase.
+# ----------------------------------------------
 
-animation:
-  - "value1"
+animations:
+  - "nod"
+  - "shake"
