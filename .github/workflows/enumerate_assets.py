@@ -13,14 +13,14 @@
 # Flutter Asset Directory: <Flutter project root>/assets/       #
 # ############################################################# #
 
+import json
 import os
 import sys
-import json
-
-from google.oauth2.service_account import Credentials
-import gspread
 from datetime import datetime
+
+import gspread
 import pytz
+from google.oauth2.service_account import Credentials
 
 # ########################## Config #############################
 SHEET_NAME = 'assets_list'
@@ -50,9 +50,9 @@ ONLY_FILES_WITH_EXTENSIONS = True   # Enumerate only files with extensions
 def main():
     args = sys.argv
     if len(args) >= 2:
-      print(sys.argv[1])
+        print(sys.argv[1])
     else:
-      print("No argument.")
+        print("No argument.")
     start_row = 5
     # [ Authorize ]
     scope = ['https://www.googleapis.com/auth/spreadsheets',
@@ -81,20 +81,25 @@ def main():
     worksheet.update_cell(1, 1, "Now writing... Please wait.")
 
     # Write information source branch
-    worksheet.update_cell(1, 2, f"情報取得元Gitブランチ : {os.environ.get('GITHUB_REF_NAME')}")
+    worksheet.update_cell(
+        1, 2, f"情報取得元Gitブランチ : {os.environ.get('GITHUB_REF_NAME')}")
 
     # Enumerate path of asset files.
     cols = collect_file_path(CATEGORIES)
 
     # Write file paths to Google Sheets.
     for key in CATEGORIES:
-        worksheet.update_acell(f"{CATEGORIES[key]}{start_row}", key)  # write header
+        worksheet.update_acell(
+            f"{CATEGORIES[key]}{start_row}", key)  # write header
     for key in cols:
-        write_sheet(worksheet, CATEGORIES[key], cols[key], start_row=start_row+1)   # write values
+        # write values
+        write_sheet(worksheet, CATEGORIES[key],
+                    cols[key], start_row=start_row+1)
 
     # Write the end of editing time.
     cur_date = datetime.now(pytz.timezone('Asia/Tokyo'))
-    worksheet.update_cell(1, 1, f"最終更新 : {cur_date.strftime('%Y/%m/%d %H:%M:%S')}")
+    worksheet.update_cell(
+        1, 1, f"最終更新 : {cur_date.strftime('%Y/%m/%d %H:%M:%S')}")
 
 
 def collect_file_path(category_list):
