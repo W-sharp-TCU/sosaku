@@ -599,18 +599,18 @@ class SoundPlayer {
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
   SoundPlayer._internalConstructor() {
     // Configure audio context
-    AudioContextAndroid androidConfig = AudioContextAndroid(
+    AudioContextAndroid androidConfig = const AudioContextAndroid(
         isSpeakerphoneOn: false,
         stayAwake: true,
         contentType: AndroidContentType.music,
         usageType: AndroidUsageType.game,
         audioFocus: AndroidAudioFocus.gainTransient);
-    AudioContextIOS iosConfig = AudioContextIOS(
-      defaultToSpeaker: true,
+    AudioContextIOS iosConfig = const AudioContextIOS(
       category: AVAudioSessionCategory.soloAmbient,
       options: [
         AVAudioSessionOptions.allowAirPlay,
-        AVAudioSessionOptions.allowBluetoothA2DP
+        AVAudioSessionOptions.allowBluetoothA2DP,
+        AVAudioSessionOptions.defaultToSpeaker
       ],
     );
     if (!kIsWeb) {
