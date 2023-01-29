@@ -26,7 +26,7 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
     "assets/sound/UI/pushButton.mp3",
     "assets/sound/UI/next.mp3"
   ];
-  static const List<String> _bgmPaths = ["assets/sound/BGM/Full-bloomer.mp3"];
+  static const List<String> _bgmPaths = ["assets/sound/BGM/Full-bloomer.wav"];
 
   const TitleScreen({Key? key, SlideShowController? slideShowController})
       : super(key: key);
