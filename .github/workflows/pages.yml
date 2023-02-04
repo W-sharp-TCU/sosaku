@@ -38,9 +38,9 @@ jobs:
           # flutter-version: '3.3.4'
           channel: 'stable'
           cache: true
-      - run: flutter --version
       - name: Pre-build process
         - run: |
+            flutter --version
             flutter pub get
             flutter gen-l10n
             flutter pub run icons_launcher:create
