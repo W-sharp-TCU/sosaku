@@ -64,12 +64,15 @@ jobs:
       # Define Discord description
       - name: Pre-notification process
         if: always()
+        env:
+          job_status: ${{ job.status }}
         run: |
-          if [ ${{ job.status }} == "success" ]; then
+          if [ "${job_status}" == "success" ]; then
             echo "description=Please try the latest build [here](https://w-sharp-tcu.github.io/sosaku/)!" >> $GITHUB_ENV
           else
             echo "description=Please check the details of the latest build results [here](https://github.com/W-sharp-TCU/sosaku/deployments/activity_log?environment=github-pages)." >> $GITHUB_ENV
           fi
+        shell: bash
       # Notify Discord Channel
       - name: Notify Discord
         uses: sarisia/actions-status-discord@v1
