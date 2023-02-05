@@ -62,7 +62,9 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
       # Define Discord description
-      - run: |
+      - name: Pre-notification process
+        if: always()
+        run: |
           if [ "${job.status}" == "success" ]; then
             echo "description=Please try the latest build [here](https://w-sharp-tcu.github.io/sosaku/)!" >> $GITHUB_ENV
           else
