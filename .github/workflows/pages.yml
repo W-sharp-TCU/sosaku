@@ -40,7 +40,7 @@ jobs:
           cache: true
       - name: Pre-build process
         - run: |
-            flutter --version
+            flutter doctor -v
             flutter pub get
             flutter gen-l10n
             flutter pub run icons_launcher:create
@@ -61,6 +61,7 @@ jobs:
             echo "description=Please try the latest build [here](https://w-sharp-tcu.github.io/sosaku/)!" >> $GITHUB_ENV
           else
             echo "description=Please check the details of the latest build results [here](https://github.com/W-sharp-TCU/sosaku/deployments/activity_log?environment=github-pages)." >> $GITHUB_ENV
+          fi
       # Notify Discord Channel
       - name: Notify Discord
         uses: sarisia/actions-status-discord@v1
