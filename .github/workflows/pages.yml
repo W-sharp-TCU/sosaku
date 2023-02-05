@@ -43,7 +43,7 @@ jobs:
         with:
           # flutter-version: '3.3.4'
           channel: 'stable'
-          cache: true
+          cache: false
       - name: Pre-build process
         run: |
           flutter doctor -v
@@ -65,7 +65,7 @@ jobs:
       - name: Pre-notification process
         if: always()
         run: |
-          if [ "${job.status}" == "success" ]; then
+          if [ ${{ job.status }} == "success" ]; then
             echo "description=Please try the latest build [here](https://w-sharp-tcu.github.io/sosaku/)!" >> $GITHUB_ENV
           else
             echo "description=Please check the details of the latest build results [here](https://github.com/W-sharp-TCU/sosaku/deployments/activity_log?environment=github-pages)." >> $GITHUB_ENV
