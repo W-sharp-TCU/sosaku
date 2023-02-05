@@ -4,6 +4,12 @@ name: Sosaku for Web
 on:
   # Triggered from Codemagic workflow or contributors.
   repository_dispatch:
+  workflow_dispatch:
+    inputs:
+    user:
+      description: 'Your GitHub user name'
+      required: true
+      type: string
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -39,15 +45,15 @@ jobs:
           channel: 'stable'
           cache: true
       - name: Pre-build process
-        - run: |
-            flutter doctor -v
-            flutter pub get
-            flutter gen-l10n
-            flutter pub run icons_launcher:create
-            flutter pub run flutter_native_splash:create
+        run: |
+          flutter doctor -v
+          flutter pub get
+          flutter gen-l10n
+          flutter pub run icons_launcher:create
+          flutter pub run flutter_native_splash:create
       - name: Build Sosaku for Web
         # If you use default URL (do not use custom domain), --base-href option is required.
-        - run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
+        run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
       - name: Upload artifacts to GitHub Pages
         uses: actions/upload-pages-artifact@v1
         with:
