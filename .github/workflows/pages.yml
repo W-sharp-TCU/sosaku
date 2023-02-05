@@ -1,15 +1,8 @@
 # Workflow for deploying contents of Sosaku for web to GitHub Pages
 name: Sosaku for Web
 
-on:
-  # Triggered from Codemagic workflow or contributors.
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
-    user:
-      description: 'Your GitHub user name'
-      required: true
-      type: string
+# Triggered from Codemagic workflow or contributors.
+on: {repository_dispatch, workflow_dispatch}
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -51,9 +44,12 @@ jobs:
           flutter gen-l10n
           flutter pub run icons_launcher:create
           flutter pub run flutter_native_splash:create
+          if [ '${{ github.event_name }}' == 'repository_dispatch' ]; then
+            echo "build_number_config=--build-number=${{ github.event.client_payload.build_number }}" >> $GITHUB_ENV
+          fi
       - name: Build Sosaku for Web
         # If you use default URL (do not use custom domain), --base-href option is required.
-        run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
+        run: flutter build web --release ${{ env.build_number_config }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
       - name: Upload artifacts to GitHub Pages
         uses: actions/upload-pages-artifact@v1
         with:
@@ -62,17 +58,14 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
       # Define Discord description
-      - name: Pre-notification process
+      - name: Create a description of the build results
         if: always()
-        env:
-          job_status: ${{ job.status }}
         run: |
-          if [ "${job_status}" == "success" ]; then
+          if [ '${{ job.status }}' == 'success' ]; then
             echo "description=Please try the latest build [here](https://w-sharp-tcu.github.io/sosaku/)!" >> $GITHUB_ENV
           else
             echo "description=Please check the details of the latest build results [here](https://github.com/W-sharp-TCU/sosaku/deployments/activity_log?environment=github-pages)." >> $GITHUB_ENV
           fi
-        shell: bash
       # Notify Discord Channel
       - name: Notify Discord
         uses: sarisia/actions-status-discord@v1
