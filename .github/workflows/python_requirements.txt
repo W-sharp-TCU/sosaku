@@ -2,3 +2,6 @@
 gspread
 oauth2client
 pytz
+
+# Read YAML (.yml or .yaml) file
+pyyaml

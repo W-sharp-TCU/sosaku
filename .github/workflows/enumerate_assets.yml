@@ -7,11 +7,6 @@ on:
     branches:
       - develop
   workflow_dispatch:
-    inputs:
-      user:
-        description: 'Your GitHub user name'
-        required: false
-        type: string
 
 jobs:
   build:
@@ -35,4 +30,4 @@ jobs:
           # Set Repository secrets to environment variable
           CREDENTIAL_JSON: ${{ secrets.CREDENTIAL_JSON }}
           SPREADSHEET_KEY: ${{ secrets.SPREADSHEET_KEY }}
-        run: python .github/workflows/enumerate_assets.py ${{ inputs.user }}
+        run: python .github/workflows/enumerate_assets.py ${{ github.event_name }} ${{ github.actor }}
