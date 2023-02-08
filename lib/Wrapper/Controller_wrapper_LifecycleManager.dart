@@ -2,7 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:sosaku/main.dart';
 
 /// StatefulWidget witch manage app lifecycle
-/// === Usage ===
+///
+/// ## Example
+/// ```dart
 /// class XXScreen extends StatelessWidget {
 ///   Widget build(BuildContext context) {
 ///     return LifecycleManager(
@@ -11,10 +13,11 @@ import 'package:sosaku/main.dart';
 ///         .....
 ///   }
 /// }
-/// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+///
 /// class _XXScreenLifecycleCallback() implements LifecycleCallback {
-///   << Override functions >>
+///   /** Override functions **/
 /// }
+/// ```
 /// =============
 class LifecycleManager extends StatefulWidget {
   final Widget child;
