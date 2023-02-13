@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.3-alpha+1
+version: 0.2.1-alpha+0
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -37,12 +37,15 @@ dependencies:
   audioplayers:           # play sounds
   bordered_text:
   csv:
+  jsonlogic:              # analyze JSON Logic string
   package_info_plus:      # for checking running app version
   path_provider:          # search location apps can access
   roundcheckbox:
   shared_preferences:     # local app storage access
   simple_logger:          # logging with a simple way (Visit https://medium.com/flutter-jp/logger-ec25d8dd179a to learn usage.)
+  skeleton_text:
   table_calendar:
+  yaml:                   # Load & convert yaml string
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,6 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -97,6 +101,7 @@ flutter:
     - assets/sound/AS/
     - assets/sound/UI/
     - assets/text/fonts/
+    - assets/text/HelpData/
     - assets/text/ScenarioData/
     - assets/text/ScenarioData/ChapterTest/
 
@@ -134,15 +139,32 @@ flutter:
 # native app icon support
 # Run "flutter pub run icons_launcher:create" or "flutter pub run icons_launcher:main" to generate
 # native icons when descriptions mentioned below is changed.
-flutter_icons:
-  android: true
-  ios: true
-  web: true
+icons_launcher:
   image_path: "assets/drawable/appIcon.png"
-#  image_path_android: "for_Android.png"
-#  adaptive_icon_background: "for_Android-adaptiveIcon.png"
-#  adaptive_icon_foreground: "for_Android-adaptiveIcon.png"
-#  image_path_ios: "for_iOS.png"
+  platforms:
+    android:
+      enable: true
+#      image_path: "assets/ic_logo_border.png"
+#      adaptive_background_color: '#ffffff'
+#      adaptive_background_image: "assets/ic_background.png"
+#      adaptive_foreground_image: "assets/ic_foreground.png"
+#      adaptive_round_image: "assets/ic_logo_round.png"
+    ios:
+      enable: true
+#      image_path: "assets/ic_logo_rectangle.png"
+    web:
+      enable: true
+#      image_path: "assets/ic_logo_border.png"
+#      favicon_path: "assets/ic_logo_round.png"
+    macos:
+      enable: false
+#      image_path: "assets/ic_logo_border.png"
+    windows:
+      enable: false
+#      image_path: "assets/ic_logo_border.png"
+    linux:
+      enable: false
+#      image_path: "assets/ic_logo_border.png"
 
 
 # native splash screen support
