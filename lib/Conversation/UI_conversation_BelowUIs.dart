@@ -42,9 +42,7 @@ class BelowUIs extends ConsumerWidget {
               strokeWidth: GetScreenSize.screenHeight() * 0.004,
               strokeColor: Colors.purple,
               child: Text(
-                "[ " +
-                    ref.watch(conversationImageProvider).characterName +
-                    " ]",
+                ref.watch(conversationImageProvider).characterName,
                 style: TextStyle(
                     fontSize: GetScreenSize.screenHeight() * 0.04,
                     color: Colors.white,
