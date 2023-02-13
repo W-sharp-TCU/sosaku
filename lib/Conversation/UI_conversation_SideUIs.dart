@@ -65,6 +65,23 @@ class SideUIs extends ConsumerWidget {
 
           const Spacer(),
 
+          /// TestButton
+          AnimationButton(
+              key: const Key('test'),
+              onTap: () {
+                conversationScreenController.test();
+              },
+              width: GetScreenSize.screenWidth() * 0.07,
+              height: GetScreenSize.screenWidth() * 0.07,
+              margin: EdgeInsets.only(
+                  left: GetScreenSize.screenWidth() * 0.01,
+                  // top: GetScreenSize.screenWidth() * 0.01,
+                  right: GetScreenSize.screenWidth() * 0.01),
+              child: const FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(Icons.bug_report),
+              )),
+
           ///UI appear
           AnimationButton(
               key: const Key('ui'),

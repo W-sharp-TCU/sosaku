@@ -1,3 +1,5 @@
+import 'dart:core';
+
 enum CharacterNames { Ayana, Nonono, Neneka, Sakaki, Kawamoto, unknown }
 
 /// key(enum):[[key(String), key(kanji), last name(kanji), last name(hiragana), firstName(kanji), firstname(hiragana)]]
@@ -10,7 +12,7 @@ const Map<CharacterNames, List<String>> _variations = {
   CharacterNames.unknown: ['unknown', '???', '???', '???', '???', '???'],
 };
 
-extension on CharacterNames {
+extension CharacterNameEx on CharacterNames {
   String get toStringEn => _variations[this]![0];
   String get toStringJa => _variations[this]![1];
   String get lastNameKanji => _variations[this]![2];
@@ -19,12 +21,14 @@ extension on CharacterNames {
   String get firstNameHiragana => _variations[this]![5];
 }
 
-extension on String {
+extension StringEx on String {
   CharacterNames toCharacterNames() {
     CharacterNames formattedName = CharacterNames.unknown;
     for (CharacterNames name in CharacterNames.values) {
-      if (_variations[name]!.contains(this)) {
-        formattedName = name;
+      for (String variation in _variations[name]!) {
+        if (contains(variation)) {
+          formattedName = name;
+        }
       }
     }
     return formattedName;

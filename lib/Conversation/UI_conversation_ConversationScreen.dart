@@ -5,9 +5,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
-import 'package:sosaku/Conversation/Provider_conversationConversationCharacterProvider.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationLogProvider.dart';
 import 'package:sosaku/Conversation/UI_conversation_CharactersUI.dart';
+import 'package:sosaku/Conversation/UI_conversation_NarrationUI.dart';
 import 'package:sosaku/Menu/UI_Menu_MenuScreen.dart';
 import 'package:sosaku/Wrapper/Controller_wrapper_LifecycleManager.dart';
 import '../Wrapper/wrapper_AnimationWidget.dart';
@@ -15,6 +16,7 @@ import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Controller_conversation_ConversationScreenController.dart';
 import 'Provider_conversation_ConversationImageProvider.dart';
 import 'Provider_conversation_ConversationTextProvider.dart';
+import 'UI_conversation_ImageLayers.dart';
 import 'UI_conversation_SelectionsUI.dart';
 import 'UI_conversation_ThreeDialog.dart';
 import 'UI_conversation_LogUI.dart';
@@ -28,8 +30,6 @@ final conversationTextProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationTextProvider());
 final conversationLogProvider =
     ChangeNotifierProvider.autoDispose((ref) => ConversationLogProvider());
-final conversationCharacterProvider = ChangeNotifierProvider.autoDispose(
-    (ref) => ConversationCharacterProvider());
 
 final ConversationScreenController conversationScreenController =
     ConversationScreenController();
@@ -45,9 +45,7 @@ class ConversationScreen extends HookConsumerWidget
     ConversationImageProvider cip = ref.watch(conversationImageProvider);
     ConversationTextProvider ctp = ref.watch(conversationTextProvider);
     ConversationLogProvider clp = ref.watch(conversationLogProvider);
-    ConversationCharacterProvider ccp =
-        ref.watch(conversationCharacterProvider);
-    conversationScreenController.start(cip, ctp, clp, ccp, context);
+    conversationScreenController.start(cip, ctp, clp, context);
 
     return Scaffold(
       body: GameScreenBase(
@@ -66,9 +64,14 @@ class ConversationScreen extends HookConsumerWidget
             ),
 
             ///character
-            const CharactersUI(),
+            // const CharactersUI(),
 
             // ),
+            ///BG layer
+            ImageLayers(ref.watch(conversationImageProvider).bgLayers),
+
+            ///Character layer
+            ImageLayers(ref.watch(conversationImageProvider).characterLayers),
 
             if (ref.watch(conversationImageProvider).isDim)
               Container(
@@ -77,8 +80,17 @@ class ConversationScreen extends HookConsumerWidget
                   color: Colors.black.withOpacity(0.5)),
 
             ///below Widgets(text zone,chara name)
-            if (!ref.watch(conversationImageProvider).isHideUi)
+            if (!ref.watch(conversationImageProvider).isHideUi &&
+                !ref.watch(conversationImageProvider).isNarration)
               const BelowUIs(),
+
+            /// narration
+            if (!ref.watch(conversationImageProvider).isHideUi &&
+                ref.watch(conversationImageProvider).isNarration)
+              Align(
+                alignment: const Alignment(0, 0),
+                child: NarrationUI(),
+              ),
 
             ///tap to next screen
             GestureDetector(

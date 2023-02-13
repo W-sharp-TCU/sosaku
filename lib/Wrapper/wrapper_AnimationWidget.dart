@@ -18,7 +18,7 @@ class AnimationProvider extends ChangeNotifier {
   final Map<String, double> _stateDouble = {};
   final Map<String, dynamic> _stateDynamic = {};
   final Map<String, void Function()?> _animations = {};
-  final Map<String, Stopwatch> _stopwatches = {};
+  final Map<String, ConfigurableStopwatch> _stopwatches = {};
   final Map<String, Function()?> _callbacks = {};
   int _fps = 60;
   bool _isAnimation = false;
@@ -34,7 +34,7 @@ class AnimationProvider extends ChangeNotifier {
       _stateDouble[stateName] = initialValue;
       _animations[stateName] = null;
       _callbacks[stateName] = null;
-      _stopwatches[stateName] = Stopwatch();
+      _stopwatches[stateName] = ConfigurableStopwatch();
     }
   }
 
@@ -126,7 +126,8 @@ class AnimationWidgetController {
       _animationADProviders[providerId] = ChangeNotifierProvider.autoDispose(
           (ref) => _animationProviders[providerId]!);
     }
-    addNewStates(providerId, statesDouble);
+    addNewStatesDouble(providerId, statesDouble);
+    addNewStatesDynamic(providerId, statesDynamic ?? {});
     return _animationADProviders[providerId]!;
   }
 
@@ -143,28 +144,53 @@ class AnimationWidgetController {
     return _animationADProviders[providerId];
   }
 
-  /// Add a new states and their initial values to an already created provider.
+  /// Add a new states(double) and their initial values to an already created provider.
   ///
   /// @param providerId : ID of the provider to which the state is to be added
   /// @param states : Map of state names and their initial values
-  void addNewStates(String providerId, Map<String, double> states) {
+  void addNewStatesDouble(String providerId, Map<String, double> states) {
     for (String stateName in states.keys) {
       _animationProviders[providerId]
           ?.addNewStateDouble(stateName, states[stateName] ?? 0);
     }
   }
 
-  /// Assigns a value to a state that already exists.
+  /// Add a new states(dynamic) and their initial values to an already created provider.
+  ///
+  /// @param providerId : ID of the provider to which the state is to be added
+  /// @param states : Map of state names and their initial values
+  void addNewStatesDynamic(String providerId, Map<String, dynamic> states) {
+    for (String stateName in states.keys) {
+      _animationProviders[providerId]
+          ?.addNewStateDynamic(stateName, states[stateName]);
+    }
+  }
+
+  /// Assigns a double value to a stateDouble that already exists.
   ///
   /// @param providerId : ID of the provider
   /// @param states : Map of state names and their initial values
-  void setStates(String providerId, Map<String, double> states) async {
+  void setStatesDouble(String providerId, Map<String, double> states) async {
     while (!_animationProviders.containsKey(providerId)) {
       await Future.delayed(const Duration(milliseconds: 1));
     }
     for (String stateId in states.keys) {
       _animationProviders[providerId]
           ?.setStateDouble(stateId, states[stateId]!);
+    }
+  }
+
+  /// Assigns a dynamic value to a stateDynamic that already exists.
+  ///
+  /// @param providerId : ID of the provider
+  /// @param states : Map of state names and their initial values
+  void setStatesDynamic(String providerId, Map<String, dynamic> states) async {
+    while (!_animationProviders.containsKey(providerId)) {
+      await Future.delayed(const Duration(milliseconds: 1));
+    }
+    for (String stateId in states.keys) {
+      _animationProviders[providerId]
+          ?.setStateDynamic(stateId, states[stateId]!);
     }
   }
 
@@ -179,8 +205,20 @@ class AnimationWidgetController {
     }
   }
 
-  bool isAnimation(String providerId, String stateId) {
-    return (_animationProviders[providerId]?._animations[stateId] != null);
+  double getStateDouble(String providerId, String stateId) {
+    return _animationProviders[providerId]!.stateDouble[stateId]!;
+  }
+
+  dynamic getStateDynamic(String providerId, String stateId) {
+    return _animationProviders[providerId]!.stateDynamic[stateId]!;
+  }
+
+  bool isAnimation(String providerId, [String? stateId]) {
+    if (stateId == null) {
+      return _animationProviders[providerId]!._isAnimation;
+    } else {
+      return (_animationProviders[providerId]?._animations[stateId] != null);
+    }
   }
 
   void setFPS(String providerId, int fps) {
@@ -249,6 +287,14 @@ class AnimationWidgetController {
       _animationProviders[providerId]?._animations[stateId] = null;
       _animationProviders[providerId]?._stopwatches[stateId]?.stop();
       _animationProviders[providerId]?._stopwatches[stateId]?.reset();
+    }
+  }
+
+  void skipAnimation(String providerId, String stateId) {
+    if (_animationProviders.containsKey(providerId)) {
+      _animationProviders[providerId]
+          ?._stopwatches[stateId]
+          ?.setMilliseconds(double.maxFinite.toInt());
     }
   }
 
@@ -428,5 +474,20 @@ class Easing extends CustomAnimation {
               (_end - _begin) * ((time - _timeBegin) / (_timeEnd - _timeBegin));
       }
     }
+  }
+}
+
+/// 経過時間を加算したり、指定することができるストップウォッチ
+/// TODO : これを使わないAnimationControllerの実装
+class ConfigurableStopwatch extends Stopwatch {
+  int _skipMilliseconds = 0;
+  @override
+  int get elapsedMilliseconds => super.elapsedMilliseconds + _skipMilliseconds;
+  void skipMilliseconds(int milliseconds) {
+    _skipMilliseconds += milliseconds;
+  }
+
+  void setMilliseconds(int milliseconds) {
+    _skipMilliseconds = milliseconds - elapsedMilliseconds;
   }
 }
