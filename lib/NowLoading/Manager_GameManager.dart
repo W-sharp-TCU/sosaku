@@ -1,24 +1,23 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:simple_logger/simple_logger.dart';
+import 'package:jsonlogic/jsonlogic.dart';
 import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
-import 'package:sosaku/Conversation/Controller_conversation_ConversationScreenController.dart';
 import 'package:sosaku/SelectAction/UI_selectAction_SelectActionScreen.dart';
 import 'package:sosaku/Title/UI_title_TitleScreen.dart';
-import 'package:sosaku/Wrapper/Functions_wrapper_convertCSV.dart';
 
-import '../Common/Enum_common.ScreenType.dart';
+import '../Common/Enum_common_ScreenType.dart';
 import '../Common/Interface_common_GameScreenInterface.dart';
-import '../Common/Save/Data_common_SaveSlot.dart';
 import '../Conversation/UI_conversation_ConversationScreen.dart';
 import '../main.dart';
 
 class ScreenInfo {
   final ScreenType screenType;
   // For Conversation Screen
-  final int? lastChapter;
-  final int? lastSection;
+  final int? lastEvent;
+  final int? lastInstructionNo;
   // For Select Action Screen
   final int? buttonNo;
 
@@ -27,16 +26,16 @@ class ScreenInfo {
           buttonNo: selectedButtonNo);
 
   factory ScreenInfo.fromConversation(
-          {required int lastChapter, required int lastSection}) =>
+          {required int eventCode, required int instructionNo}) =>
       ScreenInfo._privateConstructor(ScreenType.conversationScreen,
-          lastChapter: lastChapter, lastSection: lastSection);
+          lastEvent: eventCode, lastInstructionNo: instructionNo);
 
   ScreenInfo._privateConstructor(this.screenType,
-      {this.lastChapter, this.lastSection, this.buttonNo});
+      {this.lastEvent, this.lastInstructionNo, this.buttonNo});
 
   @override
   String toString() {
-    return "ScreenInfo(screenType:$screenType, lastChapter:$lastChapter, lastSection:$lastSection, buttonNo:$buttonNo)";
+    return "ScreenInfo(screenType:$screenType, lastEvent:$lastEvent, lastInstructionNo:$lastInstructionNo, buttonNo:$buttonNo)";
   }
 }
 
@@ -52,56 +51,32 @@ class ScreenInfo {
 /// ### Global Methods
 /// [processing], [notify]
 class GameManager {
-  // note: どうやって次の画面を決めるか
-  // たった今なんの画面だったか知る必要がある
-  //  -> notify関数を作る? or セーブデータから知る
-  // 次にどうするべきか判断する
-  //  -> 行動選択後にイベントが発生するのか、とか
-  // 下に示す準備をして呼び出す
-  //
-  // note: Conversationを呼び出すとき
-  // todo: どのイベントを呼び出すか決める
-  //  -> 今何週目か、今まで見たことあるイベントは除外、残りでランダム
-  // Jsonから項目を抽出する
-  // ConversationControllerに各アセットをロードする
-  // アセットをプリロードする (過去は振り返らない)
-  // todo: どこから始めるか決める
-  // nowCode, log, eventCodeを保存
-  //  -> 引数として渡す?
-  // Conversationを呼び出す
-  //
-  // note: SelectActionを呼び出すとき
-  // todo: 今何週目か、川本電話可能かなどを取得する
-  // todo: アセットをプリロードする(アセットは固定?)
-  // todo: 引数と一緒にSelectActionを呼び出す
-  //
-  //  -> SelectActionで呼び出すべきでは?
-  // (選択要素解禁はどうする？
-  //  -> 追加情報がないかGameManagerに問い合わせる形をとるか、直に書いてもらうか)
-  //
-  // note: ロード中にアプリを落とされたら? 2で行く!
-  // 1. ロールバックする -> もう一度同じ画面を見せるのは良くない
-  // 2. onPausedで次の画面決定まで頑張る -> 次回のNow Loadingで高速化できる
-  //    -> ロード画面ではどう表示する? -> 次の画面・No image でもあり?
-  //
-  // flutter + hooks で初期化(init())を使用する
-  // static prepare() ==> prepare() に変更
-  // Widgetクラスのコンストラクタは変更禁止にした
-  // GameScreenInterfaceを作成する (prepare())
+  static const String eventMapJsonPath = "assets/text/eventMap.json";
+  Map<String, dynamic>? eventMap;
+  Jsonlogic jlParser = Jsonlogic();
+  final Random random = Random((DateTime.now().millisecondsSinceEpoch).floor());
+
+  /// private named constructor
+  /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
+  GameManager._internalConstructor();
 
   static final GameManager _singletonInstance =
       GameManager._internalConstructor();
 
   ScreenInfo? _lastScreenInfo = ScreenInfo.fromSelectAction(-1); // todo: 書き換える
 
-  /// get single-ton
+  /// Get single-ton
   factory GameManager() => _singletonInstance;
 
   /// Start all process.
   ///
-  /// App's screen will jump to new page determined by this class automatically
-  /// some milliseconds after this function is executed.
+  /// A few milliseconds after this function is executed, the application screen
+  /// automatically jumps to the new page specified in this class.
   Future<GameScreenInterface> processing(BuildContext context) async {
+    // var jl = Jsonlogic();
+    // var data = {"ayanaLov": 100, "ayanaSkill": 240};
+    // // print("GameManager.jlTest>> ${jl.apply(rule, data)}");
+    // note: eventMapはyamlで書いて、Mapに変換 -> Jsonlogic.analyseで判定
     GameScreenInterface nextScreen = _determineNextScreen();
     await _prepareForNextScreen(context, nextScreen);
     /* _lastScreenInfo = null; */ // todo: 戻す
@@ -171,12 +146,12 @@ class GameManager {
     switch (nextScreen.runtimeType) {
       case ConversationScreen:
         print("GameManager._prepareForNextScreen >> case : ConversationScreen");
-        int eventCode = _getEventCode();
-        print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
-        String scenarioPath = "assets/text/event$eventCode.csv";
-        print(
-            "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
-        // conversationScreenController.prepare(context, scenarioPath);
+        // int eventCode = await _getEventCode(SaveManager().playingSlot.lastChapter); // todo: 有効化
+        // print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
+        // String scenarioPath = "assets/text/event$eventCode.csv";  // todo: 有効化
+        // print(
+            // "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
+        // conversationScreenController.prepare(context, scenarioPath); // todo: 有効化
         break;
       case SelectActionScreen:
         print("GameManager._prepareForNextScreen >> case : SelectActionScreen");
@@ -186,37 +161,26 @@ class GameManager {
     nextScreen.prepare(context);
   }
 
-  // Map<String, List<String>> _collectNeedAssets(String csv) {
-  //   const String delimiter = ',';
-  //   List<String> lines = csv.split('\n');
-  //   Set<String> bgImagePaths = {}; // todo: 収集
-  //   Set<String> characterImagePaths = {}; // todo:
-  //   Set<String> uiImagePaths = {}; // todo:
-  //   Set<String> uiAudioPaths = {}; // todo: note: ベタ書き？
-  //   Set<String> bgmPaths = {};
-  //   Set<String> asPaths = {};
-  //   Set<String> cvPaths = {};
-  //
-  //   for (String line in lines) {
-  //     List<String> elements = line.split(delimiter);
-  //     // elements = [comment,	code,	op,	func,	arg1,	arg2,	arg3]
-  //     // bgmPaths収集
-  //     if (elements[])
-  //     }
-  //   }}
-
-  Future<List<Map<String, dynamic>>> _loadScenario(String filePath) async {
-    String csv = await rootBundle.loadString(filePath);
-    var scenarioData = convertCSV(csv);
-    return scenarioData;
+  Future<Map<String, dynamic>> _getEventMap({force = false}) async {
+    if ((eventMap == null) || force) {
+      String jsonString = await rootBundle.loadString(eventMapJsonPath);
+      eventMap = jsonDecode(jsonString);
+      logger.info(
+          "EventMap version.${eventMap!["version"]} loaded successfully.");
+    }
+    return eventMap!["eventMap"];
   }
 
   /// get next conversation event code.
-  int _getEventCode() {
-    return 1; // todo: 常に1
+  Future<int> _getEventCode(int currentEventCode) async {
+    var maps = await _getEventMap();
+    var destinations = maps[currentEventCode];
+    List<int> candidateEvents = [];
+    for (var event in destinations) {
+      if (jlParser.apply(event["condition"], SaveManager().playingSlot.status)) {
+        candidateEvents.add(int.parse(event["goto"]));
+      }
+    }
+    return candidateEvents[random.nextInt(candidateEvents.length)];
   }
-
-  /// private named constructor
-  /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
-  GameManager._internalConstructor();
 }
