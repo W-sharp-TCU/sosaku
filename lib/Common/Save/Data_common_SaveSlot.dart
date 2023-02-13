@@ -4,9 +4,9 @@ import 'Data_common_SaveManager.dart';
 class SaveSlot {
   late SaveManager _saveManager;
   Map<String, dynamic> _data = {};
-  SaveSlot(SaveManager managerInstance, String jsonData) {
+  SaveSlot(SaveManager managerInstance, Map<String, dynamic> jsonData) {
     _saveManager = managerInstance;
-    _data = jsonDecode(jsonData);
+    _data = jsonData;
   }
 
   /*
@@ -32,33 +32,23 @@ class SaveSlot {
   set playerName(String playerName) => _data["playerName"] = playerName;
 
   /*******************************************************************/
+  Map<String, int> get status => _data["status"];
 
   int get money => _data["money"];
   set money(int money) => _data["money"] = money;
 
-  double get ayanaLove => _data["ayanaLove"];
-  void addAyanaLove(double ayanaLove){
-    ayanaLove = ayanaLove * ayanaLove; // 数値変換の式はこちら
-    _data["ayanaLove"] = ayanaLove;
-  }
+  int get ayanaLove => _data["ayanaLove"];
+  set ayanaLove(int ayanaLove) => _data["ayanaLove"] = ayanaLove;
 
-  double get nononoLove => _data["nononoLove"];
-  void addNononoLove(double nononoLove, double paintingSkills){
-    nononoLove = paintingSkills + nononoLove * nononoLove; // 数値変換の式はこちら
-    _data["nononoLove"] = nononoLove;
-  }
+  int get nononoLove => _data["nononoLove"];
+  set nononoLove(int nononoLove) => _data["nononoLove"] = nononoLove;
 
-  double get writingSkills => _data["writingSkills"];
-  void addWritingSkills(double writingSkills){
-    writingSkills = writingSkills * writingSkills; // 数値変換の式はこちら
-    _data["writingSkills"] = writingSkills;
-  }
+  int get writingSkills => _data["writingSkills"];
+  set writingSkills(int writingSkills) => _data["writingSkills"] = writingSkills;
 
-  double get paintingSkills => _data["paintingSkills"];
-  void addPaintingSkills(double paintingSkills){
-    paintingSkills = paintingSkills * paintingSkills; // 数値変換の式はこちら
-    _data["paintingSkills"] = paintingSkills;
-  }
+  int get paintingSkills => _data["paintingSkills"];
+  set paintingSkills(int paintingSkills) => _data["paintingSkills"] = paintingSkills;
+
   /***************************************************************************/
 
 
