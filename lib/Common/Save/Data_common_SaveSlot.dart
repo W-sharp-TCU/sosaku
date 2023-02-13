@@ -4,15 +4,19 @@ import 'Data_common_SaveManager.dart';
 class SaveSlot {
   late SaveManager _saveManager;
   Map<String, dynamic> _data = {};
-  SaveSlot(SaveManager managerInstance, String jsonData) {
+
+  SaveSlot(SaveManager managerInstance, Map<String, dynamic> jsonData) {
     _saveManager = managerInstance;
-    _data = jsonDecode(jsonData);
+    _data = jsonData;
   }
 
+  /*
   void commit(int dataNum) {
     String jsonData = jsonEncode(_data);
     _saveManager.saveToSlot(jsonData, dataNum);
   }
+  */
+
 
   String get lastModified {
     if (_data.containsKey("lastModified")) {
