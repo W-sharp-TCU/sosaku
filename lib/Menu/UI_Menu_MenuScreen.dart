@@ -147,7 +147,7 @@ class MenuScreen extends ConsumerWidget {
                                               onTap: () {
                                                 onTapHelp?.call();
                                                 MenuScreenController
-                                                    .onTapHelpDefault();
+                                                    .onTapHelpDefault(context);
                                               },
                                               child: const FittedBox(
                                                   fit: BoxFit.contain,

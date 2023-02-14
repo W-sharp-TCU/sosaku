@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sosaku/Help/UI_help_HelpPopUp.dart';
 
 import '../Home/UI_home_HomeScreen.dart';
 import '../Settings/UI_settings_SettingScreen.dart';
@@ -61,9 +62,17 @@ class MenuScreenController {
     );
   }
 
-  static void onTapHelpDefault() {
-    // TODO : ヘルプ画面へ遷移
+  static void onTapHelpDefault(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (_, __, ___) =>
+              HelpPopUp(contentsFilePath: "assets/text/HelpData/example.json"),
+          transitionDuration: const Duration(milliseconds: 100)),
+    );
   }
+
   static void onTapGoTitleDefault(BuildContext context) {
     Navigator.pushReplacement(
       context,

@@ -1,0 +1,46 @@
+{
+  "version": "20210124",
+  "eventMap": {
+    "1000": [
+      {
+        "goto": 1001,
+        "condition": null
+      }
+    ],
+    "1001": [
+      {
+        "goto": 1002,
+        "condition": {
+          "and": [
+            {
+              "<": [
+                {
+                  "var": "ayanaLove"
+                },
+                100
+              ]
+            },
+            {
+              "<": [
+                {
+                  "var": "ayanaSkill"
+                },
+                250
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "goto": 1003,
+        "condition": null
+      }
+    ],
+    "1002": [
+      {
+        "goto": 1003,
+        "condition": null
+      }
+    ]
+  }
+}

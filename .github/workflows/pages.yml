@@ -1,9 +1,15 @@
-# Workflow for deploying flutter for web content to GitHub Pages
+# Workflow for deploying contents of Sosaku for web to GitHub Pages
 name: Sosaku for Web
 
 on:
-  # Only triggerd from Codemagic workflow
+  # Triggered from Codemagic workflow or contributors.
   repository_dispatch:
+  workflow_dispatch:
+    inputs:
+    user:
+      description: 'Your GitHub user name'
+      required: true
+      type: string
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -27,32 +33,46 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v2
-      - name: Repository
-        id: version
-        run: |
-          REPOSITORY=$(echo ${{ github.repository }} | sed -e "s#.*/##")
-          echo ::set-output name=repository::$REPOSITORY
-      - name: Install Flutter for Web
+#      - name: Repository
+#        id: version
+#        run: |
+#          REPOSITORY=$(echo ${{ github.repository }} | sed -e "s#.*/##")
+#          echo ::set-output name=repository::$REPOSITORY
+      - name: Install Flutter latest environment
         uses: subosito/flutter-action@v2
         with:
           # flutter-version: '3.3.4'
           channel: 'stable'
-          cache: true
-      - run: flutter --version
-      - run: flutter pub get
-      - run: flutter gen-l10n
-      - run: flutter pub run icons_launcher:create
-      - run: flutter pub run flutter_native_splash:create
-      # If you use default URL (do not use custom domain), --base-href option is required.
-      - run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
-      - name: Upload artifact
+          cache: false
+      - name: Pre-build process
+        run: |
+          flutter doctor -v
+          flutter pub get
+          flutter gen-l10n
+          flutter pub run icons_launcher:create
+          flutter pub run flutter_native_splash:create
+      - name: Build Sosaku for Web
+        # If you use default URL (do not use custom domain), --base-href option is required.
+        run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
+      - name: Upload artifacts to GitHub Pages
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload artifacts
           path: './build/web'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+      # Define Discord description
+      - name: Pre-notification process
+        if: always()
+        env:
+          job_status: ${{ job.status }}
+        run: |
+          if [ "${job_status}" == "success" ]; then
+            echo "description=Please try the latest build [here](https://w-sharp-tcu.github.io/sosaku/)!" >> $GITHUB_ENV
+          else
+            echo "description=Please check the details of the latest build results [here](https://github.com/W-sharp-TCU/sosaku/deployments/activity_log?environment=github-pages)." >> $GITHUB_ENV
+          fi
+        shell: bash
       # Notify Discord Channel
       - name: Notify Discord
         uses: sarisia/actions-status-discord@v1
@@ -62,5 +82,4 @@ jobs:
           username: GitHub Actions
           nocontext: true
           title: "deploy to GitHub Pages"
-          description: |
-            Click [here](https://w-sharp-tcu.github.io/sosaku/) to access!
+          description: ${{ env.description }}
