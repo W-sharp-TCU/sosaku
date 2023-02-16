@@ -65,14 +65,18 @@ class HelpPopUp extends GameScreen {
                                   child: Container(
                                     height: double.infinity,
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      ref.watch(helpPopUpProvider).title,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.bold,
-                                          decoration: TextDecoration.underline),
+                                    child: FittedBox(
+                                      child: Text(
+                                        ref.watch(helpPopUpProvider).title,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        softWrap: true,
+                                        style: const TextStyle(
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
                                     ),
                                   ),
                                 ),

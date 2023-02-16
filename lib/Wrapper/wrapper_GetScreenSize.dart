@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class GetScreenSize {
+  GetScreenSize._noConstructor();
   static double _deviceHeight = -1;
   static double _deviceWidth = -1;
 

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_logger/simple_logger.dart';
+import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
 import 'package:sosaku/CustomScrollBehavior.dart';
 import 'package:sosaku/Settings/Controller_settings_SettingsController.dart';
 import 'package:sosaku/Splash/UI_splash_SplashScreen.dart';
@@ -34,6 +35,8 @@ Future<void> main() async {
   /*logger.setLevel(Level.INFO,
       stackTraceLevel: Level.SEVERE,
       includeCallerInfo: false);*/ // todo: リリース時にはこちらに書き換える
+  await SaveManager().loadAll();
+  SaveManager().selectSlot(0); // todo: Load画面実装後削除
   runApp(const ProviderScope(child: MyApp()));
 }
 

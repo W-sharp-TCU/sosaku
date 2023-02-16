@@ -115,7 +115,7 @@ class SakuraTransitionProvider extends ChangeNotifier {
     for (int i = 0; i < _max; i++) {
       String id = 'sakuraTransition$i';
       final rand = Random();
-      animationController.setStates(id, {
+      animationController.setStatesDouble(id, {
         'dx': rand.nextDouble() * 2 + 0.5,
         'dy': rand.nextDouble() * 2 + 0.5,
         'delta': 0,

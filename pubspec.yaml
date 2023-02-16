@@ -101,9 +101,8 @@ flutter:
     - assets/sound/AS/
     - assets/sound/UI/
     - assets/text/fonts/
-    - assets/text/HelpData/
+    - assets/text/HelpContents/
     - assets/text/ScenarioData/
-    - assets/text/ScenarioData/ChapterTest/
 
   fonts:
     - family: SourceHanSansJP

@@ -93,7 +93,6 @@ class HelpPopUpProvider extends ChangeNotifier {
   }
 
   void setPage(int pageNo) {
-    print(pageNo);
     int contentsIndex = pageNo - 1;
     if (ready && 0 <= contentsIndex && contentsIndex < _length) {
       _applyPageContents(contentsIndex);

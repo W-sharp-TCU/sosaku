@@ -9,6 +9,7 @@ import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
 import '../Wrapper/wrapper_AnimationButton.dart';
 import 'Controller_menu_MenuController.dart';
+import 'UI_Menu_StatusUI.dart';
 
 final menuScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => MenuScreenProvider());
@@ -176,17 +177,8 @@ class MenuScreen extends ConsumerWidget {
 
                               /// status window
                               Align(
-                                alignment: const Alignment(-1, 0),
-                                child: Container(
-                                  width: GetScreenSize.screenWidth() * 0.5,
-                                  height: GetScreenSize.screenHeight() * 0.9,
-                                  margin: EdgeInsets.only(
-                                    left: GetScreenSize.screenWidth() * 0.03,
-                                  ),
-                                  decoration:
-                                      const BoxDecoration(color: Colors.white),
-                                ),
-                              ),
+                                  alignment: const Alignment(-0.9, 0),
+                                  child: StatusUI()),
                             ])))))),
       ),
     );

@@ -51,10 +51,12 @@ class ScreenInfo {
 /// ### Global Methods
 /// [processing], [notify]
 class GameManager {
-  static const String eventMapJsonPath = "assets/text/eventMap.json";
-  Map<String, dynamic>? eventMap;
-  Jsonlogic jlParser = Jsonlogic();
-  final Random random = Random((DateTime.now().millisecondsSinceEpoch).floor());
+  static const String _eventMapJsonPath =
+      "assets/text/ScenarioData/eventMap.json";
+  Map<String, dynamic>? _eventMap;
+  final Jsonlogic _jlParser = Jsonlogic();
+  final Random _random =
+      Random((DateTime.now().millisecondsSinceEpoch).floor());
 
   /// private named constructor
   /// DO NOT MAKE INSTANCE FROM OTHER CLASS DIRECTLY.
@@ -73,10 +75,6 @@ class GameManager {
   /// A few milliseconds after this function is executed, the application screen
   /// automatically jumps to the new page specified in this class.
   Future<GameScreenInterface> processing(BuildContext context) async {
-    // var jl = Jsonlogic();
-    // var data = {"ayanaLov": 100, "ayanaSkill": 240};
-    // // print("GameManager.jlTest>> ${jl.apply(rule, data)}");
-    // note: eventMapはyamlで書いて、Mapに変換 -> Jsonlogic.analyseで判定
     GameScreenInterface nextScreen = _determineNextScreen();
     await _prepareForNextScreen(context, nextScreen);
     /* _lastScreenInfo = null; */ // todo: 戻す
@@ -146,12 +144,14 @@ class GameManager {
     switch (nextScreen.runtimeType) {
       case ConversationScreen:
         print("GameManager._prepareForNextScreen >> case : ConversationScreen");
-        // int eventCode = await _getEventCode(SaveManager().playingSlot.lastChapter); // todo: 有効化
-        // print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
-        // String scenarioPath = "assets/text/event$eventCode.csv";  // todo: 有効化
-        // print(
-            // "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
-        // conversationScreenController.prepare(context, scenarioPath); // todo: 有効化
+        int eventCode =
+            await _getEventCode(SaveManager().playingSlot.lastEvent);
+        print("GameManager._prepareForNextScreen >> eventCode = $eventCode");
+        String scenarioPath = "assets/text/ScenarioData/event$eventCode.csv";
+        print(
+            "GameManager._prepareForNextScreen >> scenarioPath = $scenarioPath");
+        conversationScreenController.prepare(context, scenarioPath);
+        SaveManager().playingSlot.lastEvent = eventCode;
         break;
       case SelectActionScreen:
         print("GameManager._prepareForNextScreen >> case : SelectActionScreen");
@@ -162,25 +162,35 @@ class GameManager {
   }
 
   Future<Map<String, dynamic>> _getEventMap({force = false}) async {
-    if ((eventMap == null) || force) {
-      String jsonString = await rootBundle.loadString(eventMapJsonPath);
-      eventMap = jsonDecode(jsonString);
+    if ((_eventMap == null) || force) {
+      String jsonString = await rootBundle.loadString(_eventMapJsonPath);
+      _eventMap = jsonDecode(jsonString);
       logger.info(
-          "EventMap version.${eventMap!["version"]} loaded successfully.");
+          "EventMap version.${_eventMap!["version"]} loaded successfully.");
     }
-    return eventMap!["eventMap"];
+    return _eventMap!["eventMap"];
   }
 
   /// get next conversation event code.
   Future<int> _getEventCode(int currentEventCode) async {
     var maps = await _getEventMap();
-    var destinations = maps[currentEventCode];
+    print("maps: $maps");
+    print("currentEventCode: $currentEventCode");
+    print(maps.keys);
+    var destinations = maps[currentEventCode.toString()];
+    print(maps.containsKey(currentEventCode.toString()));
+    print(destinations);
     List<int> candidateEvents = [];
     for (var event in destinations) {
-      if (jlParser.apply(event["condition"], SaveManager().playingSlot.status)) {
-        candidateEvents.add(int.parse(event["goto"]));
+      print("status: ${SaveManager().playingSlot.status}");
+      print("status: ${SaveManager().playingSlot.status.runtimeType}");
+      print("condition: ${event["condition"]}");
+      if (event["condition"] == null ||
+          _jlParser.apply(
+              event["condition"], SaveManager().playingSlot.status)) {
+        candidateEvents.add(event["goto"]);
       }
     }
-    return candidateEvents[random.nextInt(candidateEvents.length)];
+    return candidateEvents[_random.nextInt(candidateEvents.length)];
   }
 }

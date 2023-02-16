@@ -1,6 +1,6 @@
 ﻿comment,code,op,func,arg1,arg2,arg3
 ここにコメントを書くことができます,0,narration,,,～会話画面のテストを行います～,
-,1,bg,set,assets/drawable/Conversation/002_classroomBB.png,fadeIn,
+,1,bg,set,教室,fade,
 ,2,,,,,
 ,3,character,in,Ayana1,,
 ,4,text,,あやな,"これは""想咲""のテストシナリオです。
@@ -18,7 +18,7 @@
 ,11,,,,,
 ,12,goto,,,,44
 ,13,,,,,
-,14,character,animation,Ayana1,bow,
+,14,character,animation,Ayana1,nod,
 ,15,bg,animation,,shake,
 ,16,text,,あやな,キャラクター・背景アニメーションのテストです。,
 ,17,,,,,
@@ -32,7 +32,7 @@
 ,25,character,in,Ayana2,,
 ,26,text,,あやな,キャラクター追加のテストです。,
 ,27,,,,,0.5
-,28,character,move,Ayana1,walk,
+,28,character,position,Ayana1,work,
 ,29,text,,あやな,キャラクター移動のテストです。,
 ,30,,,,,
 ,31,text,,あやな,sleepとキャラクター消失のテストを行います,
@@ -43,9 +43,9 @@
 ,36,sleep,,1,,
 ,37,text,,あやな,1・・・,
 ,38,sleep,,1,,
-,39,character,out,Ayana1,fadeOut,
+,39,character,out,Ayana1,fade,
 ,40,,,,,
-,41,character,animation,Ayana2,bow,
+,41,character,animation,Ayana2,nod,
 ,42,character,expression,Ayana2,flat,
 ,43,character,eye,Ayana2,close,
 ,44,text,,あやな,"現在実装できる機能のテストは以上です。

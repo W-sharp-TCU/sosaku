@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sosaku/Common/Enum_common_ScreenType.dart';
 
 import '../../Wrapper/wrapper_SharedPref.dart';
 import 'Data_common_SaveSlot.dart';
@@ -8,7 +9,7 @@ import 'dart:async';
 class SaveManager {
   //int _playingSlotNum = -1;
   late SaveSlot _playingSlot;
-  final List<SaveSlot> _saveSlots = [];
+  late final List<SaveSlot> _saveSlots;
   static const String _nullValue = "";
   static const String _keyOfSaveData = "saveData";
   //int _timer = 0;
@@ -17,9 +18,9 @@ class SaveManager {
   static const int _saveSlotsLength = 19;
   late Timer _timer;
   static const Map<String, dynamic> _initialSaveData = {
-    "lastModified":null,
-    "thumbnailPath":null,
-    "playerName":null,
+    "lastModified": null,
+    "thumbnailPath": null,
+    "playerName": null,
     "status": {
       "money": 10000,
       "ayanaLove": 1,
@@ -27,12 +28,12 @@ class SaveManager {
       "nononoLove": 1,
       "nononoSkill": 1
     },
-    "lastEvent":1000,
-    "conversationControllerInfo":null,
-    "lastScreenType":null,
-    "visitedEventList":[],
-    "actionHistory":[],
-    "kawamotoAppeared":false
+    "lastEvent": 1000,
+    "conversationControllerInfo": null,
+    "lastScreenType": ScreenType.initialLaunch,
+    "visitedEventList": [],
+    "actionHistory": [],
+    "kawamotoAppeared": false
   };
 
   /// Singleton constructor
@@ -55,7 +56,7 @@ class SaveManager {
 
   /// Load save data of all slots.
   /// This method should be called before Load Screen appear.
-  void loadAll() async {
+  Future<void> loadAll() async {
     /*
     int numOfSlot = await SharedPref.getInt("numOfSlot", 0);
     for (int i = 0; i < numOfSlot; i++) {
@@ -66,9 +67,11 @@ class SaveManager {
     */
     String jsonData = await SharedPref.getString(_keyOfSaveData, _nullValue);
     if (jsonData == _nullValue) {
-      for (int i = 0; i < _saveSlotsLength; i++) {
+      /*for (int i = 0; i < _saveSlotsLength; i++) {
         _saveSlots[i] = SaveSlot(this, _initialSaveData);
-      }
+      }*/
+      _saveSlots =
+          List.filled(_saveSlotsLength, SaveSlot(this, {..._initialSaveData}));
     } else {
       var saveData = jsonDecode(jsonData);
       for (int i = 0; i < _saveSlotsLength; i++) {
@@ -77,7 +80,6 @@ class SaveManager {
     }
   }
 
-
   /// Commit save data stored in "SaveSlot"
   ///
   /// **This method should only be called from SaveSlot.**
@@ -85,42 +87,22 @@ class SaveManager {
   /// @param [slotNum] : save to save slot of this number
   ///
   /// @param [saveData] : save data that this SaveSlot has. if this value is not passed, this function save "_playingSaveSlot".
-  void saveToSlot(int slotNum, [SaveSlot? saveData]){
+  void saveToSlot(int slotNum, [SaveSlot? saveData]) {
     saveData ??= _playingSlot;
     _saveSlots[slotNum] = saveData;
     String jsonData = jsonEncode(_saveSlots);
     SharedPref.setString(_keyOfSaveData, jsonData);
   }
 
-
   /// Start auto save timer
   void startSaveTimer() async {
-    // todo: 書き換えお願いします To: Kentaro.T
-    // --- 以下説明 ---
-    // _isAutoSaveScheduledがtrueのとき、playingSlot.commit(0) が一定時間ごとに実行される。
-    // オートセーブする周期は_autoSaveDurationで定義されている(10行目参照)
-    // _timerは、前回のセーブから何ミリ秒経ったかを記録しているだけなので、消しても大丈夫かと
-    // 消すときは8行目の定義も消しといてくれると助かります m(._.)m
-    // startSaveTimer()とstopSaveTimer()は、まだどこのクラスでも呼び出されていないので関数消したり、ガッツリ変えて大丈夫です。
-    /*
-    _timer = 0;
-    _isAutoSaveScheduled = true;
-    while (_isAutoSaveScheduled) {
-      await Future.delayed(
-          const Duration(milliseconds: 10), () => _timer += 10);
-      if (_autoSaveDuration * 1000 <= _timer) {
-        playingSlot.commit(0);
-        _timer = 0;
-      }
-    }
-    */
-    _timer = Timer.periodic(Duration(seconds:_autoSaveDuration), _onTimer);
+    _timer =
+        Timer.periodic(const Duration(seconds: _autoSaveDuration), _onTimer);
   }
 
-  void _onTimer(Timer timer){
+  void _onTimer(Timer timer) {
     saveToSlot(0);
   }
-
 
   /// Stop auto save timer
   void stopSaveTimer() {

@@ -135,7 +135,7 @@ class TapEffectScreenProvider extends ChangeNotifier {
   void create(double dx, double dy) {
     String id = 'sakura${_i % _max}';
     final rand = Random();
-    animationController.setStates(id, {
+    animationController.setStatesDouble(id, {
       'dx': dx,
       'dy': dy,
       'theta': rand.nextDouble() * 2 * pi,
