@@ -9,7 +9,7 @@ import 'dart:async';
 class SaveManager {
   //int _playingSlotNum = -1;
   late SaveSlot _playingSlot;
-  final List<SaveSlot> _saveSlots = [];
+  late final List<SaveSlot> _saveSlots;
   static const String _nullValue = "";
   static const String _keyOfSaveData = "saveData";
   //int _timer = 0;
@@ -18,9 +18,9 @@ class SaveManager {
   static const int _saveSlotsLength = 19;
   late Timer _timer;
   static const Map<String, dynamic> _initialSaveData = {
-    "lastModified":null,
-    "thumbnailPath":null,
-    "playerName":null,
+    "lastModified": null,
+    "thumbnailPath": null,
+    "playerName": null,
     "status": {
       "money": 10000,
       "ayanaLove": 1,
@@ -87,7 +87,7 @@ class SaveManager {
   /// @param [slotNum] : save to save slot of this number
   ///
   /// @param [saveData] : save data that this SaveSlot has. if this value is not passed, this function save "_playingSaveSlot".
-  void saveToSlot(int slotNum, [SaveSlot? saveData]){
+  void saveToSlot(int slotNum, [SaveSlot? saveData]) {
     saveData ??= _playingSlot;
     _saveSlots[slotNum] = saveData;
     String jsonData = jsonEncode(_saveSlots);
@@ -100,7 +100,7 @@ class SaveManager {
         Timer.periodic(const Duration(seconds: _autoSaveDuration), _onTimer);
   }
 
-  void _onTimer(Timer timer){
+  void _onTimer(Timer timer) {
     saveToSlot(0);
   }
 

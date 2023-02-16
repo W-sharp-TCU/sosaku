@@ -3,6 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPref {
   SharedPref._noConstructor();
 
+  /// Delete all data in Shared Preferences
+  ///
+  /// WARNING: After running this function, all user's data will be deleted permanently.
+  static Future<void> allClear() async {
+    SharedPreferences? pref;
+    pref = await SharedPreferences.getInstance();
+    await pref.clear();
+    await pref.reload();
+  }
+
   ///Save an integer value with key.
   ///
   /// @param key: name of key
