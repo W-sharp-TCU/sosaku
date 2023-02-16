@@ -67,8 +67,8 @@ class MenuScreenController {
       context,
       PageRouteBuilder(
           opaque: false,
-          pageBuilder: (_, __, ___) =>
-              HelpPopUp(contentsFilePath: "assets/text/HelpData/example.json"),
+          pageBuilder: (_, __, ___) => HelpPopUp(
+              contentsFilePath: "assets/text/HelpContents/example.json"),
           transitionDuration: const Duration(milliseconds: 100)),
     );
   }

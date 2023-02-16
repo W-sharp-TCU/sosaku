@@ -9,23 +9,11 @@
 # If you write eventMap.yaml, you need to convert data to JSON.
 # Web convert tool: https://onlineyamltools.com/convert-yaml-to-json
 
-version: "20210124"
+version: "20230215"
 eventMap:
   1000:
     - goto: 1001
       condition: null
   1001:
-    - goto: 1002
-      condition:
-        and:
-          - <:
-              - var: ayanaLove
-              - 100
-          - <:
-              - var: ayanaSkill
-              - 250
-    - goto: 1003
-      condition: null
-  1002:
-    - goto: 1003
+    - goto: 1000
       condition: null

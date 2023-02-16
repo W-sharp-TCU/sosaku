@@ -1,0 +1,17 @@
+{
+  "version": "20230215",
+  "eventMap": {
+    "1000": [
+      {
+        "goto": 1001,
+        "condition": null
+      }
+    ],
+    "1001": [
+      {
+        "goto": 1000,
+        "condition": null
+      }
+    ]
+  }
+}

@@ -4,10 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sosaku/Common/Callback_common_CommonLifecycleCallback.dart';
 import 'package:sosaku/Common/Interface_common_GameScreenInterface.dart';
 import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
+import 'package:sosaku/Help/UI_help_HelpPopUp.dart';
 import 'package:sosaku/Title/Controller_title_SlideShowController.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationWidget.dart';
 import 'package:sosaku/Wrapper/Functions_wrapper_TransitionBuilders.dart';
 import 'package:sosaku/main.dart';
+import '../Wrapper/wrapper_SharedPref.dart';
 import '../Wrapper/wrapper_SoundPlayer.dart';
 import '../Wrapper/wrapper_GetScreenSize.dart';
 import 'Provider_title_TitleScreenProvider.dart';
@@ -36,10 +38,30 @@ class TitleScreen extends HookConsumerWidget implements GameScreenInterface {
     print('animate');
     // called once
     useEffect(() {
-      animationController.animate('tapToStart', 'opacity', [
-        Wave(0, 100000, 0, 1, 2000, 0),
-      ]);
       SoundPlayer().playBGM(_bgmPaths[0], delay: 2000);
+      SharedPref.getBool("read_welcome_to_alpha", false).then((value) async {
+        if (!value) {
+          await Future.delayed(const Duration(seconds: 2));
+          SharedPref.setBool("read_welcome_to_alpha", true);
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (_, __, ___) => HelpPopUp(
+                    contentsFilePath:
+                        "assets/text/HelpContents/welcome_to_test.json"),
+                transitionDuration: const Duration(milliseconds: 100)),
+          ).then(
+              (value) => animationController.animate('tapToStart', 'opacity', [
+                    Wave(0, 100000, 0, 1, 2000, 0),
+                  ]));
+        } else {
+          animationController.animate('tapToStart', 'opacity', [
+            Wave(0, 100000, 0, 1, 2000, 0),
+          ]);
+        }
+        print("Done");
+      });
       return null;
     }, []);
 

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:sosaku/Common/Enum_common_ScreenType.dart';
+
 import 'Data_common_SaveManager.dart';
 
 class SaveSlot {
@@ -66,8 +68,8 @@ class SaveSlot {
   bool get isHelp => _data["isHelp"];
   set isHelp(bool isHelp) => _data["isHelp"] = isHelp;
 
-  Type get lastScreenType => _data["lastScreenType"];
-  set lastScreenType(Type lastScreenType) =>
+  ScreenType get lastScreenType => _data["lastScreenType"];
+  set lastScreenType(ScreenType lastScreenType) =>
       _data["lastScreenType"] = lastScreenType;
 
   Set get visitedEventList => _data["localVisitedEventList"];

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:sosaku/Common/Enum_common_ScreenType.dart';
+import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
 import 'package:sosaku/Conversation/Animation_conversation_ConversationAnimation.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationCharacterProvider.dart';
 import 'package:sosaku/Conversation/Provider_conversation_ConversationImageLayerProvider.dart';
@@ -20,7 +22,7 @@ import 'package:csv/csv.dart';
 
 class ConversationScreenController {
   int _interval = 40; // [ms]
-  String _playerName = 'のべさわ';
+  String _playerName = '<プレイヤー>';
   ConversationImageProvider? _conversationImageProvider;
   ConversationTextProvider? _conversationTextProvider;
   ConversationLogProvider? _conversationLogProvider;
@@ -427,18 +429,18 @@ class ConversationScreenController {
       _nowCode = 0;
 
       // TODO : べた書き
-      SoundPlayer().precacheSounds(
-          filePaths: ['assets/sound/CV/voice_sample_002.wav'],
-          audioType: SoundPlayer.cv);
-      SoundPlayer().precacheSounds(
-          filePaths: ['assets/sound/CV/voice_sample_002.wav'],
-          audioType: SoundPlayer.as);
-      SoundPlayer().precacheSounds(
-          filePaths: ['assets/sound/CV/voice_sample_002.wav'],
-          audioType: SoundPlayer.ui);
+      // SoundPlayer().precacheSounds(
+      //     filePaths: ['assets/sound/CV/voice_sample_002.wav'],
+      //     audioType: SoundPlayer.cv);
+      // SoundPlayer().precacheSounds(
+      //     filePaths: ['assets/sound/CV/voice_sample_002.wav'],
+      //     audioType: SoundPlayer.as);
+      // SoundPlayer().precacheSounds(
+      //     filePaths: ['assets/sound/CV/voice_sample_002.wav'],
+      //     audioType: SoundPlayer.ui);
       // TODO : GameManagerにprepare関数を記述したら削除
-      prepare(context,
-          'assets/text/ScenarioData/ChapterTest/event0101_-_scienario.csv');
+      // prepare(context,
+      //     'assets/text/ScenarioData/ChapterTest/event0101_-_scienario.csv');
       // await SakuraTransitionProvider.beginTransition();
       // SakuraTransitionProvider.endTransition();
       // TODO : ディレイ取り除く
@@ -541,8 +543,9 @@ class ConversationScreenController {
         _conversationLogProvider != null &&
         // _conversationCharacterProvider != null &&
         _context != null) {
-      GameManager().notify(ScreenInfo.fromConversation(
-          eventCode: -1, instructionNo: -1)); // todo: 早く作れ眞柄
+      GameManager().notify(
+          ScreenInfo.fromConversation(eventCode: -1, instructionNo: -1));
+      SaveManager().playingSlot.lastScreenType = ScreenType.conversationScreen;
       await Navigator.pushReplacement(
         _context!,
         PageRouteBuilder(

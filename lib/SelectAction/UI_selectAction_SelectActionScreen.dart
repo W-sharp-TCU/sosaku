@@ -4,8 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Common/Enum_common_ScreenType.dart';
+import 'package:sosaku/Common/Save/Data_common_SaveManager.dart';
 import 'package:sosaku/Conversation/UI_conversation_ConversationScreen.dart';
 import 'package:sosaku/Menu/UI_Menu_OpenMenuButton.dart';
+import 'package:sosaku/NowLoading/Manager_GameManager.dart';
 import 'package:sosaku/SelectAction/Controller_selectAction_SelectActionController.dart';
 import 'package:sosaku/SelectAction/Provider_selectAction_SelectActionScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_AnimationButton.dart';
@@ -32,7 +35,10 @@ class SelectActionScreen extends HookConsumerWidget
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // useEffect(() {});
+    useEffect(() {
+      SaveManager().playingSlot.lastScreenType = ScreenType.selectActionScreen;
+      GameManager().notify(ScreenInfo.fromSelectAction(-1));
+    });
     useMemoized(() {
       debugPrint("useMemoized callded");
       prepare(context);
