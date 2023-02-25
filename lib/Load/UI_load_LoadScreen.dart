@@ -21,8 +21,8 @@ final loadUIProvider =
 final loadScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => LoadScreenProvider());
 
-class LoadScreen extends HookConsumerWidget implements GameScreenInterface {
-  const LoadScreen({Key? key}) : super(key: key);
+class LoadScreen extends GameScreen {
+  LoadScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -113,7 +113,8 @@ class LoadScreen extends HookConsumerWidget implements GameScreenInterface {
 
   @override
   Future<void> prepare(BuildContext context) async {
-    // TODO: implement pre load
+    drawableAssets.addAll(["assets/drawable/Load/background.png"]);
+    return super.prepare(context);
   }
 }
 
