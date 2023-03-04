@@ -1,12 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sosaku/Conversation/Provider_conversation_ConversationImageLayerProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 import 'Animation_conversation_ConversationAnimation.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
-  String _mBGImagePath = 'assets/drawable/Conversation/black_screen.png';
   String _characterImagePath = 'assets/drawable/Conversation/no_character.png';
   String? _voicePath;
   String _characterName = '';
+
+  List<ConversationBGLayerProvider> bgLayers = [];
+  List<ConversationCharacterLayerProvider> characterLayers = [];
+  List<ConversationImageLayerProvider> imageLayers = [];
 
   /// {text, goto}
   List<Map> _selections = [];
@@ -18,8 +23,8 @@ class ConversationImageProvider extends ChangeNotifier {
   bool _isDim = false;
   bool _canNext = false;
   bool _isSleep = false;
+  bool _isNarration = false;
 
-  String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
   String? get voicePath => _voicePath;
   String get characterName => _characterName;
@@ -32,12 +37,37 @@ class ConversationImageProvider extends ChangeNotifier {
   bool get isDim => _isDim;
   bool get canNext => _canNext;
   bool get isSleep => _isSleep;
+  bool get isNarration => _isNarration;
+  bool get isAnimation =>
+      characterLayers.any((element) => element.isAnimation) ||
+      bgLayers.any((element) => element.isAnimation) ||
+      imageLayers.any((element) => element.isAnimation);
 
-  /// Set character image.
-  /// This function is for Controller.
-  void setBGImage(String path) {
-    _mBGImagePath = path;
-    notifyListeners();
+  ConversationCharacterLayerProvider? characterLayer(String layerId) {
+    for (var layer in characterLayers) {
+      if (layer.layerId == layerId) {
+        return layer;
+      }
+    }
+    return null;
+  }
+
+  ConversationBGLayerProvider? bgLayer(String layerId) {
+    for (var layer in bgLayers) {
+      if (layer.layerId == layerId) {
+        return layer;
+      }
+    }
+    return null;
+  }
+
+  ConversationImageLayerProvider? imageLayer(String layerId) {
+    for (var layer in imageLayers) {
+      if (layer.layerId == layerId) {
+        return layer;
+      }
+    }
+    return null;
   }
 
   /// Set character image.
@@ -135,5 +165,32 @@ class ConversationImageProvider extends ChangeNotifier {
   void setIsSleep(bool isSleep) {
     _isSleep = isSleep;
     notifyListeners();
+  }
+
+  void setIsNarration(bool isNarration) {
+    _isNarration = isNarration;
+    notifyListeners();
+  }
+
+  void reset() {
+    _characterImagePath = 'assets/drawable/Conversation/no_character.png';
+    _voicePath;
+    _characterName = '';
+
+    bgLayers = [];
+    characterLayers = [];
+    imageLayers = [];
+
+    /// {text, goto}
+    _selections = [];
+    _isAuto = false;
+    _isSelection = false;
+    _isMenu = false;
+    _isLog = false;
+    _isHideUi = false;
+    _isDim = false;
+    _canNext = false;
+    _isSleep = false;
+    _isNarration = false;
   }
 }

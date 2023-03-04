@@ -34,7 +34,7 @@ dependencies:
   flutter_localizations:  # L10n support
     sdk: flutter
   intl:                   # L10n support
-  audioplayers:           # play sounds
+  audioplayers: ^3.0.1    # play sounds
   bordered_text:
   csv:
   jsonlogic:              # analyze JSON Logic string
@@ -43,6 +43,7 @@ dependencies:
   roundcheckbox:
   shared_preferences:     # local app storage access
   simple_logger:          # logging with a simple way (Visit https://medium.com/flutter-jp/logger-ec25d8dd179a to learn usage.)
+  skeleton_text:
   table_calendar:
   yaml:                   # Load & convert yaml string
 
@@ -100,8 +101,8 @@ flutter:
     - assets/sound/AS/
     - assets/sound/UI/
     - assets/text/fonts/
+    - assets/text/HelpContents/
     - assets/text/ScenarioData/
-    - assets/text/ScenarioData/ChapterTest/
 
   fonts:
     - family: SourceHanSansJP

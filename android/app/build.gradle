@@ -36,7 +36,7 @@ android {
     compileSdkVersion flutter.compileSdkVersion
 
     // for Play Console Debug Symbol
-    ndkVersion "25.1.8937393"
+    ndkVersion "23.1.7779620"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -9,7 +9,7 @@
 # If you write eventMap.yaml, you need to convert data to JSON.
 # Web convert tool: https://onlineyamltools.com/convert-yaml-to-json
 
-version: "20210124"
+version: "20230124"
 eventMap:
   1000:
     - goto: 1001

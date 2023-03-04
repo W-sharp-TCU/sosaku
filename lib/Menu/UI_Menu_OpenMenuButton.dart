@@ -26,6 +26,7 @@ class OpenMenuButton extends ConsumerWidget {
         super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('openMenuButton context $context');
     return openMenuButton ??
         Align(
           alignment: const Alignment(1, -1),
@@ -33,7 +34,7 @@ class OpenMenuButton extends ConsumerWidget {
               key: const Key('menuOpen'),
               onTap: () {
                 MenuScreenController.onTapOpenDefault(
-                    context, menuScreen ?? const MenuScreen());
+                    context, menuScreen ?? MenuScreen());
               },
               width: GetScreenSize.screenWidth() * 0.06,
               height: GetScreenSize.screenWidth() * 0.06,

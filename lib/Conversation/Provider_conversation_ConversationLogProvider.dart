@@ -81,4 +81,12 @@ class ConversationLogProvider extends ChangeNotifier {
     _voicePaths = saveData['voicePaths'];
     notifyListeners();
   }
+
+  void reset() {
+    _names = [];
+    _iconPaths = [];
+    _texts = [];
+    _voicePaths = [];
+    _isPlaying = [];
+  }
 }
