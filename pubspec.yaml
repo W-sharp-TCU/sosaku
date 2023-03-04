@@ -34,7 +34,7 @@ dependencies:
   flutter_localizations:  # L10n support
     sdk: flutter
   intl:                   # L10n support
-  audioplayers:           # play sounds
+  audioplayers: ^3.0.1    # play sounds
   bordered_text:
   csv:
   jsonlogic:              # analyze JSON Logic string

@@ -5,7 +5,6 @@ import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 import 'Animation_conversation_ConversationAnimation.dart';
 
 class ConversationImageProvider extends ChangeNotifier {
-  String _mBGImagePath = 'assets/drawable/Conversation/black_screen.png';
   String _characterImagePath = 'assets/drawable/Conversation/no_character.png';
   String? _voicePath;
   String _characterName = '';
@@ -26,7 +25,6 @@ class ConversationImageProvider extends ChangeNotifier {
   bool _isSleep = false;
   bool _isNarration = false;
 
-  String get mBGImagePath => _mBGImagePath;
   String get characterImagePath => _characterImagePath;
   String? get voicePath => _voicePath;
   String get characterName => _characterName;
@@ -70,13 +68,6 @@ class ConversationImageProvider extends ChangeNotifier {
       }
     }
     return null;
-  }
-
-  /// Set character image.
-  /// This function is for Controller.
-  void setBGImage(String path) {
-    _mBGImagePath = path;
-    notifyListeners();
   }
 
   /// Set character image.
@@ -179,5 +170,27 @@ class ConversationImageProvider extends ChangeNotifier {
   void setIsNarration(bool isNarration) {
     _isNarration = isNarration;
     notifyListeners();
+  }
+
+  void reset() {
+    _characterImagePath = 'assets/drawable/Conversation/no_character.png';
+    _voicePath;
+    _characterName = '';
+
+    bgLayers = [];
+    characterLayers = [];
+    imageLayers = [];
+
+    /// {text, goto}
+    _selections = [];
+    _isAuto = false;
+    _isSelection = false;
+    _isMenu = false;
+    _isLog = false;
+    _isHideUi = false;
+    _isDim = false;
+    _canNext = false;
+    _isSleep = false;
+    _isNarration = false;
   }
 }

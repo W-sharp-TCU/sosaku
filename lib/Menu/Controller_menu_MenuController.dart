@@ -20,16 +20,11 @@ class MenuScreenController {
 
   static void onTapOpenDefault(
       BuildContext context, MenuScreen? menuScreen) async {
-    await precacheImage(
-        const AssetImage('assets/drawable/Menu/status_sample.png'), context);
-    await precacheImage(
-        const AssetImage('assets/drawable/Menu/status_bar_sample.png'),
-        context);
     Navigator.push(
       context,
       PageRouteBuilder(
           opaque: false,
-          pageBuilder: (_, __, ___) => menuScreen ?? const MenuScreen(),
+          pageBuilder: (_, __, ___) => menuScreen ?? MenuScreen(),
           transitionDuration: const Duration(milliseconds: 0)),
     );
 

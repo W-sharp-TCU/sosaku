@@ -52,17 +52,6 @@ class ConversationScreen extends HookConsumerWidget
         lifecycleCallback: const CommonLifecycleCallback(),
         child: Stack(
           children: [
-            ///BGImage
-            SizedBox(
-              width: GetScreenSize.screenWidth(),
-              height: GetScreenSize.screenHeight(),
-              child: Image(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                    ref.watch(conversationImageProvider).mBGImagePath),
-              ),
-            ),
-
             ///character
             // const CharactersUI(),
 

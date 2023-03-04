@@ -7,6 +7,7 @@ import 'package:sosaku/Common/UI_common_GameScreenBase.dart';
 import 'package:sosaku/Menu/Provider_menu_MenuScreenProvider.dart';
 import 'package:sosaku/Wrapper/wrapper_GetScreenSize.dart';
 
+import '../Common/Interface_common_GameScreenInterface.dart';
 import '../Wrapper/wrapper_AnimationButton.dart';
 import 'Controller_menu_MenuController.dart';
 import 'UI_Menu_StatusUI.dart';
@@ -14,7 +15,7 @@ import 'UI_Menu_StatusUI.dart';
 final menuScreenProvider =
     ChangeNotifierProvider.autoDispose((ref) => MenuScreenProvider());
 
-class MenuScreen extends ConsumerWidget {
+class MenuScreen extends GameScreen {
   static const sideButtonImage =
       'assets/drawable/Conversation/yokonagabotton.png';
   final Function? onTapClose;
@@ -23,7 +24,7 @@ class MenuScreen extends ConsumerWidget {
   final Function? onTapHelp;
   final Function? onTapGoTitle;
   final AnimationButton? closeMenuButton;
-  const MenuScreen(
+  MenuScreen(
       {this.onTapClose,
       this.onTapSave,
       this.onTapOption,
@@ -182,5 +183,14 @@ class MenuScreen extends ConsumerWidget {
                             ])))))),
       ),
     );
+  }
+
+  @override
+  Future<void> prepare(BuildContext context) {
+    drawableAssets.addAll([
+      'assets/drawable/Menu/status_sample.png',
+      'assets/drawable/Menu/status_bar_sample.png'
+    ]);
+    return super.prepare(context);
   }
 }

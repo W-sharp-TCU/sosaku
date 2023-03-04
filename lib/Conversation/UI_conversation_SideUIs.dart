@@ -37,6 +37,7 @@ class SideUIs extends ConsumerWidget {
                 key: const Key('menu'),
                 onTap: () {
                   conversationScreenController.openMenu();
+                  print('sideUi context$context');
                   MenuScreenController.onTapOpenDefault(
                     context,
                     MenuScreen(

@@ -454,9 +454,9 @@ class ConversationScreenController {
   /// This function is for ConversationScreenUI.
   /// TODO : コントローラー破棄
   void stop() async {
-    _conversationImageProvider?.dispose();
-    _conversationTextProvider?.dispose();
-    _conversationLogProvider?.dispose();
+    _conversationImageProvider?.reset();
+    _conversationTextProvider?.reset();
+    _conversationLogProvider?.reset();
     _conversationImageProvider = null;
     _conversationTextProvider = null;
     _conversationLogProvider = null;

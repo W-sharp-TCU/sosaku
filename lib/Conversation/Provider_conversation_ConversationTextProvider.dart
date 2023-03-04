@@ -20,4 +20,9 @@ class ConversationTextProvider extends ChangeNotifier {
     _narrationText = text;
     notifyListeners();
   }
+
+  void reset() {
+    _conversationText = "";
+    _narrationText = "";
+  }
 }

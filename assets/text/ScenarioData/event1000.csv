@@ -1,6 +1,6 @@
 ﻿comment,code,op,func,arg1,arg2,arg3
 ここにコメントを書くことができます,0,narration,,,～会話画面のテストを行います～,
-,1,bg,set,教室,fade,
+,1,bg,set,assets/drawable/Conversation/001_stationBB.png,fade,
 ,2,,,,,
 ,3,character,in,Ayana1,,
 ,4,text,,あやな,"これは""想咲""のテストシナリオです。
