@@ -33,15 +33,15 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v2
-#      - name: Repository
-#        id: version
-#        run: |
-#          REPOSITORY=$(echo ${{ github.repository }} | sed -e "s#.*/##")
-#          echo ::set-output name=repository::$REPOSITORY
+      - name: Repository
+        id: version
+        run: |
+          REPOSITORY=$(echo ${{ github.repository }} | sed -e "s#.*/##")
+          echo ::set-output name=repository::$REPOSITORY
       - name: Install Flutter latest environment
         uses: subosito/flutter-action@v2
         with:
-          # flutter-version: '3.3.4'
+          flutter-version: '3.3.4'
           channel: 'stable'
           cache: false
       - name: Pre-build process
@@ -53,7 +53,7 @@ jobs:
           flutter pub run flutter_native_splash:create
       - name: Build Sosaku for Web
         # If you use default URL (do not use custom domain), --base-href option is required.
-        run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit #--base-href /${{ steps.version.outputs.repository }}/
+        run: flutter build web --release --build-number=${{ github.event.client_payload.build_number }} --web-renderer canvaskit --base-href /${{ steps.version.outputs.repository }}/
       - name: Upload artifacts to GitHub Pages
         uses: actions/upload-pages-artifact@v1
         with:
