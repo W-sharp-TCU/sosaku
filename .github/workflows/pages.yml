@@ -41,7 +41,7 @@ jobs:
       - name: Install Flutter latest environment
         uses: subosito/flutter-action@v2
         with:
-          # flutter-version: '3.3.4'
+          flutter-version: '3.3.4'
           channel: 'stable'
           cache: true
       - name: Pre-build process
